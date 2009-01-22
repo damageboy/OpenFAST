@@ -1,0 +1,264 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>openfast</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>openfast</RootNamespace>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <ProjectGuid>{B41B3B40-8E14-45EC-BC3A-311BC8C1C20E}</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>.\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>
+    </DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>.\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>
+    </DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.Xml</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApplicationTypeDictionary.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="BitVector.cs" />
+    <Compile Include="BitVectorBuilder.cs" />
+    <Compile Include="BitVectorReader.cs" />
+    <Compile Include="BitVectorValue.cs" />
+    <Compile Include="ByteBuffer.cs" />
+    <Compile Include="ByteUtil.cs" />
+    <Compile Include="ByteVectorValue.cs" />
+    <Compile Include="Codec\Coder.cs" />
+    <Compile Include="Codec\FastDecoder.cs" />
+    <Compile Include="Codec\FastEncoder.cs" />
+    <Compile Include="Context.cs" />
+    <Compile Include="DatagramPacket.cs" />
+    <Compile Include="DateValue.cs" />
+    <Compile Include="Debug\BasicDecodeTrace.cs" />
+    <Compile Include="Debug\BasicEncodeTrace.cs" />
+    <Compile Include="Debug\Trace.cs" />
+    <Compile Include="DecimalValue.cs" />
+    <Compile Include="Dictionary.cs" />
+    <Compile Include="Error\ErrorCode.cs" />
+    <Compile Include="Error\ErrorHandler.cs" />
+    <Compile Include="Error\ErrorType.cs" />
+    <Compile Include="Error\FastAlertSeverity.cs" />
+    <Compile Include="Error\FastConstants.cs" />
+    <Compile Include="Error\FastDynamicError.cs" />
+    <Compile Include="Error\FastException.cs" />
+    <Compile Include="FieldValue.cs" />
+    <Compile Include="Global.cs" />
+    <Compile Include="GlobalDictionary.cs" />
+    <Compile Include="GroupValue.cs" />
+    <Compile Include="IllegalStateException.cs" />
+    <Compile Include="IntegerValue.cs" />
+    <Compile Include="Message.cs" />
+    <Compile Include="MessageBlockReader.cs" />
+    <Compile Include="MessageHandler.cs" />
+    <Compile Include="MessageInputStream.cs" />
+    <Compile Include="MessageOutputStream.cs" />
+    <Compile Include="MessageStream.cs" />
+    <Compile Include="NumericValue.cs" />
+    <Compile Include="PipedInputStream.cs" />
+    <Compile Include="PipedOutputStream.cs" />
+    <Compile Include="QName.cs" />
+    <Compile Include="RuntimeException.cs" />
+    <Compile Include="ScalarValue.cs" />
+    <Compile Include="SequenceValue.cs" />
+    <Compile Include="Session\AbstractSessionControlProtocol.cs" />
+    <Compile Include="Session\BasicClient.cs" />
+    <Compile Include="Session\Client.cs" />
+    <Compile Include="Session\Connection.cs" />
+    <Compile Include="Session\ConnectionListener.cs" />
+    <Compile Include="Session\Endpoint.cs" />
+    <Compile Include="Session\FastClient.cs" />
+    <Compile Include="Session\FastConnectionException.cs" />
+    <Compile Include="Session\FastServer.cs" />
+    <Compile Include="Session\LocalConnection.cs" />
+    <Compile Include="Session\LocalEndpoint.cs" />
+    <Compile Include="Session\MessageListener.cs" />
+    <Compile Include="Session\Multicast\MulticastConnection.cs" />
+    <Compile Include="Session\Multicast\MulticastEndpoint.cs" />
+    <Compile Include="Session\Multicast\MulticastInputStream.cs" />
+    <Compile Include="Session\RecordingEndpoint.cs" />
+    <Compile Include="Session\Session.cs" />
+    <Compile Include="Session\SessionConstants.cs" />
+    <Compile Include="Session\SessionControlProtocol_1_0.cs" />
+    <Compile Include="Session\SessionControlProtocol_1_1.cs" />
+    <Compile Include="Session\SessionFactory.cs" />
+    <Compile Include="Session\SessionHandler.cs" />
+    <Compile Include="Session\SessionListener.cs" />
+    <Compile Include="Session\SessionMessageHandler.cs" />
+    <Compile Include="Session\SessionProtocol.cs" />
+    <Compile Include="Session\Tcp\TcpConnection.cs" />
+    <Compile Include="Session\Tcp\TcpEndpoint.cs" />
+    <Compile Include="Session\Template\Exchange\AbstractFieldInstructionConverter.cs" />
+    <Compile Include="Session\Template\Exchange\ComposedDecimalConverter.cs" />
+    <Compile Include="Session\Template\Exchange\ConversionContext.cs" />
+    <Compile Include="Session\Template\Exchange\DynamicTemplateReferenceConverter.cs" />
+    <Compile Include="Session\Template\Exchange\FieldInstructionConverter.cs" />
+    <Compile Include="Session\Template\Exchange\GroupConverter.cs" />
+    <Compile Include="Session\Template\Exchange\ScalarConverter.cs" />
+    <Compile Include="Session\Template\Exchange\SequenceConverter.cs" />
+    <Compile Include="Session\Template\Exchange\StaticTemplateReferenceConverter.cs" />
+    <Compile Include="Session\Template\Exchange\VariableLengthInstructionConverter.cs" />
+    <Compile Include="StringValue.cs" />
+    <Compile Include="SupportClass.cs" />
+    <Compile Include="TemplateDictionary.cs" />
+    <Compile Include="Template\AbstractTemplateRegistry.cs" />
+    <Compile Include="Template\BasicTemplateRegistry.cs" />
+    <Compile Include="Template\ComposedScalar.cs" />
+    <Compile Include="Template\ComposedValueConverter.cs" />
+    <Compile Include="Template\DynamicTemplateReference.cs" />
+    <Compile Include="Template\Field.cs" />
+    <Compile Include="Template\FieldSet.cs" />
+    <Compile Include="Template\Group.cs" />
+    <Compile Include="Template\Loader\AbstractFieldParser.cs" />
+    <Compile Include="Template\Loader\ByteVectorParser.cs" />
+    <Compile Include="Template\Loader\ComposedDecimalParser.cs" />
+    <Compile Include="Template\Loader\FieldParser.cs" />
+    <Compile Include="Template\Loader\GroupParser.cs" />
+    <Compile Include="Template\Loader\MessageTemplateLoader.cs" />
+    <Compile Include="Template\Loader\ParsingContext.cs" />
+    <Compile Include="Template\Loader\ScalarParser.cs" />
+    <Compile Include="Template\Loader\SequenceParser.cs" />
+    <Compile Include="Template\Loader\StringParser.cs" />
+    <Compile Include="Template\Loader\TemplateParser.cs" />
+    <Compile Include="Template\Loader\TemplateRefParser.cs" />
+    <Compile Include="Template\Loader\VariableLengthScalarParser.cs" />
+    <Compile Include="Template\Loader\XMLMessageTemplateLoader.cs" />
+    <Compile Include="Template\LongValue.cs" />
+    <Compile Include="Template\MessageTemplate.cs" />
+    <Compile Include="Template\NullTemplateRegistry.cs" />
+    <Compile Include="Template\Operator\AlwaysPresentOperatorCodec.cs" />
+    <Compile Include="Template\Operator\ConstantOperatorCodec.cs" />
+    <Compile Include="Template\Operator\CopyOperatorCodec.cs" />
+    <Compile Include="Template\Operator\DefaultOperatorCodec.cs" />
+    <Compile Include="Template\Operator\DeltaDecimalOperatorCodec.cs" />
+    <Compile Include="Template\Operator\DeltaIntegerOperatorCodec.cs" />
+    <Compile Include="Template\Operator\DeltaStringOperatorCodec.cs" />
+    <Compile Include="Template\Operator\IncrementIntegerOperatorCodec.cs" />
+    <Compile Include="Template\Operator\NoneOperatorCodec.cs" />
+    <Compile Include="Template\Operator\Operator.cs" />
+    <Compile Include="Template\Operator\OperatorCodec.cs" />
+    <Compile Include="Template\Operator\OptionallyPresentOperatorCodec.cs" />
+    <Compile Include="Template\Operator\TailOperatorCodec.cs" />
+    <Compile Include="Template\Scalar.cs" />
+    <Compile Include="Template\Sequence.cs" />
+    <Compile Include="Template\StaticTemplateReference.cs" />
+    <Compile Include="Template\TemplateRegisteredListener.cs" />
+    <Compile Include="Template\TemplateRegistry.cs" />
+    <Compile Include="Template\TwinValue.cs" />
+    <Compile Include="Template\Type\ByteVectorType.cs" />
+    <Compile Include="Template\Type\Codec\AsciiString.cs" />
+    <Compile Include="Template\Type\Codec\BitVectorType.cs" />
+    <Compile Include="Template\Type\Codec\ByteVectorType.cs" />
+    <Compile Include="Template\Type\Codec\DateInteger.cs" />
+    <Compile Include="Template\Type\Codec\DateString.cs" />
+    <Compile Include="Template\Type\Codec\EpochTimestamp.cs" />
+    <Compile Include="Template\Type\Codec\IntegerCodec.cs" />
+    <Compile Include="Template\Type\Codec\MillisecondsSinceMidnight.cs" />
+    <Compile Include="Template\Type\Codec\NotStopBitEncodedTypeCodec.cs" />
+    <Compile Include="Template\Type\Codec\NullableAsciiString.cs" />
+    <Compile Include="Template\Type\Codec\NullableByteVector.cs" />
+    <Compile Include="Template\Type\Codec\NullableSignedInteger.cs" />
+    <Compile Include="Template\Type\Codec\NullableSingleFieldDecimal.cs" />
+    <Compile Include="Template\Type\Codec\NullableStringDelta.cs" />
+    <Compile Include="Template\Type\Codec\NullableUnicodeString.cs" />
+    <Compile Include="Template\Type\Codec\NullableUnsignedInteger.cs" />
+    <Compile Include="Template\Type\Codec\SignedInteger.cs" />
+    <Compile Include="Template\Type\Codec\SingleFieldDecimal.cs" />
+    <Compile Include="Template\Type\Codec\StringDelta.cs" />
+    <Compile Include="Template\Type\Codec\TimeInteger.cs" />
+    <Compile Include="Template\Type\Codec\TimestampInteger.cs" />
+    <Compile Include="Template\Type\Codec\TypeCodec.cs" />
+    <Compile Include="Template\Type\Codec\UnicodeString.cs" />
+    <Compile Include="Template\Type\Codec\UnsignedInteger.cs" />
+    <Compile Include="Template\Type\DateType.cs" />
+    <Compile Include="Template\Type\DecimalConverter.cs" />
+    <Compile Include="Template\Type\DecimalType.cs" />
+    <Compile Include="Template\Type\IntegerType.cs" />
+    <Compile Include="Template\Type\SignedIntegerType.cs" />
+    <Compile Include="Template\Type\SimpleType.cs" />
+    <Compile Include="Template\Type\StringType.cs" />
+    <Compile Include="Template\Type\FASTType.cs" />
+    <Compile Include="Template\Type\UnsignedIntegerType.cs" />
+    <Compile Include="Util\ArrayIterator.cs" />
+    <Compile Include="Util\Key.cs" />
+    <Compile Include="Util\RecordingInputStream.cs" />
+    <Compile Include="Util\RecordingOutputStream.cs" />
+    <Compile Include="Util\Util.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
