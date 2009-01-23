@@ -112,7 +112,7 @@ namespace OpenFAST
 			throw new System.NotSupportedException();
 		}
 
-        public virtual System.Decimal ToBigDecimal()
+        	public virtual System.Decimal ToBigDecimal()
 		{
 			throw new System.NotSupportedException();
 		}
