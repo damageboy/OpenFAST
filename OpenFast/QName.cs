@@ -2,10 +2,7 @@ using System;
 
 namespace OpenFAST
 {
-	/// <summary>
-	/// Quick name.
-    /// Provides efficient name searching in template registry. 
-	/// </summary>
+
 	[Serializable]
 	public sealed class QName
 	{
