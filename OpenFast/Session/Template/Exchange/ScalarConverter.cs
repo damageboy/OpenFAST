@@ -21,7 +21,7 @@ namespace OpenFAST.Session.Template.Exchange
 		{
 			get
 			{
-				return (Group[]) SupportClass.ICollectionSupport.ToArray(new SupportClass.HashSetSupport(TEMPLATE_TYPE_MAP.Keys), new Group[TEMPLATE_TYPE_MAP.Count]);
+				return SupportClass.ICollectionSupport.ToArray<Group>(new SupportClass.HashSetSupport(TEMPLATE_TYPE_MAP.Keys));
 			}
 			
 		}

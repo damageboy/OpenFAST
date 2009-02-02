@@ -24,9 +24,9 @@ namespace OpenFAST.Template.Type.Codec
 		{
 		}
 		
-		public override sbyte[] EncodeValue(ScalarValue value_Renamed)
+		public override byte[] EncodeValue(ScalarValue value_Renamed)
 		{
-				sbyte[] utf8encoding = SupportClass.ToSByteArray(System.Text.Encoding.UTF8.GetBytes(((StringValue) value_Renamed).value_Renamed));
+				byte[] utf8encoding = System.Text.Encoding.UTF8.GetBytes(((StringValue) value_Renamed).value_Renamed);
 				return TypeCodec.BYTE_VECTOR.Encode(new ByteVectorValue(utf8encoding));
 
 		}
@@ -36,7 +36,7 @@ namespace OpenFAST.Template.Type.Codec
 		{
 			ByteVectorValue value_Renamed = (ByteVectorValue) TypeCodec.BYTE_VECTOR.Decode(in_Renamed);
 
-				return new StringValue(System.Text.Encoding.UTF8.GetString(SupportClass.ToByteArray(value_Renamed.value_Renamed)));
+				return new StringValue(System.Text.Encoding.UTF8.GetString(value_Renamed.value_Renamed));
 
 		}
 

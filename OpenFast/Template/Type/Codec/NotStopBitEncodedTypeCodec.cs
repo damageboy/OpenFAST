@@ -8,7 +8,7 @@ namespace OpenFAST.Template.Type.Codec
 	public abstract class NotStopBitEncodedTypeCodec:TypeCodec
 	{
 		
-		public override sbyte[] Encode(ScalarValue value_Renamed)
+		public override byte[] Encode(ScalarValue value_Renamed)
 		{
 			return EncodeValue(value_Renamed);
 		}

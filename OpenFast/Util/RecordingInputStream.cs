@@ -5,18 +5,18 @@ namespace OpenFAST.util
 {
 	public sealed class RecordingInputStream: System.IO.Stream
 	{
-		public sbyte[] Buffer
+		public byte[] Buffer
 		{
 			get
 			{
-				sbyte[] b = new sbyte[index];
+				byte[] b = new byte[index];
 				Array.Copy(buffer, 0, b, 0, index);
 				
 				return b;
 			}
 			
 		}
-		private sbyte[] buffer = new sbyte[1024];
+		private byte[] buffer = new byte[1024];
 		private int index = 0;
 		private System.IO.Stream in_Renamed;
 		
@@ -29,7 +29,7 @@ namespace OpenFAST.util
 		public override int ReadByte()
 		{
 			int read = in_Renamed.ReadByte();
-			buffer[index++] = (sbyte) read;
+			buffer[index++] = (byte) read;
 			return read;
 		}
 		

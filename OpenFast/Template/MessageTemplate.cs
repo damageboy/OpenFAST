@@ -80,7 +80,7 @@ namespace OpenFAST.Template
 			return fields[index];
 		}
 
-		public sbyte[] Encode(Message message, Context context)
+		public byte[] Encode(Message message, Context context)
 		{
 			if (!context.TemplateRegistry.IsRegistered(message.Template))
 			{

@@ -43,15 +43,15 @@ namespace OpenFAST.Template.Type.Codec
 			return new TwinValue(subtractionLength, difference);
 		}
 		
-		public override sbyte[] EncodeValue(ScalarValue value_Renamed)
+		public override byte[] EncodeValue(ScalarValue value_Renamed)
 		{
 			if (value_Renamed.Null)
 				return TypeCodec.NULL_VALUE_ENCODING;
 			
 			TwinValue diff = (TwinValue) value_Renamed;
-			sbyte[] subtractionLength = TypeCodec.NULLABLE_INTEGER.Encode(diff.first);
-			sbyte[] difference = TypeCodec.ASCII.Encode(diff.second);
-			sbyte[] encoded = new sbyte[subtractionLength.Length + difference.Length];
+			byte[] subtractionLength = TypeCodec.NULLABLE_INTEGER.Encode(diff.first);
+			byte[] difference = TypeCodec.ASCII.Encode(diff.second);
+			byte[] encoded = new byte[subtractionLength.Length + difference.Length];
 			Array.Copy(subtractionLength, 0, encoded, 0, subtractionLength.Length);
 			Array.Copy(difference, 0, encoded, subtractionLength.Length, difference.Length);
 			

@@ -39,8 +39,8 @@ namespace OpenFAST.Template.operator_Renamed
 			
 			int index = 0;
 			
-			sbyte[] val = value_Renamed.Bytes;
-			sbyte[] prior = priorValue.Bytes;
+			byte[] val = value_Renamed.Bytes;
+			byte[] prior = priorValue.Bytes;
 			
 			if (val.Length > prior.Length)
 				return value_Renamed;

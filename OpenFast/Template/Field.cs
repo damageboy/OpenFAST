@@ -123,13 +123,13 @@ namespace OpenFAST.Template
 			return (!UsesPresenceMapBit()) || presenceMapReader.Read();
 		}
 		
-		public abstract sbyte[] Encode(FieldValue value_Renamed, Group template, Context context, BitVectorBuilder presenceMapBuilder);
+		public abstract byte[] Encode(FieldValue value_Renamed, Group template, Context context, BitVectorBuilder presenceMapBuilder);
 		
 		public abstract FieldValue Decode(System.IO.Stream in_Renamed, Group template, Context context, BitVectorReader presenceMapReader);
 		
 		public abstract bool UsesPresenceMapBit();
 		
-		public abstract bool IsPresenceMapBitSet(sbyte[] encoding, FieldValue fieldValue);
+		public abstract bool IsPresenceMapBitSet(byte[] encoding, FieldValue fieldValue);
 		
 		public abstract FieldValue CreateValue(string value_Renamed);
 	}

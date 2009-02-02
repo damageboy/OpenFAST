@@ -11,5 +11,9 @@ namespace OpenFAST
             : base(new MemoryStream())
         {
         }
+        public PipedInputStream(Stream stream)
+            : base(stream)
+        {
+        }
     }
 }

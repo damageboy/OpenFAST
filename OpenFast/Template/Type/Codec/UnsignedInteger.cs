@@ -13,15 +13,15 @@ namespace OpenFAST.Template.Type.Codec
 		{
 		}
 		
-		public override sbyte[] EncodeValue(ScalarValue scalarValue)
+		public override byte[] EncodeValue(ScalarValue scalarValue)
 		{
 			long value_Renamed = scalarValue.ToLong();
 			int size = GetUnsignedIntegerSize(value_Renamed);
-			sbyte[] encoded = new sbyte[size];
+			byte[] encoded = new byte[size];
 			
 			for (int factor = 0; factor < size; factor++)
 			{
-				encoded[size - factor - 1] = (sbyte) ((value_Renamed >> (factor * 7)) & 0x7f);
+				encoded[size - factor - 1] = (byte) ((value_Renamed >> (factor * 7)) & 0x7f);
 			}
 			
 			return encoded;

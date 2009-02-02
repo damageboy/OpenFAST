@@ -194,7 +194,7 @@ namespace OpenFAST.Session
 			catch (System.Threading.ThreadInterruptedException)
 			{
 			}
-			Message message = session.MessageInputStream.readMessage();
+			Message message = session.MessageInputStream.ReadMessage();
 			string serverName = message.GetString(1);
 			string vendorId = message.IsDefined(2)?message.GetString(2):"unknown";
 			session.Client = new BasicClient(serverName, vendorId);
@@ -207,7 +207,7 @@ namespace OpenFAST.Session
 		public override Session OnNewConnection(string serverName, Connection connection)
 		{
 			Session session = new Session(connection, this);
-			Message message = session.MessageInputStream.readMessage();
+			Message message = session.MessageInputStream.ReadMessage();
 			string clientName = message.GetString(1);
 			string vendorId = message.IsDefined(2)?message.GetString(2):"unknown";
 			session.Client = new BasicClient(clientName, vendorId);

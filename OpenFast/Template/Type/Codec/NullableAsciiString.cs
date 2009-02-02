@@ -28,14 +28,14 @@ namespace OpenFAST.Template.Type.Codec
 			
 		}
 		private const long serialVersionUID = 1L;
-		private static readonly sbyte[] NULLABLE_EMPTY_STRING = new sbyte[]{(sbyte) (0x00), (sbyte) (0x00)};
-		private static readonly sbyte[] ZERO_ENCODING = new sbyte[]{(sbyte) (0x00), (sbyte) (0x00), (sbyte) (0x00)};
+		private static readonly byte[] NULLABLE_EMPTY_STRING = new byte[]{(byte) (0x00), (byte) (0x00)};
+		private static readonly byte[] ZERO_ENCODING = new byte[]{(byte) (0x00), (byte) (0x00), (byte) (0x00)};
 		
 		internal NullableAsciiString()
 		{
 		}
 		
-		public override sbyte[] EncodeValue(ScalarValue value_Renamed)
+		public override byte[] EncodeValue(ScalarValue value_Renamed)
 		{
 			if (value_Renamed.Null)
 			{
@@ -51,7 +51,7 @@ namespace OpenFAST.Template.Type.Codec
 			
 			if (string_Renamed.StartsWith("\u0000"))
 				return ZERO_ENCODING;
-			return SupportClass.ToSByteArray(SupportClass.ToByteArray(string_Renamed));
+			return SupportClass.ToByteArray(string_Renamed);
 		}
 		
 		public override ScalarValue Decode(System.IO.Stream in_Renamed)
@@ -73,8 +73,8 @@ namespace OpenFAST.Template.Type.Codec
 				throw new RuntimeException(e);
 			}
 			
-			sbyte[] bytes = SupportClass.ToSByteArray(buffer.ToArray());
-			bytes[bytes.Length - 1] &= (sbyte) (0x7f);
+			byte[] bytes = buffer.ToArray();
+			bytes[bytes.Length - 1] &= (byte) (0x7f);
 			
 			if (bytes[0] == 0)
 			{
@@ -94,7 +94,7 @@ namespace OpenFAST.Template.Type.Codec
 				}
 			}
 			
-			return new StringValue(new string(SupportClass.ToCharArray(SupportClass.ToByteArray(bytes))));
+			return new StringValue(new string(SupportClass.ToCharArray(bytes)));
 		}
 		
 		public ScalarValue FromString(string value_Renamed)

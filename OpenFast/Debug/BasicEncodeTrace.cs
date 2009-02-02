@@ -31,7 +31,7 @@ namespace OpenFAST.Debug
 			stack.Add(traceGroup);
 		}
 		
-		public void  Field(Field field, FieldValue value_Renamed, FieldValue encoded, sbyte[] encoding, int pmapIndex)
+		public void  Field(Field field, FieldValue value_Renamed, FieldValue encoded, byte[] encoding, int pmapIndex)
 		{
 			((TraceGroup) stack[stack.Count - 1]).AddField(field, value_Renamed, encoded, pmapIndex, encoding);
 		}
@@ -45,7 +45,7 @@ namespace OpenFAST.Debug
 			}
 		}
 		
-		public void  Pmap(sbyte[] pmap)
+		public void  Pmap(byte[] pmap)
 		{
 			((TraceGroup) stack[stack.Count - 1]).Pmap = pmap;
 		}
@@ -57,7 +57,7 @@ namespace OpenFAST.Debug
 				this.enclosingInstance = enclosingInstance;
 			}
 			private BasicEncodeTrace enclosingInstance;
-			virtual public sbyte[] Pmap
+			virtual public byte[] Pmap
 			{
 				set
 				{
@@ -76,7 +76,7 @@ namespace OpenFAST.Debug
 			
 			private System.Collections.IList nodes;
 			
-			private sbyte[] pmap;
+			private byte[] pmap;
 			
 			private Group group;
 			
@@ -87,7 +87,7 @@ namespace OpenFAST.Debug
 				this.nodes = new System.Collections.ArrayList(group.FieldCount);
 			}
 			
-			public virtual void  AddField(Field field, FieldValue value_Renamed, FieldValue encoded, int fieldIndex, sbyte[] encoding)
+			public virtual void  AddField(Field field, FieldValue value_Renamed, FieldValue encoded, int fieldIndex, byte[] encoding)
 			{
 				nodes.Add(new TraceField(enclosingInstance, field, value_Renamed, encoded, fieldIndex, encoding));
 			}
@@ -136,13 +136,13 @@ namespace OpenFAST.Debug
 			
 			private int pmapIndex;
 			
-			private sbyte[] encoding;
+			private byte[] encoding;
 			
 			private FieldValue value_Renamed;
 			
 			private FieldValue encoded;
 			
-			public TraceField(BasicEncodeTrace enclosingInstance, Field field, FieldValue value_Renamed, FieldValue encoded, int pmapIndex, sbyte[] encoding)
+			public TraceField(BasicEncodeTrace enclosingInstance, Field field, FieldValue value_Renamed, FieldValue encoded, int pmapIndex, byte[] encoding)
 			{
 				InitBlock(enclosingInstance);
 				this.field = field;

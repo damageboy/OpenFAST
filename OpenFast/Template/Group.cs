@@ -11,6 +11,7 @@ using QName = OpenFAST.QName;
 using FastException = OpenFAST.Error.FastException;
 using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
 using OpenFAST;
+using System.Collections.Generic;
 
 namespace OpenFAST.Template
 {
@@ -126,30 +127,31 @@ namespace OpenFAST.Template
 		
 		public Group(QName name, Field[] fields, bool optional):base(name, optional)
 		{
-			System.Collections.IList expandedFields = new System.Collections.ArrayList();
-			System.Collections.IList staticTemplateReferences = new System.Collections.ArrayList();
+            List<Field> expandedFields = new List<Field>();
+            List<StaticTemplateReference> staticTemplateReferences = new List<StaticTemplateReference>();
 			for (int i = 0; i < fields.Length; i++)
 			{
 				if (fields[i] is StaticTemplateReference)
 				{
-					Field[] referenceFields = ((StaticTemplateReference) fields[i]).Template.Fields;
+                    StaticTemplateReference currentTemplate = (StaticTemplateReference)fields[i];
+                    Field[] referenceFields = currentTemplate.Template.Fields;
 					for (int j = 1; j < referenceFields.Length; j++)
 						expandedFields.Add(referenceFields[j]);
-					staticTemplateReferences.Add(fields[i]);
+                    staticTemplateReferences.Add(currentTemplate);
 				}
 				else
 				{
 					expandedFields.Add(fields[i]);
 				}
 			}
-			this.fields = (Field[]) SupportClass.ICollectionSupport.ToArray(expandedFields, new Field[expandedFields.Count]);
+            this.fields = expandedFields.ToArray();
 			this.fieldDefinitions = fields;
 			this.fieldIndexMap = ConstructFieldIndexMap(this.fields);
 			this.fieldNameMap = ConstructFieldNameMap(this.fields);
 			this.fieldIdMap = ConstructFieldIdMap(this.fields);
 			this.introspectiveFieldMap = ConstructInstrospectiveFields(this.fields);
 			this.usesPresenceMap_Renamed_Field = DeterminePresenceMapUsage(this.fields);
-			this.staticTemplateReferences = (StaticTemplateReference[]) SupportClass.ICollectionSupport.ToArray(staticTemplateReferences, new StaticTemplateReference[staticTemplateReferences.Count]);
+            this.staticTemplateReferences = staticTemplateReferences.ToArray();
 		}
 		
 		// BAD ABSTRACTION
@@ -180,9 +182,9 @@ namespace OpenFAST.Template
 		}
 		
 		
-		public override sbyte[] Encode(FieldValue value_Renamed, Group template, Context context, BitVectorBuilder presenceMapBuilder)
+		public override byte[] Encode(FieldValue value_Renamed, Group template, Context context, BitVectorBuilder presenceMapBuilder)
 		{
-			sbyte[] encoding = Encode(value_Renamed, template, context);
+			byte[] encoding = Encode(value_Renamed, template, context);
 			if (optional)
 			{
 				if (encoding.Length != 0)
@@ -194,11 +196,11 @@ namespace OpenFAST.Template
 		}
 		
 		
-		public virtual sbyte[] Encode(FieldValue value_Renamed, Group template, Context context)
+		public virtual byte[] Encode(FieldValue value_Renamed, Group template, Context context)
 		{
 			if (value_Renamed == null)
 			{
-				return new sbyte[]{};
+				return new byte[]{};
 			}
 			
 			GroupValue groupValue = (GroupValue) value_Renamed;
@@ -209,7 +211,7 @@ namespace OpenFAST.Template
 			BitVectorBuilder presenceMapBuilder = new BitVectorBuilder(template.MaxPresenceMapSize);
 			try
 			{
-				sbyte[][] fieldEncodings = new sbyte[fields.Length][];
+				byte[][] fieldEncodings = new byte[fields.Length][];
 				
 				for (int fieldIndex = 0; fieldIndex < fields.Length; fieldIndex++)
 				{
@@ -219,32 +221,32 @@ namespace OpenFAST.Template
 					{
 						Global.HandleError(OpenFAST.Error.FastConstants.GENERAL_ERROR, "Mandatory field " + field + " is null");
 					}
-					sbyte[] encoding = field.Encode(fieldValue, template, context, presenceMapBuilder);
+					byte[] encoding = field.Encode(fieldValue, template, context, presenceMapBuilder);
 					fieldEncodings[fieldIndex] = encoding;
 				}
 				System.IO.MemoryStream buffer = new System.IO.MemoryStream();
 				
 				if (UsesPresenceMap())
 				{
-					sbyte[] pmap = presenceMapBuilder.BitVector.TruncatedBytes;
+					byte[] pmap = presenceMapBuilder.BitVector.TruncatedBytes;
 					if (context.TraceEnabled)
 						context.GetEncodeTrace().Pmap(pmap);
-					sbyte[] temp_sbyteArray;
-					temp_sbyteArray = pmap;
-					buffer.Write(SupportClass.ToByteArray(temp_sbyteArray), 0, temp_sbyteArray.Length);
+					byte[] temp_byteArray;
+					temp_byteArray = pmap;
+					buffer.Write(temp_byteArray, 0, temp_byteArray.Length);
 				}
 				for (int i = 0; i < fieldEncodings.Length; i++)
 				{
 					if (fieldEncodings[i] != null)
 					{
-						sbyte[] temp_sbyteArray2;
-						temp_sbyteArray2 = fieldEncodings[i];
-						buffer.Write(SupportClass.ToByteArray(temp_sbyteArray2), 0, temp_sbyteArray2.Length);
+						byte[] temp_byteArray2;
+						temp_byteArray2 = fieldEncodings[i];
+						buffer.Write(temp_byteArray2, 0, temp_byteArray2.Length);
 					}
 				}
 				if (context.TraceEnabled)
 					context.GetEncodeTrace().GroupEnd();
-				return SupportClass.ToSByteArray(buffer.ToArray());
+				return buffer.ToArray();
 			}
 			catch (System.IO.IOException e)
 			{
@@ -315,7 +317,7 @@ namespace OpenFAST.Template
 		}
 		
 		
-		public override bool IsPresenceMapBitSet(sbyte[] encoding, FieldValue fieldValue)
+		public override bool IsPresenceMapBitSet(byte[] encoding, FieldValue fieldValue)
 		{
 			return encoding.Length != 0;
 		}

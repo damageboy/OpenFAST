@@ -23,7 +23,7 @@ namespace OpenFAST.Template.Type.Codec
 		{
 		}
 		
-		public override sbyte[] EncodeValue(ScalarValue value_Renamed)
+		public override byte[] EncodeValue(ScalarValue value_Renamed)
 		{
 			return ((BitVectorValue) value_Renamed).value_Renamed.Bytes;
 		}
@@ -32,7 +32,6 @@ namespace OpenFAST.Template.Type.Codec
 		{
 			System.IO.MemoryStream buffer = new System.IO.MemoryStream();
 			int byt;
-			
 			do 
 			{
 				try
@@ -53,7 +52,7 @@ namespace OpenFAST.Template.Type.Codec
 			}
 			while ((byt & 0x80) == 0);
 			
-			return new BitVectorValue(new BitVector(SupportClass.ToSByteArray(buffer.ToArray())));
+			return new BitVectorValue(new BitVector(buffer.ToArray()));
 		}
 		
 		public ScalarValue FromString(string value_Renamed)

@@ -17,7 +17,7 @@ namespace OpenFAST.Template.Type.Codec
 			return new DateValue(ref tempAux);
 		}
 		
-		public override sbyte[] EncodeValue(ScalarValue value_Renamed)
+		public override byte[] EncodeValue(ScalarValue value_Renamed)
 		{
 			return TypeCodec.INTEGER.EncodeValue(new LongValue(value_Renamed.ToLong()));
 		}

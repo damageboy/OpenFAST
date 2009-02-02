@@ -10,7 +10,6 @@ using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
 
 namespace OpenFAST.Codec
 {
-	
 	public sealed class FastDecoder : Coder
 	{
 		private System.IO.Stream in_Renamed;

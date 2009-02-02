@@ -35,7 +35,7 @@ namespace OpenFAST.Template.Type.Codec
 			}
 		}
 		
-		public override sbyte[] EncodeValue(ScalarValue value_Renamed)
+		public override byte[] EncodeValue(ScalarValue value_Renamed)
 		{
 			return TypeCodec.ASCII.Encode(new StringValue(SupportClass.FormatDateTime(formatter, ((DateValue) value_Renamed).value_Renamed)));
 		}

@@ -4,7 +4,7 @@ namespace OpenFAST
 {
 	public class BitVector
 	{
-		virtual public sbyte[] Bytes
+		virtual public byte[] Bytes
 		{
 			get
 			{
@@ -12,7 +12,7 @@ namespace OpenFAST
 			}
 			
 		}
-		virtual public sbyte[] TruncatedBytes
+		virtual public byte[] TruncatedBytes
 		{
 			get
 			{
@@ -26,10 +26,10 @@ namespace OpenFAST
 					return bytes;
 				}
 				
-				sbyte[] truncated = new sbyte[index + 1];
+				byte[] truncated = new byte[index + 1];
 				Array.Copy(bytes, 0, truncated, 0, index + 1);
                 byte tempStop = STOP_BIT;
-                truncated[truncated.Length - 1] |= (sbyte)(tempStop);
+                truncated[truncated.Length - 1] |= (byte)(tempStop);
 				
 				return truncated;
 			}
@@ -53,25 +53,25 @@ namespace OpenFAST
 		}
 		private const int VALUE_BITS_SET = 0x7F;
 		private const int STOP_BIT = 0x80;
-		private sbyte[] bytes;
+		private byte[] bytes;
 		private int size;
 		
-		public BitVector(int size):this(new sbyte[((size - 1) / 7) + 1])
+		public BitVector(int size):this(new byte[((size - 1) / 7) + 1])
 		{
 		}
 		
-		public BitVector(sbyte[] bytes)
+		public BitVector(byte[] bytes)
 		{
 			this.bytes = bytes;
 			this.size = bytes.Length * 7;
             byte tempStop = STOP_BIT;
 
-            bytes[bytes.Length - 1] |= (sbyte)(tempStop);
+            bytes[bytes.Length - 1] |= (byte)(tempStop);
 		}
 		
 		public virtual void  set_Renamed(int fieldIndex)
 		{
-			bytes[fieldIndex / 7] |= (sbyte) ((1 << (6 - (fieldIndex % 7))));
+			bytes[fieldIndex / 7] |= (byte) ((1 << (6 - (fieldIndex % 7))));
 		}
 		
 		public virtual bool IsSet(int fieldIndex)

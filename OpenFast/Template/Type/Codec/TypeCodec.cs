@@ -14,8 +14,8 @@ namespace OpenFAST.Template.Type.Codec
 			}
 			
 		}
-		protected internal static sbyte STOP_BIT = (sbyte) SupportClass.Identity(0x80);
-		internal static readonly sbyte[] NULL_VALUE_ENCODING = new sbyte[]{STOP_BIT};
+		protected internal static byte STOP_BIT = (byte) SupportClass.Identity(0x80);
+		internal static readonly byte[] NULL_VALUE_ENCODING = new byte[]{STOP_BIT};
 		
 		// Codec Definitions
 		public static readonly TypeCodec UINT = new UnsignedInteger();
@@ -45,14 +45,14 @@ namespace OpenFAST.Template.Type.Codec
 		public static readonly TypeCodec TIME_INTEGER = new TimeInteger();
 		public static readonly TypeCodec TIME_IN_MS = new MillisecondsSinceMidnight();
 		
-		public abstract sbyte[] EncodeValue(ScalarValue value_Renamed);
+		public abstract byte[] EncodeValue(ScalarValue value_Renamed);
 		public abstract ScalarValue Decode(System.IO.Stream in_Renamed);
 		
-		public virtual sbyte[] Encode(ScalarValue value_Renamed)
+		public virtual byte[] Encode(ScalarValue value_Renamed)
 		{
-			sbyte[] encoding = EncodeValue(value_Renamed);
+			byte[] encoding = EncodeValue(value_Renamed);
             byte assign = 0x80;
-            encoding[encoding.Length - 1] |= (sbyte)(assign); // add stop bit;
+            encoding[encoding.Length - 1] |= (byte)(assign); // add stop bit;
 			return encoding;
 		}
 	}

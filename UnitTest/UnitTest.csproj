@@ -1,0 +1,79 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{05D5E09C-CEF1-4831-BF48-DAA36977100B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UnitTest</RootNamespace>
+    <AssemblyName>UnitTest</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApplicationTypeDictionaryTest.cs" />
+    <Compile Include="BitVectorReaderTest.cs" />
+    <Compile Include="BitVectorTest.cs" />
+    <Compile Include="BitVectorValueTest.cs" />
+    <Compile Include="ByteUtilTest.cs" />
+    <Compile Include="ByteVectorValueTest.cs" />
+    <Compile Include="Codec\FastDecoderTest.cs" />
+    <Compile Include="Codec\FastEncoderTest.cs" />
+    <Compile Include="DecimalValueTest.cs" />
+    <Compile Include="DictionaryTest.cs" />
+    <Compile Include="EncodeDecodeTest.cs" />
+    <Compile Include="ExhaustiveOperatorTest.cs" />
+    <Compile Include="GroupValueTest.cs" />
+    <Compile Include="IntegerValueTest.cs" />
+    <Compile Include="MessageInputStreamTest.cs" />
+    <Compile Include="MessageOutputStreamTest.cs" />
+    <Compile Include="MessageTest.cs" />
+    <Compile Include="Scenario\CmeTemplateTest.cs" />
+    <Compile Include="Scenario\ErrorCasesTest.cs" />
+    <Compile Include="StringValueTest.cs" />
+    <Compile Include="TemplateDictionaryTest.cs" />
+    <Compile Include="TemplateTest.cs" />
+    <Compile Include="Test\ObjectMother.cs" />
+    <Compile Include="Test\OpenFastTestCase.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Test\TestUtil.cs" />
+    <Compile Include="TypeConversionTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OpenFast\OpenFAST.csproj">
+      <Project>{B41B3B40-8E14-45EC-BC3A-311BC8C1C20E}</Project>
+      <Name>OpenFAST</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

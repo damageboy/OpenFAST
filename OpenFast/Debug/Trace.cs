@@ -10,7 +10,7 @@ namespace OpenFAST.Debug
 	{
 		void  GroupStart(Group group);
 		void  GroupEnd();
-		void  Field(Field field, FieldValue value_Renamed, FieldValue encoded, sbyte[] encoding, int pmapIndex);
-		void  Pmap(sbyte[] pmap);
+		void  Field(Field field, FieldValue value_Renamed, FieldValue encoded, byte[] encoding, int pmapIndex);
+		void  Pmap(byte[] pmap);
 	}
 }

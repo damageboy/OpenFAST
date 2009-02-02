@@ -2,6 +2,7 @@ using System;
 using QName = OpenFAST.QName;
 using Field = OpenFAST.Template.Field;
 using Group = OpenFAST.Template.Group;
+using System.Collections.Generic;
 
 namespace OpenFAST.Template.Loader
 {
@@ -31,7 +32,7 @@ namespace OpenFAST.Template.Loader
 		protected internal static Field[] ParseFields(System.Xml.XmlElement template, ParsingContext context)
 		{
 			System.Xml.XmlNodeList childNodes = template.ChildNodes;
-			System.Collections.IList fields = new System.Collections.ArrayList();
+			List<Field> fields = new List<Field>();
 			
 			for (int i = 0; i < childNodes.Count; i++)
 			{
@@ -49,7 +50,7 @@ namespace OpenFAST.Template.Loader
 				}
 			}
 			
-			return (Field[]) SupportClass.ICollectionSupport.ToArray(fields, new Field[]{});
+			return fields.ToArray();
 		}
 		
 		protected internal static QName GetTypeReference(System.Xml.XmlElement templateTag)

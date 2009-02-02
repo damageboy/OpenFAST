@@ -99,12 +99,12 @@ namespace OpenFAST
 			return GetScalar(fieldName).ToLong();
 		}
 		
-		public virtual sbyte GetByte(int fieldIndex)
+		public virtual byte GetByte(int fieldIndex)
 		{
 			return GetScalar(fieldIndex).ToByte();
 		}
 		
-		public virtual sbyte GetByte(string fieldName)
+		public virtual byte GetByte(string fieldName)
 		{
 			return GetScalar(fieldName).ToByte();
 		}
@@ -150,12 +150,12 @@ namespace OpenFAST
 			return GetScalar(fieldName).ToBigDecimal();
 		}
 		
-		public virtual sbyte[] GetBytes(int fieldIndex)
+		public virtual byte[] GetBytes(int fieldIndex)
 		{
 			return GetScalar(fieldIndex).Bytes;
 		}
 		
-		public virtual sbyte[] GetBytes(string fieldName)
+		public virtual byte[] GetBytes(string fieldName)
 		{
 			return GetScalar(fieldName).Bytes;
 		}
@@ -232,12 +232,12 @@ namespace OpenFAST
 			values[fieldIndex] = new BitVectorValue(vector);
 		}
 		
-		public virtual void  SetByteVector(int fieldIndex, sbyte[] bytes)
+		public virtual void  SetByteVector(int fieldIndex, byte[] bytes)
 		{
 			values[fieldIndex] = new ByteVectorValue(bytes);
 		}
 		
-		public virtual void  SetByteVector(string fieldName, sbyte[] bytes)
+		public virtual void  SetByteVector(string fieldName, byte[] bytes)
 		{
 			SetFieldValue(fieldName, new ByteVectorValue(bytes));
 		}

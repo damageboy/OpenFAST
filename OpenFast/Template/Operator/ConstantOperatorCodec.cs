@@ -26,7 +26,7 @@ namespace OpenFAST.Template.operator_Renamed
 		{
 			return field.DefaultValue;
 		}
-		public override bool IsPresenceMapBitSet(sbyte[] encoding, FieldValue fieldValue)
+		public override bool IsPresenceMapBitSet(byte[] encoding, FieldValue fieldValue)
 		{
 			return fieldValue != null;
 		}

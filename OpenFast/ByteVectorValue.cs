@@ -5,7 +5,7 @@ namespace OpenFAST
 	[Serializable]
 	public sealed class ByteVectorValue:ScalarValue
 	{
-		override public sbyte[] Bytes
+		override public byte[] Bytes
 		{
 			get
 			{
@@ -15,9 +15,9 @@ namespace OpenFAST
 		}
 		private const long serialVersionUID = 1L;
 
-		public sbyte[] value_Renamed;
+		public byte[] value_Renamed;
 		
-		public ByteVectorValue(sbyte[] value_Renamed)
+		public ByteVectorValue(byte[] value_Renamed)
 		{
 			this.value_Renamed = value_Renamed;
 		}

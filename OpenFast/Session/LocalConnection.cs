@@ -1,5 +1,6 @@
 using System;
 using OpenFAST;
+using System.IO;
 
 namespace OpenFAST.Session
 {
@@ -24,12 +25,12 @@ namespace OpenFAST.Session
 		
 		private System.IO.StreamReader in_Renamed;
 		private System.IO.StreamWriter out_Renamed;
-		
-		public LocalConnection(LocalEndpoint remote, LocalEndpoint local)
-		{
-			this.in_Renamed = new PipedInputStream();
-			this.out_Renamed = new PipedOutputStream();
-		}
+
+        public LocalConnection(LocalEndpoint remote, LocalEndpoint local)
+        {
+            this.in_Renamed = new System.IO.StreamReader(new MemoryStream());//PipedInputStream
+            this.out_Renamed = new System.IO.StreamWriter(new MemoryStream());//PipedOutputStream
+        }
 		
 		public LocalConnection(LocalConnection localConnection)
 		{

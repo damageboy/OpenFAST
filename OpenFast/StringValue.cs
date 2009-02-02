@@ -1,4 +1,5 @@
 using System;
+using OpenFAST.Template.Type;
 
 namespace OpenFAST
 {
@@ -6,11 +7,11 @@ namespace OpenFAST
 	[Serializable]
 	public class StringValue:ScalarValue
 	{
-		override public sbyte[] Bytes
+		override public byte[] Bytes
 		{
 			get
 			{
-				return SupportClass.ToSByteArray(SupportClass.ToByteArray(value_Renamed));
+				return SupportClass.ToByteArray(value_Renamed);
 			}
 			
 		}
@@ -24,15 +25,15 @@ namespace OpenFAST
 				throw new System.NullReferenceException();
 			this.value_Renamed = value_Renamed;
 		}
-		public override sbyte ToByte()
+		public override byte ToByte()
 		{
 			int value_Renamed = ToInt();
-			if (value_Renamed > (sbyte) System.SByte.MaxValue || value_Renamed < (sbyte) System.SByte.MinValue)
+			if (value_Renamed > System.SByte.MaxValue || value_Renamed < System.SByte.MinValue)
 			{
 				Global.HandleError(OpenFAST.Error.FastConstants.R4_NUMERIC_VALUE_TOO_LARGE, "The value \"" + value_Renamed + "\" is too large to fit into a byte.");
 				return 0;
 			}
-			return (sbyte) value_Renamed;
+			return (byte) value_Renamed;
 		}
 		public override short ToShort()
 		{
@@ -50,7 +51,7 @@ namespace OpenFAST
 			{
 				return System.Int32.Parse(value_Renamed);
 			}
-			catch (System.FormatException e)
+			catch (System.Exception e)
 			{
 				Global.HandleError(OpenFAST.Error.FastConstants.R4_NUMERIC_VALUE_TOO_LARGE, "The value \"" + value_Renamed + "\" is too large to fit into an int.", e);
 				return 0;

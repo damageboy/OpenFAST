@@ -80,7 +80,7 @@ namespace OpenFAST.Template
 			return valueConverter.Compose(values);
 		}
 		
-		public override sbyte[] Encode(FieldValue value_Renamed, Group template, Context context, BitVectorBuilder presenceMapBuilder)
+		public override byte[] Encode(FieldValue value_Renamed, Group template, Context context, BitVectorBuilder presenceMapBuilder)
 		{
 			if (value_Renamed == null)
 			{
@@ -95,20 +95,20 @@ namespace OpenFAST.Template
 				{
 					try
 					{
-						sbyte[] temp_sbyteArray;
-						temp_sbyteArray = fields[i].Encode(values[i], template, context, presenceMapBuilder);
-						buffer.Write(SupportClass.ToByteArray(temp_sbyteArray), 0, temp_sbyteArray.Length);
+						byte[] temp_byteArray;
+						temp_byteArray = fields[i].Encode(values[i], template, context, presenceMapBuilder);
+						buffer.Write(temp_byteArray, 0, temp_byteArray.Length);
 					}
 					catch (System.IO.IOException e)
 					{
 						throw new RuntimeException(e);
 					}
 				}
-				return SupportClass.ToSByteArray(buffer.ToArray());
+				return buffer.ToArray();
 			}
 		}
 		
-		public override bool IsPresenceMapBitSet(sbyte[] encoding, FieldValue fieldValue)
+		public override bool IsPresenceMapBitSet(byte[] encoding, FieldValue fieldValue)
 		{
 			return false;
 		}

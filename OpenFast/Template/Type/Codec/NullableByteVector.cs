@@ -15,7 +15,7 @@ namespace OpenFAST.Template.Type.Codec
 		{
 			get
 			{
-				return new ByteVectorValue(new sbyte[]{});
+				return new ByteVectorValue(new byte[]{});
 			}
 			
 		}
@@ -28,12 +28,12 @@ namespace OpenFAST.Template.Type.Codec
 			if (decode == null)
 				return null;
 			int length = ((ScalarValue) decode).ToInt();
-			sbyte[] encoding = new sbyte[length];
+			byte[] encoding = new byte[length];
 			
 			for (int i = 0; i < length; i++)
 				try
 				{
-					encoding[i] = (sbyte) in_Renamed.ReadByte();
+					encoding[i] = (byte) in_Renamed.ReadByte();
 				}
 				catch (System.IO.IOException e)
 				{
@@ -42,14 +42,14 @@ namespace OpenFAST.Template.Type.Codec
 			return new ByteVectorValue(encoding);
 		}
 		
-		public override sbyte[] EncodeValue(ScalarValue value_Renamed)
+		public override byte[] EncodeValue(ScalarValue value_Renamed)
 		{
 			if (value_Renamed.Null)
 				return TypeCodec.NULLABLE_UNSIGNED_INTEGER.EncodeValue(ScalarValue.NULL);
 			ByteVectorValue byteVectorValue = (ByteVectorValue) value_Renamed;
 			int lengthSize = IntegerCodec.GetUnsignedIntegerSize(byteVectorValue.value_Renamed.Length);
-			sbyte[] encoding = new sbyte[byteVectorValue.value_Renamed.Length + lengthSize];
-			sbyte[] length = TypeCodec.NULLABLE_UNSIGNED_INTEGER.Encode(new IntegerValue(byteVectorValue.value_Renamed.Length));
+			byte[] encoding = new byte[byteVectorValue.value_Renamed.Length + lengthSize];
+			byte[] length = TypeCodec.NULLABLE_UNSIGNED_INTEGER.Encode(new IntegerValue(byteVectorValue.value_Renamed.Length));
 			Array.Copy(length, 0, encoding, 0, lengthSize);
 			Array.Copy(byteVectorValue.value_Renamed, 0, encoding, lengthSize, byteVectorValue.value_Renamed.Length);
 			return encoding;
@@ -57,7 +57,7 @@ namespace OpenFAST.Template.Type.Codec
 		
 		public virtual ScalarValue FromString(string value_Renamed)
 		{
-			return new ByteVectorValue(SupportClass.ToSByteArray(SupportClass.ToByteArray(value_Renamed)));
+			return new ByteVectorValue(SupportClass.ToByteArray(value_Renamed));
 		}
 		
 		public  override bool Equals(System.Object obj)

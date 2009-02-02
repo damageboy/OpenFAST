@@ -150,7 +150,7 @@ namespace OpenFAST.Template
 			operator_Renamed.Validate(this);
 		}
 
-		public override sbyte[] Encode(FieldValue fieldValue, Group template, Context context, BitVectorBuilder presenceMapBuilder)
+		public override byte[] Encode(FieldValue fieldValue, Group template, Context context, BitVectorBuilder presenceMapBuilder)
 		{
 			ScalarValue priorValue = (ScalarValue) context.Lookup(Dictionary, template, Key);
 			ScalarValue value_Renamed = (ScalarValue) fieldValue;
@@ -165,9 +165,9 @@ namespace OpenFAST.Template
 			}
 			if (valueToEncode == null)
 			{
-				return new sbyte[0];
+				return new byte[0];
 			}
-			sbyte[] encoding = typeCodec.Encode(valueToEncode);
+			byte[] encoding = typeCodec.Encode(valueToEncode);
 			if (context.TraceEnabled && encoding.Length > 0)
 			{
 				context.GetEncodeTrace().Field(this, fieldValue, valueToEncode, encoding, presenceMapBuilder.Index);
@@ -190,7 +190,7 @@ namespace OpenFAST.Template
 			return operatorCodec.UsesPresenceMapBit(optional);
 		}
 
-		public override bool IsPresenceMapBitSet(sbyte[] encoding, FieldValue fieldValue)
+		public override bool IsPresenceMapBitSet(byte[] encoding, FieldValue fieldValue)
 		{
 			return operatorCodec.IsPresenceMapBitSet(encoding, fieldValue);
 		}

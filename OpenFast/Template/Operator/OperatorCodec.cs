@@ -64,7 +64,7 @@ namespace OpenFAST.Template.operator_Renamed
 		
 		public abstract ScalarValue DecodeValue(ScalarValue newValue, ScalarValue priorValue, Scalar field);
 		
-		public virtual bool IsPresenceMapBitSet(sbyte[] encoding, FieldValue fieldValue)
+		public virtual bool IsPresenceMapBitSet(byte[] encoding, FieldValue fieldValue)
 		{
 			return encoding.Length != 0;
 		}

@@ -26,7 +26,7 @@ namespace OpenFAST.Template.Type.Codec
 		{
 		}
 		
-		public override sbyte[] EncodeValue(ScalarValue v)
+		public override byte[] EncodeValue(ScalarValue v)
 		{
 			if (v == ScalarValue.NULL)
 			{
@@ -43,19 +43,19 @@ namespace OpenFAST.Template.Type.Codec
 					Global.HandleError(OpenFAST.Error.FastConstants.R1_LARGE_DECIMAL, "Encountered exponent of size " + value_Renamed.exponent);
 				}
 				
-				sbyte[] temp_sbyteArray;
-				temp_sbyteArray = TypeCodec.INTEGER.Encode(new IntegerValue(value_Renamed.exponent));
-				buffer.Write(SupportClass.ToByteArray(temp_sbyteArray), 0, temp_sbyteArray.Length);
-				sbyte[] temp_sbyteArray2;
-				temp_sbyteArray2 = TypeCodec.INTEGER.Encode(new LongValue(value_Renamed.mantissa));
-				buffer.Write(SupportClass.ToByteArray(temp_sbyteArray2), 0, temp_sbyteArray2.Length);
+				byte[] temp_byteArray;
+				temp_byteArray = TypeCodec.INTEGER.Encode(new IntegerValue(value_Renamed.exponent));
+				buffer.Write(temp_byteArray, 0, temp_byteArray.Length);
+				byte[] temp_byteArray2;
+				temp_byteArray2 = TypeCodec.INTEGER.Encode(new LongValue(value_Renamed.mantissa));
+				buffer.Write(temp_byteArray2, 0, temp_byteArray2.Length);
 			}
 			catch (System.IO.IOException e)
 			{
 				throw new RuntimeException(e);
 			}
 			
-			return SupportClass.ToSByteArray(buffer.ToArray());
+			return buffer.ToArray();
 		}
 		
 		public override ScalarValue Decode(System.IO.Stream in_Renamed)

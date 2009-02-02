@@ -26,7 +26,7 @@ namespace OpenFAST.Template.Type.Codec
 			return new DateValue(ref tempAux);
 		}
 		
-		public override sbyte[] EncodeValue(ScalarValue value_Renamed)
+		public override byte[] EncodeValue(ScalarValue value_Renamed)
 		{
 			System.DateTime date = ((DateValue) value_Renamed).value_Renamed;
 			int intValue = Util.TimeToInt(ref date);

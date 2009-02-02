@@ -132,12 +132,12 @@ namespace OpenFAST
 			return (short) (value_Renamed);
 		}
 		
-		public override sbyte ToByte()
+		public override byte ToByte()
 		{
 			long value_Renamed = Value;
-			if (exponent < 0 || (value_Renamed) > (sbyte) System.SByte.MaxValue)
+			if (exponent < 0 || (value_Renamed) > (byte) System.SByte.MaxValue)
 				Global.HandleError(OpenFAST.Error.FastConstants.R5_DECIMAL_CANT_CONVERT_TO_INT, "");
-			return (sbyte) (value_Renamed);
+			return (byte) (value_Renamed);
 		}
 		
 		public override double ToDouble()
@@ -147,7 +147,7 @@ namespace OpenFAST
 		
 		public override System.Decimal ToBigDecimal()
 		{
-			return Decimal.Divide(new System.Decimal(mantissa), (System.Decimal) System.Math.Pow(10, - exponent));
+			return (decimal)((double)mantissa/System.Math.Pow(10, - exponent));
 		}
 		
 		public override string ToString()

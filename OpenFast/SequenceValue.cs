@@ -1,6 +1,7 @@
 using System;
 using Sequence = OpenFAST.Template.Sequence;
 using System.Text;
+using System.Collections.Generic;
 
 namespace OpenFAST
 {
@@ -27,12 +28,12 @@ namespace OpenFAST
 		{
 			get
 			{
-				return (GroupValue[]) SupportClass.ICollectionSupport.ToArray(this.elements, new GroupValue[elements.Count]);
+				return this.elements.ToArray();
 			}
 			
 		}
 		private const long serialVersionUID = 1L;
-		private System.Collections.ArrayList elements = new System.Collections.ArrayList();
+		private List<GroupValue> elements = new List<GroupValue>();
 		private Sequence sequence;
 		
 		public SequenceValue(Sequence sequence)

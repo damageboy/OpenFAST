@@ -37,7 +37,7 @@ namespace OpenFAST.Session
 		public override Session OnNewConnection(string serverName, Connection connection)
 		{
 			Session session = new Session(connection, this);
-			Message message = session.MessageInputStream.readMessage();
+			Message message = session.MessageInputStream.ReadMessage();
 			session.MessageOutputStream.WriteMessage(CreateHelloMessage(serverName));
 			string clientName = message.GetString(1);
 			session.Client = new BasicClient(clientName, "unknown");
@@ -47,7 +47,7 @@ namespace OpenFAST.Session
 		{
 			Session session = new Session(connection, this);
 			session.MessageOutputStream.WriteMessage(CreateHelloMessage(senderName));
-			Message message = session.MessageInputStream.readMessage();
+			Message message = session.MessageInputStream.ReadMessage();
 			string serverName = message.GetString(1);
 			session.Client = new BasicClient(serverName, "unknown");
 			return session;

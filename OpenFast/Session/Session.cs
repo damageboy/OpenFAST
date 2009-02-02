@@ -40,7 +40,7 @@ namespace OpenFAST.Session
 				{
 					try
 					{
-						Message message = Enclosing_Instance.MessageInputStream.readMessage();
+						Message message = Enclosing_Instance.MessageInputStream.ReadMessage();
 						
 						if (message == null)
 						{

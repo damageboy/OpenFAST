@@ -10,7 +10,7 @@ namespace OpenFAST.Template
 		{
 			get
 			{
-				return (MessageTemplate[]) SupportClass.ICollectionSupport.ToArray(new SupportClass.HashSetSupport(templateMap.Keys), new MessageTemplate[templateMap.Count]);
+                return SupportClass.ICollectionSupport.ToArray <MessageTemplate>(new SupportClass.HashSetSupport(templateMap.Keys));
 			}
 			
 		}

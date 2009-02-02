@@ -124,12 +124,12 @@ namespace OpenFAST.Template
 			return length.UsesPresenceMapBit();
 		}
 		
-		public override bool IsPresenceMapBitSet(sbyte[] encoding, FieldValue fieldValue)
+		public override bool IsPresenceMapBitSet(byte[] encoding, FieldValue fieldValue)
 		{
 			return length.IsPresenceMapBitSet(encoding, fieldValue);
 		}
 		
-		public override sbyte[] Encode(FieldValue value_Renamed, Group template, Context context, BitVectorBuilder presenceMapBuilder)
+		public override byte[] Encode(FieldValue value_Renamed, Group template, Context context, BitVectorBuilder presenceMapBuilder)
 		{
 			if (HasTypeReference())
 				context.CurrentApplicationType = TypeReference;
@@ -144,17 +144,17 @@ namespace OpenFAST.Template
 			
 			try
 			{
-				sbyte[] temp_sbyteArray;
-				temp_sbyteArray = length.Encode(new IntegerValue(len), template, context, presenceMapBuilder);
-				buffer.Write(SupportClass.ToByteArray(temp_sbyteArray), 0, temp_sbyteArray.Length);
+				byte[] temp_byteArray;
+				temp_byteArray = length.Encode(new IntegerValue(len), template, context, presenceMapBuilder);
+				buffer.Write(temp_byteArray, 0, temp_byteArray.Length);
 				
 				System.Collections.IEnumerator iter = val.Iterator();
 
                 while (iter.MoveNext())
 				{
-					sbyte[] temp_sbyteArray2;
-					temp_sbyteArray2 = group.Encode((FieldValue) iter.Current, template, context);
-					buffer.Write(SupportClass.ToByteArray(temp_sbyteArray2), 0, temp_sbyteArray2.Length);
+					byte[] temp_byteArray2;
+					temp_byteArray2 = group.Encode((FieldValue) iter.Current, template, context);
+					buffer.Write(temp_byteArray2, 0, temp_byteArray2.Length);
 				}
 			}
 			catch (System.IO.IOException e)
@@ -162,7 +162,7 @@ namespace OpenFAST.Template
 				Global.HandleError(OpenFAST.Error.FastConstants.IO_ERROR, "An IO error occurred while encoding " + this, e);
 			}
 			
-			return SupportClass.ToSByteArray(buffer.ToArray());
+			return buffer.ToArray();
 		}
 		
 		public override FieldValue Decode(System.IO.Stream in_Renamed, Group template, Context context, BitVectorReader pmapReader)

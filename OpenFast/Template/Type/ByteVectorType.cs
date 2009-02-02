@@ -12,7 +12,7 @@ namespace OpenFAST.Template.Type
 		{
 			get
 			{
-				return new ByteVectorValue(new sbyte[]{});
+				return new ByteVectorValue(new byte[]{});
 			}
 			
 		}
@@ -24,7 +24,7 @@ namespace OpenFAST.Template.Type
 		
 		public override ScalarValue GetVal(string value_Renamed)
 		{
-			return new ByteVectorValue(SupportClass.ToSByteArray(SupportClass.ToByteArray(value_Renamed)));
+			return new ByteVectorValue(SupportClass.ToByteArray(value_Renamed));
 		}
 		
 		public override bool IsValueOf(ScalarValue previousValue)

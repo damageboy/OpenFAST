@@ -15,7 +15,7 @@ namespace OpenFAST.Codec
 			this.context = context;
 		}
 		
-		public sbyte[] Encode(Message message)
+		public byte[] Encode(Message message)
 		{
 			MessageTemplate template = message.Template;
 			context.NewMessage(template);

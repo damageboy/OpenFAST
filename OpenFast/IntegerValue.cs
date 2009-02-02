@@ -1,5 +1,6 @@
 using System;
 using LongValue = OpenFAST.Template.LongValue;
+using OpenFAST.Template.Type;
 
 namespace OpenFAST
 {
@@ -95,11 +96,11 @@ namespace OpenFAST
 			return System.Convert.ToString(value_Renamed);
 		}
 		
-		public override sbyte ToByte()
+		public override byte ToByte()
 		{
-			if (value_Renamed > (sbyte) System.SByte.MaxValue || value_Renamed < (sbyte) System.SByte.MinValue)
+			if (value_Renamed > System.SByte.MaxValue || value_Renamed <  System.SByte.MinValue)
 				Global.HandleError(OpenFAST.Error.FastConstants.R4_NUMERIC_VALUE_TOO_LARGE, "The value \"" + value_Renamed + "\" is too large for a byte.");
-			return (sbyte) value_Renamed;
+			return (byte) value_Renamed;
 		}
 		
 		public override short ToShort()

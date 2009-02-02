@@ -65,16 +65,16 @@ namespace OpenFAST
 					templateHandlers[message.Template].HandleMessage(message, context, encoder);
 				}
 				
-				sbyte[] data = encoder.Encode(message);
+				byte[] data = encoder.Encode(message);
 				
 				if ((data == null) || (data.Length == 0))
 				{
 					return ;
 				}
 				
-				sbyte[] temp_sbyteArray;
-				temp_sbyteArray = data;
-				out_Renamed.Write(SupportClass.ToByteArray(temp_sbyteArray), 0, temp_sbyteArray.Length);
+				byte[] temp_byteArray;
+				temp_byteArray = data;
+				out_Renamed.Write(temp_byteArray, 0, temp_byteArray.Length);
 				if (flush)
 					out_Renamed.Flush();
 			}

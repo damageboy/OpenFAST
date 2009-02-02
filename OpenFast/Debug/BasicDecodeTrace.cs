@@ -47,7 +47,7 @@ namespace OpenFAST.Debug
 			moveUp();
 		}
 		
-		public void  Field(Field field, FieldValue value_Renamed, FieldValue decodedValue, sbyte[] encoding, int pmapIndex)
+		public void  Field(Field field, FieldValue value_Renamed, FieldValue decodedValue, byte[] encoding, int pmapIndex)
 		{
 			StringBuilder scalarDecode = new StringBuilder();
 			scalarDecode.Append(field.Name).Append(": ");
@@ -56,7 +56,7 @@ namespace OpenFAST.Debug
 			print(scalarDecode);
 		}
 		
-		public void  Pmap(sbyte[] bytes)
+		public void  Pmap(byte[] bytes)
 		{
 			print("PMAP: " + ByteUtil.ConvertByteArrayToBitString(bytes));
 		}

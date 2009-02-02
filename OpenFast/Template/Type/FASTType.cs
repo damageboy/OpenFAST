@@ -63,12 +63,12 @@ namespace OpenFAST.Template.Type
 		public virtual void  ValidateValue(ScalarValue value_Renamed)
 		{
 		}
-		
+
 		public static readonly FASTType U8 = new UnsignedIntegerType(8, 256);
 		public static readonly FASTType U16 = new UnsignedIntegerType(16, 65536);
 		public static readonly FASTType U32 = new UnsignedIntegerType(32, 4294967295L);
 		public static readonly FASTType U64 = new UnsignedIntegerType(64, System.Int64.MaxValue);
-		public static readonly FASTType I8 = new SignedIntegerType(8, (sbyte) System.SByte.MinValue, (sbyte) System.SByte.MaxValue);
+		public static readonly FASTType I8 = new SignedIntegerType(8,  System.SByte.MinValue,  System.SByte.MaxValue);
 		public static readonly FASTType I16 = new SignedIntegerType(16, System.Int16.MinValue, System.Int16.MaxValue);
 		public static readonly FASTType I32 = new SignedIntegerType(32, System.Int32.MinValue, System.Int32.MaxValue);
 		public static readonly FASTType I64 = new SignedIntegerType(64, System.Int64.MinValue, System.Int64.MaxValue);

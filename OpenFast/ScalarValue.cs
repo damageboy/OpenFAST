@@ -58,7 +58,7 @@ namespace OpenFAST
 			}
 			
 		}
-		virtual public sbyte[] Bytes
+		virtual public byte[] Bytes
 		{
 			get
 			{
@@ -82,7 +82,7 @@ namespace OpenFAST
 			return this; // immutable objects don't need actual copies.
 		}
 		
-		public virtual sbyte ToByte()
+		public virtual byte ToByte()
 		{
 			throw new System.NotSupportedException();
 		}
@@ -112,7 +112,7 @@ namespace OpenFAST
 			throw new System.NotSupportedException();
 		}
 
-        	public virtual System.Decimal ToBigDecimal()
+        public virtual System.Decimal ToBigDecimal()
 		{
 			throw new System.NotSupportedException();
 		}

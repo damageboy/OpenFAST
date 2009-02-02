@@ -5,48 +5,48 @@ namespace OpenFAST
 {
 	public class ByteUtil
 	{
-		public static sbyte[] ConvertBitStringToFastByteArray(string bitString)
+		public static byte[] ConvertBitStringToFastByteArray(string bitString)
 		{
 			if (bitString.Length == 0)
 			{
-				return new sbyte[0];
+				return new byte[0];
 			}
 			
 			string[] bitStrings = bitString.Split(' ');
-			sbyte[] bytes = new sbyte[bitStrings.Length];
+			byte[] bytes = new byte[bitStrings.Length];
 			
 			for (int i = 0; i < bitStrings.Length; i++)
 			{
-				bytes[i] = (sbyte) System.Convert.ToInt32(bitStrings[i], 2);
+				bytes[i] = (byte) System.Convert.ToInt32(bitStrings[i], 2);
 			}
 			
 			return bytes;
 		}
 		
-		public static sbyte[] ConvertHexStringToByteArray(string hexString)
+		public static byte[] ConvertHexStringToByteArray(string hexString)
 		{
 			if (hexString == null)
 			{
-				return new sbyte[0];
+				return new byte[0];
 			}
 			
 			hexString = hexString.Replace(" ", "");
-			sbyte[] bytes = new sbyte[hexString.Length / 2];
+			byte[] bytes = new byte[hexString.Length / 2];
 			
 			for (int i = 0; i < hexString.Length; i += 2)
 			{
-				bytes[i / 2] = (sbyte) System.Convert.ToInt32(hexString.Substring(i, (i + 2) - (i)), 16);
+				bytes[i / 2] = (byte) System.Convert.ToInt32(hexString.Substring(i, (i + 2) - (i)), 16);
 			}
 			
 			return bytes;
 		}
 
-		public static string ConvertByteArrayToBitString(sbyte[] bytes)
+		public static string ConvertByteArrayToBitString(byte[] bytes)
 		{
 			return ConvertByteArrayToBitString(bytes, bytes.Length);
 		}
 		
-		public static string ConvertByteArrayToBitString(sbyte[] bytes, int length)
+		public static string ConvertByteArrayToBitString(byte[] bytes, int length)
 		{
 			if (bytes.Length == 0)
 			{
@@ -75,23 +75,23 @@ namespace OpenFAST
 		
 		public static System.IO.Stream CreateByteStream(string bitString)
 		{
-			return new System.IO.MemoryStream(SupportClass.ToByteArray(ConvertBitStringToFastByteArray(bitString)));
+			return new System.IO.MemoryStream(ConvertBitStringToFastByteArray(bitString));
 		}
 		
 		public static System.IO.Stream CreateByteStreamFromHexBytes(string hexString)
 		{
-			return new System.IO.MemoryStream(SupportClass.ToByteArray(ConvertHexStringToByteArray(hexString)));
+			return new System.IO.MemoryStream(ConvertHexStringToByteArray(hexString));
 		}
 		
-		public static sbyte[] Combine(sbyte[] first, sbyte[] second)
+		public static byte[] Combine(byte[] first, byte[] second)
 		{
-			sbyte[] result = new sbyte[first.Length + second.Length];
+			byte[] result = new byte[first.Length + second.Length];
 			Array.Copy(first, 0, result, 0, first.Length);
 			Array.Copy(second, 0, result, first.Length, second.Length);
 			return result;
 		}
 		
-		public static bool IsEmpty(sbyte[] bytes)
+		public static bool IsEmpty(byte[] bytes)
 		{
 			for (int i = 0; i < bytes.Length; i++)
 				if ((bytes[i] & 0x7f) != 0)

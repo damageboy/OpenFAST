@@ -51,7 +51,7 @@ namespace OpenFAST
 			this.decoder = new FastDecoder(context, in_Renamed);
 		}
 
-		public Message readMessage()
+		public Message ReadMessage()
 		{
 			if (context.TraceEnabled)
 				context.StartTrace();
@@ -81,7 +81,7 @@ namespace OpenFAST
 			{
                 templateHandlers[message.Template].HandleMessage(message, context, decoder);
 				
-				return readMessage();
+				return ReadMessage();
 			}
 			
 			return message;

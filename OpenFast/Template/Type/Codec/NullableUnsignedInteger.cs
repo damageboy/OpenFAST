@@ -22,7 +22,7 @@ namespace OpenFAST.Template.Type.Codec
 		{
 		}
 		
-		public override sbyte[] EncodeValue(ScalarValue v)
+		public override byte[] EncodeValue(ScalarValue v)
 		{
 			if (v.Null)
 			{

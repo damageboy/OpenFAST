@@ -14,22 +14,22 @@ namespace OpenFAST.Template.Type.Codec
 		{
 		}
 		
-		public override sbyte[] EncodeValue(ScalarValue value_Renamed)
+		public override byte[] EncodeValue(ScalarValue value_Renamed)
 		{
 			long longValue = ((NumericValue) value_Renamed).ToLong();
 			int size = GetSignedIntegerSize(longValue);
-			sbyte[] encoding = new sbyte[size];
+			byte[] encoding = new byte[size];
 			
 			for (int factor = 0; factor < size; factor++)
 			{
 				int bitMask = (factor == (size - 1))?0x3f:0x7f;
-				encoding[size - factor - 1] = (sbyte) ((longValue >> (factor * 7)) & bitMask);
+				encoding[size - factor - 1] = (byte) ((longValue >> (factor * 7)) & bitMask);
 			}
 			
 			// Get the sign bit from the long value and set it on the first byte
 			// 01000000 00000000 ... 00000000
 			//  ^----SIGN BIT
-			encoding[0] |= (sbyte) ((0x40 & (longValue >> 57)));
+			encoding[0] |= (byte) ((0x40 & (longValue >> 57)));
 			
 			return encoding;
 		}

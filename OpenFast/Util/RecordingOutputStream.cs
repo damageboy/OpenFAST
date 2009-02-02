@@ -5,7 +5,7 @@ namespace OpenFAST.util
 {
 	public sealed class RecordingOutputStream:System.IO.Stream
 	{
-		private sbyte[] buffer = new sbyte[1024];
+		private byte[] buffer = new byte[1024];
 		private int index = 0;
 		private System.IO.Stream out_Renamed;
 		
@@ -16,7 +16,7 @@ namespace OpenFAST.util
 		
 		public  void  WriteByte(int b)
 		{
-			buffer[index++] = (sbyte) b;
+			buffer[index++] = (byte) b;
 			out_Renamed.WriteByte((System.Byte) b);
 		}
 
