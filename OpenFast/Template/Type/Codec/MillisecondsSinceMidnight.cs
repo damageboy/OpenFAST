@@ -7,7 +7,7 @@ using Util = OpenFAST.util.Util;
 namespace OpenFAST.Template.Type.Codec
 {
 	[Serializable]
-	public class MillisecondsSinceMidnight:TypeCodec
+	public sealed class MillisecondsSinceMidnight:TypeCodec
 	{
 		private const long serialVersionUID = 1L;
 		

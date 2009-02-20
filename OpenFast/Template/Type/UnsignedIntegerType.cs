@@ -5,7 +5,7 @@ using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
 namespace OpenFAST.Template.Type
 {
 	[Serializable]
-	public class UnsignedIntegerType:IntegerType
+	public sealed class UnsignedIntegerType:IntegerType
 	{
 		private const long serialVersionUID = 1L;
 		

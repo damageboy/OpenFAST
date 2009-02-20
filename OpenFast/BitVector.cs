@@ -2,9 +2,9 @@ using System;
 
 namespace OpenFAST
 {
-	public class BitVector
+	public sealed class BitVector
 	{
-		virtual public byte[] Bytes
+		public byte[] Bytes
 		{
 			get
 			{
@@ -12,7 +12,7 @@ namespace OpenFAST
 			}
 			
 		}
-		virtual public byte[] TruncatedBytes
+		public byte[] TruncatedBytes
 		{
 			get
 			{
@@ -35,7 +35,7 @@ namespace OpenFAST
 			}
 			
 		}
-		virtual public int Size
+		public int Size
 		{
 			get
 			{
@@ -43,7 +43,7 @@ namespace OpenFAST
 			}
 			
 		}
-		virtual public bool Overlong
+		public bool Overlong
 		{
 			get
 			{
@@ -68,20 +68,20 @@ namespace OpenFAST
 
             bytes[bytes.Length - 1] |= (byte)(tempStop);
 		}
-		
-		public virtual void  set_Renamed(int fieldIndex)
-		{
-			bytes[fieldIndex / 7] |= (byte) ((1 << (6 - (fieldIndex % 7))));
-		}
-		
-		public virtual bool IsSet(int fieldIndex)
-		{
-			if (fieldIndex >= bytes.Length * 7)
-				return false;
-			return ((bytes[fieldIndex / 7] & (1 << (6 - (fieldIndex % 7)))) > 0);
-		}
-		
-		public  override bool Equals(System.Object obj)
+
+        public void set_Renamed(int fieldIndex)
+        {
+            bytes[fieldIndex / 7] |= (byte)((1 << (6 - (fieldIndex % 7))));
+        }
+
+        public bool IsSet(int fieldIndex)
+        {
+            if (fieldIndex >= bytes.Length * 7)
+                return false;
+            return ((bytes[fieldIndex / 7] & (1 << (6 - (fieldIndex % 7)))) > 0);
+        }
+
+        public  override bool Equals(System.Object obj)
 		{
 			if ((obj == null) || !(obj is BitVector))
 			{
@@ -118,13 +118,13 @@ namespace OpenFAST
 		{
 			return "BitVector [" + ByteUtil.ConvertByteArrayToBitString(bytes) + "]";
 		}
-		
-		public virtual int IndexOfLastSet()
-		{
-			int index = bytes.Length * 7 - 1;
-			while (index >= 0 && !IsSet(index))
-				index--;
-			return index;
-		}
+
+        public int IndexOfLastSet()
+        {
+            int index = bytes.Length * 7 - 1;
+            while (index >= 0 && !(((bytes[index / 7] & (1 << (6 - (index % 7)))) > 0)))
+                index--;
+            return index;
+        }
 	}
 }

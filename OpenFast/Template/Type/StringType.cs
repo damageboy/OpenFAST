@@ -7,7 +7,7 @@ using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
 namespace OpenFAST.Template.Type
 {
 	[Serializable]
-	public class StringType:SimpleType
+	public sealed class StringType:SimpleType
 	{
 		override public ScalarValue DefaultValue
 		{

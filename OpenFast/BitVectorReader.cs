@@ -57,11 +57,11 @@ namespace OpenFAST
 		{
 			this.vector = vector;
 		}
-		
-		public virtual bool Read()
-		{
-			return vector.IsSet(index++);
-		}
+
+        public virtual bool Read()
+        {
+            return vector.IsSet(index++);
+        }
 		
 		public virtual bool HasMoreBitsSet()
 		{

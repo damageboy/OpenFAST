@@ -6,7 +6,7 @@ using LongValue = OpenFAST.Template.LongValue;
 namespace OpenFAST.Template.Type.Codec
 {
 	[Serializable]
-	public class EpochTimestamp:TypeCodec
+	public sealed class EpochTimestamp:TypeCodec
 	{
 		
 		private const long serialVersionUID = 1L;

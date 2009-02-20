@@ -9,7 +9,7 @@ namespace OpenFAST.Template.Type
 {
 	
 	[Serializable]
-	public class DateType:FASTType
+	public sealed class DateType:FASTType
 	{
 		override public ScalarValue DefaultValue
 		{

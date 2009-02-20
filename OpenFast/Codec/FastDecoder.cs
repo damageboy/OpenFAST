@@ -31,7 +31,7 @@ namespace OpenFAST.Codec
 				return null; // Must have reached end of stream;
 			}
 			
-			BitVector pmap = (bitVectorValue).value_Renamed;
+			BitVector pmap = bitVectorValue.value_Renamed;
 			BitVectorReader presenceMapReader = new BitVectorReader(pmap);
 			
 			// if template id is not present, use previous, else decode template id

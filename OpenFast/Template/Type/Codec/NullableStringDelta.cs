@@ -6,10 +6,10 @@ using TwinValue = OpenFAST.Template.TwinValue;
 namespace OpenFAST.Template.Type.Codec
 {
 	[Serializable]
-	public class NullableStringDelta:TypeCodec
+	public sealed class NullableStringDelta:TypeCodec
 	{
 
-		virtual public ScalarValue DefaultValue
+		public ScalarValue DefaultValue
 		{
 			get
 			{
@@ -58,7 +58,7 @@ namespace OpenFAST.Template.Type.Codec
 			return encoded;
 		}
 		
-		public virtual ScalarValue FromString(string value_Renamed)
+		public ScalarValue FromString(string value_Renamed)
 		{
 			return new StringValue(value_Renamed);
 		}

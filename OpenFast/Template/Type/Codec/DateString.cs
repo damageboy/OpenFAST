@@ -7,7 +7,7 @@ using StringValue = OpenFAST.StringValue;
 namespace OpenFAST.Template.Type.Codec
 {
 	[Serializable]
-	public class DateString:TypeCodec
+	public sealed class DateString:TypeCodec
 	{
 		private const long serialVersionUID = 1L;
 		private System.Globalization.DateTimeFormatInfo formatter;

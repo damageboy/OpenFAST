@@ -8,7 +8,7 @@ namespace OpenFAST.Template.Type.Codec
 {
 	
 	[Serializable]
-	public class TimeInteger:TypeCodec
+	public sealed class TimeInteger:TypeCodec
 	{
 		private const long serialVersionUID = 1L;
 		

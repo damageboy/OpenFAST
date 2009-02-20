@@ -8,10 +8,10 @@ namespace OpenFAST.Template.Type.Codec
 {
 	
 	[Serializable]
-	public class NullableByteVector:NotStopBitEncodedTypeCodec
+	public sealed class NullableByteVector:NotStopBitEncodedTypeCodec
 	{
 
-		virtual public ScalarValue DefaultValue
+		public ScalarValue DefaultValue
 		{
 			get
 			{
@@ -55,7 +55,7 @@ namespace OpenFAST.Template.Type.Codec
 			return encoding;
 		}
 		
-		public virtual ScalarValue FromString(string value_Renamed)
+		public ScalarValue FromString(string value_Renamed)
 		{
 			return new ByteVectorValue(SupportClass.ToByteArray(value_Renamed));
 		}

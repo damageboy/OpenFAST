@@ -39,12 +39,12 @@ namespace OpenFAST
 		{
 			vector = new BitVector(size);
 		}
-		
-		public void  set_Renamed()
-		{
-			vector.set_Renamed(index);
-			index++;
-		}
+
+        public void set_Renamed()
+        {
+            vector.set_Renamed(index);
+            index++;
+        }
 		
 		public void  Skip()
 		{
