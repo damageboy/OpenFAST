@@ -66,7 +66,7 @@ namespace OpenFAST.Template.Type.Codec
 					byt = in_Renamed.ReadByte();
 					buffer.WriteByte((System.Byte) byt);
 				}
-				while ((byt & 0x80) == 0);
+				while ((byt & STOP_BIT) == 0);
 			}
 			catch (System.IO.IOException e)
 			{

@@ -168,16 +168,9 @@ namespace OpenFAST.Template.Loader
 		
 		private System.Xml.XmlDocument ParseXml(System.IO.Stream templateStream)
 		{
-			//XmlSaxErrorHandler errorHandler = new AnonymousClassErrorHandler(this);
 			try
 			{
-                //OVERLOOK
-                //DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-                //dbf.setIgnoringElementContentWhitespace(true);
-                //dbf.setNamespaceAware(namespaceAwareness);
                 System.Xml.XmlDocument builder = new System.Xml.XmlDocument();
-				
-				//builder.setErrorHandler(errorHandler);
 				XmlSourceSupport inputSource = new XmlSourceSupport(templateStream);
 				System.Xml.XmlDocument document = SupportClass.ParseDocument(builder, inputSource);
 				return document;

@@ -53,7 +53,7 @@ namespace OpenFAST.Session
 						}
 						else if (Enclosing_Instance.messageListener != null)
 						{
-							Enclosing_Instance.messageListener.OnMessage(message);
+							Enclosing_Instance.messageListener.OnMessage(this.enclosingInstance,message);
 						}
 						else
 						{
@@ -71,7 +71,7 @@ namespace OpenFAST.Session
 						else if (e is FastException)
 						{
 							FastException fastException = ((FastException) e);
-							Enclosing_Instance.errorHandler.Error(fastException.Code, fastException.Message);
+							Enclosing_Instance.errorHandler.Error(fastException.Code, fastException.Message, e);
 						}
 						else
 						{
@@ -181,10 +181,12 @@ namespace OpenFAST.Session
 		private ErrorHandler errorHandler = OpenFAST.Error.ErrorHandler_Fields.DEFAULT;
 		private SessionListener sessionListener = OpenFAST.Session.SessionListener_Fields.NULL;
 		
-		public Session(Connection connection, SessionProtocol protocol)
+		public Session(Connection connection, SessionProtocol protocol, TemplateRegistry inboundRegistry, TemplateRegistry outboundRegistry)
 		{
 			Context inContext = new Context();
+            inContext.TemplateRegistry.RegisterAll(inboundRegistry);
 			Context outContext = new Context();
+            outContext.TemplateRegistry.RegisterAll(outboundRegistry);
 			inContext.ErrorHandler = this;
 			
 			this.connection = connection;

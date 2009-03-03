@@ -11,6 +11,7 @@ using Scalar = OpenFAST.Template.Scalar;
 using TemplateRegistry = OpenFAST.Template.TemplateRegistry;
 using Operator = OpenFAST.Template.operator_Renamed.Operator;
 using Type = OpenFAST.Template.Type.FASTType;
+using OpenFAST.Template;
 
 namespace OpenFAST.Session
 {
@@ -36,7 +37,7 @@ namespace OpenFAST.Session
 		
 		public override Session OnNewConnection(string serverName, Connection connection)
 		{
-			Session session = new Session(connection, this);
+            Session session = new Session(connection, this, TemplateRegistry_Fields.NULL, TemplateRegistry_Fields.NULL);
 			Message message = session.MessageInputStream.ReadMessage();
 			session.MessageOutputStream.WriteMessage(CreateHelloMessage(serverName));
 			string clientName = message.GetString(1);
@@ -45,7 +46,7 @@ namespace OpenFAST.Session
 		}
 		public override Session Connect(string senderName, Connection connection)
 		{
-			Session session = new Session(connection, this);
+            Session session = new Session(connection, this, TemplateRegistry_Fields.NULL, TemplateRegistry_Fields.NULL);
 			session.MessageOutputStream.WriteMessage(CreateHelloMessage(senderName));
 			Message message = session.MessageInputStream.ReadMessage();
 			string serverName = message.GetString(1);

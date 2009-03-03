@@ -138,6 +138,8 @@
     <Compile Include="Session\FastClient.cs" />
     <Compile Include="Session\FastConnectionException.cs" />
     <Compile Include="Session\FastServer.cs" />
+    <Compile Include="Session\LocalConnection.cs" />
+    <Compile Include="Session\LocalEndpoint.cs" />
     <Compile Include="Session\MessageListener.cs" />
     <Compile Include="Session\Multicast\MulticastConnection.cs" />
     <Compile Include="Session\Multicast\MulticastEndpoint.cs" />

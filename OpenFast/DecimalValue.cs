@@ -40,7 +40,7 @@ namespace OpenFAST
 			
 			System.Decimal decimalValue = (Decimal)(value_Renamed);
             int exponent = SupportClass.BigDecimal_Scale(decimalValue);
-            long mantissa = SupportClass.BigDecimal_UnScaledValue(decimalValue);// System.Decimal.ToInt64(decimalValue.unscaledValue());//OVERLOOK
+            long mantissa = SupportClass.BigDecimal_UnScaledValue(decimalValue);
 			
 			while (((mantissa % 10) == 0) && (mantissa != 0))
 			{
@@ -60,7 +60,7 @@ namespace OpenFAST
 		
 		public DecimalValue(System.Decimal bigDecimal)
 		{
-            this.mantissa = SupportClass.BigDecimal_UnScaledValue(bigDecimal); // System.Decimal.ToInt64(bigDecimal.unscaledValue());//OVERLOOK
+            this.mantissa = SupportClass.BigDecimal_UnScaledValue(bigDecimal);
             this.exponent = SupportClass.BigDecimal_Scale(bigDecimal);
 		}
 		

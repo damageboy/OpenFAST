@@ -79,7 +79,7 @@ namespace OpenFAST.Template.Type
 		public static readonly FASTType DECIMAL = new DecimalType();
 
         static FASTType[] staticAllTypes = null;
-        public static FASTType[] ALL_TYPES()//OVERLOOK
+        public static FASTType[] ALL_TYPES()
         {
             if (staticAllTypes == null)
             {

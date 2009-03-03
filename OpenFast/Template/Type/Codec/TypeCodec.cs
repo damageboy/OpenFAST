@@ -14,7 +14,7 @@ namespace OpenFAST.Template.Type.Codec
 			}
 			
 		}
-		protected internal static byte STOP_BIT = (byte) SupportClass.Identity(0x80);
+		protected internal static byte STOP_BIT = 0x80;
 		internal static readonly byte[] NULL_VALUE_ENCODING = new byte[]{STOP_BIT};
 		
 		// Codec Definitions
@@ -51,8 +51,7 @@ namespace OpenFAST.Template.Type.Codec
 		public virtual byte[] Encode(ScalarValue value_Renamed)
 		{
 			byte[] encoding = EncodeValue(value_Renamed);
-            byte assign = 0x80;
-            encoding[encoding.Length - 1] |= (byte)(assign); // add stop bit;
+            encoding[encoding.Length - 1] |= STOP_BIT; // add stop bit;
 			return encoding;
 		}
 	}

@@ -15,17 +15,17 @@ namespace UnitTest
         {
             BitVector vector = new BitVector(new byte[] { 0x00, 0x00 });
             Assert.IsTrue(vector.Overlong);
-            TestUtil.AssertByteArrayEquals(new byte[] { TestUtil.ToSByte(0x80) } ,
+            TestUtil.AssertByteArrayEquals(new byte[] { 0x80 } ,
                 vector.TruncatedBytes);
 
             vector = new BitVector(new byte[] { 0x00 });
             Assert.IsFalse(vector.Overlong);
-            TestUtil.AssertByteArrayEquals(new byte[] { TestUtil.ToSByte(0x80) },
+            TestUtil.AssertByteArrayEquals(new byte[] { 0x80 },
                 vector.TruncatedBytes);
 
             vector = new BitVector(new byte[] { 0x60, 0x00, 0x04, 0x00 });
             Assert.IsTrue(vector.Overlong);
-            TestUtil.AssertByteArrayEquals(new byte[] { 0x60, 0x00, TestUtil.ToSByte(0x84) },
+            TestUtil.AssertByteArrayEquals(new byte[] { 0x60, 0x00, 0x84 },
                 vector.TruncatedBytes);
         }
 
@@ -81,7 +81,7 @@ namespace UnitTest
         [Test]
         public void TestEquals()
         {
-            BitVector expected = new BitVector(new byte[] { TestUtil.ToSByte(0xf0) });
+            BitVector expected = new BitVector(new byte[] { 0xf0 });
             BitVector actual = new BitVector(7);
             actual.set_Renamed(0);
             actual.set_Renamed(1);

@@ -9,29 +9,24 @@ namespace UnitTest.Test
 {
     public class TestUtil
     {
-        public static byte[] ToSByte(StreamWriter stream)
+        public static byte[] ToByte(StreamWriter stream)
         {
             if (stream.BaseStream is MemoryStream)
             {
-                return ToSByte((MemoryStream)stream.BaseStream);
+                return ToByte((MemoryStream)stream.BaseStream);
 
             }
             throw new Exception("Invalid base stream");
         }
-        public static byte[] ToSByte(MemoryStream stream)
+        public static byte[] ToByte(MemoryStream stream)
         {
             byte[] ret = new byte[stream.Length];
             byte[] buff = stream.GetBuffer();
             for (int i = 0; i < ret.Length; i++)
             {
-                ret[i] = ToSByte(buff[i]);
+                ret[i] = buff[i];
             }
             return ret;
-        }
-        public static byte ToSByte(byte b)
-        {
-            byte bb =(byte) b;
-            return bb;
         }
         public static void AssertBitVectorEquals(String bitString, byte[] encoding)
         {

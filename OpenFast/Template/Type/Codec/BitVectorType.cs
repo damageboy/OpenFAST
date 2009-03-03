@@ -50,7 +50,7 @@ namespace OpenFAST.Template.Type.Codec
 				
 				buffer.WriteByte((System.Byte) byt);
 			}
-			while ((byt & 0x80) == 0);
+			while ((byt & STOP_BIT) == 0);
 			
 			return new BitVectorValue(new BitVector(buffer.ToArray()));
 		}

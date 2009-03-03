@@ -46,7 +46,7 @@ namespace UnitTest
                 {
                     outStream.Close();
                 }
-                catch (IOException e)
+                catch (IOException)
                 {
                 }
             }
@@ -57,7 +57,7 @@ namespace UnitTest
         protected void setUp()
         {
             output = new StreamWriter(new MemoryStream());
-            session = new Session(new MyConnection(output.BaseStream), SessionConstants.SCP_1_0);
+            session = new Session(new MyConnection(output.BaseStream), SessionConstants.SCP_1_0, TemplateRegistry_Fields.NULL, TemplateRegistry_Fields.NULL);
         }
         [Test]
         public void TestMultipleDictionaryTypes() {
@@ -93,7 +93,7 @@ namespace UnitTest
             "11100000 10000001 11111111 00000000 11100111 " +
             "11000000 10000010 " +
             "11100000 10000001 11111111 00000000 11100110";
-        TestUtil.AssertBitVectorEquals(expected,TestUtil.ToSByte( output));
+        TestUtil.AssertBitVectorEquals(expected,TestUtil.ToByte( output));
     }
     }
 }

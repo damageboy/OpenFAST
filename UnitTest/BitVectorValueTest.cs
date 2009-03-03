@@ -14,7 +14,7 @@ namespace UnitTest
         public void TestEquals()
         {
             BitVectorValue expected = new BitVectorValue(new BitVector(
-                        new byte[] { TestUtil.ToSByte(0xf0) }));
+                        new byte[] { 0xf0 }));
             BitVectorValue actual = new BitVectorValue(new BitVector(7));
             actual.value_Renamed.set_Renamed(0);
             actual.value_Renamed.set_Renamed(1);

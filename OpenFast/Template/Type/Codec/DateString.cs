@@ -15,10 +15,8 @@ namespace OpenFAST.Template.Type.Codec
 		
 		public DateString(string format)
 		{
-			//formatter = new SimpleDateFormat(format);//OVERLOOK
             formatter = new System.Globalization.DateTimeFormatInfo();
             FormatString = format;
-
 		}
 		
 		public override ScalarValue Decode(System.IO.Stream in_Renamed)

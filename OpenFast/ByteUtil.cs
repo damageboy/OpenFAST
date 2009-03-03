@@ -65,8 +65,6 @@ namespace OpenFAST
 				builder.Append(bits).Append(' ');
 			}
 			
-            //if (builder.length() > 0)//OVERLOOK
-            //    builder.deleteCharAt(builder.length() - 1);
             if (builder.Length > 0)
                 builder.Remove(builder.Length - 1, 1);
 			

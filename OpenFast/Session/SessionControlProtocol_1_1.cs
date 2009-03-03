@@ -27,6 +27,7 @@ using StaticTemplateReference = OpenFAST.Template.StaticTemplateReference;
 using TemplateRegistry = OpenFAST.Template.TemplateRegistry;
 using Operator = OpenFAST.Template.operator_Renamed.Operator;
 using Type = OpenFAST.Template.Type.FASTType;
+using OpenFAST.Template;
 
 namespace OpenFAST.Session
 {
@@ -185,7 +186,7 @@ namespace OpenFAST.Session
 		}
 		public override Session Connect(string senderName, Connection connection)
 		{
-			Session session = new Session(connection, this);
+            Session session = new Session(connection, this, TemplateRegistry_Fields.NULL, TemplateRegistry_Fields.NULL);
 			session.MessageOutputStream.WriteMessage(CreateHelloMessage(senderName));
 			try
 			{
@@ -206,7 +207,7 @@ namespace OpenFAST.Session
 		}
 		public override Session OnNewConnection(string serverName, Connection connection)
 		{
-			Session session = new Session(connection, this);
+            Session session = new Session(connection, this, TemplateRegistry_Fields.NULL, TemplateRegistry_Fields.NULL);
 			Message message = session.MessageInputStream.ReadMessage();
 			string clientName = message.GetString(1);
 			string vendorId = message.IsDefined(2)?message.GetString(2):"unknown";
@@ -267,8 +268,8 @@ namespace OpenFAST.Session
 		}
 		
 		new public const int FAST_RESET_TEMPLATE_ID = 120;
-		public const int FAST_HELLO_TEMPLATE_ID = 16003;
-		public const int FAST_ALERT_TEMPLATE_ID = 16004;
+		public const int FAST_HELLO_TEMPLATE_ID = 16002;
+		public const int FAST_ALERT_TEMPLATE_ID = 16003;
 		public const int TEMPLATE_DECL_ID = 16010;
 		public const int TEMPLATE_DEF_ID = 16011;
 		public const int INT32_INSTR_ID = 16012;
@@ -563,8 +564,8 @@ namespace OpenFAST.Session
         }
 		static SessionControlProtocol_1_1()
 		{
-			FAST_ALERT_TEMPLATE = new MessageTemplate("", new Field[]{new Scalar("Severity", Type.U32, Operator.NONE, ScalarValue.UNDEFINED, false), new Scalar("Code", Type.U32, Operator.NONE, ScalarValue.UNDEFINED, false), new Scalar("Value", Type.U32, Operator.NONE, ScalarValue.UNDEFINED, true), new Scalar("Description", Type.ASCII, Operator.NONE, ScalarValue.UNDEFINED, false)});
-			FAST_HELLO_TEMPLATE = new MessageTemplate("", new Field[]{new Scalar("SenderName", Type.ASCII, Operator.NONE, ScalarValue.UNDEFINED, false), new Scalar("VendorId", Type.ASCII, Operator.NONE, ScalarValue.UNDEFINED, true)});
+			FAST_ALERT_TEMPLATE = new MessageTemplate("Alert", new Field[]{new Scalar("Severity", Type.U32, Operator.NONE, ScalarValue.UNDEFINED, false), new Scalar("Code", Type.U32, Operator.NONE, ScalarValue.UNDEFINED, false), new Scalar("Value", Type.U32, Operator.NONE, ScalarValue.UNDEFINED, true), new Scalar("Description", Type.ASCII, Operator.NONE, ScalarValue.UNDEFINED, false)});
+			FAST_HELLO_TEMPLATE = new MessageTemplate("Hello", new Field[]{new Scalar("SenderName", Type.ASCII, Operator.NONE, ScalarValue.UNDEFINED, false), new Scalar("VendorId", Type.ASCII, Operator.NONE, ScalarValue.UNDEFINED, true)});
 			RESET = new RESETMessage(FAST_RESET_TEMPLATE);
 			{
 				FAST_RESET_TEMPLATE.AddAttribute(RESET_PROPERTY, "yes");

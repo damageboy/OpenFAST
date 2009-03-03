@@ -24,10 +24,6 @@ namespace OpenFAST.Template.Type
 		private TypeCodec dateCodec;
 		private System.Globalization.DateTimeFormatInfo dateFormatter;
 
-		//OVERLOOK
-        //public DateType(string dateFormat, TypeCodec dateCodec):this(new SimpleDateFormat(dateFormat).ToString(), dateCodec)
-        //{
-        //}
 		public DateType(System.Globalization.DateTimeFormatInfo dateFormat, TypeCodec dateCodec):base("date")
 		{
 			this.dateFormatter = dateFormat;

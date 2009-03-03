@@ -49,7 +49,7 @@ namespace OpenFAST.Template.Type.Codec
 				
 				value_Renamed = (value_Renamed << 7) | (byt & 0x7f);
 				
-				while ((byt & 0x80) == 0)
+				while ((byt & STOP_BIT) == 0)
 				{
                     byt = (uint)in_Renamed.ReadByte();
 					value_Renamed = (value_Renamed << 7) | (byt & 0x7f);

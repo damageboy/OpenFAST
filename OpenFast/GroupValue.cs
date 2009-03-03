@@ -349,13 +349,8 @@ namespace OpenFAST
 			{
 				builder.Append(values[i]).Append(", ");
 			}
-			
-            //if (values.Length > 0)//OVERLOOK check recent test case
-            //{
-            //    builder.Remove(builder.Length - 2, builder.Length);
-            //}
-			
-			builder.Append("}");
+
+            builder.Append("}");
 			return builder.ToString();
 		}
 		

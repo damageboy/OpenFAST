@@ -5,6 +5,6 @@ namespace OpenFAST.Session
 {
 	public interface MessageListener
 	{
-		void  OnMessage(Message message);
+		void  OnMessage(Session session, Message message);
 	}
 }

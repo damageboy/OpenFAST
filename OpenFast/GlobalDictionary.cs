@@ -4,8 +4,6 @@ using System.Text;
 
 namespace OpenFAST
 {
-	
-	//Optimized By SHARIQ
 	public sealed class GlobalDictionary : Dictionary
 	{
         internal System.Collections.Generic.Dictionary<QName, ScalarValue> table = new System.Collections.Generic.Dictionary<QName, ScalarValue>();

@@ -3,7 +3,6 @@ using QName = OpenFAST.QName;
 
 namespace OpenFAST.Template
 {
-	//Optimized by SHARIQ
 	public sealed class BasicTemplateRegistry:AbstractTemplateRegistry
 	{
 		override public MessageTemplate[] Templates
@@ -128,7 +127,9 @@ namespace OpenFAST.Template
 		
 		public override void  RegisterAll(TemplateRegistry registry)
 		{
+            if (registry == null) return;
 			MessageTemplate[] templates = registry.Templates;
+            if (templates == null) return;
 			for (int i = 0; i < templates.Length; i++)
 			{
 				Register(registry.GetId(templates[i]), templates[i]);

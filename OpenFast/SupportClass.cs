@@ -1413,7 +1413,7 @@ public class DateTimeFormatManager
 		return literal;
 	}
 
-    public static int BigDecimal_Scale(decimal d)//OVERLOOK
+    public static int BigDecimal_Scale(decimal d)
     {
         int val = 0;
         while (Math.Truncate(d) != d)
@@ -1425,7 +1425,7 @@ public class DateTimeFormatManager
     }
 
 
-    public static long BigDecimal_UnScaledValue(decimal d)//OVERLOOK
+    public static long BigDecimal_UnScaledValue(decimal d)
     {
         while (Math.Truncate(d) != d)
         {

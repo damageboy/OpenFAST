@@ -13,8 +13,8 @@ namespace UnitTest
         [Test]
         public void TestEquals()
         {
-            ByteVectorValue expected = new ByteVectorValue(new byte[] { TestUtil.ToSByte(0xff) });
-            ByteVectorValue actual = new ByteVectorValue(new byte[] { TestUtil.ToSByte(0xff) });
+            ByteVectorValue expected = new ByteVectorValue(new byte[] { 0xff });
+            ByteVectorValue actual = new ByteVectorValue(new byte[] { 0xff });
             Assert.AreEqual(expected, actual);
         }
     }
