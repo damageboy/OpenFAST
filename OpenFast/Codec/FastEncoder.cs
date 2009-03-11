@@ -19,17 +19,13 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using Context = OpenFAST.Context;
-using Message = OpenFAST.Message;
 using MessageTemplate = OpenFAST.Template.MessageTemplate;
-using TemplateRegisteredListener = OpenFAST.Template.TemplateRegisteredListener;
 
 namespace OpenFAST.Codec
 {
 	public sealed class FastEncoder : Coder
 	{
-		private Context context;
+		private readonly Context context;
 	
 		public FastEncoder(Context context)
 		{
@@ -38,7 +34,7 @@ namespace OpenFAST.Codec
 		
 		public byte[] Encode(Message message)
 		{
-			MessageTemplate template = message.Template;
+			var template = message.Template;
 			context.NewMessage(template);
 			return template.Encode(message, context);
 		}

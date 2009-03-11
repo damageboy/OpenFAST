@@ -20,7 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using Operator = OpenFAST.Template.operator_Renamed.Operator;
+using Operator = openfast.Template.Operator.Operator;
 using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
 
 namespace OpenFAST.Template.Type
@@ -28,9 +28,7 @@ namespace OpenFAST.Template.Type
 	[Serializable]
 	public sealed class UnsignedIntegerType:IntegerType
 	{
-		private const long serialVersionUID = 1L;
-		
-		public UnsignedIntegerType(int numberBits, long maxValue):base("uInt" + numberBits, 0, maxValue, TypeCodec.UINT, TypeCodec.NULLABLE_UNSIGNED_INTEGER)
+	    public UnsignedIntegerType(int numberBits, long maxValue):base("uInt" + numberBits, 0, maxValue, TypeCodec.UINT, TypeCodec.NULLABLE_UNSIGNED_INTEGER)
 		{
 		}
 

@@ -20,8 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using ByteVectorValue = OpenFAST.ByteVectorValue;
-using ScalarValue = OpenFAST.ScalarValue;
 using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
 
 namespace OpenFAST.Template.Type
@@ -37,15 +35,14 @@ namespace OpenFAST.Template.Type
 			}
 			
 		}
-		private const long serialVersionUID = 1L;
-		
-		internal ByteVectorType():base("byteVector", TypeCodec.BYTE_VECTOR, TypeCodec.NULLABLE_BYTE_VECTOR_TYPE)
+
+	    internal ByteVectorType():base("byteVector", TypeCodec.BYTE_VECTOR, TypeCodec.NULLABLE_BYTE_VECTOR_TYPE)
 		{
 		}
 		
 		public override ScalarValue GetVal(string value_Renamed)
 		{
-			return new ByteVectorValue(SupportClass.ToByteArray(value_Renamed));
+            return new ByteVectorValue(System.Text.Encoding.UTF8.GetBytes(value_Renamed));
 		}
 		
 		public override bool IsValueOf(ScalarValue previousValue)

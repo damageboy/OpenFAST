@@ -19,9 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using ByteUtil = OpenFAST.ByteUtil;
-using FieldValue = OpenFAST.FieldValue;
 using Field = OpenFAST.Template.Field;
 using Group = OpenFAST.Template.Group;
 using System.Text;
@@ -34,12 +31,12 @@ namespace OpenFAST.Debug
 		{
 			set
 			{
-				this.out_Renamed = value;
+				out_Renamed = value;
 			}
 			
 		}
 		private string indent = "";
-		private System.IO.StreamWriter out_Renamed = new System.IO.StreamWriter(System.Console.OpenStandardOutput(), System.Text.Encoding.Default);
+		private System.IO.StreamWriter out_Renamed = new System.IO.StreamWriter(System.Console.OpenStandardOutput(), Encoding.Default);
 		
 		public void  GroupStart(Group group)
 		{
@@ -70,7 +67,7 @@ namespace OpenFAST.Debug
 		
 		public void  Field(Field field, FieldValue value_Renamed, FieldValue decodedValue, byte[] encoding, int pmapIndex)
 		{
-			StringBuilder scalarDecode = new StringBuilder();
+			var scalarDecode = new StringBuilder();
 			scalarDecode.Append(field.Name).Append(": ");
 			scalarDecode.Append(ByteUtil.ConvertByteArrayToBitString(encoding));
 			scalarDecode.Append(" -> ").Append(value_Renamed).Append('(').Append(decodedValue).Append(')');

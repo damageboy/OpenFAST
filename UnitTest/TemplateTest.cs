@@ -34,17 +34,17 @@ namespace UnitTest
     [TestFixture]
     public class TemplateTest : OpenFastTestCase
     {
-        private static readonly String SCP_1_1_NS = "http://www.fixprotocol.org/ns/fast/scp/1.1";
-        private static readonly String PRE_TRADE_NS = "http://www.openfast.org/fix44/preTrade";
-        private static readonly String SESSION_NS = "http://www.openfast.org/fix44/session";
-        private static readonly String COMPONENTS_NS = "http://www.openfast.org/fix44/components";
-        private static readonly String FIX_44_NS = "http://www.openfast.org/fix44";
-        private static readonly String EXT_NS = "http://www.openfast.org/ext";
+        private const string SCP_1_1_NS = "http://www.fixprotocol.org/ns/fast/scp/1.1";
+        private const string PRE_TRADE_NS = "http://www.openfast.org/fix44/preTrade";
+        private const string SESSION_NS = "http://www.openfast.org/fix44/session";
+        private const string COMPONENTS_NS = "http://www.openfast.org/fix44/components";
+        private const string FIX_44_NS = "http://www.openfast.org/fix44";
+        private const string EXT_NS = "http://www.openfast.org/ext";
         private MessageTemplateLoader loader;
         [SetUp]
         protected void SetUp()
         {
-            loader = new XMLMessageTemplateLoader(true);
+            loader = new XMLMessageTemplateLoader();
             loader.Load(new StreamReader("components.xml").BaseStream);
             loader.Load(new StreamReader("preTrade.xml").BaseStream);
             loader.Load(new StreamReader("session.xml").BaseStream);

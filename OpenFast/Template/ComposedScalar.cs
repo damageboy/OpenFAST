@@ -20,13 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using BitVectorBuilder = OpenFAST.BitVectorBuilder;
-using BitVectorReader = OpenFAST.BitVectorReader;
-using Context = OpenFAST.Context;
-using FieldValue = OpenFAST.FieldValue;
-using QName = OpenFAST.QName;
 using FASTType = OpenFAST.Template.Type.FASTType;
-using OpenFAST;
 using System.Text;
 
 namespace OpenFAST.Template
@@ -67,11 +61,11 @@ namespace OpenFAST.Template
 			}
 			
 		}
-		private const long serialVersionUID = 1L;
-		private static readonly System.Type ScalarValueType = null;
-		private Scalar[] fields;
-		private ComposedValueConverter valueConverter;
-		private FASTType type;
+
+	    private const System.Type ScalarValueType = null;
+		private readonly Scalar[] fields;
+		private readonly ComposedValueConverter valueConverter;
+		private readonly FASTType type;
 		
 		public ComposedScalar(string name, FASTType type, Scalar[] fields, bool optional, ComposedValueConverter valueConverter):this(new QName(name), type, fields, optional, valueConverter)
 		{
@@ -89,44 +83,40 @@ namespace OpenFAST.Template
 			return type.GetValue(value_Renamed);
 		}
 		
-		public override FieldValue Decode(System.IO.Stream in_Renamed, Group template, Context context, BitVectorReader presenceMapReader)
+		public override FieldValue Decode(System.IO.Stream in_Renamed, Group decodeTemplate, Context context, BitVectorReader presenceMapReader)
 		{
-			FieldValue[] values = new FieldValue[fields.Length];
-			for (int i = 0; i < fields.Length; i++)
+			var values = new FieldValue[fields.Length];
+			for (var i = 0; i < fields.Length; i++)
 			{
-				values[i] = fields[i].Decode(in_Renamed, template, context, presenceMapReader);
+				values[i] = fields[i].Decode(in_Renamed, decodeTemplate, context, presenceMapReader);
 				if (i == 0 && values[0] == null)
 					return null;
 			}
 			return valueConverter.Compose(values);
 		}
 		
-		public override byte[] Encode(FieldValue value_Renamed, Group template, Context context, BitVectorBuilder presenceMapBuilder)
+		public override byte[] Encode(FieldValue value_Renamed, Group encodeTemplate, Context context, BitVectorBuilder presenceMapBuilder)
 		{
 			if (value_Renamed == null)
 			{
 				// Only encode null in the first field.
-				return fields[0].Encode(null, template, context, presenceMapBuilder);
+				return fields[0].Encode(null, encodeTemplate, context, presenceMapBuilder);
 			}
-			else
-			{
-				System.IO.MemoryStream buffer = new System.IO.MemoryStream(fields.Length * 8);
-				FieldValue[] values = valueConverter.Split(value_Renamed);
-				for (int i = 0; i < fields.Length; i++)
-				{
-					try
-					{
-						byte[] temp_byteArray;
-						temp_byteArray = fields[i].Encode(values[i], template, context, presenceMapBuilder);
-						buffer.Write(temp_byteArray, 0, temp_byteArray.Length);
-					}
-					catch (System.IO.IOException e)
-					{
-						throw new RuntimeException(e);
-					}
-				}
-				return buffer.ToArray();
-			}
+		    var buffer = new System.IO.MemoryStream(fields.Length * 8);
+		    var values = valueConverter.Split(value_Renamed);
+		    for (int i = 0; i < fields.Length; i++)
+		    {
+		        try
+		        {
+		            var temp_byteArray = fields[i].Encode(values[i], encodeTemplate, context, presenceMapBuilder);
+		            buffer.Write(temp_byteArray, 0, temp_byteArray.Length);
+		        }
+		        catch (System.IO.IOException e)
+		        {
+		            throw new RuntimeException(e);
+		        }
+		    }
+		    return buffer.ToArray();
 		}
 		
 		public override bool IsPresenceMapBitSet(byte[] encoding, FieldValue fieldValue)
@@ -139,13 +129,13 @@ namespace OpenFAST.Template
 			return false;
 		}
 		
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
 			if (obj == this)
 				return true;
 			if (obj == null || !obj.GetType().Equals(typeof(ComposedScalar)))
 				return false;
-			ComposedScalar other = (ComposedScalar) obj;
+			var other = (ComposedScalar) obj;
 			if (other.fields.Length != fields.Length)
 				return false;
 			if (!other.Name.Equals(Name))
@@ -175,7 +165,7 @@ namespace OpenFAST.Template
 		
 		public override string ToString()
 		{
-			StringBuilder builder = new StringBuilder();
+			var builder = new StringBuilder();
 			builder.Append("Composed {");
 			for (int i = 0; i < fields.Length; i++)
 			{

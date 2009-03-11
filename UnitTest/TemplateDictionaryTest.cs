@@ -25,8 +25,8 @@ using System.Text;
 using NUnit.Framework;
 using OpenFAST;
 using OpenFAST.Template;
+using openfast.Template.Operator;
 using OpenFAST.Template.Type;
-using OpenFAST.Template.operator_Renamed;
 using OpenFAST.Error;
 
 namespace UnitTest

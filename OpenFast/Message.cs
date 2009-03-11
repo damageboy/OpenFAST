@@ -44,9 +44,8 @@ namespace OpenFAST
 			}
 			
 		}
-		private const long serialVersionUID = 1L;
 
-        private MessageTemplate template;
+	    private readonly MessageTemplate template;
 		
 		public Message(MessageTemplate template, FieldValue[] fieldValues):base(template, fieldValues)
 		{
@@ -57,10 +56,10 @@ namespace OpenFAST
 		}
 		private static FieldValue[] InitializeFieldValues(int fieldCount)
 		{
-			FieldValue[] fields = new FieldValue[fieldCount];
+			var fields = new FieldValue[fieldCount];
 			return fields;
 		}
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(object obj)
 		{
 			if ((obj == null) || !(obj is Message))
 			{
@@ -70,21 +69,18 @@ namespace OpenFAST
 		}
 		public virtual bool equals(Message message)
 		{
-			if (this.FieldCount != message.FieldCount)
+			if (FieldCount != message.FieldCount)
 				return false;
 			for (int i = 1; i < message.FieldCount; i++)
 				if (message.GetValue(i) == null)
 				{
-					if (this.GetValue(i) == null)
+				    if (GetValue(i) == null)
 					{
 						continue;
 					}
-					else
-					{
-						return false;
-					}
+				    return false;
 				}
-				else if (!message.GetValue(i).Equals(this.GetValue(i)))
+				else if (!message.GetValue(i).Equals(GetValue(i)))
 				{
 					return false;
 				}
@@ -96,12 +92,12 @@ namespace OpenFAST
 		}
 		public override FieldValue Copy()
 		{
-			FieldValue[] copies = new FieldValue[values.Length];
+			var copies = new FieldValue[values.Length];
 			for (int i = 0; i < copies.Length; i++)
 			{
 				copies[i] = values[i].Copy();
 			}
-			return new Message(template, this.values);
+			return new Message(template, values);
 		}
 	}
 }

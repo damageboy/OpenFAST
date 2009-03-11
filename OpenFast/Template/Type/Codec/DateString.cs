@@ -20,46 +20,39 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using DateValue = OpenFAST.DateValue;
-using Global = OpenFAST.Global;
-using ScalarValue = OpenFAST.ScalarValue;
-using StringValue = OpenFAST.StringValue;
 
 namespace OpenFAST.Template.Type.Codec
 {
 	[Serializable]
 	public sealed class DateString:TypeCodec
 	{
-		private const long serialVersionUID = 1L;
-		private System.Globalization.DateTimeFormatInfo formatter;
-        private string FormatString;
-		
-		public DateString(string format)
-		{
-            formatter = new System.Globalization.DateTimeFormatInfo();
-            FormatString = format;
-		}
-		
-		public override ScalarValue Decode(System.IO.Stream in_Renamed)
+	    private readonly System.Globalization.DateTimeFormatInfo formatter;
+
+	    public DateString(string format)
+	    {
+	        formatter = new System.Globalization.DateTimeFormatInfo();
+	    }
+
+	    public override ScalarValue Decode(System.IO.Stream in_Renamed)
 		{
 			try
 			{
-				System.DateTime tempAux = System.DateTime.Parse(TypeCodec.ASCII.Decode(in_Renamed).ToString(), formatter);
+				System.DateTime tempAux = DateTime.Parse(ASCII.Decode(in_Renamed).ToString(), formatter);
 				return new DateValue(ref tempAux);
 			}
-			catch (System.FormatException e)
+			catch (FormatException e)
 			{
-				Global.HandleError(OpenFAST.Error.FastConstants.PARSE_ERROR, "", e);
+				Global.HandleError(Error.FastConstants.PARSE_ERROR, "", e);
 				return null;
 			}
 		}
 		
 		public override byte[] EncodeValue(ScalarValue value_Renamed)
 		{
-			return TypeCodec.ASCII.Encode(new StringValue(SupportClass.FormatDateTime(formatter, ((DateValue) value_Renamed).value_Renamed)));
+			return ASCII.Encode(new StringValue(SupportClass.FormatDateTime(formatter, ((DateValue) value_Renamed).value_Renamed)));
 		}
 		
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
 			return obj != null && obj.GetType() == GetType();
 		}

@@ -20,10 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using BitVectorBuilder = OpenFAST.BitVectorBuilder;
-using BitVectorReader = OpenFAST.BitVectorReader;
-using Context = OpenFAST.Context;
-using FieldValue = OpenFAST.FieldValue;
 
 namespace OpenFAST.Template
 {
@@ -55,8 +51,8 @@ namespace OpenFAST.Template
 			}
 			
 		}
-		private const long serialVersionUID = 1L;
-		private MessageTemplate template;
+
+	    private readonly MessageTemplate template;
 		
 		public StaticTemplateReference(MessageTemplate template):base(template.QName, false)
 		{
@@ -68,12 +64,12 @@ namespace OpenFAST.Template
 			return null;
 		}
 		
-		public override FieldValue Decode(System.IO.Stream in_Renamed, Group template, Context context, BitVectorReader pmapReader)
+		public override FieldValue Decode(System.IO.Stream in_Renamed, Group decodeTemplate, Context context, BitVectorReader pmapReader)
 		{
 			return null;
 		}
 		
-		public override byte[] Encode(FieldValue value_Renamed, Group template, Context context, BitVectorBuilder presenceMapBuilder)
+		public override byte[] Encode(FieldValue value_Renamed, Group encodeTemplate, Context context, BitVectorBuilder presenceMapBuilder)
 		{
 			return null;
 		}
@@ -88,13 +84,13 @@ namespace OpenFAST.Template
 			return false;
 		}
 		
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
 			if (obj == this)
 				return true;
-			if (obj == null || obj.GetType() != this.GetType())
+			if (obj == null || obj.GetType() != GetType())
 				return false;
-			StaticTemplateReference other = (StaticTemplateReference) obj;
+			var other = (StaticTemplateReference) obj;
 			return template.Equals(other.template);
 		}
 

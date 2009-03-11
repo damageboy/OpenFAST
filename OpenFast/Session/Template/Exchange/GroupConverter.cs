@@ -19,12 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using FieldValue = OpenFAST.FieldValue;
-using GroupValue = OpenFAST.GroupValue;
-using Message = OpenFAST.Message;
-using SequenceValue = OpenFAST.SequenceValue;
-using SessionControlProtocol_1_1 = OpenFAST.Session.SessionControlProtocol_1_1;
 using Field = OpenFAST.Template.Field;
 using Group = OpenFAST.Template.Group;
 using MessageTemplate = OpenFAST.Template.MessageTemplate;
@@ -53,8 +47,8 @@ namespace OpenFAST.Session.Template.Exchange
 		
 		public override GroupValue Convert(Field field, ConversionContext context)
 		{
-			Group group = (Group) field;
-			Message groupMsg = Convert(group, new Message(SessionControlProtocol_1_1.GROUP_INSTR), context);
+			var group = (Group) field;
+			var groupMsg = Convert(group, new Message(SessionControlProtocol_1_1.GROUP_INSTR), context);
 			groupMsg.SetBool("Optional", field.Optional);
 			return groupMsg;
 		}
@@ -67,7 +61,7 @@ namespace OpenFAST.Session.Template.Exchange
 		public static Message Convert(Group group, Message groupMsg, ConversionContext context)
 		{
 			SetNameAndId(group, groupMsg);
-			SequenceValue instructions = new SequenceValue(SessionControlProtocol_1_1.TEMPLATE_DEFINITION.GetSequence("Instructions"));
+			var instructions = new SequenceValue(SessionControlProtocol_1_1.TEMPLATE_DEFINITION.GetSequence("Instructions"));
 			int i = group is MessageTemplate?1:0;
 			Field[] fields = group.FieldDefinitions;
 			for (; i < fields.Length; i++)
@@ -77,7 +71,7 @@ namespace OpenFAST.Session.Template.Exchange
 				if (converter == null)
 					throw new System.SystemException("No converter found for type " + field.GetType());
 				FieldValue value_Renamed = converter.Convert(field, context);
-				instructions.Add(new FieldValue[]{value_Renamed});
+				instructions.Add(new[]{value_Renamed});
 			}
 			groupMsg.SetFieldValue("Instructions", instructions);
 			return groupMsg;
@@ -85,12 +79,12 @@ namespace OpenFAST.Session.Template.Exchange
 		
 		public static Field[] ParseFieldInstructions(GroupValue groupDef, TemplateRegistry registry, ConversionContext context)
 		{
-			SequenceValue instructions = groupDef.GetSequence("Instructions");
-			Field[] fields = new Field[instructions.Length];
+			var instructions = groupDef.GetSequence("Instructions");
+			var fields = new Field[instructions.Length];
 			for (int i = 0; i < fields.Length; i++)
 			{
-				GroupValue fieldDef = instructions[i].GetGroup(0);
-				FieldInstructionConverter converter = context.GetConverter(fieldDef.GetGroup());
+				var fieldDef = instructions[i].GetGroup(0);
+				var converter = context.GetConverter(fieldDef.GetGroup());
 				if (converter == null)
 				{
 					throw new System.SystemException("Encountered unknown group " + fieldDef.GetGroup() + "while processing field instructions " + groupDef.GetGroup());

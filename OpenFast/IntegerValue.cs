@@ -21,33 +21,30 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System;
 using LongValue = OpenFAST.Template.LongValue;
-using OpenFAST.Template.Type;
 
 namespace OpenFAST
 {
 	[Serializable]
 	public sealed class IntegerValue:NumericValue
 	{
-		private const long serialVersionUID = 1L;
-
-        public int value_Renamed;
+	    public int value_Renamed;
 		
 		public IntegerValue(int value_Renamed)
 		{
 			this.value_Renamed = value_Renamed;
 		}
 		
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(object obj)
 		{
 			if ((obj == null) || !(obj is NumericValue))
 			{
 				return false;
 			}
-			
-			return Equals((NumericValue) obj);
+
+            return Equals((ScalarValue)obj);
 		}
 		
-		private bool Equals(NumericValue otherValue)
+		private bool Equals(ScalarValue otherValue)
 		{
 			return value_Renamed == otherValue.ToLong();
 		}
@@ -59,7 +56,7 @@ namespace OpenFAST
 		
 		public override bool EqualsValue(string defaultValue)
 		{
-			return System.Int32.Parse(defaultValue) == value_Renamed;
+			return Int32.Parse(defaultValue) == value_Renamed;
 		}
 		
 		public override NumericValue Increment()
@@ -76,10 +73,10 @@ namespace OpenFAST
 		{
 			if (subend is LongValue)
 			{
-				return new LongValue(this.value_Renamed - subend.ToLong());
+				return new LongValue(value_Renamed - subend.ToLong());
 			}
 			
-			return new IntegerValue(this.value_Renamed - subend.ToInt());
+			return new IntegerValue(value_Renamed - subend.ToInt());
 		}
 		
 		public override NumericValue Add(NumericValue addend)
@@ -89,17 +86,17 @@ namespace OpenFAST
 				return addend.Add(this);
 			}
 			
-			return new IntegerValue(this.value_Renamed + addend.ToInt());
+			return new IntegerValue(value_Renamed + addend.ToInt());
 		}
 		
 		public string Serialize()
 		{
-			return System.Convert.ToString(value_Renamed);
+			return Convert.ToString(value_Renamed);
 		}
 		
-		public override bool Equals(int value_Renamed)
+		public override bool Equals(int valueRenamed)
 		{
-			return value_Renamed == this.value_Renamed;
+			return valueRenamed == value_Renamed;
 		}
 		
 		public override long ToLong()
@@ -114,20 +111,20 @@ namespace OpenFAST
 		
 		public override string ToString()
 		{
-			return System.Convert.ToString(value_Renamed);
+			return Convert.ToString(value_Renamed);
 		}
 		
 		public override byte ToByte()
 		{
-			if (value_Renamed > System.SByte.MaxValue || value_Renamed <  System.SByte.MinValue)
-				Global.HandleError(OpenFAST.Error.FastConstants.R4_NUMERIC_VALUE_TOO_LARGE, "The value \"" + value_Renamed + "\" is too large for a byte.");
+			if (value_Renamed > SByte.MaxValue || value_Renamed <  SByte.MinValue)
+				Global.HandleError(Error.FastConstants.R4_NUMERIC_VALUE_TOO_LARGE, "The value \"" + value_Renamed + "\" is too large for a byte.");
 			return (byte) value_Renamed;
 		}
 		
 		public override short ToShort()
 		{
-			if (value_Renamed > System.Int16.MaxValue || value_Renamed < System.Int16.MinValue)
-				Global.HandleError(OpenFAST.Error.FastConstants.R4_NUMERIC_VALUE_TOO_LARGE, "The value \"" + value_Renamed + "\" is too large for a short.");
+			if (value_Renamed > Int16.MaxValue || value_Renamed < Int16.MinValue)
+				Global.HandleError(Error.FastConstants.R4_NUMERIC_VALUE_TOO_LARGE, "The value \"" + value_Renamed + "\" is too large for a short.");
 			return (short) value_Renamed;
 		}
 		
@@ -136,9 +133,9 @@ namespace OpenFAST
 			return value_Renamed;
 		}
 		
-		public override System.Decimal ToBigDecimal()
+		public override Decimal ToBigDecimal()
 		{
-			return new System.Decimal(value_Renamed);
+			return new Decimal(value_Renamed);
 		}
 	}
 }

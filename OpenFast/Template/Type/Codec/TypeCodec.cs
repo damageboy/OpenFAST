@@ -20,7 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using ScalarValue = OpenFAST.ScalarValue;
 
 namespace OpenFAST.Template.Type.Codec
 {
@@ -36,7 +35,7 @@ namespace OpenFAST.Template.Type.Codec
 			
 		}
 		protected internal static byte STOP_BIT = 0x80;
-		internal static readonly byte[] NULL_VALUE_ENCODING = new byte[]{STOP_BIT};
+		internal static readonly byte[] NULL_VALUE_ENCODING = new[]{STOP_BIT};
 		
 		// Codec Definitions
 		public static readonly TypeCodec UINT = new UnsignedInteger();

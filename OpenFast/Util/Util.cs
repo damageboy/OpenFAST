@@ -19,16 +19,10 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using Global = OpenFAST.Global;
-using IntegerValue = OpenFAST.IntegerValue;
-using QName = OpenFAST.QName;
-using ScalarValue = OpenFAST.ScalarValue;
-using StringValue = OpenFAST.StringValue;
 using ComposedScalar = OpenFAST.Template.ComposedScalar;
 using Scalar = OpenFAST.Template.Scalar;
 using TwinValue = OpenFAST.Template.TwinValue;
-using Operator = OpenFAST.Template.operator_Renamed.Operator;
+using Operator = openfast.Template.Operator.Operator;
 using DecimalConverter = OpenFAST.Template.Type.DecimalConverter;
 using Type = OpenFAST.Template.Type.FASTType;
 
@@ -103,7 +97,7 @@ namespace OpenFAST.util
 		
 		public static string CollectionToString(System.Collections.ICollection set_Renamed, string sep)
 		{
-			System.Text.StringBuilder buffer = new System.Text.StringBuilder();
+			var buffer = new System.Text.StringBuilder();
 			System.Collections.IEnumerator iter = set_Renamed.GetEnumerator();
 			buffer.Append("{");
 			while (iter.MoveNext())
@@ -152,18 +146,18 @@ namespace OpenFAST.util
 		public static System.DateTime ToTimestamp(long value_Renamed)
 		{
 			System.Globalization.Calendar cal = new System.Globalization.GregorianCalendar();
-			int year = (int) (value_Renamed / 10000000000000L);
+			var year = (int) (value_Renamed / 10000000000000L);
 			value_Renamed %= 10000000000000L;
-			int month = (int) (value_Renamed / 100000000000L);
+			var month = (int) (value_Renamed / 100000000000L);
 			value_Renamed %= 100000000000L;
-			int day = (int) (value_Renamed / 1000000000);
+			var day = (int) (value_Renamed / 1000000000);
 			value_Renamed %= 1000000000;
-			int hour = (int) (value_Renamed / 10000000);
+			var hour = (int) (value_Renamed / 10000000);
 			value_Renamed %= 10000000;
-			int min = (int) (value_Renamed / 100000);
+			var min = (int) (value_Renamed / 100000);
 			value_Renamed %= 100000;
-			int sec = (int) (value_Renamed / 1000);
-			int ms = (int) (value_Renamed % 1000);
+			var sec = (int) (value_Renamed / 1000);
+			var ms = (int) (value_Renamed % 1000);
 			SupportClass.CalendarManager.manager.Set(cal, year, month - 1, day, hour, min, sec);
 			SupportClass.CalendarManager.manager.Set(cal, SupportClass.CalendarManager.MILLISECOND, ms);
 			return SupportClass.CalendarManager.manager.GetDateTime(cal);
@@ -171,9 +165,9 @@ namespace OpenFAST.util
 		
 		public static ComposedScalar ComposedDecimal(QName name, Operator exponentOp, ScalarValue exponentVal, Operator mantissaOp, ScalarValue mantissaVal, bool optional)
 		{
-			Scalar exponentScalar = new Scalar(Global.CreateImplicitName(name), Type.I32, exponentOp, exponentVal, optional);
-			Scalar mantissaScalar = new Scalar(Global.CreateImplicitName(name), Type.I64, mantissaOp, mantissaVal, false);
-			return new ComposedScalar(name, Type.DECIMAL, new Scalar[]{exponentScalar, mantissaScalar}, optional, new DecimalConverter());
+			var exponentScalar = new Scalar(Global.CreateImplicitName(name), Type.I32, exponentOp, exponentVal, optional);
+			var mantissaScalar = new Scalar(Global.CreateImplicitName(name), Type.I64, mantissaOp, mantissaVal, false);
+			return new ComposedScalar(name, Type.DECIMAL, new[]{exponentScalar, mantissaScalar}, optional, new DecimalConverter());
 		}
 		
 		public static int ToInt(string attribute)

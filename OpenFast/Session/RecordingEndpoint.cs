@@ -19,10 +19,8 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
 using RecordingInputStream = OpenFAST.util.RecordingInputStream;
 using RecordingOutputStream = OpenFAST.util.RecordingOutputStream;
-using OpenFAST;
 
 namespace OpenFAST.Session
 {
@@ -37,11 +35,11 @@ namespace OpenFAST.Session
 			
 		}
 		
-		private Endpoint underlyingEndpoint;
+		private readonly Endpoint underlyingEndpoint;
 		
 		public RecordingEndpoint(Endpoint endpoint)
 		{
-			this.underlyingEndpoint = endpoint;
+			underlyingEndpoint = endpoint;
 		}
 		
 		public virtual void  Accept()
@@ -52,19 +50,14 @@ namespace OpenFAST.Session
 		public virtual Connection Connect()
 		{
 			Connection connection = underlyingEndpoint.Connect();
-			Connection connectionWrapper = new RecordingConnection(this, connection);
+			Connection connectionWrapper = new RecordingConnection(connection);
 			return connectionWrapper;
 		}
 
 		private sealed class RecordingConnection : Connection
 		{
-			private void  InitBlock(RecordingEndpoint enclosingInstance)
-			{
-				this.enclosingInstance = enclosingInstance;
-			}
-			private RecordingEndpoint enclosingInstance;
-            System.IO.StreamReader in_stream;
-            System.IO.StreamWriter out_stream;
+		    readonly System.IO.StreamReader in_stream;
+		    readonly System.IO.StreamWriter out_stream;
             public System.IO.StreamReader InputStream
 			{
 				get
@@ -81,26 +74,18 @@ namespace OpenFAST.Session
 				}
 				
 			}
-			public RecordingEndpoint Enclosing_Instance
-			{
-				get
-				{
-					return enclosingInstance;
-				}
-				
-			}
-			private RecordingInputStream recordingInputStream;
-			private RecordingOutputStream recordingOutputStream;
+
+			private readonly RecordingInputStream recordingInputStream;
+			private readonly RecordingOutputStream recordingOutputStream;
 			
-			internal RecordingConnection(RecordingEndpoint enclosingInstance, Connection connection)
+			internal RecordingConnection(Connection connection)
 			{
-				InitBlock(enclosingInstance);
 				try
 				{
-					this.recordingInputStream = new RecordingInputStream(connection.InputStream.BaseStream);
-					this.recordingOutputStream = new RecordingOutputStream(connection.OutputStream.BaseStream);
-                    in_stream = new System.IO.StreamReader(this.recordingInputStream);
-                    out_stream = new System.IO.StreamWriter(this.recordingOutputStream);
+					recordingInputStream = new RecordingInputStream(connection.InputStream.BaseStream);
+					recordingOutputStream = new RecordingOutputStream(connection.OutputStream.BaseStream);
+                    in_stream = new System.IO.StreamReader(recordingInputStream);
+                    out_stream = new System.IO.StreamWriter(recordingOutputStream);
 				}
 				catch (System.IO.IOException e)
 				{

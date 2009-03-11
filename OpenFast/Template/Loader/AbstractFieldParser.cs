@@ -19,23 +19,19 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using QName = OpenFAST.QName;
-using Field = OpenFAST.Template.Field;
-
 namespace OpenFAST.Template.Loader
 {
 	public abstract class AbstractFieldParser : FieldParser
 	{
-		private string[] parseableNodeNames;
+		private readonly string[] parseableNodeNames;
 		
-		protected internal AbstractFieldParser(string nodeName):this(new string[]{nodeName})
+		protected internal AbstractFieldParser(string nodeName):this(new[]{nodeName})
 		{
 		}
 		
 		protected internal AbstractFieldParser(string[] nodeNames)
 		{
-			this.parseableNodeNames = nodeNames;
+			parseableNodeNames = nodeNames;
 		}
 		
 		public virtual bool CanParse(System.Xml.XmlElement element, ParsingContext context)
@@ -56,10 +52,10 @@ namespace OpenFAST.Template.Loader
 		
 		protected internal static void  ParseExternalAttributes(System.Xml.XmlElement element, Field field)
 		{
-			System.Xml.XmlNamedNodeMap attributes = (System.Xml.XmlAttributeCollection) element.Attributes;
+			System.Xml.XmlNamedNodeMap attributes = element.Attributes;
 			for (int i = 0; i < attributes.Count; i++)
 			{
-				System.Xml.XmlAttribute attribute = (System.Xml.XmlAttribute) attributes.Item(i);
+				var attribute = (System.Xml.XmlAttribute) attributes.Item(i);
 				if (attribute.NamespaceURI == null || attribute.NamespaceURI.Equals("") || attribute.NamespaceURI.Equals(XMLMessageTemplateLoader.TEMPLATE_DEFINITION_NS))
 					continue;
 				field.AddAttribute(new QName(attribute.LocalName, attribute.NamespaceURI), attribute.Value);

@@ -20,9 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using IntegerValue = OpenFAST.IntegerValue;
-using NumericValue = OpenFAST.NumericValue;
-using ScalarValue = OpenFAST.ScalarValue;
 
 namespace OpenFAST.Template.Type.Codec
 {
@@ -37,9 +34,8 @@ namespace OpenFAST.Template.Type.Codec
 			}
 			
 		}
-		private const long serialVersionUID = 1L;
-		
-		internal NullableSignedInteger()
+
+	    internal NullableSignedInteger()
 		{
 		}
 		
@@ -47,24 +43,21 @@ namespace OpenFAST.Template.Type.Codec
 		{
 			if (value_Renamed.Null)
 			{
-				return TypeCodec.NULL_VALUE_ENCODING;
+				return NULL_VALUE_ENCODING;
 			}
 			
-			NumericValue intValue = (NumericValue) value_Renamed;
+			var intValue = (NumericValue) value_Renamed;
 			
 			if (intValue.ToLong() >= 0)
 			{
-				return TypeCodec.INTEGER.EncodeValue(intValue.Increment());
+				return INTEGER.EncodeValue(intValue.Increment());
 			}
-			else
-			{
-				return TypeCodec.INTEGER.EncodeValue(intValue);
-			}
+		    return INTEGER.EncodeValue(intValue);
 		}
 		
 		public override ScalarValue Decode(System.IO.Stream in_Renamed)
 		{
-			NumericValue numericValue = ((NumericValue) TypeCodec.INTEGER.Decode(in_Renamed));
+			var numericValue = ((NumericValue) INTEGER.Decode(in_Renamed));
 			long value_Renamed = numericValue.ToLong();
 			
 			if (value_Renamed == 0)
@@ -80,7 +73,7 @@ namespace OpenFAST.Template.Type.Codec
 			return numericValue;
 		}
 		
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
 			return obj != null && obj.GetType() == GetType();
 		}

@@ -20,8 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
 
 namespace OpenFAST
@@ -30,7 +28,7 @@ namespace OpenFAST
     {
         internal static ByteBuffer Allocate(int BUFFER_SIZE)
         {
-            ByteBuffer buff = new ByteBuffer();
+            var buff = new ByteBuffer();
             buff.SetLength(BUFFER_SIZE);
             return buff;
         }

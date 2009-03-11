@@ -20,11 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using BitVectorBuilder = OpenFAST.BitVectorBuilder;
-using BitVectorReader = OpenFAST.BitVectorReader;
-using Context = OpenFAST.Context;
-using FieldValue = OpenFAST.FieldValue;
-using QName = OpenFAST.QName;
 
 namespace OpenFAST.Template
 {
@@ -68,7 +63,7 @@ namespace OpenFAST.Template
 			
 			set
 			{
-				this.key = value;
+				key = value;
 			}
 			
 		}
@@ -84,7 +79,7 @@ namespace OpenFAST.Template
 			
 			set
 			{
-				this.id = value;
+				id = value;
 			}
 			
 		}
@@ -95,24 +90,24 @@ namespace OpenFAST.Template
 		protected internal bool optional;
 		protected internal string id;
 		private System.Collections.Generic.Dictionary<QName,string> attributes;
-		
-		public Field(QName name, bool optional)
+
+	    protected Field(QName name, bool optional)
 		{
 			this.name = name;
-			this.key = name;
+			key = name;
 			this.optional = optional;
 		}
-		
-		
-		public Field(QName name, QName key, bool optional)
+
+
+	    protected Field(QName name, QName key, bool optional)
 		{
 			this.name = name;
 			this.key = key;
 			this.optional = optional;
 		}
-		
-		
-		public Field(string name, string key, bool optional, string id)
+
+
+	    protected Field(string name, string key, bool optional, string id)
 		{
 			this.name = new QName(name);
 			this.key = new QName(key);
@@ -125,18 +120,18 @@ namespace OpenFAST.Template
 			return attributes != null && attributes.ContainsKey(attributeName);
 		}
 		
-		public virtual void  AddAttribute(QName name, string value_Renamed)
+		public virtual void  AddAttribute(QName qname, string value_Renamed)
 		{
 			if (attributes == null)
 			{
 				attributes = new System.Collections.Generic.Dictionary<QName,string>();
 			}
-			attributes[name] = value_Renamed;
+			attributes[qname] = value_Renamed;
 		}
 		
-		public virtual string GetAttribute(QName name)
+		public virtual string GetAttribute(QName qname)
 		{
-			return (string) attributes[name];
+			return attributes[qname];
 		}
 		
 		protected internal virtual bool IsPresent(BitVectorReader presenceMapReader)
@@ -144,9 +139,9 @@ namespace OpenFAST.Template
 			return (!UsesPresenceMapBit()) || presenceMapReader.Read();
 		}
 		
-		public abstract byte[] Encode(FieldValue value_Renamed, Group template, Context context, BitVectorBuilder presenceMapBuilder);
+		public abstract byte[] Encode(FieldValue value_Renamed, Group encodeTemplate, Context context, BitVectorBuilder presenceMapBuilder);
 		
-		public abstract FieldValue Decode(System.IO.Stream in_Renamed, Group template, Context context, BitVectorReader presenceMapReader);
+		public abstract FieldValue Decode(System.IO.Stream in_Renamed, Group decodeTemplate, Context context, BitVectorReader presenceMapReader);
 		
 		public abstract bool UsesPresenceMapBit();
 		

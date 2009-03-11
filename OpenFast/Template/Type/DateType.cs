@@ -20,11 +20,8 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using DateValue = OpenFAST.DateValue;
-using ScalarValue = OpenFAST.ScalarValue;
-using Operator = OpenFAST.Template.operator_Renamed.Operator;
+using Operator = openfast.Template.Operator.Operator;
 using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
-using OpenFAST;
 
 namespace OpenFAST.Template.Type
 {
@@ -36,18 +33,18 @@ namespace OpenFAST.Template.Type
 		{
 			get
 			{
-				System.DateTime tempAux = new System.DateTime(0);
+				var tempAux = new DateTime(0);
 				return new DateValue(ref tempAux);
 			}
 			
 		}
-		private const long serialVersionUID = 1L;
-		private TypeCodec dateCodec;
-		private System.Globalization.DateTimeFormatInfo dateFormatter;
+
+	    private readonly TypeCodec dateCodec;
+		private readonly System.Globalization.DateTimeFormatInfo dateFormatter;
 
 		public DateType(System.Globalization.DateTimeFormatInfo dateFormat, TypeCodec dateCodec):base("date")
 		{
-			this.dateFormatter = dateFormat;
+			dateFormatter = dateFormat;
 			this.dateCodec = dateCodec;
 		}
 		public override bool IsValueOf(ScalarValue previousValue)
@@ -64,10 +61,10 @@ namespace OpenFAST.Template.Type
 				return ScalarValue.UNDEFINED;
 			try
 			{
-				System.DateTime tempAux = System.DateTime.Parse(value_Renamed, dateFormatter);
+				var tempAux = DateTime.Parse(value_Renamed, dateFormatter);
 				return new DateValue(ref tempAux);
 			}
-			catch (System.FormatException e)
+			catch (FormatException e)
 			{
 				throw new RuntimeException(e);
 			}
@@ -78,13 +75,13 @@ namespace OpenFAST.Template.Type
 		}
 		public override int GetHashCode()
 		{
-			int prime = 31;
+			const int prime = 31;
 			int result = 1;
 			result = prime * result + ((dateCodec == null)?0:dateCodec.GetHashCode());
 			result = prime * result + ((dateFormatter == null)?0:dateFormatter.GetHashCode());
 			return result;
 		}
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
 			if (this == obj)
 				return true;
@@ -92,7 +89,7 @@ namespace OpenFAST.Template.Type
 				return false;
 			if (GetType() != obj.GetType())
 				return false;
-			DateType other = (DateType) obj;
+			var other = (DateType) obj;
 			if (dateCodec == null)
 			{
 				if (other.dateCodec != null)

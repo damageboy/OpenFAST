@@ -19,16 +19,15 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
 using OpenFAST.Template;
 
 namespace OpenFAST.Session
 {
 	public sealed class FastClient
 	{
-		private string clientName;
-		private Endpoint endpoint;
-		private SessionProtocol sessionProtocol;
+		private readonly string clientName;
+		private readonly Endpoint endpoint;
+		private readonly SessionProtocol sessionProtocol;
 		
 		public FastClient(string clientName, SessionProtocol sessionProtocol, Endpoint endpoint)
 		{
@@ -38,11 +37,11 @@ namespace OpenFAST.Session
 		}
 		public Session Connect()
 		{
-			Connection connection = endpoint.Connect();
-            Session session = sessionProtocol.Connect(clientName, connection, inboundRegistry, outboundRegistry, messageListener, sessionListener);
+			var connection = endpoint.Connect();
+            var session = sessionProtocol.Connect(clientName, connection, inboundRegistry, outboundRegistry, messageListener, sessionListener);
 			return session;
 		}
-        private SessionListener sessionListener = SessionListener_Fields.NULL;
+        private readonly SessionListener sessionListener = SessionListener_Fields.NULL;
         private TemplateRegistry inboundRegistry = TemplateRegistry_Fields.NULL;
         private TemplateRegistry outboundRegistry = TemplateRegistry_Fields.NULL;
         private MessageListener messageListener = MessageListener_Fields.NULL;

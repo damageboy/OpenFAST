@@ -19,16 +19,12 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using QName = OpenFAST.QName;
-
 namespace OpenFAST.Template
 {
-	
 	public abstract class AbstractTemplateRegistry : TemplateRegistry
 	{
-		public abstract OpenFAST.Template.MessageTemplate[] Templates{get;}
-		private System.Collections.ArrayList listeners = new System.Collections.ArrayList();
+		public abstract MessageTemplate[] Templates{get;}
+		private readonly System.Collections.ArrayList listeners = new System.Collections.ArrayList();
 		
 		public virtual MessageTemplate get_Renamed(string name)
 		{
@@ -68,29 +64,29 @@ namespace OpenFAST.Template
 		
 		public virtual void  AddTemplateRegisteredListener(TemplateRegisteredListener templateRegisteredListener)
 		{
-			this.listeners.Add(templateRegisteredListener);
+			listeners.Add(templateRegisteredListener);
 		}
 		
 		public virtual void  RemoveTemplateRegisteredListener(TemplateRegisteredListener templateRegisteredListener)
 		{
-			this.listeners.Remove(templateRegisteredListener);
+			listeners.Remove(templateRegisteredListener);
 		}
-		public abstract void  Define(OpenFAST.Template.MessageTemplate param1);
-		public abstract OpenFAST.Template.MessageTemplate get_Renamed(int param1);
-		public abstract int GetId(OpenFAST.QName param1);
-		public abstract void  Remove(OpenFAST.QName param1);
-		public abstract OpenFAST.Template.MessageTemplate get_Renamed(OpenFAST.QName param1);
+		public abstract void  Define(MessageTemplate param1);
+		public abstract MessageTemplate get_Renamed(int param1);
+		public abstract int GetId(QName param1);
+		public abstract void  Remove(QName param1);
+		public abstract MessageTemplate get_Renamed(QName param1);
 		public abstract bool IsRegistered(int param1);
 		public abstract System.Collections.IEnumerator NameIterator();
-		public abstract void  Register(int param1, OpenFAST.Template.MessageTemplate param2);
-		public abstract void  Remove(OpenFAST.Template.MessageTemplate param1);
-		public abstract bool IsDefined(OpenFAST.QName param1);
+		public abstract void  Register(int param1, MessageTemplate param2);
+		public abstract void  Remove(MessageTemplate param1);
+		public abstract bool IsDefined(QName param1);
 		public abstract System.Collections.IEnumerator Iterator();
-		public abstract bool IsRegistered(OpenFAST.Template.MessageTemplate param1);
-		public abstract bool IsRegistered(OpenFAST.QName param1);
-		public abstract void  RegisterAll(OpenFAST.Template.TemplateRegistry param1);
+		public abstract bool IsRegistered(MessageTemplate param1);
+		public abstract bool IsRegistered(QName param1);
+		public abstract void  RegisterAll(TemplateRegistry param1);
 		public abstract void  Remove(int param1);
-		public abstract int GetId(OpenFAST.Template.MessageTemplate param1);
-		public abstract void  Register(int param1, OpenFAST.QName param2);
+		public abstract int GetId(MessageTemplate param1);
+		public abstract void  Register(int param1, QName param2);
 	}
 }

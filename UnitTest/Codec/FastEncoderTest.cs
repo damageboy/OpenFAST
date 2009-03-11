@@ -22,13 +22,13 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System;
 using System.Collections.Generic;
 using System.Text;
+using openfast.Template.Operator;
 using UnitTest.Test;
 using OpenFAST.Template;
 using OpenFAST;
 using OpenFAST.Codec;
 using NUnit.Framework;
 using OpenFAST.Template.Type;
-using OpenFAST.Template.operator_Renamed;
 
 namespace UnitTest.Codec
 {

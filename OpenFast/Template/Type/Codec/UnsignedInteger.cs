@@ -20,17 +20,13 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using ScalarValue = OpenFAST.ScalarValue;
-using OpenFAST;
 
 namespace OpenFAST.Template.Type.Codec
 {
 	[Serializable]
 	public sealed class UnsignedInteger:IntegerCodec
 	{
-		private const long serialVersionUID = 1L;
-		
-		internal UnsignedInteger()
+	    internal UnsignedInteger()
 		{
 		}
 		
@@ -38,7 +34,7 @@ namespace OpenFAST.Template.Type.Codec
 		{
 			long value_Renamed = scalarValue.ToLong();
 			int size = GetUnsignedIntegerSize(value_Renamed);
-			byte[] encoded = new byte[size];
+			var encoded = new byte[size];
 			
 			for (int factor = 0; factor < size; factor++)
 			{
@@ -51,8 +47,7 @@ namespace OpenFAST.Template.Type.Codec
 		public override ScalarValue Decode(System.IO.Stream in_Renamed)
 		{
 			long value_Renamed = 0;
-			uint byt;
-			
+            uint byt;
 			try
 			{
 				do 
@@ -70,7 +65,7 @@ namespace OpenFAST.Template.Type.Codec
 			return CreateValue(value_Renamed);
 		}
 		
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(object obj)
 		{
 			return obj != null && GetType() == obj.GetType();
 		}

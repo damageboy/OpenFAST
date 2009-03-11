@@ -19,23 +19,15 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using BitVector = OpenFAST.BitVector;
-using BitVectorReader = OpenFAST.BitVectorReader;
-using BitVectorValue = OpenFAST.BitVectorValue;
-using Context = OpenFAST.Context;
-using IntegerValue = OpenFAST.IntegerValue;
-using Message = OpenFAST.Message;
-using MessageTemplate = OpenFAST.Template.MessageTemplate;
 using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
 
 namespace OpenFAST.Codec
 {
 	public sealed class FastDecoder : Coder
 	{
-		private System.IO.Stream in_Renamed;
+		private readonly System.IO.Stream in_Renamed;
 		
-		private Context context;
+		private readonly Context context;
 		
 		public FastDecoder(Context context, System.IO.Stream in_Renamed)
 		{
@@ -45,19 +37,19 @@ namespace OpenFAST.Codec
 		
 		public Message ReadMessage()
 		{
-			BitVectorValue bitVectorValue = (BitVectorValue) TypeCodec.BIT_VECTOR.Decode(in_Renamed);
+            var bitVectorValue = (BitVectorValue)TypeCodec.BIT_VECTOR.Decode(in_Renamed);
 			
 			if (bitVectorValue == null)
 			{
 				return null; // Must have reached end of stream;
 			}
 			
-			BitVector pmap = bitVectorValue.value_Renamed;
-			BitVectorReader presenceMapReader = new BitVectorReader(pmap);
+			var pmap = bitVectorValue.value_Renamed;
+			var presenceMapReader = new BitVectorReader(pmap);
 			
 			// if template id is not present, use previous, else decode template id
 			int templateId = (presenceMapReader.Read())?((IntegerValue) TypeCodec.UINT.Decode(in_Renamed)).value_Renamed:context.LastTemplateId;
-			MessageTemplate template = context.GetTemplate(templateId);
+			var template = context.GetTemplate(templateId);
 			
 			if (template == null)
 			{

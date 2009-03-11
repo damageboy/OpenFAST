@@ -20,7 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using ByteUtil = OpenFAST.ByteUtil;
 
 namespace OpenFAST.util
 {
@@ -30,20 +29,20 @@ namespace OpenFAST.util
 		{
 			get
 			{
-				byte[] b = new byte[index];
+				var b = new byte[index];
 				Array.Copy(buffer, 0, b, 0, index);
 				
 				return b;
 			}
 			
 		}
-		private byte[] buffer = new byte[1024];
-		private int index = 0;
-		private System.IO.Stream in_Renamed;
+		private readonly byte[] buffer = new byte[1024];
+		private int index;
+		private readonly System.IO.Stream in_Renamed;
 		
 		public RecordingInputStream(System.IO.Stream inputStream)
 		{
-			this.in_Renamed = inputStream;
+			in_Renamed = inputStream;
 		}
 		
 		
@@ -68,34 +67,25 @@ namespace OpenFAST.util
 		{
 		}
 
-		public override System.Int64 Seek(System.Int64 offset, System.IO.SeekOrigin origin)
+		public override Int64 Seek(Int64 offset, System.IO.SeekOrigin origin)
 		{
 			return 0;
 		}
 
-		public override void  SetLength(System.Int64 value)
+		public override void  SetLength(Int64 value)
 		{
 		}
 
-		public override System.Int32 Read(System.Byte[] buffer, System.Int32 offset, System.Int32 count)
+		public override Int32 Read(Byte[] readBuffer, Int32 offset, Int32 count)
 		{
 			return 0;
 		}
 
-		public override void  Write(System.Byte[] buffer, System.Int32 offset, System.Int32 count)
+		public override void  Write(Byte[] writeBuffer, Int32 offset, Int32 count)
 		{
 		}
 
-		public override System.Boolean CanRead
-		{
-			get
-			{
-				return false;
-			}
-			
-		}
-
-		public override System.Boolean CanSeek
+		public override Boolean CanRead
 		{
 			get
 			{
@@ -104,7 +94,7 @@ namespace OpenFAST.util
 			
 		}
 
-        public override System.Boolean CanWrite
+		public override Boolean CanSeek
 		{
 			get
 			{
@@ -113,7 +103,16 @@ namespace OpenFAST.util
 			
 		}
 
-		public override System.Int64 Length
+        public override Boolean CanWrite
+		{
+			get
+			{
+				return false;
+			}
+			
+		}
+
+		public override Int64 Length
 		{
 			get
 			{
@@ -122,7 +121,7 @@ namespace OpenFAST.util
 			
 		}
 
-		public override System.Int64 Position
+		public override Int64 Position
 		{
 			get
 			{

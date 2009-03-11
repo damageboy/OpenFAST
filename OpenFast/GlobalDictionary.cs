@@ -19,7 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
 using Group = OpenFAST.Template.Group;
 using System.Text;
 
@@ -51,11 +50,11 @@ namespace OpenFAST
 		
 		public override string ToString()
 		{
-			StringBuilder builder = new StringBuilder();
+			var builder = new StringBuilder();
 			System.Collections.IEnumerator keyIterator = new SupportClass.HashSetSupport(table.Keys).GetEnumerator();
 			while (keyIterator.MoveNext())
 			{
-				QName key = (QName) keyIterator.Current;
+				var key = (QName) keyIterator.Current;
 				builder.Append("Dictionary: Global");
 				builder.Append(key).Append("=").Append(table[key]).Append("\n");
 			}

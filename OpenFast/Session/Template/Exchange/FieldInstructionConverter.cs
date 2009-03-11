@@ -19,8 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using GroupValue = OpenFAST.GroupValue;
 using Field = OpenFAST.Template.Field;
 using Group = OpenFAST.Template.Group;
 using TemplateRegistry = OpenFAST.Template.TemplateRegistry;

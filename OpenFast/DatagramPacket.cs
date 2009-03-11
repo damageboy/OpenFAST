@@ -19,10 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace OpenFAST
 {
     public sealed class DatagramPacket : SupportClass.PacketSupport

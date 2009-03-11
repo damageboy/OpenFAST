@@ -19,8 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-
 namespace OpenFAST.Session
 {
 	public sealed class BasicClient : Client
@@ -42,13 +40,13 @@ namespace OpenFAST.Session
 			
 		}
 		
-		private string name;
+		private readonly string name;
 
-        private string vendorId;
+        private readonly string vendorId;
 		
 		public BasicClient(string clientName, string vendorId)
 		{
-			this.name = clientName;
+			name = clientName;
 			this.vendorId = vendorId;
 		}
 		

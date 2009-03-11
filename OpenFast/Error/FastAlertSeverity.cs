@@ -19,8 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-
 namespace OpenFAST.Error
 {
 	public sealed class FastAlertSeverity
@@ -53,9 +51,9 @@ namespace OpenFAST.Error
 		public static readonly FastAlertSeverity ERROR = new FastAlertSeverity(2, "ERROR", "Error");
 		public static readonly FastAlertSeverity WARN = new FastAlertSeverity(3, "WARN", "Warning");
 		public static readonly FastAlertSeverity INFO = new FastAlertSeverity(4, "INFO", "Information");
-		private int code;
-		private string shortName;
-		private string description;
+		private readonly int code;
+		private readonly string shortName;
+		private readonly string description;
 		
 		public FastAlertSeverity(int code, string shortName, string description)
 		{

@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using OpenFAST.Template;
-using OpenFAST.Template.operator_Renamed;
+using openfast.Template.Operator;
 using OpenFAST.Template.Type;
 using OpenFAST;
 

@@ -19,9 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using GroupValue = OpenFAST.GroupValue;
-using SessionControlProtocol_1_1 = OpenFAST.Session.SessionControlProtocol_1_1;
 using Field = OpenFAST.Template.Field;
 using Group = OpenFAST.Template.Group;
 using Scalar = OpenFAST.Template.Scalar;
@@ -43,22 +40,22 @@ namespace OpenFAST.Session.Template.Exchange
 		
 		public override Field Convert(GroupValue fieldDef, TemplateRegistry templateRegistry, ConversionContext context)
 		{
-			Scalar scalar = (Scalar) base.Convert(fieldDef, templateRegistry, context);
+			var scalar = (Scalar) base.Convert(fieldDef, templateRegistry, context);
 			if (fieldDef.IsDefined("Length"))
 			{
-				scalar.AddAttribute(OpenFAST.Error.FastConstants.LENGTH_FIELD, fieldDef.GetGroup("Length").GetString("Name"));
+				scalar.AddAttribute(Error.FastConstants.LENGTH_FIELD, fieldDef.GetGroup("Length").GetString("Name"));
 			}
 			return scalar;
 		}
 		
 		public override GroupValue Convert(Field field, ConversionContext context)
 		{
-			Scalar scalar = (Scalar) field;
+			var scalar = (Scalar) field;
 			GroupValue fieldDef = base.Convert(field, context);
-			if (scalar.HasAttribute(OpenFAST.Error.FastConstants.LENGTH_FIELD))
+			if (scalar.HasAttribute(Error.FastConstants.LENGTH_FIELD))
 			{
-				GroupValue lengthDef = new GroupValue(fieldDef.GetGroup().GetGroup("Length"));
-				lengthDef.SetString("Name", scalar.GetAttribute(OpenFAST.Error.FastConstants.LENGTH_FIELD));
+				var lengthDef = new GroupValue(fieldDef.GetGroup().GetGroup("Length"));
+				lengthDef.SetString("Name", scalar.GetAttribute(Error.FastConstants.LENGTH_FIELD));
 				fieldDef.SetFieldValue("Length", lengthDef);
 			}
 			return fieldDef;

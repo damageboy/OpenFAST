@@ -19,12 +19,9 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
 using FastDecoder = OpenFAST.Codec.FastDecoder;
 using MessageTemplate = OpenFAST.Template.MessageTemplate;
-using TemplateRegisteredListener = OpenFAST.Template.TemplateRegisteredListener;
 using TemplateRegistry = OpenFAST.Template.TemplateRegistry;
-using OpenFAST;
 
 namespace OpenFAST
 {
@@ -50,16 +47,16 @@ namespace OpenFAST
 		{
 			set
 			{
-				this.blockReader = value;
+				blockReader = value;
 			}
 			
 		}
-		private System.IO.Stream in_Renamed;
-		private FastDecoder decoder;
-		private Context context;
-        private System.Collections.Generic.Dictionary<MessageTemplate, MessageHandler> templateHandlers = new System.Collections.Generic.Dictionary<MessageTemplate, MessageHandler>();
-        private System.Collections.Generic.List<MessageHandler> handlers = new System.Collections.Generic.List<MessageHandler>();
-		private MessageBlockReader blockReader = OpenFAST.MessageBlockReader_Fields.NULL;
+		private readonly System.IO.Stream in_Renamed;
+		private readonly FastDecoder decoder;
+		private readonly Context context;
+        private readonly System.Collections.Generic.Dictionary<MessageTemplate, MessageHandler> templateHandlers = new System.Collections.Generic.Dictionary<MessageTemplate, MessageHandler>();
+        private readonly System.Collections.Generic.List<MessageHandler> handlers = new System.Collections.Generic.List<MessageHandler>();
+		private MessageBlockReader blockReader = MessageBlockReader_Fields.NULL;
 		
 		public MessageInputStream(System.IO.Stream inputStream):this(inputStream, new Context())
 		{
@@ -67,9 +64,9 @@ namespace OpenFAST
 		
 		public MessageInputStream(System.IO.Stream inputStream, Context context)
 		{
-			this.in_Renamed = inputStream;
+			in_Renamed = inputStream;
 			this.context = context;
-			this.decoder = new FastDecoder(context, in_Renamed);
+			decoder = new FastDecoder(context, in_Renamed);
 		}
 
 		public Message ReadMessage()
@@ -77,12 +74,12 @@ namespace OpenFAST
 			if (context.TraceEnabled)
 				context.StartTrace();
 			
-			bool keepReading = blockReader.ReadBlock(in_Renamed);
+			var keepReading = blockReader.ReadBlock(in_Renamed);
 			
 			if (!keepReading)
 				return null;
 			
-			Message message = decoder.ReadMessage();
+			var message = decoder.ReadMessage();
 			
 			if (message == null)
 			{
@@ -93,12 +90,12 @@ namespace OpenFAST
 			
 			if (!(handlers.Count == 0))
 			{
-				for (int i = 0; i < handlers.Count; i++)
+				for (var i = 0; i < handlers.Count; i++)
 				{
 					handlers[i].HandleMessage(message, context, decoder);
 				}
 			}
-			if (templateHandlers.ContainsKey(message.Template))
+            if (templateHandlers.ContainsKey(message.Template))
 			{
                 templateHandlers[message.Template].HandleMessage(message, context, decoder);
 				
@@ -145,9 +142,9 @@ namespace OpenFAST
 			return context.TemplateRegistry;
 		}
 		
-		public void  AddTemplateRegisteredListener(TemplateRegisteredListener templateRegisteredListener)
-		{
-		}
+        //public void  AddTemplateRegisteredListener(TemplateRegisteredListener templateRegisteredListener)
+        //{
+        //}
 		
 		public void  Reset()
 		{

@@ -20,57 +20,52 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using ByteUtil = OpenFAST.ByteUtil;
-using Global = OpenFAST.Global;
-using ScalarValue = OpenFAST.ScalarValue;
-using StringValue = OpenFAST.StringValue;
-using OpenFAST;
 
 namespace OpenFAST.Template.Type.Codec
 {
 	[Serializable]
 	sealed class AsciiString:TypeCodec
 	{
-		private const long serialVersionUID = 1L;
-		private const string ZERO_TERMINATOR = "\u0000";
+	    private const string ZERO_TERMINATOR = "\u0000";
 
 		private static readonly byte[] ZERO_PREAMBLE = new byte[]{0, 0};
-		
-		internal AsciiString()
-		{
-		}
-		
-		public override byte[] EncodeValue(ScalarValue value_Renamed)
+
+	    public override byte[] EncodeValue(ScalarValue value_Renamed)
 		{
 			if ((value_Renamed == null) || value_Renamed.Null)
 			{
-				throw new System.SystemException("Only nullable strings can represent null values.");
+				throw new SystemException("Only nullable strings can represent null values.");
 			}
 			
 			string string_Renamed = value_Renamed.ToString();
 			
-			if ((string_Renamed != null) && (string_Renamed.Length == 0))
-			{
-				return TypeCodec.NULL_VALUE_ENCODING;
-			}
-			if (string_Renamed.StartsWith(ZERO_TERMINATOR))
-			{
-				return ZERO_PREAMBLE;
-			}
-			return SupportClass.ToByteArray(string_Renamed);
+			
+	        if (string_Renamed != null)
+	        {
+                if (string_Renamed.Length == 0)
+                {
+                    return NULL_VALUE_ENCODING;
+                }
+	            if (string_Renamed.StartsWith(ZERO_TERMINATOR))
+	            {
+	                return ZERO_PREAMBLE;
+	            }
+                return System.Text.Encoding.UTF8.GetBytes(string_Renamed);
+	        }
+            return NULL_VALUE_ENCODING;
 		}
 		
 		public override ScalarValue Decode(System.IO.Stream in_Renamed)
 		{
-			System.IO.MemoryStream buffer = new System.IO.MemoryStream();
-			int byt;
+			var buffer = new System.IO.MemoryStream();
+			byte byt;
 			
 			try
 			{
 				do 
 				{
-					byt = in_Renamed.ReadByte();
-					buffer.WriteByte((System.Byte) byt);
+                    byt = (byte)in_Renamed.ReadByte();
+					buffer.WriteByte( byt);
 				}
 				while ((byt & STOP_BIT) == 0);
 			}
@@ -80,28 +75,28 @@ namespace OpenFAST.Template.Type.Codec
 			}
 			
 			byte[] bytes = buffer.ToArray();
-			bytes[bytes.Length - 1] &= (byte) (0x7f);
+			bytes[bytes.Length - 1] &=  (0x7f);
 			
 			if (bytes[0] == 0)
 			{
 				if (!ByteUtil.IsEmpty(bytes))
-					Global.HandleError(OpenFAST.Error.FastConstants.R9_STRING_OVERLONG, null);
+					Global.HandleError(Error.FastConstants.R9_STRING_OVERLONG, null);
 				if (bytes.Length > 1 && bytes[1] == 0)
 					return new StringValue("\u0000");
 				return new StringValue("");
 			}
-			
-			return new StringValue(new string(SupportClass.ToCharArray(bytes)));
+
+            return new StringValue(System.Text.Encoding.UTF8.GetString(bytes));
 		}
 		
-		public ScalarValue FromString(string value_Renamed)
+		public static ScalarValue FromString(string value_Renamed)
 		{
 			return new StringValue(value_Renamed);
 		}
 		
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
-			return obj != null && obj.GetType() == GetType();
+            return obj != null && obj.GetType() == GetType();//POINTP
 		}
 
 		public override int GetHashCode()

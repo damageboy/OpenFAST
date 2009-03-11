@@ -25,7 +25,7 @@ using System.Text;
 using OpenFAST;
 using OpenFAST.Template;
 using System.Globalization;
-using OpenFAST.Template.operator_Renamed;
+using openfast.Template.Operator;
 using System.Xml;
 using System.IO;
 using NUnit.Framework;

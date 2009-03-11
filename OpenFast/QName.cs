@@ -48,13 +48,12 @@ namespace OpenFAST
 			}
 			
 		}
-		private const long serialVersionUID = 1L;
+
+	    public static readonly QName NULL = new QName("", "");
 		
-		public static readonly QName NULL = new QName("", "");
+		private readonly string namespace_Renamed;
 		
-		private string namespace_Renamed;
-		
-		private string name;
+		private readonly string name;
 		
 		public QName(string name):this(name, "")
 		{
@@ -63,16 +62,16 @@ namespace OpenFAST
 		public QName(string name, string namespace_Renamed)
 		{
 			if (name == null)
-				throw new System.NullReferenceException();
+				throw new NullReferenceException();
 			this.name = name;
 			this.namespace_Renamed = namespace_Renamed == null?"":namespace_Renamed;
 		}
 		
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(object obj)
 		{
 			if (obj == this)
 				return true;
-			if (obj == null || obj.GetType() != this.GetType())
+            if (obj == null || obj.GetType() != GetType())//POINTP
 				return false;
 			QName other = (QName) obj;
 			return other.namespace_Renamed.Equals(namespace_Renamed) && other.name.Equals(name);

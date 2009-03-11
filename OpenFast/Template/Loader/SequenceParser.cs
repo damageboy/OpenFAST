@@ -19,14 +19,7 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using Global = OpenFAST.Global;
-using QName = OpenFAST.QName;
-using ScalarValue = OpenFAST.ScalarValue;
-using Field = OpenFAST.Template.Field;
-using Scalar = OpenFAST.Template.Scalar;
-using Sequence = OpenFAST.Template.Sequence;
-using Operator = OpenFAST.Template.operator_Renamed.Operator;
+using Operator = openfast.Template.Operator.Operator;
 using FASTType = OpenFAST.Template.Type.FASTType;
 
 namespace OpenFAST.Template.Loader
@@ -36,9 +29,9 @@ namespace OpenFAST.Template.Loader
 	{
 		public class SequenceLengthParser:ScalarParser
 		{
-			private void  InitBlock(SequenceParser enclosingInstance)
+			private void  InitBlock(SequenceParser internalInstance)
 			{
-				this.enclosingInstance = enclosingInstance;
+				enclosingInstance = internalInstance;
 			}
 			private SequenceParser enclosingInstance;
 			public SequenceParser Enclosing_Instance
@@ -79,7 +72,7 @@ namespace OpenFAST.Template.Loader
 		
 		public override Field Parse(System.Xml.XmlElement sequenceElement, bool optional, ParsingContext context)
 		{
-			Sequence sequence = new Sequence(context.GetName(), ParseSequenceLengthField(context.GetName(), sequenceElement, optional, context), GroupParser.ParseFields(sequenceElement, context), optional);
+			var sequence = new Sequence(context.GetName(), ParseSequenceLengthField(context.GetName(), sequenceElement, optional, context), GroupParser.ParseFields(sequenceElement, context), optional);
 			GroupParser.ParseMore(sequenceElement, sequence.Group, context);
 			return sequence;
 		}
@@ -90,13 +83,13 @@ namespace OpenFAST.Template.Loader
 			
 			if (lengthElements.Count == 0)
 			{
-				Scalar implicitLength = new Scalar(Global.CreateImplicitName(name), FASTType.U32, Operator.NONE, ScalarValue.UNDEFINED, optional);
-				implicitLength.Dictionary = parent.Dictionary;
-				return implicitLength;
+				var implicitLength = new Scalar(Global.CreateImplicitName(name), FASTType.U32, Operator.NONE, ScalarValue.UNDEFINED, optional)
+				                         {Dictionary = parent.Dictionary};
+			    return implicitLength;
 			}
 			
-			System.Xml.XmlElement length = (System.Xml.XmlElement) lengthElements.Item(0);
-			ParsingContext context = new ParsingContext(length, parent);
+			var length = (System.Xml.XmlElement) lengthElements.Item(0);
+			var context = new ParsingContext(length, parent);
 			return (Scalar) sequenceLengthParser.Parse(length, optional, context);
 		}
 	}

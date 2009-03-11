@@ -19,15 +19,13 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-
 namespace OpenFAST
 {
 	public class BitVectorReader
 	{
 		public sealed class NullBitVectorReader:BitVectorReader
 		{
-			internal NullBitVectorReader(OpenFAST.BitVector Param1):base(Param1)
+			internal NullBitVectorReader(BitVector Param1):base(Param1)
 			{
 			}
 			public override bool Read()
@@ -42,7 +40,7 @@ namespace OpenFAST
 		}
 		public sealed class InfiniteBitVectorReader:BitVectorReader
 		{
-			internal InfiniteBitVectorReader(OpenFAST.BitVector Param1):base(Param1)
+			internal InfiniteBitVectorReader(BitVector Param1):base(Param1)
 			{
 			}
 			public override bool Read()
@@ -71,8 +69,8 @@ namespace OpenFAST
 		
 		public static readonly BitVectorReader INFINITE_TRUE;
 		
-		private BitVector vector;
-		private int index = 0;
+		private readonly BitVector vector;
+		private int index;
 		
 		public BitVectorReader(BitVector vector)
 		{

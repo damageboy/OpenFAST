@@ -20,30 +20,25 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using NumericValue = OpenFAST.NumericValue;
-using ScalarValue = OpenFAST.ScalarValue;
-using OpenFAST;
 
 namespace OpenFAST.Template.Type.Codec
 {
 	[Serializable]
 	public sealed class SignedInteger:IntegerCodec
 	{
-		private const long serialVersionUID = 1L;
-		
-		internal SignedInteger()
+	    internal SignedInteger()
 		{
 		}
 		
 		public override byte[] EncodeValue(ScalarValue value_Renamed)
 		{
-			long longValue = ((NumericValue) value_Renamed).ToLong();
-			int size = GetSignedIntegerSize(longValue);
-			byte[] encoding = new byte[size];
+			var longValue = value_Renamed.ToLong();
+			var size = GetSignedIntegerSize(longValue);
+			var encoding = new byte[size];
 			
-			for (int factor = 0; factor < size; factor++)
+			for (var factor = 0; factor < size; factor++)
 			{
-				int bitMask = (factor == (size - 1))?0x3f:0x7f;
+				var bitMask = (factor == (size - 1))?0x3f:0x7f;
 				encoding[size - factor - 1] = (byte) ((longValue >> (factor * 7)) & bitMask);
 			}
 			
@@ -58,10 +53,10 @@ namespace OpenFAST.Template.Type.Codec
 		public override ScalarValue Decode(System.IO.Stream in_Renamed)
 		{
 			long value_Renamed = 0;
-			
+		    uint byt;
 			try
 			{
-				uint byt =(uint) in_Renamed.ReadByte();
+				byt =(uint) in_Renamed.ReadByte();
 				
 				if ((byt & 0x40) > 0)
 				{
@@ -84,7 +79,7 @@ namespace OpenFAST.Template.Type.Codec
 			return CreateValue(value_Renamed);
 		}
 		
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
 			return obj != null && obj.GetType() == GetType();
 		}

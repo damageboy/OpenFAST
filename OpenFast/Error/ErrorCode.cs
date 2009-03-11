@@ -19,9 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using Message = OpenFAST.Message;
-
 namespace OpenFAST.Error
 {
 	public sealed class ErrorCode
@@ -67,15 +64,15 @@ namespace OpenFAST.Error
 			
 		}
 		private static readonly System.Collections.IDictionary ALERT_CODES = new System.Collections.Hashtable();
-		private int code;
-		private string shortName;
-		private string description;
-		private FastAlertSeverity severity;
-		private ErrorType type;
+		private readonly int code;
+		private readonly string shortName;
+		private readonly string description;
+		private readonly FastAlertSeverity severity;
+		private readonly ErrorType type;
 		
 		public ErrorCode(ErrorType type, int code, string shortName, string description, FastAlertSeverity severity)
 		{
-			ALERT_CODES[(System.Int32) code] = this;
+			ALERT_CODES[code] = this;
 			this.type = type;
 			this.code = code;
 			this.shortName = shortName;
@@ -90,7 +87,7 @@ namespace OpenFAST.Error
 		
 		public static ErrorCode GetAlertCode(Message alertMsg)
 		{
-			return (ErrorCode) ALERT_CODES[(System.Int32) alertMsg.GetInt(2)];
+			return (ErrorCode) ALERT_CODES[alertMsg.GetInt(2)];
 		}
 		
 		public override string ToString()
@@ -104,8 +101,8 @@ namespace OpenFAST.Error
 				return true;
 			if (obj == null || !(obj is ErrorCode))
 				return false;
-			ErrorCode other = (ErrorCode) obj;
-			return other.code == this.code && other.Type.Equals(this.Type);
+			var other = (ErrorCode) obj;
+			return other.code == code && other.Type.Equals(Type);
 		}
 		public override int GetHashCode()
 		{

@@ -20,15 +20,8 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using BitVectorReader = OpenFAST.BitVectorReader;
-using Context = OpenFAST.Context;
-using FieldValue = OpenFAST.FieldValue;
-using IntegerValue = OpenFAST.IntegerValue;
-using Message = OpenFAST.Message;
-using QName = OpenFAST.QName;
-using ScalarValue = OpenFAST.ScalarValue;
 using FastException = OpenFAST.Error.FastException;
-using Operator = OpenFAST.Template.operator_Renamed.Operator;
+using Operator = openfast.Template.Operator.Operator;
 using FASTType = OpenFAST.Template.Type.FASTType;
 
 namespace OpenFAST.Template
@@ -38,7 +31,7 @@ namespace OpenFAST.Template
 	public sealed class MessageTemplate:Group, FieldSet
 	{
 
-		public new System.Type ValueType
+		public new static System.Type ValueType
 		{
 			get
 			{
@@ -51,15 +44,14 @@ namespace OpenFAST.Template
 		{
 			get
 			{
-				Field[] f = new Field[fields.Length - 1];
+				var f = new Field[fields.Length - 1];
 				Array.Copy(fields, 1, f, 0, fields.Length - 1);
 				return f;
 			}
 			
 		}
-		private const long serialVersionUID = 1L;
-		
-		public MessageTemplate(QName name, Field[] fields):base(name, AddTemplateIdField(fields), false)
+
+	    public MessageTemplate(QName name, Field[] fields):base(name, AddTemplateIdField(fields), false)
 		{
 		}
 		public override bool UsesPresenceMap()
@@ -72,7 +64,7 @@ namespace OpenFAST.Template
 
 		private static Field[] AddTemplateIdField(Field[] fields)
 		{
-			Field[] newFields = new Field[fields.Length + 1];
+			var newFields = new Field[fields.Length + 1];
 			newFields[0] = new Scalar("templateId", FASTType.U32, Operator.COPY, ScalarValue.UNDEFINED, false);
 			Array.Copy(fields, 0, newFields, 1, fields.Length);
 			return newFields;
@@ -87,10 +79,10 @@ namespace OpenFAST.Template
 		{
 			if (!context.TemplateRegistry.IsRegistered(message.Template))
 			{
-				throw new FastException("Cannot encode message: The template " + message.Template + " has not been registered.", OpenFAST.Error.FastConstants.D9_TEMPLATE_NOT_REGISTERED);
+				throw new FastException("Cannot encode message: The template " + message.Template + " has not been registered.", Error.FastConstants.D9_TEMPLATE_NOT_REGISTERED);
 			}
 			message.SetInteger(0, context.GetTemplateId(message.Template));
-			return base.Encode(message, this, context);
+			return Encode(message, this, context);
 		}
 
 		public Message Decode(System.IO.Stream in_Renamed, int templateId, BitVectorReader presenceMapReader, Context context)
@@ -99,9 +91,9 @@ namespace OpenFAST.Template
 			{
 				if (context.TraceEnabled)
 					context.DecodeTrace.GroupStart(this);
-				FieldValue[] fieldValues = base.DecodeFieldValues(in_Renamed, this, presenceMapReader, context);
+				FieldValue[] fieldValues = DecodeFieldValues(in_Renamed, this, presenceMapReader, context);
 				fieldValues[0] = new IntegerValue(templateId);
-				Message message = new Message(this, fieldValues);
+				var message = new Message(this, fieldValues);
 				if (context.TraceEnabled)
 					context.DecodeTrace.GroupEnd();
 				return message;
@@ -120,7 +112,7 @@ namespace OpenFAST.Template
 		{
 			return new Message(this);
 		}
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
 			if (obj == this)
 				return true;

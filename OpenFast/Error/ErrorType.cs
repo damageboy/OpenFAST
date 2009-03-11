@@ -19,8 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-
 namespace OpenFAST.Error
 {
 	public sealed class ErrorType
@@ -33,7 +31,7 @@ namespace OpenFAST.Error
 			}
 			
 		}
-		private string name;
+		private readonly string name;
 		
 		public ErrorType(string name)
 		{

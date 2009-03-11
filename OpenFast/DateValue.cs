@@ -27,12 +27,11 @@ namespace OpenFAST
 	[Serializable]
 	public sealed class DateValue:ScalarValue
 	{
-		private const long serialVersionUID = 1L;
-		public System.DateTime value_Renamed;
+	    public DateTime value_Renamed;
 		
-		public DateValue(ref System.DateTime date)
+		public DateValue(ref DateTime date)
 		{
-			this.value_Renamed = date;
+			value_Renamed = date;
 		}
 		
 		public override long ToLong()
@@ -45,7 +44,7 @@ namespace OpenFAST
 			return value_Renamed.ToString("r");
 		}
 		
-		public  override bool Equals(System.Object other)
+		public  override bool Equals(Object other)
 		{
 			if (other == this)
 				return true;

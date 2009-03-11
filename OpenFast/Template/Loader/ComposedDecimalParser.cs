@@ -19,13 +19,7 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using QName = OpenFAST.QName;
-using ScalarValue = OpenFAST.ScalarValue;
-using ComposedScalar = OpenFAST.Template.ComposedScalar;
-using Field = OpenFAST.Template.Field;
-using Scalar = OpenFAST.Template.Scalar;
-using Operator = OpenFAST.Template.operator_Renamed.Operator;
+using Operator = openfast.Template.Operator.Operator;
 using FASTType = OpenFAST.Template.Type.FASTType;
 using Util = OpenFAST.util.Util;
 
@@ -70,7 +64,7 @@ namespace OpenFAST.Template.Loader
 			return createComposedDecimal(fieldNode, context.GetName(), optional, mantissaNode, exponentNode, context);
 		}
 		
-		private Field createComposedDecimal(System.Xml.XmlElement fieldNode, QName name, bool optional, System.Xml.XmlNode mantissaNode, System.Xml.XmlNode exponentNode, ParsingContext context)
+		private static Field createComposedDecimal(System.Xml.XmlElement fieldNode, QName name, bool optional, System.Xml.XmlNode mantissaNode, System.Xml.XmlNode exponentNode, ParsingContext context)
 		{
 			string mantissaOperator = "none";
 			string exponentOperator = "none";

@@ -23,7 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using OpenFAST.Template;
-using OpenFAST.Template.operator_Renamed;
+using openfast.Template.Operator;
 using OpenFAST;
 using OpenFAST.Template.Type;
 

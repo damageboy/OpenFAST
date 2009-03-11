@@ -19,21 +19,19 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-
 namespace OpenFAST.util
 {
 	
 	
 	public sealed class Key
 	{
-		private System.Object[] keys;
+		private readonly System.Object[] keys;
 		
-		public Key(System.Object key1, System.Object key2):this(new System.Object[]{key1, key2})
+		public Key(System.Object key1, System.Object key2):this(new[]{key1, key2})
 		{
 		}
 		
-		public Key(System.Object key1, System.Object key2, System.Object key3):this(new System.Object[]{key1, key2, key3})
+		public Key(System.Object key1, System.Object key2, System.Object key3):this(new[]{key1, key2, key3})
 		{
 		}
 		
@@ -57,7 +55,7 @@ namespace OpenFAST.util
 			if ((obj == null) || !(obj is Key))
 				return false;
 			
-			Key other = ((Key) obj);
+			var other = ((Key) obj);
 			if (other.keys.Length != keys.Length)
 				return false;
 			for (int i = 0; i < keys.Length; i++)

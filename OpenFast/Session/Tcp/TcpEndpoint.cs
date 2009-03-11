@@ -19,11 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using Connection = OpenFAST.Session.Connection;
-using Endpoint = OpenFAST.Session.Endpoint;
-using FastConnectionException = OpenFAST.Session.FastConnectionException;
-
 namespace OpenFAST.Session.Tcp
 {
     public sealed class TcpEndpoint : Endpoint
@@ -32,14 +27,14 @@ namespace OpenFAST.Session.Tcp
         {
             set
             {
-                this.connectionListener = value;
+                connectionListener = value;
             }
 
         }
 
-        private int port;
-        private string host;
-        private ConnectionListener connectionListener = OpenFAST.Session.ConnectionListener.NULL;
+        private readonly int port;
+        private readonly string host;
+        private ConnectionListener connectionListener = ConnectionListener.NULL;
         private System.Net.Sockets.TcpListener serverSocket;
         private bool closed = true;
 
@@ -56,7 +51,7 @@ namespace OpenFAST.Session.Tcp
         {
             try
             {
-                System.Net.Sockets.TcpClient socket = new System.Net.Sockets.TcpClient(host, port);
+                var socket = new System.Net.Sockets.TcpClient(host, port);
                 Connection connection = new TcpConnection(socket);
                 return connection;
             }
@@ -77,18 +72,17 @@ namespace OpenFAST.Session.Tcp
             {
                 if (serverSocket == null)
                 {
-                    System.Net.Sockets.TcpListener temp_tcpListener;
                     //commented by shariq
                     //temp_tcpListener = new System.Net.Sockets.TcpListener(System.Net.Dns.GetHostByName(System.Net.Dns.GetHostName()).AddressList[0], port);
                     //listen on all adapters
-                    temp_tcpListener = new System.Net.Sockets.TcpListener(System.Net.IPAddress.Parse("0.0.0.0"), port);
+                    var temp_tcpListener = new System.Net.Sockets.TcpListener(System.Net.IPAddress.Parse("0.0.0.0"), port);
 
                     temp_tcpListener.Start();
                     serverSocket = temp_tcpListener;
                 }
                 while (true)
                 {
-                    System.Net.Sockets.TcpClient socket = serverSocket.AcceptTcpClient();
+                    var socket = serverSocket.AcceptTcpClient();
                     connectionListener.OnConnect(new TcpConnection(socket));
                 }
             }

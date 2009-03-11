@@ -20,12 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using BitVectorBuilder = OpenFAST.BitVectorBuilder;
-using BitVectorReader = OpenFAST.BitVectorReader;
-using Context = OpenFAST.Context;
-using FieldValue = OpenFAST.FieldValue;
-using Message = OpenFAST.Message;
-using QName = OpenFAST.QName;
 using FastDecoder = OpenFAST.Codec.FastDecoder;
 
 namespace OpenFAST.Template
@@ -51,8 +45,8 @@ namespace OpenFAST.Template
 			}
 			
 		}
-		private const long serialVersionUID = 1L;
-		public static readonly DynamicTemplateReference INSTANCE = new DynamicTemplateReference();
+
+	    public static readonly DynamicTemplateReference INSTANCE = new DynamicTemplateReference();
 		
 		private DynamicTemplateReference():base(QName.NULL, false)
 		{
@@ -64,15 +58,15 @@ namespace OpenFAST.Template
 		}
 		
 		
-		public override FieldValue Decode(System.IO.Stream in_Renamed, Group template, Context context, BitVectorReader pmapReader)
+		public override FieldValue Decode(System.IO.Stream in_Renamed, Group decodeTemplate, Context context, BitVectorReader pmapReader)
 		{
 			return new FastDecoder(context, in_Renamed).ReadMessage();
 		}
 		
 		
-		public override byte[] Encode(FieldValue value_Renamed, Group template, Context context, BitVectorBuilder presenceMapBuilder)
+		public override byte[] Encode(FieldValue value_Renamed, Group encodeTemplate, Context context, BitVectorBuilder presenceMapBuilder)
 		{
-			Message message = (Message) value_Renamed;
+			var message = (Message) value_Renamed;
 			return message.Template.Encode(message, context);
 		}
 		
@@ -88,9 +82,9 @@ namespace OpenFAST.Template
 			return false;
 		}
 		
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
-			return obj != null && obj.GetType().Equals(this.GetType());
+			return obj != null && obj.GetType().Equals(GetType());
 		}
 
 		public override int GetHashCode()

@@ -37,9 +37,8 @@ namespace OpenFAST
 				}
 				
 			}
-			private new const long serialVersionUID = 1L;
-			
-			public override string ToString()
+
+		    public override string ToString()
 			{
 				return "UNDEFINED";
 			}
@@ -55,9 +54,8 @@ namespace OpenFAST
 				}
 				
 			}
-			private new const long serialVersionUID = 1L;
-			
-			public override string ToString()
+
+		    public override string ToString()
 			{
 				return "NULL";
 			}
@@ -83,13 +81,12 @@ namespace OpenFAST
 		{
 			get
 			{
-				throw new System.NotSupportedException();
+				throw new NotSupportedException();
 			}
 			
 		}
-		private const long serialVersionUID = 1L;
-		
-		public static readonly ScalarValue UNDEFINED;
+
+	    public static readonly ScalarValue UNDEFINED;
 		
 		public static readonly ScalarValue NULL;
 		
@@ -105,37 +102,37 @@ namespace OpenFAST
 		
 		public virtual byte ToByte()
 		{
-			throw new System.NotSupportedException();
+			throw new NotSupportedException();
 		}
 		
 		public virtual short ToShort()
 		{
-			throw new System.NotSupportedException();
+			throw new NotSupportedException();
 		}
 		
 		public virtual int ToInt()
 		{
-			throw new System.NotSupportedException();
+			throw new NotSupportedException();
 		}
 		
 		public virtual long ToLong()
 		{
-			throw new System.NotSupportedException();
+			throw new NotSupportedException();
 		}
 		
 		public override string ToString()
 		{
-			throw new System.NotSupportedException();
+			throw new NotSupportedException();
 		}
 		
 		public virtual double ToDouble()
 		{
-			throw new System.NotSupportedException();
+			throw new NotSupportedException();
 		}
 
-        public virtual System.Decimal ToBigDecimal()
+        public virtual Decimal ToBigDecimal()
 		{
-			throw new System.NotSupportedException();
+			throw new NotSupportedException();
 		}
 		
         static ScalarValue()

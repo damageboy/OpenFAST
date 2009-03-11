@@ -20,17 +20,13 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using BitVector = OpenFAST.BitVector;
-using BitVectorValue = OpenFAST.BitVectorValue;
-using ScalarValue = OpenFAST.ScalarValue;
-using OpenFAST;
 
 namespace OpenFAST.Template.Type.Codec
 {
 	[Serializable]
 	public sealed class BitVectorType:TypeCodec
 	{
-		public ScalarValue DefaultValue
+		public static ScalarValue DefaultValue
 		{
 			get
 			{
@@ -38,9 +34,8 @@ namespace OpenFAST.Template.Type.Codec
 			}
 			
 		}
-		private const long serialVersionUID = 1L;
-		
-		internal BitVectorType()
+
+	    internal BitVectorType()
 		{
 		}
 		
@@ -51,7 +46,7 @@ namespace OpenFAST.Template.Type.Codec
 		
 		public override ScalarValue Decode(System.IO.Stream in_Renamed)
 		{
-			System.IO.MemoryStream buffer = new System.IO.MemoryStream();
+			var buffer = new System.IO.MemoryStream();
 			int byt;
 			do 
 			{
@@ -69,7 +64,7 @@ namespace OpenFAST.Template.Type.Codec
 					throw new RuntimeException(e);
 				}
 				
-				buffer.WriteByte((System.Byte) byt);
+				buffer.WriteByte((Byte) byt);
 			}
 			while ((byt & STOP_BIT) == 0);
 			
@@ -81,7 +76,7 @@ namespace OpenFAST.Template.Type.Codec
 			return null;
 		}
 		
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
 			return obj != null && obj.GetType() == GetType();
 		}

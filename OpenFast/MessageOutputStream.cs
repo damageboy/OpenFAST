@@ -19,7 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
 using FastEncoder = OpenFAST.Codec.FastEncoder;
 using MessageTemplate = OpenFAST.Template.MessageTemplate;
 using TemplateRegistry = OpenFAST.Template.TemplateRegistry;
@@ -44,11 +43,11 @@ namespace OpenFAST
 			}
 			
 		}
-		private System.IO.Stream out_Renamed;
-		private FastEncoder encoder;
-		private Context context;
-        private System.Collections.Generic.Dictionary<MessageTemplate, MessageHandler> templateHandlers = new System.Collections.Generic.Dictionary<MessageTemplate, MessageHandler>();
-        private System.Collections.Generic.List<MessageHandler> handlers = new System.Collections.Generic.List<MessageHandler>();
+		private readonly System.IO.Stream out_Renamed;
+		private readonly FastEncoder encoder;
+		private readonly Context context;
+        private readonly System.Collections.Generic.Dictionary<MessageTemplate, MessageHandler> templateHandlers = new System.Collections.Generic.Dictionary<MessageTemplate, MessageHandler>();
+        private readonly System.Collections.Generic.List<MessageHandler> handlers = new System.Collections.Generic.List<MessageHandler>();
 
 		
 		public MessageOutputStream(System.IO.Stream outputStream):this(outputStream, new Context())
@@ -57,8 +56,8 @@ namespace OpenFAST
 		
 		public MessageOutputStream(System.IO.Stream outputStream, Context context)
 		{
-			this.out_Renamed = outputStream;
-			this.encoder = new FastEncoder(context);
+			out_Renamed = outputStream;
+			encoder = new FastEncoder(context);
 			this.context = context;
 		}
 		
@@ -76,7 +75,7 @@ namespace OpenFAST
 				
 				if (!(handlers.Count == 0))
 				{
-					for (int i = 0; i < handlers.Count; i++)
+					for (var i = 0; i < handlers.Count; i++)
 					{
 						handlers[i].HandleMessage(message, context, encoder);
 					}
@@ -86,22 +85,21 @@ namespace OpenFAST
 					templateHandlers[message.Template].HandleMessage(message, context, encoder);
 				}
 				
-				byte[] data = encoder.Encode(message);
+				var data = encoder.Encode(message);
 				
 				if ((data == null) || (data.Length == 0))
 				{
 					return ;
 				}
-				
-				byte[] temp_byteArray;
-				temp_byteArray = data;
+
+			    var temp_byteArray = data;
 				out_Renamed.Write(temp_byteArray, 0, temp_byteArray.Length);
 				if (flush)
 					out_Renamed.Flush();
 			}
 			catch (System.IO.IOException e)
 			{
-				Global.HandleError(OpenFAST.Error.FastConstants.IO_ERROR, "An IO error occurred while writing message " + message, e);
+				Global.HandleError(Error.FastConstants.IO_ERROR, "An IO error occurred while writing message " + message, e);
 			}
 		}
 		
@@ -123,7 +121,7 @@ namespace OpenFAST
 			}
 			catch (System.IO.IOException e)
 			{
-				Global.HandleError(OpenFAST.Error.FastConstants.IO_ERROR, "An error occurred while closing output stream.", e);
+				Global.HandleError(Error.FastConstants.IO_ERROR, "An error occurred while closing output stream.", e);
 			}
 		}
 		

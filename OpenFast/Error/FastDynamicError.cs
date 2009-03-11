@@ -24,7 +24,7 @@ using System;
 namespace OpenFAST.Error
 {
 	[Serializable]
-	public class FastDynamicError:System.SystemException
+	public class FastDynamicError:SystemException
 	{
 		virtual public ErrorCode Error
 		{
@@ -34,8 +34,8 @@ namespace OpenFAST.Error
 			}
 			
 		}
-		private const long serialVersionUID = 2L;
-		private ErrorCode error;
+
+	    private readonly ErrorCode error;
 		
 		public FastDynamicError(ErrorCode error):base(error.ShortName + ": " + error.Description)
 		{

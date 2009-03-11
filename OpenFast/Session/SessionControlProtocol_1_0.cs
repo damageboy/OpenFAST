@@ -19,18 +19,13 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using Context = OpenFAST.Context;
-using Message = OpenFAST.Message;
-using MessageHandler = OpenFAST.MessageHandler;
-using ScalarValue = OpenFAST.ScalarValue;
 using Coder = OpenFAST.Codec.Coder;
 using ErrorCode = OpenFAST.Error.ErrorCode;
 using Field = OpenFAST.Template.Field;
 using MessageTemplate = OpenFAST.Template.MessageTemplate;
 using Scalar = OpenFAST.Template.Scalar;
 using TemplateRegistry = OpenFAST.Template.TemplateRegistry;
-using Operator = OpenFAST.Template.operator_Renamed.Operator;
+using Operator = openfast.Template.Operator.Operator;
 using Type = OpenFAST.Template.Type.FASTType;
 using OpenFAST.Template;
 
@@ -49,7 +44,7 @@ namespace OpenFAST.Session
 		{
 			get
 			{
-				return CreateFastAlertMessage(OpenFAST.Session.SessionConstants.CLOSE);
+				return CreateFastAlertMessage(SessionConstants.CLOSE);
 			}
 			
 		}
@@ -58,7 +53,7 @@ namespace OpenFAST.Session
 		
 		public override Session OnNewConnection(string serverName, Connection connection)
 		{
-            Session session = new Session(connection, this, TemplateRegistry_Fields.NULL, TemplateRegistry_Fields.NULL);
+            var session = new Session(connection, this, TemplateRegistry_Fields.NULL, TemplateRegistry_Fields.NULL);
 			Message message = session.MessageInputStream.ReadMessage();
 			session.MessageOutputStream.WriteMessage(CreateHelloMessage(serverName));
 			string clientName = message.GetString(1);
@@ -67,7 +62,7 @@ namespace OpenFAST.Session
 		}
 		public override Session Connect(string senderName, Connection connection, TemplateRegistry inboundRegistry, TemplateRegistry outboundRegistry, MessageListener messageListener, SessionListener sessionListener)
 		{
-            Session session = new Session(connection, this, TemplateRegistry_Fields.NULL, TemplateRegistry_Fields.NULL);
+            var session = new Session(connection, this, TemplateRegistry_Fields.NULL, TemplateRegistry_Fields.NULL);
 			session.MessageOutputStream.WriteMessage(CreateHelloMessage(senderName));
 			Message message = session.MessageInputStream.ReadMessage();
 			string serverName = message.GetString(1);
@@ -93,7 +88,7 @@ namespace OpenFAST.Session
 		}
 		public static Message CreateFastAlertMessage(ErrorCode code)
 		{
-			Message alert = new Message(FAST_ALERT_TEMPLATE);
+			var alert = new Message(FAST_ALERT_TEMPLATE);
 			alert.SetInteger(1, code.Severity.Code);
 			alert.SetInteger(2, code.Code);
 			alert.SetString(4, code.Description);
@@ -101,7 +96,7 @@ namespace OpenFAST.Session
 		}
 		public static Message CreateHelloMessage(string name)
 		{
-			Message message = new Message(FAST_HELLO_TEMPLATE);
+			var message = new Message(FAST_HELLO_TEMPLATE);
 			message.SetString(1, name);
 			return message;
 		}
@@ -115,7 +110,7 @@ namespace OpenFAST.Session
 			if (message.Template.Equals(FAST_ALERT_TEMPLATE))
 			{
 				ErrorCode alertCode = ErrorCode.GetAlertCode(message);
-				if (alertCode.Equals(OpenFAST.Session.SessionConstants.CLOSE))
+				if (alertCode.Equals(SessionConstants.CLOSE))
 				{
 					session.Close(alertCode);
 				}

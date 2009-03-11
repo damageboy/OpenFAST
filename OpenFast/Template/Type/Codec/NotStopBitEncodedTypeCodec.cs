@@ -20,7 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using ScalarValue = OpenFAST.ScalarValue;
 
 namespace OpenFAST.Template.Type.Codec
 {
@@ -34,7 +33,7 @@ namespace OpenFAST.Template.Type.Codec
 			return EncodeValue(value_Renamed);
 		}
 		
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
 			return obj != null && obj.GetType() == GetType();
 		}

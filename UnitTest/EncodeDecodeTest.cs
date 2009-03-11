@@ -22,13 +22,13 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System;
 using System.Collections.Generic;
 using System.Text;
+using openfast.Template.Operator;
 using UnitTest.Test;
 using OpenFAST;
 using NUnit.Framework;
 using System.IO;
 using OpenFAST.Template;
 using OpenFAST.Template.Type;
-using OpenFAST.Template.operator_Renamed;
 
 namespace UnitTest
 {

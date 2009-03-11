@@ -27,8 +27,8 @@ using OpenFAST.Template;
 using OpenFAST;
 using System.IO;
 using OpenFAST.Codec;
+using openfast.Template.Operator;
 using OpenFAST.Template.Type;
-using OpenFAST.Template.operator_Renamed;
 
 namespace UnitTest.Codec
 {

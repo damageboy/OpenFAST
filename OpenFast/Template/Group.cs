@@ -20,18 +20,8 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using BitVector = OpenFAST.BitVector;
-using BitVectorBuilder = OpenFAST.BitVectorBuilder;
-using BitVectorReader = OpenFAST.BitVectorReader;
-using BitVectorValue = OpenFAST.BitVectorValue;
-using Context = OpenFAST.Context;
-using FieldValue = OpenFAST.FieldValue;
-using Global = OpenFAST.Global;
-using GroupValue = OpenFAST.GroupValue;
-using QName = OpenFAST.QName;
 using FastException = OpenFAST.Error.FastException;
 using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
-using OpenFAST;
 using System.Collections.Generic;
 
 namespace OpenFAST.Template
@@ -95,7 +85,7 @@ namespace OpenFAST.Template
 			
 			set
 			{
-				this.typeReference = value;
+				typeReference = value;
 			}
 			
 		}
@@ -108,7 +98,7 @@ namespace OpenFAST.Template
 			
 			set
 			{
-				this.childNamespace = value;
+				childNamespace = value;
 			}
 			
 		}
@@ -128,9 +118,8 @@ namespace OpenFAST.Template
 			}
 			
 		}
-		private const long serialVersionUID = 1L;
-		
-		private QName typeReference = null;
+
+	    private QName typeReference;
 		
 		protected internal string childNamespace = "";
 		protected internal Field[] fields;
@@ -148,17 +137,17 @@ namespace OpenFAST.Template
 		
 		public Group(QName name, Field[] fields, bool optional):base(name, optional)
 		{
-            List<Field> expandedFields = new List<Field>();
-            List<StaticTemplateReference> staticTemplateReferences = new List<StaticTemplateReference>();
+            var expandedFields = new List<Field>();
+            var references = new List<StaticTemplateReference>();
 			for (int i = 0; i < fields.Length; i++)
 			{
 				if (fields[i] is StaticTemplateReference)
 				{
-                    StaticTemplateReference currentTemplate = (StaticTemplateReference)fields[i];
+                    var currentTemplate = (StaticTemplateReference)fields[i];
                     Field[] referenceFields = currentTemplate.Template.Fields;
 					for (int j = 1; j < referenceFields.Length; j++)
 						expandedFields.Add(referenceFields[j]);
-                    staticTemplateReferences.Add(currentTemplate);
+                    references.Add(currentTemplate);
 				}
 				else
 				{
@@ -166,13 +155,13 @@ namespace OpenFAST.Template
 				}
 			}
             this.fields = expandedFields.ToArray();
-			this.fieldDefinitions = fields;
-			this.fieldIndexMap = ConstructFieldIndexMap(this.fields);
-			this.fieldNameMap = ConstructFieldNameMap(this.fields);
-			this.fieldIdMap = ConstructFieldIdMap(this.fields);
-			this.introspectiveFieldMap = ConstructInstrospectiveFields(this.fields);
-			this.usesPresenceMap_Renamed_Field = DeterminePresenceMapUsage(this.fields);
-            this.staticTemplateReferences = staticTemplateReferences.ToArray();
+			fieldDefinitions = fields;
+			fieldIndexMap = ConstructFieldIndexMap(this.fields);
+			fieldNameMap = ConstructFieldNameMap(this.fields);
+			fieldIdMap = ConstructFieldIdMap(this.fields);
+			introspectiveFieldMap = ConstructInstrospectiveFields(this.fields);
+			usesPresenceMap_Renamed_Field = DeterminePresenceMapUsage(this.fields);
+            staticTemplateReferences = references.ToArray();
 		}
 		
 		// BAD ABSTRACTION
@@ -183,9 +172,9 @@ namespace OpenFAST.Template
 			{
 				if (fields[i] is Scalar)
 				{
-					if (fields[i].HasAttribute(OpenFAST.Error.FastConstants.LENGTH_FIELD))
+					if (fields[i].HasAttribute(Error.FastConstants.LENGTH_FIELD))
 					{
-						map[fields[i].GetAttribute(OpenFAST.Error.FastConstants.LENGTH_FIELD)] = fields[i];
+						map[fields[i].GetAttribute(Error.FastConstants.LENGTH_FIELD)] = fields[i];
 					}
 				}
 			}
@@ -203,9 +192,9 @@ namespace OpenFAST.Template
 		}
 		
 		
-		public override byte[] Encode(FieldValue value_Renamed, Group template, Context context, BitVectorBuilder presenceMapBuilder)
+		public override byte[] Encode(FieldValue value_Renamed, Group encodeTemplate, Context context, BitVectorBuilder presenceMapBuilder)
 		{
-			byte[] encoding = Encode(value_Renamed, template, context);
+			byte[] encoding = Encode(value_Renamed, encodeTemplate, context);
 			if (optional)
 			{
 				if (encoding.Length != 0)
@@ -224,15 +213,15 @@ namespace OpenFAST.Template
 				return new byte[]{};
 			}
 			
-			GroupValue groupValue = (GroupValue) value_Renamed;
+			var groupValue = (GroupValue) value_Renamed;
 			if (context.TraceEnabled)
 			{
 				context.GetEncodeTrace().GroupStart(this);
 			}
-			BitVectorBuilder presenceMapBuilder = new BitVectorBuilder(template.MaxPresenceMapSize);
+			var presenceMapBuilder = new BitVectorBuilder(template.MaxPresenceMapSize);
 			try
 			{
-				byte[][] fieldEncodings = new byte[fields.Length][];
+				var fieldEncodings = new byte[fields.Length][];
 				
 				for (int fieldIndex = 0; fieldIndex < fields.Length; fieldIndex++)
 				{
@@ -240,29 +229,27 @@ namespace OpenFAST.Template
 					Field field = GetField(fieldIndex);
 					if (!field.Optional && fieldValue == null)
 					{
-						Global.HandleError(OpenFAST.Error.FastConstants.GENERAL_ERROR, "Mandatory field " + field + " is null");
+						Global.HandleError(Error.FastConstants.GENERAL_ERROR, "Mandatory field " + field + " is null");
 					}
 					byte[] encoding = field.Encode(fieldValue, template, context, presenceMapBuilder);
 					fieldEncodings[fieldIndex] = encoding;
 				}
-				System.IO.MemoryStream buffer = new System.IO.MemoryStream();
+				var buffer = new System.IO.MemoryStream();
 				
 				if (UsesPresenceMap())
 				{
 					byte[] pmap = presenceMapBuilder.BitVector.TruncatedBytes;
 					if (context.TraceEnabled)
 						context.GetEncodeTrace().Pmap(pmap);
-					byte[] temp_byteArray;
-					temp_byteArray = pmap;
+				    byte[] temp_byteArray = pmap;
 					buffer.Write(temp_byteArray, 0, temp_byteArray.Length);
 				}
 				for (int i = 0; i < fieldEncodings.Length; i++)
 				{
 					if (fieldEncodings[i] != null)
 					{
-						byte[] temp_byteArray2;
-						temp_byteArray2 = fieldEncodings[i];
-						buffer.Write(temp_byteArray2, 0, temp_byteArray2.Length);
+					    byte[] temp_byteArray2 = fieldEncodings[i];
+					    buffer.Write(temp_byteArray2, 0, temp_byteArray2.Length);
 					}
 				}
 				if (context.TraceEnabled)
@@ -276,23 +263,22 @@ namespace OpenFAST.Template
 		}
 		
 		
-		public override FieldValue Decode(System.IO.Stream in_Renamed, Group group, Context context, BitVectorReader pmapReader)
+		public override FieldValue Decode(System.IO.Stream in_Renamed, Group decodeTemplate, Context context, BitVectorReader pmapReader)
 		{
 			try
 			{
-				if (!UsesPresenceMapBit() || pmapReader.Read())
+			    if (!UsesPresenceMapBit() || pmapReader.Read())
 				{
 					if (context.TraceEnabled)
 					{
 						context.DecodeTrace.GroupStart(this);
 					}
-					GroupValue groupValue = new GroupValue(this, DecodeFieldValues(in_Renamed, group, context));
+					var groupValue = new GroupValue(this, DecodeFieldValues(in_Renamed, decodeTemplate, context));
 					if (context.TraceEnabled)
 						context.DecodeTrace.GroupEnd();
 					return groupValue;
 				}
-				else
-					return null;
+			    return null;
 			}
 			catch (FastException e)
 			{
@@ -303,35 +289,32 @@ namespace OpenFAST.Template
 		
 		protected internal virtual FieldValue[] DecodeFieldValues(System.IO.Stream in_Renamed, Group template, Context context)
 		{
-			if (UsesPresenceMap())
-			{
-				BitVector pmap = ((BitVectorValue) TypeCodec.BIT_VECTOR.Decode(in_Renamed)).value_Renamed;
-				if (context.TraceEnabled)
-					context.DecodeTrace.Pmap(pmap.Bytes);
-				if (pmap.Overlong)
-				{
-					Global.HandleError(OpenFAST.Error.FastConstants.R7_PMAP_OVERLONG, "The presence map " + pmap + " for the group " + this + " is overlong.");
-				}
-				return DecodeFieldValues(in_Renamed, template, new BitVectorReader(pmap), context);
-			}
-			else
-			{
-				return DecodeFieldValues(in_Renamed, template, BitVectorReader.NULL, context);
-			}
+		    if (!UsesPresenceMap())
+		    {
+		        return DecodeFieldValues(in_Renamed, template, BitVectorReader.NULL, context);
+		    }
+		    var pmap = ((BitVectorValue) TypeCodec.BIT_VECTOR.Decode(in_Renamed)).value_Renamed;
+		    if (context.TraceEnabled)
+		        context.DecodeTrace.Pmap(pmap.Bytes);
+		    if (pmap.Overlong)
+		    {
+		        Global.HandleError(Error.FastConstants.R7_PMAP_OVERLONG, "The presence map " + pmap + " for the group " + this + " is overlong.");
+		    }
+		    return DecodeFieldValues(in_Renamed, template, new BitVectorReader(pmap), context);
 		}
-		
-		public virtual FieldValue[] DecodeFieldValues(System.IO.Stream in_Renamed, Group template, BitVectorReader pmapReader, Context context)
+
+	    public virtual FieldValue[] DecodeFieldValues(System.IO.Stream in_Renamed, Group template, BitVectorReader pmapReader, Context context)
 		{
-			FieldValue[] values = new FieldValue[fields.Length];
-			int start = this is MessageTemplate?1:0;
-			for (int fieldIndex = start; fieldIndex < fields.Length; fieldIndex++)
+			var values = new FieldValue[fields.Length];
+			var start = this is MessageTemplate?1:0;
+			for (var fieldIndex = start; fieldIndex < fields.Length; fieldIndex++)
 			{
-				Field field = GetField(fieldIndex);
+				var field = GetField(fieldIndex);
 				values[fieldIndex] = field.Decode(in_Renamed, template, context, pmapReader);
 			}
 			if (pmapReader.HasMoreBitsSet())
 			{
-				Global.HandleError(OpenFAST.Error.FastConstants.R8_PMAP_TOO_MANY_BITS, "The presence map " + pmapReader + " has too many bits for the group " + this);
+				Global.HandleError(Error.FastConstants.R8_PMAP_TOO_MANY_BITS, "The presence map " + pmapReader + " has too many bits for the group " + this);
 			}
 			
 			return values;
@@ -372,9 +355,9 @@ namespace OpenFAST.Template
 			return (Field) fieldNameMap[new QName(fieldName, childNamespace)];
 		}
 		
-		public virtual Field GetField(QName name)
+		public virtual Field GetField(QName qname)
 		{
-			return (Field) fieldNameMap[name];
+			return (Field) fieldNameMap[qname];
 		}
 		
 		
@@ -404,19 +387,19 @@ namespace OpenFAST.Template
 			System.Collections.IDictionary map = new System.Collections.Hashtable();
 			
 			for (int i = 0; i < fields.Length; i++)
-				map[fields[i]] = (System.Int32) i;
+				map[fields[i]] = i;
 			
 			return map;
 		}
 		
 		public virtual int GetFieldIndex(string fieldName)
 		{
-			return ((System.Int32) fieldIndexMap[GetField(fieldName)]);
+			return ((Int32) fieldIndexMap[GetField(fieldName)]);
 		}
 		
 		public virtual int GetFieldIndex(Field field)
 		{
-			return ((System.Int32) fieldIndexMap[field]);
+			return ((Int32) fieldIndexMap[field]);
 		}
 		
 		public virtual Sequence GetSequence(string fieldName)
@@ -461,22 +444,22 @@ namespace OpenFAST.Template
 		
 		public override int GetHashCode()
 		{
-			int prime = 31;
+			const int prime = 31;
 			int result = 1;
-			result = prime * result + Group.hashCode(fields);
+			result = prime * result + hashCode(fields);
 			result = prime * result + name.GetHashCode();
 			result = prime * result + ((typeReference == null)?0:typeReference.GetHashCode());
 			return result;
 		}
 		
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
 			if (this == obj)
 				return true;
 			if (obj == null || GetType() != obj.GetType())
 				return false;
 
-			Group other = (Group) obj;
+			var other = (Group) obj;
 			if (other.fields.Length != fields.Length)
 				return false;
 			if (!other.name.Equals(name))
@@ -487,39 +470,39 @@ namespace OpenFAST.Template
 			return true;
 		}
 		
-		private static int hashCode(System.Object[] array)
+		private static int hashCode(Object[] array)
 		{
-			int prime = 31;
+			const int prime = 31;
 			if (array == null)
 				return 0;
-			int result = 1;
-			for (int index = 0; index < array.Length; index++)
+			var result = 1;
+			for (var index = 0; index < array.Length; index++)
 			{
 				result = prime * result + (array[index] == null?0:array[index].GetHashCode());
 			}
 			return result;
 		}
 		
-		public virtual bool HasFieldWithId(string id)
+		public virtual bool HasFieldWithId(string fid)
 		{
-			return fieldIdMap.Contains(id);
+			return fieldIdMap.Contains(fid);
 		}
 		
-		public virtual Field GetFieldById(string id)
+		public virtual Field GetFieldById(string fid)
 		{
-			return (Field) fieldIdMap[id];
+			return (Field) fieldIdMap[fid];
 		}
 		
-		public virtual StaticTemplateReference GetStaticTemplateReference(string name)
+		public virtual StaticTemplateReference GetStaticTemplateReference(string qname)
 		{
-			return GetStaticTemplateReference(new QName(name, this.name.Namespace));
+			return GetStaticTemplateReference(new QName(qname, name.Namespace));
 		}
 		
-		public virtual StaticTemplateReference GetStaticTemplateReference(QName name)
+		public virtual StaticTemplateReference GetStaticTemplateReference(QName qname)
 		{
 			for (int i = 0; i < staticTemplateReferences.Length; i++)
 			{
-				if (staticTemplateReferences[i].QName.Equals(name))
+				if (staticTemplateReferences[i].QName.Equals(qname))
 					return staticTemplateReferences[i];
 			}
 			return null;

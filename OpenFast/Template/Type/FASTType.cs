@@ -20,13 +20,9 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using Global = OpenFAST.Global;
-using ScalarValue = OpenFAST.ScalarValue;
-using LongValue = OpenFAST.Template.LongValue;
-using Operator = OpenFAST.Template.operator_Renamed.Operator;
+using Operator = openfast.Template.Operator.Operator;
 using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
 using Util = OpenFAST.util.Util;
-using OpenFAST;
 using System.Collections;
 
 namespace OpenFAST.Template.Type
@@ -44,7 +40,7 @@ namespace OpenFAST.Template.Type
 			
 		}
 		public abstract ScalarValue DefaultValue{get;}
-		public static System.Collections.IDictionary RegisteredTypeMap
+		public static IDictionary RegisteredTypeMap
 		{
 			get
 			{
@@ -52,12 +48,12 @@ namespace OpenFAST.Template.Type
 			}
 			
 		}
-        private static readonly System.Collections.IDictionary TYPE_NAME_MAP = new Hashtable();
-		private string name;
-		
-		public FASTType(string typeName)
+        private static readonly IDictionary TYPE_NAME_MAP = new Hashtable();
+		private readonly string name;
+
+	    protected FASTType(string typeName)
 		{
-			this.name = typeName;
+			name = typeName;
 			TYPE_NAME_MAP[typeName] = this;
 		}
 
@@ -65,7 +61,7 @@ namespace OpenFAST.Template.Type
 		{
 			if (!TYPE_NAME_MAP.Contains(typeName))
 			{
-				throw new System.ArgumentException("The type named " + typeName + " does not exist.  Existing types are " + Util.CollectionToString(new SupportClass.HashSetSupport(TYPE_NAME_MAP.Keys)));
+				throw new ArgumentException("The type named " + typeName + " does not exist.  Existing types are " + Util.CollectionToString(new SupportClass.HashSetSupport(TYPE_NAME_MAP.Keys)));
 			}
 			return (FASTType) TYPE_NAME_MAP[typeName];
 		}
@@ -88,34 +84,34 @@ namespace OpenFAST.Template.Type
 		public static readonly FASTType U8 = new UnsignedIntegerType(8, 256);
 		public static readonly FASTType U16 = new UnsignedIntegerType(16, 65536);
 		public static readonly FASTType U32 = new UnsignedIntegerType(32, 4294967295L);
-		public static readonly FASTType U64 = new UnsignedIntegerType(64, System.Int64.MaxValue);
-		public static readonly FASTType I8 = new SignedIntegerType(8,  System.SByte.MinValue,  System.SByte.MaxValue);
-		public static readonly FASTType I16 = new SignedIntegerType(16, System.Int16.MinValue, System.Int16.MaxValue);
-		public static readonly FASTType I32 = new SignedIntegerType(32, System.Int32.MinValue, System.Int32.MaxValue);
-		public static readonly FASTType I64 = new SignedIntegerType(64, System.Int64.MinValue, System.Int64.MaxValue);
+		public static readonly FASTType U64 = new UnsignedIntegerType(64, Int64.MaxValue);
+		public static readonly FASTType I8 = new SignedIntegerType(8,  SByte.MinValue,  SByte.MaxValue);
+		public static readonly FASTType I16 = new SignedIntegerType(16, Int16.MinValue, Int16.MaxValue);
+		public static readonly FASTType I32 = new SignedIntegerType(32, Int32.MinValue, Int32.MaxValue);
+		public static readonly FASTType I64 = new SignedIntegerType(64, Int64.MinValue, Int64.MaxValue);
         public static readonly FASTType STRING;
 		public static readonly FASTType ASCII;
 		public static readonly FASTType UNICODE;
 		public static readonly FASTType BYTE_VECTOR = new ByteVectorType();
 		public static readonly FASTType DECIMAL = new DecimalType();
 
-        static FASTType[] staticAllTypes = null;
+        static FASTType[] staticAllTypes;
         public static FASTType[] ALL_TYPES()
         {
             if (staticAllTypes == null)
             {
-                staticAllTypes = new FASTType[] { U8, U16, U32, U64, I8, I16, I32, I64, STRING, ASCII, UNICODE, BYTE_VECTOR, DECIMAL };
+                staticAllTypes = new[] { U8, U16, U32, U64, I8, I16, I32, I64, STRING, ASCII, UNICODE, BYTE_VECTOR, DECIMAL };
 
             }
             return staticAllTypes;
         }
         
-		public static readonly FASTType[] INTEGER_TYPES = new FASTType[]{U8, U16, U32, U64, I8, I16, I32, I64};
-		public  override bool Equals(System.Object obj)
+		public static readonly FASTType[] INTEGER_TYPES = new[]{U8, U16, U32, U64, I8, I16, I32, I64};
+		public  override bool Equals(Object obj)
 		{
 			if (obj == null)
 				return false;
-			return obj.GetType().Equals(this.GetType());
+			return obj.GetType().Equals(GetType());
 		}
 		public override int GetHashCode()
 		{

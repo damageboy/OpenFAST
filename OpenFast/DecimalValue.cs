@@ -39,13 +39,12 @@ namespace OpenFAST
 		{
 			get
 			{
-				return mantissa * ((long) System.Math.Pow(10, exponent));
+				return mantissa * ((long) Math.Pow(10, exponent));
 			}
 			
 		}
-		private const long serialVersionUID = 1L;
-		
-		public int exponent;
+
+	    public int exponent;
 
         public long mantissa;
 		
@@ -53,24 +52,24 @@ namespace OpenFAST
 		{
 			if (value_Renamed == 0.0)
 			{
-				this.exponent = 0;
-				this.mantissa = 0;
+				exponent = 0;
+				mantissa = 0;
 				
 				return ;
 			}
 			
-			System.Decimal decimalValue = (Decimal)(value_Renamed);
-            int exponent = SupportClass.BigDecimal_Scale(decimalValue);
-            long mantissa = SupportClass.BigDecimal_UnScaledValue(decimalValue);
+			var decimalValue = (Decimal)(value_Renamed);
+            int exp = SupportClass.BigDecimal_Scale(decimalValue);
+            long mant = SupportClass.BigDecimal_UnScaledValue(decimalValue);
 			
-			while (((mantissa % 10) == 0) && (mantissa != 0))
+			while (((mant % 10) == 0) && (mant != 0))
 			{
-				mantissa /= 10;
-				exponent -= 1;
+				mant /= 10;
+				exp -= 1;
 			}
 			
-			this.mantissa = mantissa;
-			this.exponent = - exponent;
+			mantissa = mant;
+			exponent = - exp;
 		}
 		
 		public DecimalValue(long mantissa, int exponent)
@@ -79,10 +78,10 @@ namespace OpenFAST
 			this.exponent = exponent;
 		}
 		
-		public DecimalValue(System.Decimal bigDecimal)
+		public DecimalValue(Decimal bigDecimal)
 		{
-            this.mantissa = SupportClass.BigDecimal_UnScaledValue(bigDecimal);
-            this.exponent = SupportClass.BigDecimal_Scale(bigDecimal);
+            mantissa = SupportClass.BigDecimal_UnScaledValue(bigDecimal);
+            exponent = SupportClass.BigDecimal_Scale(bigDecimal);
 		}
 		
 		public override NumericValue Increment()
@@ -95,7 +94,7 @@ namespace OpenFAST
 			return null;
 		}
 		
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
 			if ((obj == null) || !(obj is DecimalValue))
 			{
@@ -107,17 +106,17 @@ namespace OpenFAST
 		
 		public bool equals(DecimalValue other)
 		{
-			return other.mantissa == this.mantissa && other.exponent == this.exponent;
+			return other.mantissa == mantissa && other.exponent == exponent;
 		}
 		
 		public override NumericValue Subtract(NumericValue subtrahend)
 		{
-			return new DecimalValue(System.Decimal.Subtract(ToBigDecimal(), ((DecimalValue) subtrahend).ToBigDecimal()));
+			return new DecimalValue(Decimal.Subtract(ToBigDecimal(), subtrahend.ToBigDecimal()));
 		}
 		
 		public override NumericValue Add(NumericValue addend)
 		{
-			return new DecimalValue(System.Decimal.Add(ToBigDecimal(), ((DecimalValue) addend).ToBigDecimal()));
+			return new DecimalValue(Decimal.Add(ToBigDecimal(), addend.ToBigDecimal()));
 		}
 		
 		public string Serialize()
@@ -125,7 +124,7 @@ namespace OpenFAST
 			return ToString();
 		}
 		
-		public override bool Equals(int value_Renamed)
+		public override bool Equals(int valueRenamed)
 		{
 			return false;
 		}
@@ -133,42 +132,42 @@ namespace OpenFAST
 		public override long ToLong()
 		{
 			if (exponent < 0)
-				Global.HandleError(OpenFAST.Error.FastConstants.R5_DECIMAL_CANT_CONVERT_TO_INT, "");
-			return (long) (Value);
+				Global.HandleError(Error.FastConstants.R5_DECIMAL_CANT_CONVERT_TO_INT, "");
+			return Value;
 		}
 		
 		public override int ToInt()
 		{
 			long value_Renamed = Value;
-			if (exponent < 0 || (value_Renamed) > System.Int32.MaxValue)
-				Global.HandleError(OpenFAST.Error.FastConstants.R5_DECIMAL_CANT_CONVERT_TO_INT, "");
+			if (exponent < 0 || (value_Renamed) > Int32.MaxValue)
+				Global.HandleError(Error.FastConstants.R5_DECIMAL_CANT_CONVERT_TO_INT, "");
 			return (int) (value_Renamed);
 		}
 		
 		public override short ToShort()
 		{
 			long value_Renamed = Value;
-			if (exponent < 0 || (value_Renamed) > System.Int16.MaxValue)
-				Global.HandleError(OpenFAST.Error.FastConstants.R5_DECIMAL_CANT_CONVERT_TO_INT, "");
+			if (exponent < 0 || (value_Renamed) > Int16.MaxValue)
+				Global.HandleError(Error.FastConstants.R5_DECIMAL_CANT_CONVERT_TO_INT, "");
 			return (short) (value_Renamed);
 		}
 		
 		public override byte ToByte()
 		{
 			long value_Renamed = Value;
-			if (exponent < 0 || (value_Renamed) > (byte) System.SByte.MaxValue)
-				Global.HandleError(OpenFAST.Error.FastConstants.R5_DECIMAL_CANT_CONVERT_TO_INT, "");
+			if (exponent < 0 || (value_Renamed) > (byte) SByte.MaxValue)
+				Global.HandleError(Error.FastConstants.R5_DECIMAL_CANT_CONVERT_TO_INT, "");
 			return (byte) (value_Renamed);
 		}
 		
 		public override double ToDouble()
 		{
-			return mantissa * System.Math.Pow(10.0, exponent);
+			return mantissa * Math.Pow(10.0, exponent);
 		}
 		
-		public override System.Decimal ToBigDecimal()
+		public override Decimal ToBigDecimal()
 		{
-			return (decimal)((double)mantissa/System.Math.Pow(10, - exponent));
+			return (decimal)(mantissa/Math.Pow(10, - exponent));
 		}
 		
 		public override string ToString()

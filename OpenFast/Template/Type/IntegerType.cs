@@ -21,10 +21,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using Global = OpenFAST.Global;
-using IntegerValue = OpenFAST.IntegerValue;
-using ScalarValue = OpenFAST.ScalarValue;
-using LongValue = OpenFAST.Template.LongValue;
 using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
 using Util = OpenFAST.util.Util;
 
@@ -44,8 +40,8 @@ namespace OpenFAST.Template.Type
 		
 		protected internal long minValue;
 		protected internal long maxValue;
-		
-		public IntegerType(string typeName, long minValue, long maxValue, TypeCodec codec, TypeCodec nullableCodec):base(typeName, codec, nullableCodec)
+
+	    protected IntegerType(string typeName, long minValue, long maxValue, TypeCodec codec, TypeCodec nullableCodec):base(typeName, codec, nullableCodec)
 		{
 			this.minValue = minValue;
 			this.maxValue = maxValue;
@@ -56,11 +52,11 @@ namespace OpenFAST.Template.Type
 			long longValue;
 			try
 			{
-				longValue = System.Int64.Parse(value_Renamed);
+				longValue = Int64.Parse(value_Renamed);
 			}
-			catch (System.FormatException)
+			catch (FormatException)
 			{
-				Global.HandleError(OpenFAST.Error.FastConstants.S3_INITIAL_VALUE_INCOMP, "The value \"" + value_Renamed + "\" is not compatable with type " + this);
+				Global.HandleError(Error.FastConstants.S3_INITIAL_VALUE_INCOMP, "The value \"" + value_Renamed + "\" is not compatable with type " + this);
 				return null;
 			}
 			if (Util.IsBiggerThanInt(longValue))
@@ -81,7 +77,7 @@ namespace OpenFAST.Template.Type
 				return ;
 			if (value_Renamed.ToLong() > maxValue || value_Renamed.ToLong() < minValue)
 			{
-				Global.HandleError(OpenFAST.Error.FastConstants.D2_INT_OUT_OF_RANGE, "The value " + value_Renamed + " is out of range for type " + this);
+				Global.HandleError(Error.FastConstants.D2_INT_OUT_OF_RANGE, "The value " + value_Renamed + " is out of range for type " + this);
 			}
 		}
 	}

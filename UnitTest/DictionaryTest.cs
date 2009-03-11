@@ -25,9 +25,9 @@ using System.Text;
 using OpenFAST.Session;
 using System.IO;
 using NUnit.Framework;
+using openfast.Template.Operator;
 using OpenFAST.Template.Type;
 using OpenFAST.Template;
-using OpenFAST.Template.operator_Renamed;
 using OpenFAST;
 using UnitTest.Test;
 

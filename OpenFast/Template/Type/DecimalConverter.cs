@@ -20,12 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using DecimalValue = OpenFAST.DecimalValue;
-using FieldValue = OpenFAST.FieldValue;
-using IntegerValue = OpenFAST.IntegerValue;
-using ScalarValue = OpenFAST.ScalarValue;
-using ComposedValueConverter = OpenFAST.Template.ComposedValueConverter;
-using LongValue = OpenFAST.Template.LongValue;
 
 namespace OpenFAST.Template.Type
 {
@@ -41,9 +35,9 @@ namespace OpenFAST.Template.Type
 		{
 			if (value_Renamed == null)
 				return NULL_SET;
-			else if (value_Renamed == ScalarValue.UNDEFINED)
-				return UNDEFINED_SET;
-			DecimalValue decimal_Renamed = (DecimalValue) value_Renamed;
+		    if (value_Renamed == ScalarValue.UNDEFINED)
+		        return UNDEFINED_SET;
+		    var decimal_Renamed = (DecimalValue) value_Renamed;
 			return new FieldValue[]{new IntegerValue(decimal_Renamed.exponent), new LongValue(decimal_Renamed.mantissa)};
 		}
 		

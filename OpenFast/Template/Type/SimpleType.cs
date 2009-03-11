@@ -20,8 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using ScalarValue = OpenFAST.ScalarValue;
-using Operator = OpenFAST.Template.operator_Renamed.Operator;
+using Operator = openfast.Template.Operator.Operator;
 using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
 
 namespace OpenFAST.Template.Type
@@ -29,10 +28,10 @@ namespace OpenFAST.Template.Type
 	[Serializable]
 	public abstract class SimpleType:FASTType
 	{
-		private TypeCodec codec;
-		private TypeCodec nullableCodec;
-		
-		public SimpleType(string typeName, TypeCodec codec, TypeCodec nullableCodec):base(typeName)
+		private readonly TypeCodec codec;
+		private readonly TypeCodec nullableCodec;
+
+	    protected SimpleType(string typeName, TypeCodec codec, TypeCodec nullableCodec):base(typeName)
 		{
 			this.codec = codec;
 			this.nullableCodec = nullableCodec;

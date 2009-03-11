@@ -19,9 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using ByteUtil = OpenFAST.ByteUtil;
-using FieldValue = OpenFAST.FieldValue;
 using Field = OpenFAST.Template.Field;
 using Group = OpenFAST.Template.Group;
 using System.Text;
@@ -34,17 +31,17 @@ namespace OpenFAST.Debug
 		{
 			set
 			{
-				this.out_Renamed = value;
+				out_Renamed = value;
 			}
 			
 		}
 		
-		private System.Collections.ArrayList stack = new System.Collections.ArrayList();
-		private System.IO.StreamWriter out_Renamed = new System.IO.StreamWriter(System.Console.OpenStandardOutput(), System.Text.Encoding.Default);
+		private readonly System.Collections.ArrayList stack = new System.Collections.ArrayList();
+		private System.IO.StreamWriter out_Renamed = new System.IO.StreamWriter(System.Console.OpenStandardOutput(), Encoding.Default);
 		
 		public void  GroupStart(Group group)
 		{
-			TraceGroup traceGroup = new TraceGroup(this, group);
+			var traceGroup = new TraceGroup(group);
 			if (!(stack.Count == 0))
 			{
 				((TraceGroup) stack[stack.Count - 1]).AddGroup(traceGroup);
@@ -59,7 +56,7 @@ namespace OpenFAST.Debug
 		
 		public void  GroupEnd()
 		{
-			TraceGroup group = (TraceGroup) SupportClass.StackSupport.Pop(stack);
+			var group = (TraceGroup) SupportClass.StackSupport.Pop(stack);
 			if ((stack.Count == 0))
 			{
 				out_Renamed.WriteLine(group);
@@ -71,46 +68,32 @@ namespace OpenFAST.Debug
 			((TraceGroup) stack[stack.Count - 1]).Pmap = pmap;
 		}
 		
-		private class TraceGroup : BasicEncodeTrace.TraceNode
+		private class TraceGroup : TraceNode
 		{
-			private void  InitBlock(BasicEncodeTrace enclosingInstance)
-			{
-				this.enclosingInstance = enclosingInstance;
-			}
-			private BasicEncodeTrace enclosingInstance;
-			virtual public byte[] Pmap
+		    virtual public byte[] Pmap
 			{
 				set
 				{
-					this.pmap = value;
+					pmap = value;
 				}
 				
 			}
-			public BasicEncodeTrace Enclosing_Instance
-			{
-				get
-				{
-					return enclosingInstance;
-				}
-				
-			}
-			
-			private System.Collections.IList nodes;
+
+		    private readonly System.Collections.IList nodes;
 			
 			private byte[] pmap;
 			
-			private Group group;
+			private readonly Group group;
 			
-			public TraceGroup(BasicEncodeTrace enclosingInstance, Group group)
+			public TraceGroup(Group group)
 			{
-				InitBlock(enclosingInstance);
 				this.group = group;
-				this.nodes = new System.Collections.ArrayList(group.FieldCount);
+				nodes = new System.Collections.ArrayList(group.FieldCount);
 			}
 			
 			public virtual void  AddField(Field field, FieldValue value_Renamed, FieldValue encoded, int fieldIndex, byte[] encoding)
 			{
-				nodes.Add(new TraceField(enclosingInstance, field, value_Renamed, encoded, fieldIndex, encoding));
+				nodes.Add(new TraceField(field, value_Renamed, encoded, fieldIndex, encoding));
 			}
 			
 			public virtual void  AddGroup(TraceGroup traceGroup)
@@ -120,15 +103,15 @@ namespace OpenFAST.Debug
 			
 			public virtual StringBuilder Serialize(StringBuilder builder, int indent)
 			{
-				builder.Append(Enclosing_Instance.Indent(indent)).Append(group.Name).Append("\n");
+				builder.Append(Indent(indent)).Append(group.Name).Append("\n");
 				indent += 2;
 				if (pmap != null)
-					builder.Append(Enclosing_Instance.Indent(indent)).Append("PMAP: ").Append(ByteUtil.ConvertByteArrayToBitString(pmap)).Append("\n");
+					builder.Append(Indent(indent)).Append("PMAP: ").Append(ByteUtil.ConvertByteArrayToBitString(pmap)).Append("\n");
 				for (int i = 0; i < nodes.Count; i++)
 				{
-					((BasicEncodeTrace.TraceNode) nodes[i]).Serialize(builder, indent);
+					((TraceNode) nodes[i]).Serialize(builder, indent);
 				}
-				indent -= 2;
+				//indent -= 2;
 				return builder;
 			}
 			
@@ -138,34 +121,20 @@ namespace OpenFAST.Debug
 			}
 		}
 
-        private class TraceField : BasicEncodeTrace.TraceNode
+        private class TraceField : TraceNode
 		{
-			private void  InitBlock(BasicEncodeTrace enclosingInstance)
+            private readonly Field field;
+			
+			private readonly int pmapIndex;
+			
+			private readonly byte[] encoding;
+			
+			private readonly FieldValue value_Renamed;
+			
+			private readonly FieldValue encoded;
+			
+			public TraceField(Field field, FieldValue value_Renamed, FieldValue encoded, int pmapIndex, byte[] encoding)
 			{
-				this.enclosingInstance = enclosingInstance;
-			}
-			private BasicEncodeTrace enclosingInstance;
-			public BasicEncodeTrace Enclosing_Instance
-			{
-				get
-				{
-					return enclosingInstance;
-				}
-				
-			}
-			private Field field;
-			
-			private int pmapIndex;
-			
-			private byte[] encoding;
-			
-			private FieldValue value_Renamed;
-			
-			private FieldValue encoded;
-			
-			public TraceField(BasicEncodeTrace enclosingInstance, Field field, FieldValue value_Renamed, FieldValue encoded, int pmapIndex, byte[] encoding)
-			{
-				InitBlock(enclosingInstance);
 				this.field = field;
 				this.value_Renamed = value_Renamed;
 				this.encoded = encoded;
@@ -175,7 +144,7 @@ namespace OpenFAST.Debug
 			
 			public virtual StringBuilder Serialize(StringBuilder builder, int indent)
 			{
-				builder.Append(Enclosing_Instance.Indent(indent));
+				builder.Append(Indent(indent));
 				builder.Append(field.Name).Append("[");
 				if (field.UsesPresenceMapBit())
 					builder.Append("pmapIndex:").Append(pmapIndex);
@@ -191,7 +160,7 @@ namespace OpenFAST.Debug
 			StringBuilder Serialize(StringBuilder builder, int indent);
 		}
 		
-		public string Indent(int indent)
+		public static string Indent(int indent)
 		{
 			string tab = "";
 			for (int i = 0; i < indent; i++)

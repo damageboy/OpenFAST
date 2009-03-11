@@ -19,15 +19,12 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using Connection = OpenFAST.Session.Connection;
-
 namespace OpenFAST.Session.Tcp
 {
 	sealed class TcpConnection : Connection
 	{
-        System.IO.StreamReader in_stream ;
-        System.IO.StreamWriter out_stream ;
+	    readonly System.IO.StreamReader in_stream ;
+	    readonly System.IO.StreamWriter out_stream ;
         public System.IO.StreamReader InputStream
 		{
 			get
@@ -45,7 +42,7 @@ namespace OpenFAST.Session.Tcp
 			
 		}
 
-        private System.Net.Sockets.TcpClient socket;
+        private readonly System.Net.Sockets.TcpClient socket;
 		
 		public TcpConnection(System.Net.Sockets.TcpClient socket)
 		{

@@ -20,9 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using IntegerValue = OpenFAST.IntegerValue;
-using NumericValue = OpenFAST.NumericValue;
-using ScalarValue = OpenFAST.ScalarValue;
 
 namespace OpenFAST.Template.Type.Codec
 {
@@ -37,9 +34,8 @@ namespace OpenFAST.Template.Type.Codec
 			}
 			
 		}
-		private const long serialVersionUID = 1L;
-		
-		internal NullableUnsignedInteger()
+
+	    internal NullableUnsignedInteger()
 		{
 		}
 		
@@ -47,15 +43,15 @@ namespace OpenFAST.Template.Type.Codec
 		{
 			if (v.Null)
 			{
-				return TypeCodec.NULL_VALUE_ENCODING;
+				return NULL_VALUE_ENCODING;
 			}
 			
-			return TypeCodec.UINT.EncodeValue(((NumericValue) v).Increment());
+			return UINT.EncodeValue(((NumericValue) v).Increment());
 		}
 		
 		public override ScalarValue Decode(System.IO.Stream in_Renamed)
 		{
-			NumericValue value_Renamed = (NumericValue) TypeCodec.UINT.Decode(in_Renamed);
+			var value_Renamed = (NumericValue) UINT.Decode(in_Renamed);
 			
 			if (value_Renamed.Equals(0))
 			{
@@ -65,7 +61,7 @@ namespace OpenFAST.Template.Type.Codec
 			return value_Renamed.Decrement();
 		}
 		
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
 			return obj != null && obj.GetType() == GetType();
 		}

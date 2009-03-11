@@ -20,20 +20,14 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using DecimalValue = OpenFAST.DecimalValue;
-using Global = OpenFAST.Global;
-using IntegerValue = OpenFAST.IntegerValue;
-using NumericValue = OpenFAST.NumericValue;
-using ScalarValue = OpenFAST.ScalarValue;
-using LongValue = OpenFAST.Template.LongValue;
-using OpenFAST;
+
 
 namespace OpenFAST.Template.Type.Codec
 {
 	[Serializable]
 	sealed class NullableSingleFieldDecimal:TypeCodec
 	{
-		public ScalarValue DefaultValue
+		public static ScalarValue DefaultValue
 		{
 			get
 			{
@@ -50,34 +44,27 @@ namespace OpenFAST.Template.Type.Codec
 			}
 			
 		}
-		private const long serialVersionUID = 1L;
-		
-		internal NullableSingleFieldDecimal()
-		{
-		}
-		
-		public override byte[] EncodeValue(ScalarValue v)
+
+	    public override byte[] EncodeValue(ScalarValue v)
 		{
 			if (v == ScalarValue.NULL)
 			{
-				return TypeCodec.NULL_VALUE_ENCODING;
+				return NULL_VALUE_ENCODING;
 			}
 			
-			System.IO.MemoryStream buffer = new System.IO.MemoryStream();
-			DecimalValue value_Renamed = (DecimalValue) v;
+			var buffer = new System.IO.MemoryStream();
+			var value_Renamed = (DecimalValue) v;
 			
 			try
 			{
-				if (System.Math.Abs(value_Renamed.exponent) > 63)
+				if (Math.Abs(value_Renamed.exponent) > 63)
 				{
-					Global.HandleError(OpenFAST.Error.FastConstants.R1_LARGE_DECIMAL, "");
+					Global.HandleError(Error.FastConstants.R1_LARGE_DECIMAL, "");
 				}
-				
-				byte[] temp_byteArray;
-				temp_byteArray = TypeCodec.NULLABLE_INTEGER.Encode(new IntegerValue(value_Renamed.exponent));
+
+			    byte[] temp_byteArray = NULLABLE_INTEGER.Encode(new IntegerValue(value_Renamed.exponent));
 				buffer.Write(temp_byteArray, 0, temp_byteArray.Length);
-				byte[] temp_byteArray2;
-				temp_byteArray2 = TypeCodec.INTEGER.Encode(new LongValue(value_Renamed.mantissa));
+			    byte[] temp_byteArray2 = INTEGER.Encode(new LongValue(value_Renamed.mantissa));
 				buffer.Write(temp_byteArray2, 0, temp_byteArray2.Length);
 			}
 			catch (System.IO.IOException e)
@@ -90,26 +77,26 @@ namespace OpenFAST.Template.Type.Codec
 		
 		public override ScalarValue Decode(System.IO.Stream in_Renamed)
 		{
-			ScalarValue exp = TypeCodec.NULLABLE_INTEGER.Decode(in_Renamed);
+			ScalarValue exp = NULLABLE_INTEGER.Decode(in_Renamed);
 			
 			if ((exp == null) || exp.Null)
 			{
 				return null;
 			}
 			
-			int exponent = ((NumericValue) exp).ToInt();
-			long mantissa = ((NumericValue) TypeCodec.INTEGER.Decode(in_Renamed)).ToLong();
-			DecimalValue decimalValue = new DecimalValue(mantissa, exponent);
+			int exponent = exp.ToInt();
+			long mantissa = INTEGER.Decode(in_Renamed).ToLong();
+			var decimalValue = new DecimalValue(mantissa, exponent);
 			
 			return decimalValue;
 		}
 		
-		public ScalarValue FromString(string value_Renamed)
+		public static ScalarValue FromString(string value_Renamed)
 		{
-			return new DecimalValue(System.Double.Parse(value_Renamed));
+			return new DecimalValue(Double.Parse(value_Renamed));
 		}
 		
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
 			return obj != null && obj.GetType() == GetType();
 		}

@@ -19,11 +19,7 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using QName = OpenFAST.QName;
-using Field = OpenFAST.Template.Field;
-using Scalar = OpenFAST.Template.Scalar;
-using Operator = OpenFAST.Template.operator_Renamed.Operator;
+using Operator = openfast.Template.Operator.Operator;
 using FASTType = OpenFAST.Template.Type.FASTType;
 using Util = OpenFAST.util.Util;
 

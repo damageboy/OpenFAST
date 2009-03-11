@@ -19,19 +19,12 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using Global = OpenFAST.Global;
-using GroupValue = OpenFAST.GroupValue;
-using Message = OpenFAST.Message;
-using QName = OpenFAST.QName;
-using ScalarValue = OpenFAST.ScalarValue;
-using SessionControlProtocol_1_1 = OpenFAST.Session.SessionControlProtocol_1_1;
 using Field = OpenFAST.Template.Field;
 using Group = OpenFAST.Template.Group;
 using Scalar = OpenFAST.Template.Scalar;
 using Sequence = OpenFAST.Template.Sequence;
 using TemplateRegistry = OpenFAST.Template.TemplateRegistry;
-using Operator = OpenFAST.Template.operator_Renamed.Operator;
+using Operator = openfast.Template.Operator.Operator;
 using Type = OpenFAST.Template.Type.FASTType;
 
 namespace OpenFAST.Session.Template.Exchange
@@ -51,32 +44,31 @@ namespace OpenFAST.Session.Template.Exchange
 		{
 			string name = fieldDef.GetString("Name");
 			string ns = fieldDef.GetString("Ns");
-			QName qname = new QName(name, ns);
-			Field[] fields = GroupConverter.ParseFieldInstructions(fieldDef, templateRegistry, context);
+			var qname = new QName(name, ns);
+			var fields = GroupConverter.ParseFieldInstructions(fieldDef, templateRegistry, context);
 			bool optional = fieldDef.GetBool("Optional");
 			Scalar length = null;
 			if (fieldDef.IsDefined("Length"))
 			{
-				GroupValue lengthDef = fieldDef.GetGroup("Length");
+				var lengthDef = fieldDef.GetGroup("Length");
 				QName lengthName;
 				string id = null;
 				if (lengthDef.IsDefined("Name"))
 				{
-					GroupValue nameDef = lengthDef.GetGroup("Name");
+					var nameDef = lengthDef.GetGroup("Name");
 					lengthName = new QName(nameDef.GetString("Name"), nameDef.GetString("Ns"));
 					if (nameDef.IsDefined("AuxId"))
 						id = nameDef.GetString("AuxId");
 				}
 				else
 					lengthName = Global.CreateImplicitName(qname);
-				Operator operator_Renamed = Operator.NONE;
+				var operator_Renamed = Operator.NONE;
 				if (lengthDef.IsDefined("Operator"))
 					operator_Renamed = GetOperator(lengthDef.GetGroup("Operator").GetGroup(0).GetGroup());
-				ScalarValue initialValue = ScalarValue.UNDEFINED;
+				var initialValue = ScalarValue.UNDEFINED;
 				if (lengthDef.IsDefined("InitialValue"))
 					initialValue = (ScalarValue) lengthDef.GetValue("InitialValue");
-				length = new Scalar(lengthName, Type.U32, operator_Renamed, initialValue, optional);
-				length.Id = id;
+				length = new Scalar(lengthName, Type.U32, operator_Renamed, initialValue, optional) {Id = id};
 			}
 			
 			return new Sequence(qname, length, fields, optional);
@@ -84,22 +76,22 @@ namespace OpenFAST.Session.Template.Exchange
 		
 		public override GroupValue Convert(Field field, ConversionContext context)
 		{
-			Sequence sequence = (Sequence) field;
-			Message seqDef = GroupConverter.Convert(sequence.Group, new Message(SessionControlProtocol_1_1.SEQUENCE_INSTR), context);
+			var sequence = (Sequence) field;
+			var seqDef = GroupConverter.Convert(sequence.Group, new Message(SessionControlProtocol_1_1.SEQUENCE_INSTR), context);
 			seqDef.SetBool("Optional", sequence.Optional);
 			if (!sequence.ImplicitLength)
 			{
-				Group lengthGroup = SessionControlProtocol_1_1.SEQUENCE_INSTR.GetGroup("Length");
-				GroupValue lengthDef = new GroupValue(lengthGroup);
-				Scalar length = sequence.Length;
-				GroupValue nameDef = new GroupValue(lengthGroup.GetGroup("Name"));
+				var lengthGroup = SessionControlProtocol_1_1.SEQUENCE_INSTR.GetGroup("Length");
+				var lengthDef = new GroupValue(lengthGroup);
+				var length = sequence.Length;
+				var nameDef = new GroupValue(lengthGroup.GetGroup("Name"));
 				SetNameAndId(length, nameDef);
 				lengthDef.SetFieldValue("Name", nameDef);
 				seqDef.SetFieldValue("Length", lengthDef);
 				
 				if (!length.Operator.Equals(Operator.NONE))
 				{
-					GroupValue operatorDef = new GroupValue(lengthGroup.GetGroup("Operator"));
+					var operatorDef = new GroupValue(lengthGroup.GetGroup("Operator"));
 					operatorDef.SetFieldValue(0, CreateOperator(length));
 					lengthDef.SetFieldValue("Operator", operatorDef);
 				}

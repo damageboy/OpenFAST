@@ -20,15 +20,21 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace OpenFAST
 {
     public class IllegalStateException:Exception
     {
+        private readonly Exception e;
+
         public IllegalStateException(Exception e)
-        { 
+        {
+            this.e = e;
+        }
+
+        public Exception E
+        {
+            get { return e; }
         }
     }
 }

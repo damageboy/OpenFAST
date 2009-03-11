@@ -19,11 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using GroupValue = OpenFAST.GroupValue;
-using Message = OpenFAST.Message;
-using QName = OpenFAST.QName;
-using SessionControlProtocol_1_1 = OpenFAST.Session.SessionControlProtocol_1_1;
 using Field = OpenFAST.Template.Field;
 using Group = OpenFAST.Template.Group;
 using StaticTemplateReference = OpenFAST.Template.StaticTemplateReference;
@@ -44,7 +39,7 @@ namespace OpenFAST.Session.Template.Exchange
 		
 		public override Field Convert(GroupValue fieldDef, TemplateRegistry templateRegistry, ConversionContext context)
 		{
-			QName name = new QName(fieldDef.GetString("Name"), fieldDef.GetString("Ns"));
+			var name = new QName(fieldDef.GetString("Name"), fieldDef.GetString("Ns"));
 			if (!templateRegistry.IsDefined(name))
 			{
 				throw new System.SystemException("Referenced template " + name + " not defined.");
@@ -54,7 +49,7 @@ namespace OpenFAST.Session.Template.Exchange
 		
 		public override GroupValue Convert(Field field, ConversionContext context)
 		{
-			Message strDef = new Message(SessionControlProtocol_1_1.STAT_TEMP_REF_INSTR);
+			var strDef = new Message(SessionControlProtocol_1_1.STAT_TEMP_REF_INSTR);
 			SetNameAndId(field, strDef);
 			return strDef;
 		}

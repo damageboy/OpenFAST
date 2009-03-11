@@ -19,19 +19,12 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using FieldValue = OpenFAST.FieldValue;
-using GroupValue = OpenFAST.GroupValue;
-using Message = OpenFAST.Message;
-using QName = OpenFAST.QName;
-using ScalarValue = OpenFAST.ScalarValue;
-using SessionControlProtocol_1_1 = OpenFAST.Session.SessionControlProtocol_1_1;
 using Field = OpenFAST.Template.Field;
 using Group = OpenFAST.Template.Group;
 using MessageTemplate = OpenFAST.Template.MessageTemplate;
 using Scalar = OpenFAST.Template.Scalar;
 using TemplateRegistry = OpenFAST.Template.TemplateRegistry;
-using Operator = OpenFAST.Template.operator_Renamed.Operator;
+using Operator = openfast.Template.Operator.Operator;
 using Type = OpenFAST.Template.Type.FASTType;
 
 namespace OpenFAST.Session.Template.Exchange
@@ -47,8 +40,8 @@ namespace OpenFAST.Session.Template.Exchange
 			
 		}
 		
-		private System.Collections.IDictionary TYPE_TEMPLATE_MAP = new System.Collections.Hashtable();
-		private System.Collections.IDictionary TEMPLATE_TYPE_MAP = new System.Collections.Hashtable();
+		private readonly System.Collections.IDictionary TYPE_TEMPLATE_MAP = new System.Collections.Hashtable();
+		private readonly System.Collections.IDictionary TEMPLATE_TYPE_MAP = new System.Collections.Hashtable();
 		
 		public ScalarConverter()
 		{
@@ -74,9 +67,9 @@ namespace OpenFAST.Session.Template.Exchange
 		
 		public override Field Convert(GroupValue fieldDef, TemplateRegistry templateRegistry, ConversionContext context)
 		{
-			Type type = (Type) TEMPLATE_TYPE_MAP[fieldDef.GetGroup()];
+			var type = (Type) TEMPLATE_TYPE_MAP[fieldDef.GetGroup()];
 			bool optional = fieldDef.GetBool("Optional");
-			ScalarValue initialValue = ScalarValue.UNDEFINED;
+			var initialValue = ScalarValue.UNDEFINED;
 			if (fieldDef.IsDefined("InitialValue"))
 				initialValue = (ScalarValue) fieldDef.GetValue("InitialValue");
 			
@@ -84,7 +77,7 @@ namespace OpenFAST.Session.Template.Exchange
 			{
 				GroupValue operatorGroup = fieldDef.GetGroup("Operator").GetGroup(0);
 				Operator operator_Renamed = GetOperator(operatorGroup.GetGroup());
-				Scalar scalar = new Scalar(fieldDef.GetString("Name"), type, operator_Renamed, initialValue, optional);
+				var scalar = new Scalar(fieldDef.GetString("Name"), type, operator_Renamed, initialValue, optional);
 				if (operatorGroup.IsDefined("Dictionary"))
 					scalar.Dictionary = operatorGroup.GetString("Dictionary");
 				if (operatorGroup.IsDefined("Key"))
@@ -95,17 +88,14 @@ namespace OpenFAST.Session.Template.Exchange
 				}
 				return scalar;
 			}
-			else
-			{
-				return new Scalar(fieldDef.GetString("Name"), type, Operator.NONE, initialValue, optional);
-			}
+		    return new Scalar(fieldDef.GetString("Name"), type, Operator.NONE, initialValue, optional);
 		}
 		
 		public override GroupValue Convert(Field field, ConversionContext context)
 		{
-			Scalar scalar = (Scalar) field;
-			MessageTemplate scalarTemplate = (MessageTemplate) TYPE_TEMPLATE_MAP[scalar.Type];
-			Message scalarMsg = new Message(scalarTemplate);
+			var scalar = (Scalar) field;
+			var scalarTemplate = (MessageTemplate) TYPE_TEMPLATE_MAP[scalar.Type];
+			var scalarMsg = new Message(scalarTemplate);
 			SetNameAndId(scalar, scalarMsg);
 			scalarMsg.SetInteger("Optional", scalar.Optional?1:0);
 			if (!scalar.Operator.Equals(Operator.NONE))

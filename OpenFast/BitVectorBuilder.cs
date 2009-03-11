@@ -19,8 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-
 namespace OpenFAST
 {
 	public sealed class BitVectorBuilder
@@ -53,8 +51,8 @@ namespace OpenFAST
 			
 		}
 
-        private BitVector vector;
-		private int index = 0;
+        private readonly BitVector vector;
+		private int index;
 		
 		public BitVectorBuilder(int size)
 		{

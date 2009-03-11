@@ -20,32 +20,30 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using NumericValue = OpenFAST.NumericValue;
 
 namespace OpenFAST.Template
 {
 	[Serializable]
 	public class LongValue:NumericValue
 	{
-		private const long serialVersionUID = 1L;
-		public long value_Renamed;
+	    public long value_Renamed;
 		
 		public LongValue(long value_Renamed)
 		{
 			this.value_Renamed = value_Renamed;
 		}
 		
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
 			if ((obj == null) || !(obj is NumericValue))
 			{
 				return false;
 			}
-			
-			return Equals((NumericValue) obj);
+
+            return Equals((ScalarValue)obj);
 		}
 		
-		private bool Equals(NumericValue otherValue)
+		private bool Equals(ScalarValue otherValue)
 		{
 			return value_Renamed == otherValue.ToLong();
 		}
@@ -57,7 +55,7 @@ namespace OpenFAST.Template
 		
 		public override bool EqualsValue(string defaultValue)
 		{
-			return System.Int32.Parse(defaultValue) == value_Renamed;
+			return Int32.Parse(defaultValue) == value_Renamed;
 		}
 		
 		public override NumericValue Increment()
@@ -72,27 +70,27 @@ namespace OpenFAST.Template
 		
 		public override string ToString()
 		{
-			return System.Convert.ToString(value_Renamed);
+			return Convert.ToString(value_Renamed);
 		}
 		
 		public override NumericValue Subtract(NumericValue subend)
 		{
-			return new LongValue(this.value_Renamed - subend.ToLong());
+			return new LongValue(value_Renamed - subend.ToLong());
 		}
 		
 		public override NumericValue Add(NumericValue addend)
 		{
-			return new LongValue(this.value_Renamed + addend.ToLong());
+			return new LongValue(value_Renamed + addend.ToLong());
 		}
 		
 		public virtual string Serialize()
 		{
-			return System.Convert.ToString(value_Renamed);
+			return Convert.ToString(value_Renamed);
 		}
 		
-		public override bool Equals(int value_Renamed)
+		public override bool Equals(int valueRenamed)
 		{
-			return value_Renamed == this.value_Renamed;
+			return valueRenamed == value_Renamed;
 		}
 		
 		public override long ToLong()

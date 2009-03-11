@@ -20,28 +20,18 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using ByteVectorValue = OpenFAST.ByteVectorValue;
-using IntegerValue = OpenFAST.IntegerValue;
-using ScalarValue = OpenFAST.ScalarValue;
-using OpenFAST;
 
 namespace OpenFAST.Template.Type.Codec
 {
 	[Serializable]
 	sealed class ByteVectorType:TypeCodec
 	{
-		private const long serialVersionUID = 1L;
-		
-		internal ByteVectorType()
-		{
-		}
-
-		public override byte[] Encode(ScalarValue value_Renamed)
+	    public override byte[] Encode(ScalarValue value_Renamed)
 		{
 			byte[] bytes = value_Renamed.Bytes;
 			int lengthSize = IntegerCodec.GetUnsignedIntegerSize(bytes.Length);
-			byte[] encoding = new byte[bytes.Length + lengthSize];
-			byte[] length = TypeCodec.UINT.Encode(new IntegerValue(bytes.Length));
+			var encoding = new byte[bytes.Length + lengthSize];
+			byte[] length = UINT.Encode(new IntegerValue(bytes.Length));
 			Array.Copy(length, 0, encoding, 0, lengthSize);
 			Array.Copy(bytes, 0, encoding, lengthSize, bytes.Length);
 			return encoding;
@@ -49,8 +39,8 @@ namespace OpenFAST.Template.Type.Codec
 		
 		public override ScalarValue Decode(System.IO.Stream in_Renamed)
 		{
-			int length = ((IntegerValue) TypeCodec.UINT.Decode(in_Renamed)).value_Renamed;
-			byte[] encoding = new byte[length];
+			int length = ((IntegerValue) UINT.Decode(in_Renamed)).value_Renamed;
+			var encoding = new byte[length];
 			for (int i = 0; i < length; i++)
 				try
 				{
@@ -64,16 +54,16 @@ namespace OpenFAST.Template.Type.Codec
 		}
 		public override byte[] EncodeValue(ScalarValue value_Renamed)
 		{
-			throw new System.NotSupportedException();
+			throw new NotSupportedException();
 		}
 		
-		public ScalarValue FromString(string value_Renamed)
+		public static ScalarValue FromString(string value_Renamed)
 		{
-			return new ByteVectorValue(SupportClass.ToByteArray(value_Renamed));
+			return new ByteVectorValue(System.Text.Encoding.UTF8.GetBytes(value_Renamed));
 		}
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
-			return obj != null && obj.GetType() == GetType();
+			return obj != null && obj.GetType() == GetType();//POINTP
 		}
 
 		public override int GetHashCode()

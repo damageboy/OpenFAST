@@ -19,15 +19,13 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using OpenFAST;
 using System.IO;
 
 namespace OpenFAST.Session
 {
 	public class LocalConnection : Connection
 	{
-		virtual public System.IO.StreamReader InputStream
+		virtual public StreamReader InputStream
 		{
 			get
 			{
@@ -35,7 +33,7 @@ namespace OpenFAST.Session
 			}
 			
 		}
-		virtual public System.IO.StreamWriter OutputStream
+		virtual public StreamWriter OutputStream
 		{
 			get
 			{
@@ -44,23 +42,23 @@ namespace OpenFAST.Session
 			
 		}
 		
-		private System.IO.StreamReader in_Renamed;
-		private System.IO.StreamWriter out_Renamed;
+		private readonly StreamReader in_Renamed;
+		private readonly StreamWriter out_Renamed;
 		
-        public LocalConnection(LocalEndpoint remote, LocalEndpoint local)
+        public LocalConnection()
         {
-            this.in_Renamed = new System.IO.StreamReader(new MemoryStream());//PipedInputStream
-            this.out_Renamed = new System.IO.StreamWriter(new MemoryStream());//PipedOutputStream
+            in_Renamed = new StreamReader(new MemoryStream());
+            out_Renamed = new StreamWriter(new MemoryStream());
         }
 		
-		public LocalConnection(LocalConnection localConnection)
+		public LocalConnection(Connection localConnection)
 		{
 			try
 			{
-				this.in_Renamed = new System.IO.StreamReader(localConnection.OutputStream.BaseStream);
-				this.out_Renamed = new System.IO.StreamWriter(localConnection.InputStream.BaseStream);
+				in_Renamed = new StreamReader(localConnection.OutputStream.BaseStream);
+				out_Renamed = new StreamWriter(localConnection.InputStream.BaseStream);
 			}
-			catch (System.IO.IOException e)
+			catch (IOException e)
 			{
 				throw new RuntimeException(e);
 			}
@@ -72,14 +70,14 @@ namespace OpenFAST.Session
 			{
 				in_Renamed.Close();
 			}
-			catch (System.IO.IOException)
+			catch (IOException)
 			{
 			}
 			try
 			{
 				out_Renamed.Close();
 			}
-			catch (System.IO.IOException)
+			catch (IOException)
 			{
 			}
 		}

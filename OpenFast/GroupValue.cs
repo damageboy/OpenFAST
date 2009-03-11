@@ -24,7 +24,7 @@ using Field = OpenFAST.Template.Field;
 using Group = OpenFAST.Template.Group;
 using LongValue = OpenFAST.Template.LongValue;
 using Scalar = OpenFAST.Template.Scalar;
-using Operator = OpenFAST.Template.operator_Renamed.Operator;
+using Operator = openfast.Template.Operator.Operator;
 using Type = OpenFAST.Template.Type.FASTType;
 using ArrayIterator = OpenFAST.util.ArrayIterator;
 using System.Text;
@@ -43,32 +43,29 @@ namespace OpenFAST
 			}
 			
 		}
-		private const long serialVersionUID = 1L;
 
-        protected internal FieldValue[] values;
+	    protected internal FieldValue[] values;
 		
-		private Group group;
+		private readonly Group group;
 		
 		public GroupValue(Group group, FieldValue[] values)
 		{
 			if (group == null)
 			{
-				throw new System.NullReferenceException();
+				throw new NullReferenceException();
 			}
 			
 			this.group = group;
 			this.values = values;
 			
-			for (int i = 0; i < group.FieldCount; i++)
+			for (var i = 0; i < group.FieldCount; i++)
 			{
-				if (group.GetField(i) is Scalar)
-				{
-					Scalar scalar = ((Scalar) group.GetField(i));
-					if (scalar.Operator.Equals(Operator.CONSTANT) && !scalar.Optional)
-					{
-						values[i] = scalar.DefaultValue;
-					}
-				}
+			    if (!(group.GetField(i) is Scalar)) continue;
+			    var scalar = ((Scalar) group.GetField(i));
+			    if (scalar.Operator.Equals(Operator.CONSTANT) && !scalar.Optional)
+			    {
+			        values[i] = scalar.DefaultValue;
+			    }
 			}
 		}
 		
@@ -93,7 +90,7 @@ namespace OpenFAST
 			{
 				if (group.HasIntrospectiveField(fieldName))
 				{
-					Scalar scalar = group.GetIntrospectiveField(fieldName);
+					var scalar = group.GetIntrospectiveField(fieldName);
 					if (scalar.Type.Equals(Type.UNICODE) || scalar.Type.Equals(Type.STRING) || scalar.Type.Equals(Type.ASCII))
 						return GetString(scalar.Name).Length;
 					if (scalar.Type.Equals(Type.BYTE_VECTOR))
@@ -147,7 +144,7 @@ namespace OpenFAST
 		
 		public virtual string GetString(string fieldName)
 		{
-			FieldValue value_Renamed = GetValue(fieldName);
+			var value_Renamed = GetValue(fieldName);
 			return (value_Renamed == null)?null:value_Renamed.ToString();
 		}
 		
@@ -161,12 +158,12 @@ namespace OpenFAST
 			return GetScalar(fieldName).ToDouble();
 		}
 		
-		public virtual System.Decimal GetBigDecimal(int fieldIndex)
+		public virtual Decimal GetBigDecimal(int fieldIndex)
 		{
 			return GetScalar(fieldIndex).ToBigDecimal();
 		}
 		
-		public virtual System.Decimal GetBigDecimal(string fieldName)
+		public virtual Decimal GetBigDecimal(string fieldName)
 		{
 			return GetScalar(fieldName).ToBigDecimal();
 		}
@@ -220,7 +217,7 @@ namespace OpenFAST
 		{
 			if (!group.HasField(fieldName))
 			{
-				throw new System.ArgumentException("The field \"" + fieldName + "\" does not exist in group " + group);
+				throw new ArgumentException("The field \"" + fieldName + "\" does not exist in group " + group);
 			}
 			
 			return values[group.GetFieldIndex(fieldName)];
@@ -234,7 +231,7 @@ namespace OpenFAST
 		public virtual void  SetString(Field field, string value_Renamed)
 		{
 			if (field == null)
-				throw new System.ArgumentException("Field must not be null [value=" + value_Renamed + "]");
+				throw new ArgumentException("Field must not be null [value=" + value_Renamed + "]");
 			SetFieldValue(field, field.CreateValue(value_Renamed));
 		}
 		
@@ -273,12 +270,12 @@ namespace OpenFAST
 			SetFieldValue(fieldName, new DecimalValue(value_Renamed));
 		}
 		
-		public virtual void  SetDecimal(int fieldIndex, System.Decimal value_Renamed)
+		public virtual void  SetDecimal(int fieldIndex, Decimal value_Renamed)
 		{
 			values[fieldIndex] = new DecimalValue(value_Renamed);
 		}
 		
-		public virtual void  SetDecimal(string fieldName, System.Decimal value_Renamed)
+		public virtual void  SetDecimal(string fieldName, Decimal value_Renamed)
 		{
 			SetFieldValue(fieldName, new DecimalValue(value_Renamed));
 		}
@@ -318,7 +315,7 @@ namespace OpenFAST
 			SetFieldValue(fieldName, group.GetField(fieldName).CreateValue(value_Renamed));
 		}
 		
-		public  override bool Equals(System.Object other)
+		public  override bool Equals(Object other)
 		{
 			if (other == this)
 			{
@@ -340,7 +337,7 @@ namespace OpenFAST
 				return false;
 			}
 			
-			for (int i = 0; i < values.Length; i++)
+			for (var i = 0; i < values.Length; i++)
 			{
 				if (values[i] == null)
 				{
@@ -363,10 +360,10 @@ namespace OpenFAST
 		
 		public override string ToString()
 		{
-			StringBuilder builder = new StringBuilder();
+			var builder = new StringBuilder();
 			
 			builder.Append(group).Append(" -> {");
-			for (int i = 0; i < values.Length; i++)
+			for (var i = 0; i < values.Length; i++)
 			{
 				builder.Append(values[i]).Append(", ");
 			}
@@ -379,9 +376,9 @@ namespace OpenFAST
 		{
 			if (!group.HasField(fieldName))
 			{
-				throw new System.ArgumentException("The field " + fieldName + " does not exist in group " + group);
+				throw new ArgumentException("The field " + fieldName + " does not exist in group " + group);
 			}
-			int index = group.GetFieldIndex(fieldName);
+			var index = group.GetFieldIndex(fieldName);
 			SetFieldValue(index, value_Renamed);
 		}
 		
@@ -402,12 +399,12 @@ namespace OpenFAST
 		
 		public virtual FieldValue Copy()
 		{
-			FieldValue[] copies = new FieldValue[values.Length];
-			for (int i = 0; i < copies.Length; i++)
+			var copies = new FieldValue[values.Length];
+			for (var i = 0; i < copies.Length; i++)
 			{
 				copies[i] = values[i].Copy();
 			}
-			return new GroupValue(group, this.values);
+			return new GroupValue(group, values);
 		}
 	}
 }

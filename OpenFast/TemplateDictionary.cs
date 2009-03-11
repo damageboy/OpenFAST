@@ -19,7 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
 using Group = OpenFAST.Template.Group;
 using System.Text;
 
@@ -31,17 +30,11 @@ namespace OpenFAST
 		
 		public ScalarValue Lookup(Group template, QName key, QName applicationType)
 		{
-			if (!table.ContainsKey(template))
-			{
-				return ScalarValue.UNDEFINED;
-			}
-			
-			if ((table[template]).ContainsKey(key))
-			{
-				return table[template][key];
-			}
-			
-			return ScalarValue.UNDEFINED;
+		    if (table.ContainsKey(template))
+		    {
+		        return (table[template]).ContainsKey(key) ? table[template][key] : ScalarValue.UNDEFINED;
+		    }
+		    return ScalarValue.UNDEFINED;
 		}
 		
 		public void  Reset()
@@ -61,15 +54,15 @@ namespace OpenFAST
 		
 		public override string ToString()
 		{
-			StringBuilder builder = new StringBuilder();
-            foreach (Group template in table.Keys)
+			var builder = new StringBuilder();
+            foreach (var template in table.Keys)
             {
-                builder.Append("Dictionary: Template=" + template.ToString());
-                System.Collections.IDictionary templateMap = (System.Collections.IDictionary)table[template];
+                builder.Append("Dictionary: Template=" + template);
+                System.Collections.IDictionary templateMap = table[template];
                 System.Collections.IEnumerator keyIterator = new SupportClass.HashSetSupport(templateMap.Keys).GetEnumerator();
                 while (keyIterator.MoveNext())
                 {
-                    System.Object key = keyIterator.Current;
+                    var key = keyIterator.Current;
                     builder.Append(key).Append("=").Append(templateMap[key]).Append("\n");
                 }
             }

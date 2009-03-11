@@ -20,7 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using ScalarValue = OpenFAST.ScalarValue;
 
 namespace OpenFAST.Template
 {
@@ -28,8 +27,7 @@ namespace OpenFAST.Template
 	[Serializable]
 	public class TwinValue:ScalarValue
 	{
-		private const long serialVersionUID = 1L;
-		public ScalarValue first;
+	    public ScalarValue first;
 		public ScalarValue second;
 		
 		public TwinValue(ScalarValue first, ScalarValue second)
@@ -38,7 +36,7 @@ namespace OpenFAST.Template
 			this.second = second;
 		}
 		
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
 			if ((obj == null) || !(obj is TwinValue))
 			{
@@ -60,7 +58,7 @@ namespace OpenFAST.Template
 		
 		public override string ToString()
 		{
-			return first.ToString() + ", " + second.ToString();
+			return first + ", " + second;
 		}
 	}
 }

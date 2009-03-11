@@ -19,13 +19,9 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
 using ErrorCode = OpenFAST.Error.ErrorCode;
 using ErrorHandler = OpenFAST.Error.ErrorHandler;
 using FastAlertSeverity = OpenFAST.Error.FastAlertSeverity;
-using BasicTemplateRegistry = OpenFAST.Template.BasicTemplateRegistry;
-using MessageTemplate = OpenFAST.Template.MessageTemplate;
-using TemplateRegistry = OpenFAST.Template.TemplateRegistry;
 using FASTType = OpenFAST.Template.Type.FASTType;
 
 namespace OpenFAST.Template.Loader
@@ -66,7 +62,7 @@ namespace OpenFAST.Template.Loader
 		{
 			set
 			{
-				this.loadTemplateIdFromAuxId = value;
+				loadTemplateIdFromAuxId = value;
 			}
 			
 		}
@@ -78,31 +74,25 @@ namespace OpenFAST.Template.Loader
 		
 		internal static readonly ErrorCode INVALID_TYPE;
 		
-		// IMMUTABLE
-		private bool namespaceAwareness;
-		
-		private ParsingContext initialContext;
+	    private readonly ParsingContext initialContext;
 		
 		private bool loadTemplateIdFromAuxId;
 		
-		public XMLMessageTemplateLoader():this(false)
+		public XMLMessageTemplateLoader()
 		{
-		}
-		
-		public XMLMessageTemplateLoader(bool namespaceAwareness)
-		{
-			this.namespaceAwareness = namespaceAwareness;
-			this.initialContext = CreateInitialContext();
+            initialContext = CreateInitialContext();
 		}
 		
 		public static ParsingContext CreateInitialContext()
 		{
-			ParsingContext initialContext = new ParsingContext();
-			initialContext.ErrorHandler = OpenFAST.Error.ErrorHandler_Fields.DEFAULT;
-			initialContext.TemplateRegistry = new BasicTemplateRegistry();
-			initialContext.TypeMap = FASTType.RegisteredTypeMap;
-			initialContext.FieldParsers = new System.Collections.ArrayList();
-			initialContext.AddFieldParser(new ScalarParser());
+			var initialContext = new ParsingContext
+			                         {
+			                             ErrorHandler = Error.ErrorHandler_Fields.DEFAULT,
+			                             TemplateRegistry = new BasicTemplateRegistry(),
+			                             TypeMap = FASTType.RegisteredTypeMap,
+			                             FieldParsers = new System.Collections.ArrayList()
+			                         };
+		    initialContext.AddFieldParser(new ScalarParser());
 			initialContext.AddFieldParser(new GroupParser());
 			initialContext.AddFieldParser(new SequenceParser());
 			initialContext.AddFieldParser(new ComposedDecimalParser());
@@ -126,40 +116,42 @@ namespace OpenFAST.Template.Loader
 				return new MessageTemplate[]{};
 			}
 			
-			System.Xml.XmlElement root = (System.Xml.XmlElement) document.DocumentElement;
+			var root = document.DocumentElement;
 			
-			TemplateParser templateParser = new TemplateParser(loadTemplateIdFromAuxId);
-			
-			if (root.Name.Equals("template"))
-			{
-				return new MessageTemplate[]{(MessageTemplate) templateParser.Parse(root, initialContext)};
-			}
-			else if (root.Name.Equals("templates"))
-			{
-				ParsingContext context = new ParsingContext(root, initialContext);
-				
-				System.Xml.XmlNodeList templateTags = root.GetElementsByTagName("template");
-				MessageTemplate[] templates = new MessageTemplate[templateTags.Count];
-				for (int i = 0; i < templateTags.Count; i++)
-				{
-					System.Xml.XmlElement templateTag = (System.Xml.XmlElement) templateTags.Item(i);
-					templates[i] = (MessageTemplate) templateParser.Parse(templateTag, context);
-				}
-				return templates;
-			}
-			else
-			{
-				initialContext.ErrorHandler.Error(OpenFAST.Error.FastConstants.S1_INVALID_XML, "Invalid root node " + root.Name + ", \"template\" or \"templates\" expected.");
-				return new MessageTemplate[]{};
-			}
+			var templateParser = new TemplateParser(loadTemplateIdFromAuxId);
+            if (root != null)
+            {
+                if (root.Name.Equals("template"))
+                {
+                    return new[] {(MessageTemplate) templateParser.Parse(root, initialContext)};
+                }
+                if (root.Name.Equals("templates"))
+                {
+                    var context = new ParsingContext(root, initialContext);
+
+                    System.Xml.XmlNodeList templateTags = root.GetElementsByTagName("template");
+                    var templates = new MessageTemplate[templateTags.Count];
+                    for (int i = 0; i < templateTags.Count; i++)
+                    {
+                        var templateTag = (System.Xml.XmlElement) templateTags.Item(i);
+                        templates[i] = (MessageTemplate) templateParser.Parse(templateTag, context);
+                    }
+                    return templates;
+                }
+                initialContext.ErrorHandler.Error(Error.FastConstants.S1_INVALID_XML,
+                                                  "Invalid root node " + root.Name +
+                                                  ", \"template\" or \"templates\" expected.");
+                
+            }
+            return new MessageTemplate[] { };
 		}
 		
 		private System.Xml.XmlDocument ParseXml(System.IO.Stream templateStream)
 		{
 			try
 			{
-                System.Xml.XmlDocument builder = new System.Xml.XmlDocument();
-				XmlSourceSupport inputSource = new XmlSourceSupport(templateStream);
+                var builder = new System.Xml.XmlDocument();
+				var inputSource = new XmlSourceSupport(templateStream);
 				System.Xml.XmlDocument document = SupportClass.ParseDocument(builder, inputSource);
 				return document;
 			}
@@ -176,9 +168,9 @@ namespace OpenFAST.Template.Loader
 		}
 		static XMLMessageTemplateLoader()
 		{
-			IO_ERROR = new ErrorCode(OpenFAST.Error.FastConstants.STATIC, - 1, "IOERROR", "IO Error", FastAlertSeverity.ERROR);
-			XML_PARSING_ERROR = new ErrorCode(OpenFAST.Error.FastConstants.STATIC, - 1, "XMLPARSEERR", "XML Parsing Error", FastAlertSeverity.ERROR);
-			INVALID_TYPE = new ErrorCode(OpenFAST.Error.FastConstants.STATIC, - 1, "INVALIDTYPE", "Invalid Type", FastAlertSeverity.ERROR);
+			IO_ERROR = new ErrorCode(Error.FastConstants.STATIC, - 1, "IOERROR", "IO Error", FastAlertSeverity.ERROR);
+			XML_PARSING_ERROR = new ErrorCode(Error.FastConstants.STATIC, - 1, "XMLPARSEERR", "XML Parsing Error", FastAlertSeverity.ERROR);
+			INVALID_TYPE = new ErrorCode(Error.FastConstants.STATIC, - 1, "INVALIDTYPE", "Invalid Type", FastAlertSeverity.ERROR);
 		}
 	}
 }

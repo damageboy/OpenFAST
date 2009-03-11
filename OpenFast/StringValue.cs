@@ -20,7 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using OpenFAST.Template.Type;
 
 namespace OpenFAST
 {
@@ -32,49 +31,48 @@ namespace OpenFAST
 		{
 			get
 			{
-				return SupportClass.ToByteArray(value_Renamed);
+				return System.Text.Encoding.UTF8.GetBytes(value_Renamed);
 			}
 			
 		}
-		private const long serialVersionUID = 1L;
 
-        public string value_Renamed;
+	    public string value_Renamed;
 		
 		public StringValue(string value_Renamed)
 		{
 			if (value_Renamed == null)
-				throw new System.NullReferenceException();
+				throw new NullReferenceException();
 			this.value_Renamed = value_Renamed;
 		}
 		public override byte ToByte()
 		{
-			int value_Renamed = ToInt();
-			if (value_Renamed > System.SByte.MaxValue || value_Renamed < System.SByte.MinValue)
+			var i = ToInt();
+			if (i > SByte.MaxValue || i < SByte.MinValue)
 			{
-				Global.HandleError(OpenFAST.Error.FastConstants.R4_NUMERIC_VALUE_TOO_LARGE, "The value \"" + value_Renamed + "\" is too large to fit into a byte.");
+				Global.HandleError(Error.FastConstants.R4_NUMERIC_VALUE_TOO_LARGE, "The value \"" + i + "\" is too large to fit into a byte.");
 				return 0;
 			}
-			return (byte) value_Renamed;
+			return (byte) i;
 		}
 		public override short ToShort()
 		{
-			int value_Renamed = ToInt();
-			if (value_Renamed > System.Int16.MaxValue || value_Renamed < System.Int16.MinValue)
+			int i = ToInt();
+			if (i > Int16.MaxValue || i < Int16.MinValue)
 			{
-				Global.HandleError(OpenFAST.Error.FastConstants.R4_NUMERIC_VALUE_TOO_LARGE, "The value \"" + value_Renamed + "\" is too large to fit into a short.");
+				Global.HandleError(Error.FastConstants.R4_NUMERIC_VALUE_TOO_LARGE, "The value \"" + i + "\" is too large to fit into a short.");
 				return 0;
 			}
-			return (short) value_Renamed;
+			return (short) i;
 		}
 		public override int ToInt()
 		{
 			try
 			{
-				return System.Int32.Parse(value_Renamed);
+				return Int32.Parse(value_Renamed);
 			}
-			catch (System.Exception e)
+			catch (Exception e)
 			{
-				Global.HandleError(OpenFAST.Error.FastConstants.R4_NUMERIC_VALUE_TOO_LARGE, "The value \"" + value_Renamed + "\" is too large to fit into an int.", e);
+				Global.HandleError(Error.FastConstants.R4_NUMERIC_VALUE_TOO_LARGE, "The value \"" + value_Renamed + "\" is too large to fit into an int.", e);
 				return 0;
 			}
 		}
@@ -82,11 +80,11 @@ namespace OpenFAST
 		{
 			try
 			{
-				return System.Int64.Parse(value_Renamed);
+				return Int64.Parse(value_Renamed);
 			}
-			catch (System.FormatException e)
+			catch (FormatException e)
 			{
-				Global.HandleError(OpenFAST.Error.FastConstants.R4_NUMERIC_VALUE_TOO_LARGE, "The value \"" + value_Renamed + "\" is too large to fit into a long.", e);
+				Global.HandleError(Error.FastConstants.R4_NUMERIC_VALUE_TOO_LARGE, "The value \"" + value_Renamed + "\" is too large to fit into a long.", e);
 				return 0;
 			}
 		}
@@ -94,23 +92,23 @@ namespace OpenFAST
 		{
 			try
 			{
-				return System.Double.Parse(value_Renamed);
+				return Double.Parse(value_Renamed);
 			}
-			catch (System.FormatException e)
+			catch (FormatException e)
 			{
-				Global.HandleError(OpenFAST.Error.FastConstants.R4_NUMERIC_VALUE_TOO_LARGE, "The value\"" + value_Renamed + "\" is too large to fit into a double.", e);
+				Global.HandleError(Error.FastConstants.R4_NUMERIC_VALUE_TOO_LARGE, "The value\"" + value_Renamed + "\" is too large to fit into a double.", e);
 				return 0.0;
 			}
 		}
-		public override System.Decimal ToBigDecimal()
+		public override Decimal ToBigDecimal()
 		{
-			return System.Decimal.Parse(value_Renamed, System.Globalization.NumberStyles.Any);
+			return Decimal.Parse(value_Renamed, System.Globalization.NumberStyles.Any);
 		}
 		public override string ToString()
 		{
 			return value_Renamed;
 		}
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
 			if ((obj == null) || !(obj is StringValue))
 			{

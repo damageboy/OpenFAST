@@ -19,9 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using Field = OpenFAST.Template.Field;
-
 namespace OpenFAST.Template.Loader
 {
 	public interface FieldParser

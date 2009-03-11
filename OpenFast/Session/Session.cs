@@ -19,18 +19,11 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using Context = OpenFAST.Context;
-using Message = OpenFAST.Message;
-using MessageInputStream = OpenFAST.MessageInputStream;
-using MessageOutputStream = OpenFAST.MessageOutputStream;
-using QName = OpenFAST.QName;
 using ErrorCode = OpenFAST.Error.ErrorCode;
 using ErrorHandler = OpenFAST.Error.ErrorHandler;
 using FastException = OpenFAST.Error.FastException;
 using MessageTemplate = OpenFAST.Template.MessageTemplate;
 using TemplateRegistry = OpenFAST.Template.TemplateRegistry;
-using OpenFAST;
 
 namespace OpenFAST.Session
 {
@@ -42,9 +35,9 @@ namespace OpenFAST.Session
 			{
 				InitBlock(enclosingInstance);
 			}
-			private void  InitBlock(Session enclosingInstance)
+			private void  InitBlock(Session internalInstance)
 			{
-				this.enclosingInstance = enclosingInstance;
+				enclosingInstance = internalInstance;
 			}
 			private Session enclosingInstance;
 			public Session Enclosing_Instance
@@ -74,7 +67,7 @@ namespace OpenFAST.Session
 						}
 						else if (Enclosing_Instance.messageListener != null)
 						{
-							Enclosing_Instance.messageListener.OnMessage(this.enclosingInstance,message);
+							Enclosing_Instance.messageListener.OnMessage(enclosingInstance,message);
 						}
 						else
 						{
@@ -91,7 +84,7 @@ namespace OpenFAST.Session
 						}
 						else if (e is FastException)
 						{
-							FastException fastException = ((FastException) e);
+							var fastException = ((FastException) e);
 							Enclosing_Instance.errorHandler.Error(fastException.Code, fastException.Message, e);
 						}
 						else
@@ -102,20 +95,10 @@ namespace OpenFAST.Session
 				}
 			}
 		}
-		virtual public Client Client
-		{
-			get
-			{
-				return client;
-			}
-			
-			set
-			{
-				this.client = value;
-			}
-			
-		}
-		virtual public ErrorHandler ErrorHandler
+
+	    public virtual Client Client { get; set; }
+
+	    virtual public ErrorHandler ErrorHandler
 		{
 			get
 			{
@@ -126,10 +109,10 @@ namespace OpenFAST.Session
 			{
 				if (value == null)
 				{
-					this.errorHandler = OpenFAST.Error.ErrorHandler_Fields.NULL;
+					errorHandler = OpenFAST.Error.ErrorHandler_Fields.NULL;
 				}
 				
-				this.errorHandler = value;
+				errorHandler = value;
 			}
 			
 		}
@@ -145,7 +128,7 @@ namespace OpenFAST.Session
 		{
 			set
 			{
-				this.messageListener = value;
+				messageListener = value;
 				Listening = true;
 			}
 			
@@ -154,17 +137,18 @@ namespace OpenFAST.Session
 		{
 			set
 			{
-				this.listening = value;
+				listening = value;
 				if (value)
 					ListenForMessages();
 			}
 			
 		}
+
 		virtual public SessionListener SessionListener
 		{
 			set
 			{
-				this.SessionListener = value;
+                sessionListener = value;
 			}
 			
 		}
@@ -193,20 +177,19 @@ namespace OpenFAST.Session
                 out_stream = value;
             }
         }
-		private SessionProtocol protocol;
-		private Connection connection;
-		private Client client;
-		private MessageListener messageListener;
+		private readonly SessionProtocol protocol;
+		private readonly Connection connection;
+	    private MessageListener messageListener;
 		private bool listening;
 		private SupportClass.ThreadClass listeningThread;
 		private ErrorHandler errorHandler = OpenFAST.Error.ErrorHandler_Fields.DEFAULT;
-		private SessionListener sessionListener = OpenFAST.Session.SessionListener_Fields.NULL;
+		private SessionListener sessionListener = SessionListener_Fields.NULL;
 		
 		public Session(Connection connection, SessionProtocol protocol, TemplateRegistry inboundRegistry, TemplateRegistry outboundRegistry)
 		{
-			Context inContext = new Context();
+			var inContext = new Context();
             inContext.TemplateRegistry.RegisterAll(inboundRegistry);
-			Context outContext = new Context();
+			var outContext = new Context();
             outContext.TemplateRegistry.RegisterAll(outboundRegistry);
 			inContext.ErrorHandler = this;
 			
@@ -214,8 +197,8 @@ namespace OpenFAST.Session
 			this.protocol = protocol;
 			try
 			{
-				this.in_stream = new MessageInputStream(connection.InputStream.BaseStream, inContext);
-				this.out_stream = new MessageOutputStream(connection.OutputStream.BaseStream, outContext);
+				in_stream = new MessageInputStream(connection.InputStream.BaseStream, inContext);
+				out_stream = new MessageOutputStream(connection.OutputStream.BaseStream, outContext);
 			}
 			catch (System.IO.IOException e)
 			{
@@ -248,7 +231,7 @@ namespace OpenFAST.Session
 		{
 			if (code.Equals(OpenFAST.Error.FastConstants.D9_TEMPLATE_NOT_REGISTERED))
 			{
-				code = OpenFAST.Session.SessionConstants.TEMPLATE_NOT_SUPPORTED;
+				code = SessionConstants.TEMPLATE_NOT_SUPPORTED;
 				message = "Template Not Supported";
 			}
 			protocol.OnError(this, code, message);

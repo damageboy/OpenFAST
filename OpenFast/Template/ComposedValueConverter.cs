@@ -19,9 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using FieldValue = OpenFAST.FieldValue;
-
 namespace OpenFAST.Template
 {
 	

@@ -34,11 +34,11 @@ namespace OpenFAST
 			}
 			
 			string[] bitStrings = bitString.Split(' ');
-			byte[] bytes = new byte[bitStrings.Length];
+			var bytes = new byte[bitStrings.Length];
 			
 			for (int i = 0; i < bitStrings.Length; i++)
 			{
-				bytes[i] = (byte) System.Convert.ToInt32(bitStrings[i], 2);
+				bytes[i] = (byte) Convert.ToInt32(bitStrings[i], 2);
 			}
 			
 			return bytes;
@@ -52,11 +52,11 @@ namespace OpenFAST
 			}
 			
 			hexString = hexString.Replace(" ", "");
-			byte[] bytes = new byte[hexString.Length / 2];
+			var bytes = new byte[hexString.Length / 2];
 			
 			for (int i = 0; i < hexString.Length; i += 2)
 			{
-				bytes[i / 2] = (byte) System.Convert.ToInt32(hexString.Substring(i, (i + 2) - (i)), 16);
+				bytes[i / 2] = (byte) Convert.ToInt32(hexString.Substring(i, (i + 2) - (i)), 16);
 			}
 			
 			return bytes;
@@ -74,11 +74,11 @@ namespace OpenFAST
 				return "";
 			}
 			
-			StringBuilder builder = new StringBuilder();
+			var builder = new StringBuilder();
 			
 			for (int i = 0; i < length; i++)
 			{
-				string bits = System.Convert.ToString(bytes[i] & 0xFF, 2);
+				string bits = Convert.ToString(bytes[i] & 0xFF, 2);
 				
 				for (int j = 0; j < (8 - bits.Length); j++)
 					builder.Append('0');
@@ -104,7 +104,7 @@ namespace OpenFAST
 		
 		public static byte[] Combine(byte[] first, byte[] second)
 		{
-			byte[] result = new byte[first.Length + second.Length];
+			var result = new byte[first.Length + second.Length];
 			Array.Copy(first, 0, result, 0, first.Length);
 			Array.Copy(second, 0, result, first.Length, second.Length);
 			return result;

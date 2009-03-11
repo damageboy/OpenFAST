@@ -19,16 +19,13 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using QName = OpenFAST.QName;
 using ErrorHandler = OpenFAST.Error.ErrorHandler;
-using TemplateRegistry = OpenFAST.Template.TemplateRegistry;
 
 namespace OpenFAST.Template.Loader
 {
 	public class ParsingContext
 	{
-		virtual public string TemplateNamespace
+		public string TemplateNamespace
 		{
 			get
 			{
@@ -39,11 +36,11 @@ namespace OpenFAST.Template.Loader
 			
 			set
 			{
-				this.templateNamespace = value;
+				templateNamespace = value;
 			}
 			
 		}
-		virtual public string Namespace
+		public string Namespace
 		{
 			get
 			{
@@ -54,11 +51,11 @@ namespace OpenFAST.Template.Loader
 			
 			set
 			{
-				this.namespace_Renamed = value;
+				namespace_Renamed = value;
 			}
 			
 		}
-		virtual public string Dictionary
+		public string Dictionary
 		{
 			get
 			{
@@ -69,7 +66,7 @@ namespace OpenFAST.Template.Loader
 			
 			set
 			{
-				this.dictionary = value;
+				dictionary = value;
 			}
 			
 		}
@@ -84,7 +81,7 @@ namespace OpenFAST.Template.Loader
 			
 			set
 			{
-				this.errorHandler = value;
+				errorHandler = value;
 			}
 			
 		}
@@ -99,7 +96,7 @@ namespace OpenFAST.Template.Loader
 			
 			set
 			{
-				this.templateRegistry = value;
+				templateRegistry = value;
 			}
 			
 		}
@@ -114,7 +111,7 @@ namespace OpenFAST.Template.Loader
 			
 			set
 			{
-				this.typeMap = value;
+				typeMap = value;
 			}
 			
 		}
@@ -129,7 +126,7 @@ namespace OpenFAST.Template.Loader
 			
 			set
 			{
-				this.fieldParsers = value;
+				fieldParsers = value;
 			}
 			
 		}
@@ -144,11 +141,11 @@ namespace OpenFAST.Template.Loader
 		
 		internal static readonly ParsingContext NULL = new ParsingContext();
 		
-		private ParsingContext parent;
+		private readonly ParsingContext parent;
 		
-		private string templateNamespace = null;
-		private string namespace_Renamed = null;
-		private string dictionary = null;
+		private string templateNamespace;
+		private string namespace_Renamed;
+		private string dictionary;
 		private ErrorHandler errorHandler;
 		private TemplateRegistry templateRegistry;
 		private System.Collections.IDictionary typeMap;
@@ -178,9 +175,9 @@ namespace OpenFAST.Template.Loader
 				setName(new QName(node.GetAttribute("name"), Namespace));
 		}
 		
-		private void  setName(QName name)
+		private void  setName(QName qname)
 		{
-			this.name = name;
+			name = qname;
 		}
 		
 		public virtual FieldParser GetFieldParser(System.Xml.XmlElement element)
@@ -188,7 +185,7 @@ namespace OpenFAST.Template.Loader
 			System.Collections.IList parsers = FieldParsers;
 			for (int i = parsers.Count - 1; i >= 0; i--)
 			{
-				FieldParser fieldParser = ((FieldParser) parsers[i]);
+				var fieldParser = ((FieldParser) parsers[i]);
 				if (fieldParser.CanParse(element, this))
 					return fieldParser;
 			}

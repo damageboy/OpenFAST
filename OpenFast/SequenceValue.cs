@@ -49,19 +49,19 @@ namespace OpenFAST
 		{
 			get
 			{
-				return this.elements.ToArray();
+				return elements.ToArray();
 			}
 			
 		}
-		private const long serialVersionUID = 1L;
-		private List<GroupValue> elements = new List<GroupValue>();
-		private Sequence sequence;
+
+	    private readonly List<GroupValue> elements = new List<GroupValue>();
+		private readonly Sequence sequence;
 		
 		public SequenceValue(Sequence sequence)
 		{
 			if (sequence == null)
 			{
-				throw new System.NullReferenceException();
+				throw new NullReferenceException();
 			}
 			
 			this.sequence = sequence;
@@ -82,7 +82,7 @@ namespace OpenFAST
 			elements.Add(new GroupValue(sequence.Group, values));
 		}
 		
-		public  override bool Equals(System.Object other)
+		public  override bool Equals(object other)
 		{
 			if (other == this)
 			{
@@ -122,13 +122,13 @@ namespace OpenFAST
 		
 		public override string ToString()
 		{
-			StringBuilder builder = new StringBuilder();
+			var builder = new StringBuilder();
 			System.Collections.IEnumerator iter = elements.GetEnumerator();
 			builder.Append("[ ");
 			
 			while (iter.MoveNext())
 			{
-				GroupValue value_Renamed = (GroupValue) iter.Current;
+				var value_Renamed = (GroupValue) iter.Current;
 				builder.Append('[').Append(value_Renamed).Append("] ");
 			}
 			
@@ -141,16 +141,16 @@ namespace OpenFAST
 		{
             get
             {
-                return (GroupValue)elements[index];
+                return elements[index];
             }
 		}
 		
 		public FieldValue Copy()
 		{
-			SequenceValue value_Renamed = new SequenceValue(this.sequence);
+			var value_Renamed = new SequenceValue(sequence);
 			for (int i = 0; i < elements.Count; i++)
 			{
-				value_Renamed.Add((GroupValue) ((GroupValue) elements[i]).Copy());
+				value_Renamed.Add((GroupValue) elements[i].Copy());
 			}
 			return value_Renamed;
 		}

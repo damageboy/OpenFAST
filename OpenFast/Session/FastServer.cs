@@ -19,7 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
 using ErrorHandler = OpenFAST.Error.ErrorHandler;
 
 namespace OpenFAST.Session
@@ -32,9 +31,9 @@ namespace OpenFAST.Session
 			{
 				InitBlock(enclosingInstance);
 			}
-			private void  InitBlock(FastServer enclosingInstance)
+			private void  InitBlock(FastServer internalInstance)
 			{
-				this.enclosingInstance = enclosingInstance;
+				enclosingInstance = internalInstance;
 			}
 			private FastServer enclosingInstance;
 			public FastServer Enclosing_Instance
@@ -77,7 +76,7 @@ namespace OpenFAST.Session
 					throw new System.NullReferenceException();
 				}
 				
-				this.errorHandler = value;
+				errorHandler = value;
 			}
 			
 		}
@@ -85,17 +84,17 @@ namespace OpenFAST.Session
 		{
 			set
 			{
-				this.sessionHandler = value;
+				sessionHandler = value;
 			}
 			
 		}
-		private ErrorHandler errorHandler = OpenFAST.Error.ErrorHandler_Fields.DEFAULT;
-		private SessionHandler sessionHandler = OpenFAST.Session.SessionHandler_Fields.NULL;
+		private ErrorHandler errorHandler = Error.ErrorHandler_Fields.DEFAULT;
+		private SessionHandler sessionHandler = SessionHandler_Fields.NULL;
 		private bool listening;
 		
-		private SessionProtocol sessionProtocol;
-		private Endpoint endpoint;
-		private string serverName;
+		private readonly SessionProtocol sessionProtocol;
+		private readonly Endpoint endpoint;
+		private readonly string serverName;
 		private SupportClass.ThreadClass serverThread;
 		
 		public FastServer(string serverName, SessionProtocol sessionProtocol, Endpoint endpoint)
@@ -130,7 +129,7 @@ namespace OpenFAST.Session
 		public override void  OnConnect(Connection connection)
 		{
 			Session session = sessionProtocol.OnNewConnection(serverName, connection);
-			this.sessionHandler.NewSession(session);
+			sessionHandler.NewSession(session);
 		}
 	}
 }

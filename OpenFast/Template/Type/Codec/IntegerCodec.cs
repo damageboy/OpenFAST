@@ -20,15 +20,10 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using IntegerValue = OpenFAST.IntegerValue;
-using ScalarValue = OpenFAST.ScalarValue;
-using LongValue = OpenFAST.Template.LongValue;
 using Util = OpenFAST.util.Util;
 
 namespace OpenFAST.Template.Type.Codec
 {
-	
-	
 	[Serializable]
 	public abstract class IntegerCodec:TypeCodec
 	{
@@ -140,7 +135,7 @@ namespace OpenFAST.Template.Type.Codec
 			return 10;
 		}
 		
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
 			return obj != null && obj.GetType() == GetType();
 		}

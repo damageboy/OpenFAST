@@ -20,18 +20,13 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using ByteUtil = OpenFAST.ByteUtil;
-using Global = OpenFAST.Global;
-using ScalarValue = OpenFAST.ScalarValue;
-using StringValue = OpenFAST.StringValue;
-using OpenFAST;
 
 namespace OpenFAST.Template.Type.Codec
 {
 	[Serializable]
 	sealed class NullableAsciiString:TypeCodec
 	{
-		public ScalarValue DefaultValue
+		public static ScalarValue DefaultValue
 		{
 			get
 			{
@@ -48,36 +43,36 @@ namespace OpenFAST.Template.Type.Codec
 			}
 			
 		}
-		private const long serialVersionUID = 1L;
-		private static readonly byte[] NULLABLE_EMPTY_STRING = new byte[]{(byte) (0x00), (byte) (0x00)};
-		private static readonly byte[] ZERO_ENCODING = new byte[]{(byte) (0x00), (byte) (0x00), (byte) (0x00)};
-		
-		internal NullableAsciiString()
-		{
-		}
-		
-		public override byte[] EncodeValue(ScalarValue value_Renamed)
+
+	    private static readonly byte[] NULLABLE_EMPTY_STRING = new byte[]{0x00,0x00};
+		private static readonly byte[] ZERO_ENCODING = new byte[]{0x00, 0x00, 0x00};
+
+	    public override byte[] EncodeValue(ScalarValue value_Renamed)
 		{
 			if (value_Renamed.Null)
 			{
-				return TypeCodec.NULL_VALUE_ENCODING;
+				return NULL_VALUE_ENCODING;
 			}
 			
 			string string_Renamed = ((StringValue) value_Renamed).value_Renamed;
-			
-			if ((string_Renamed != null) && (string_Renamed.Length == 0))
-			{
-				return NULLABLE_EMPTY_STRING;
-			}
-			
-			if (string_Renamed.StartsWith("\u0000"))
-				return ZERO_ENCODING;
-			return SupportClass.ToByteArray(string_Renamed);
+
+            if (string_Renamed != null)
+            {
+                if ((string_Renamed.Length == 0))
+                {
+                    return NULLABLE_EMPTY_STRING;
+                }
+
+                if (string_Renamed.StartsWith("\u0000"))
+                    return ZERO_ENCODING;
+                return System.Text.Encoding.UTF8.GetBytes(string_Renamed);
+            }
+	        return ZERO_ENCODING;
 		}
 		
 		public override ScalarValue Decode(System.IO.Stream in_Renamed)
 		{
-			System.IO.MemoryStream buffer = new System.IO.MemoryStream();
+			var buffer = new System.IO.MemoryStream();
 			int byt;
 			
 			try
@@ -85,7 +80,7 @@ namespace OpenFAST.Template.Type.Codec
 				do 
 				{
 					byt = in_Renamed.ReadByte();
-					buffer.WriteByte((System.Byte) byt);
+					buffer.WriteByte((byte) byt);
 				}
 				while ((byt & STOP_BIT) == 0);
 			}
@@ -95,35 +90,35 @@ namespace OpenFAST.Template.Type.Codec
 			}
 			
 			byte[] bytes = buffer.ToArray();
-			bytes[bytes.Length - 1] &= (byte) (0x7f);
+			bytes[bytes.Length - 1] &= (0x7f);
 			
 			if (bytes[0] == 0)
 			{
 				if (!ByteUtil.IsEmpty(bytes))
-					Global.HandleError(OpenFAST.Error.FastConstants.R9_STRING_OVERLONG, null);
+					Global.HandleError(Error.FastConstants.R9_STRING_OVERLONG, null);
 				if ((bytes.Length == 1))
 				{
 					return null;
 				}
-				else if (bytes.Length == 2 && bytes[1] == 0)
-				{
-					return new StringValue("");
-				}
-				else if (bytes.Length == 3 && bytes[2] == 0)
-				{
-					return new StringValue("\u0000");
-				}
+			    if (bytes.Length == 2 && bytes[1] == 0)
+			    {
+			        return new StringValue("");
+			    }
+			    if (bytes.Length == 3 && bytes[2] == 0)
+			    {
+			        return new StringValue("\u0000");
+			    }
 			}
 			
-			return new StringValue(new string(SupportClass.ToCharArray(bytes)));
+			return new StringValue(System.Text.Encoding.UTF8.GetString(bytes));
 		}
 		
-		public ScalarValue FromString(string value_Renamed)
+		public static ScalarValue FromString(string value_Renamed)
 		{
 			return new StringValue(value_Renamed);
 		}
 		
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
 			return obj != null && obj.GetType() == GetType();
 		}

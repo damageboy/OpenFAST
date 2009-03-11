@@ -20,9 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using DateValue = OpenFAST.DateValue;
-using IntegerValue = OpenFAST.IntegerValue;
-using ScalarValue = OpenFAST.ScalarValue;
 using Util = OpenFAST.util.Util;
 
 namespace OpenFAST.Template.Type.Codec
@@ -30,11 +27,9 @@ namespace OpenFAST.Template.Type.Codec
 	[Serializable]
 	public sealed class TimestampInteger:TypeCodec
 	{
-		private const long serialVersionUID = 1L;
-		
-		public override ScalarValue Decode(System.IO.Stream in_Renamed)
+	    public override ScalarValue Decode(System.IO.Stream in_Renamed)
 		{
-			int intValue = ((IntegerValue) TypeCodec.UINT.Decode(in_Renamed)).value_Renamed;
+			int intValue = ((IntegerValue) UINT.Decode(in_Renamed)).value_Renamed;
 			System.DateTime tempAux = Util.ToTimestamp(intValue);
 			return new DateValue(ref tempAux);
 		}
@@ -42,9 +37,9 @@ namespace OpenFAST.Template.Type.Codec
 		{
 			System.DateTime date = ((DateValue) value_Renamed).value_Renamed;
 			int intValue = Util.TimestampToInt(ref date);
-			return TypeCodec.UINT.Encode(new IntegerValue(intValue));
+			return UINT.Encode(new IntegerValue(intValue));
 		}
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
 			return obj != null && obj.GetType() == GetType();
 		}

@@ -19,7 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
 using Group = OpenFAST.Template.Group;
 using System.Text;
 
@@ -33,7 +32,7 @@ namespace OpenFAST
 		{
 			if (dictionary.ContainsKey(template.TypeReference))
 			{
-				System.Collections.IDictionary applicationTypeMap = (System.Collections.IDictionary) dictionary[template.TypeReference];
+				var applicationTypeMap = (System.Collections.IDictionary) dictionary[template.TypeReference];
 				if (applicationTypeMap.Contains(key))
 					return (ScalarValue) applicationTypeMap[key];
 			}
@@ -56,11 +55,11 @@ namespace OpenFAST
 		
 		public override string ToString()
 		{
-			StringBuilder builder = new StringBuilder();
+			var builder = new StringBuilder();
             foreach (QName type in dictionary.Keys)
             {
-                builder.Append("Dictionary: Type=" + type.ToString());
-                System.Collections.IDictionary templateMap = (System.Collections.IDictionary)dictionary[type];
+                builder.Append("Dictionary: Type=" + type);
+                System.Collections.IDictionary templateMap = dictionary[type];
                 System.Collections.IEnumerator keyIterator = new SupportClass.HashSetSupport(templateMap.Keys).GetEnumerator();
                 while (keyIterator.MoveNext())
                 {

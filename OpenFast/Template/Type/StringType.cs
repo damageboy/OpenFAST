@@ -20,9 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using ScalarValue = OpenFAST.ScalarValue;
-using StringValue = OpenFAST.StringValue;
-using Operator = OpenFAST.Template.operator_Renamed.Operator;
+using Operator = openfast.Template.Operator.Operator;
 using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
 
 namespace OpenFAST.Template.Type
@@ -38,9 +36,8 @@ namespace OpenFAST.Template.Type
 			}
 			
 		}
-		private const long serialVersionUID = 1L;
-		
-		public StringType(string typeName, TypeCodec codec, TypeCodec nullableCodec):base(typeName, codec, nullableCodec)
+
+	    public StringType(string typeName, TypeCodec codec, TypeCodec nullableCodec):base(typeName, codec, nullableCodec)
 		{
 		}
 		

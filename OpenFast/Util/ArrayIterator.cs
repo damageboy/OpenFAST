@@ -19,8 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-
 namespace OpenFAST.util
 {
 	public sealed class ArrayIterator : System.Collections.IEnumerator
@@ -35,7 +33,7 @@ namespace OpenFAST.util
 		}
 		private int position;
 
-		private System.Object[] array;
+		private readonly System.Object[] array;
 		
 		public ArrayIterator(System.Object[] array)
 		{
@@ -45,11 +43,6 @@ namespace OpenFAST.util
 		public bool MoveNext()
 		{
 			return position < array.Length;
-		}
-
-		public void  Remove()
-		{
-			throw new System.NotSupportedException();
 		}
 
 		public void  Reset()

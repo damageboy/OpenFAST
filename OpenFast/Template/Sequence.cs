@@ -20,17 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using BitVectorReader = OpenFAST.BitVectorReader;
-using QName = OpenFAST.QName;
-using BitVectorBuilder = OpenFAST.BitVectorBuilder;
-using Context = OpenFAST.Context;
-using FieldValue = OpenFAST.FieldValue;
-using Global = OpenFAST.Global;
-using GroupValue = OpenFAST.GroupValue;
-using IntegerValue = OpenFAST.IntegerValue;
-using ScalarValue = OpenFAST.ScalarValue;
-using SequenceValue = OpenFAST.SequenceValue;
-using Operator = OpenFAST.Template.operator_Renamed.Operator;
+using Operator = openfast.Template.Operator.Operator;
 using FASTType = OpenFAST.Template.Type.FASTType;
 
 namespace OpenFAST.Template
@@ -97,14 +87,14 @@ namespace OpenFAST.Template
 			
 			set
 			{
-				this.group.TypeReference = value;
+				group.TypeReference = value;
 			}
 			
 		}
-		private const long serialVersionUID = 1L;
-		private Group group;
-		private Scalar length;
-		private bool implicitLength;
+
+	    private readonly Group group;
+		private readonly Scalar length;
+		private readonly bool implicitLength;
 		
 		public Sequence(QName name, Field[] fields, bool optional):this(name, CreateLength(name, optional), fields, optional)
 		{
@@ -117,7 +107,7 @@ namespace OpenFAST.Template
 		
 		public Sequence(QName name, Scalar length, Field[] fields, bool optional):base(name, optional)
 		{
-			this.group = new Group(name, fields, optional);
+			group = new Group(name, fields, optional);
 			
 			if (length == null)
 			{
@@ -150,46 +140,44 @@ namespace OpenFAST.Template
 			return length.IsPresenceMapBitSet(encoding, fieldValue);
 		}
 		
-		public override byte[] Encode(FieldValue value_Renamed, Group template, Context context, BitVectorBuilder presenceMapBuilder)
+		public override byte[] Encode(FieldValue value_Renamed, Group encodeTemplate, Context context, BitVectorBuilder presenceMapBuilder)
 		{
 			if (HasTypeReference())
 				context.CurrentApplicationType = TypeReference;
 			if (value_Renamed == null)
 			{
-				return length.Encode(null, template, context, presenceMapBuilder);
+				return length.Encode(null, encodeTemplate, context, presenceMapBuilder);
 			}
 			
-			System.IO.MemoryStream buffer = new System.IO.MemoryStream();
-			SequenceValue val = (SequenceValue) value_Renamed;
+			var buffer = new System.IO.MemoryStream();
+			var val = (SequenceValue) value_Renamed;
 			int len = val.Length;
 			
 			try
 			{
-				byte[] temp_byteArray;
-				temp_byteArray = length.Encode(new IntegerValue(len), template, context, presenceMapBuilder);
+			    var temp_byteArray = length.Encode(new IntegerValue(len), encodeTemplate, context, presenceMapBuilder);
 				buffer.Write(temp_byteArray, 0, temp_byteArray.Length);
 				
 				System.Collections.IEnumerator iter = val.Iterator();
 
                 while (iter.MoveNext())
-				{
-					byte[] temp_byteArray2;
-					temp_byteArray2 = group.Encode((FieldValue) iter.Current, template, context);
-					buffer.Write(temp_byteArray2, 0, temp_byteArray2.Length);
-				}
+                {
+                    var temp_byteArray2 = group.Encode((FieldValue) iter.Current, encodeTemplate, context);
+                    buffer.Write(temp_byteArray2, 0, temp_byteArray2.Length);
+                }
 			}
 			catch (System.IO.IOException e)
 			{
-				Global.HandleError(OpenFAST.Error.FastConstants.IO_ERROR, "An IO error occurred while encoding " + this, e);
+				Global.HandleError(Error.FastConstants.IO_ERROR, "An IO error occurred while encoding " + this, e);
 			}
 			
 			return buffer.ToArray();
 		}
 		
-		public override FieldValue Decode(System.IO.Stream in_Renamed, Group template, Context context, BitVectorReader pmapReader)
+		public override FieldValue Decode(System.IO.Stream in_Renamed, Group decodeTemplate, Context context, BitVectorReader pmapReader)
 		{
-			SequenceValue sequenceValue = new SequenceValue(this);
-			FieldValue lengthValue = length.Decode(in_Renamed, template, context, pmapReader);
+			var sequenceValue = new SequenceValue(this);
+			FieldValue lengthValue = length.Decode(in_Renamed, decodeTemplate, context, pmapReader);
 			
 			if ((lengthValue == ScalarValue.NULL) || (lengthValue == null))
 			{
@@ -198,8 +186,8 @@ namespace OpenFAST.Template
 			
 			int len = ((IntegerValue) lengthValue).value_Renamed;
 			
-			for (int i = 0; i < len; i++)
-				sequenceValue.Add((GroupValue) group.Decode(in_Renamed, template, context, BitVectorReader.INFINITE_TRUE));
+			for (var i = 0; i < len; i++)
+				sequenceValue.Add((GroupValue) group.Decode(in_Renamed, decodeTemplate, context, BitVectorReader.INFINITE_TRUE));
 			
 			return sequenceValue;
 		}
@@ -226,21 +214,21 @@ namespace OpenFAST.Template
 		
 		public override int GetHashCode()
 		{
-			int prime = 31;
+			const int prime = 31;
 			int result = 1;
 			result = prime * result + ((group == null)?0:group.GetHashCode());
 			result = prime * result + ((length == null)?0:length.GetHashCode());
 			return result;
 		}
 		
-		public  override bool Equals(System.Object obj)
+		public  override bool Equals(Object obj)
 		{
 			if (this == obj)
 				return true;
 			if (obj == null || GetType() != obj.GetType())
 				return false;
 
-			Sequence other = (Sequence) obj;
+			var other = (Sequence) obj;
 			if (!group.Equals(other.group))
 				return false;
 			if (ImplicitLength != other.ImplicitLength)
@@ -255,9 +243,9 @@ namespace OpenFAST.Template
 			return group.HasAttribute(attributeName);
 		}
 		
-		public override string GetAttribute(QName name)
+		public override string GetAttribute(QName qname)
 		{
-			return group.GetAttribute(name);
+			return group.GetAttribute(qname);
 		}
 	}
 }

@@ -20,38 +20,37 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using BitVectorBuilder = OpenFAST.BitVectorBuilder;
-using ScalarValue = OpenFAST.ScalarValue;
-using Scalar = OpenFAST.Template.Scalar;
+using OpenFAST;
+using OpenFAST.Template;
 using FASTType = OpenFAST.Template.Type.FASTType;
 
-namespace OpenFAST.Template.operator_Renamed
+namespace openfast.Template.Operator
 {
-	[Serializable]
-	public abstract class AlwaysPresentOperatorCodec:OperatorCodec
-	{
-		protected internal AlwaysPresentOperatorCodec(Operator operator_Renamed, FASTType[] types):base(operator_Renamed, types)
-		{
-		}
+    [Serializable]
+    public abstract class AlwaysPresentOperatorCodec:OperatorCodec
+    {
+        protected internal AlwaysPresentOperatorCodec(Operator operator_Renamed, FASTType[] types):base(operator_Renamed, types)
+        {
+        }
 		
-		public override bool UsesPresenceMapBit(bool optional)
-		{
-			return false;
-		}
+        public override bool UsesPresenceMapBit(bool optional)
+        {
+            return false;
+        }
 		
-		public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar scalar, BitVectorBuilder presenceMapBuilder)
-		{
-			return GetValueToEncode(value_Renamed, priorValue, scalar);
-		}
+        public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar scalar, BitVectorBuilder presenceMapBuilder)
+        {
+            return GetValueToEncode(value_Renamed, priorValue, scalar);
+        }
 		
-		public  override bool Equals(System.Object obj)
-		{
-			return obj != null && obj.GetType() == GetType();
-		}
+        public  override bool Equals(Object obj)
+        {
+            return obj != null && obj.GetType() == GetType();
+        }
 
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-	}
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }

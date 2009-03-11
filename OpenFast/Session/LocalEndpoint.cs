@@ -19,8 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-
 namespace OpenFAST.Session
 {
 	public class LocalEndpoint : Endpoint
@@ -29,14 +27,14 @@ namespace OpenFAST.Session
 		{
 			set
 			{
-				this.listener = value;
+				listener = value;
 			}
 			
 		}
 		
-		private LocalEndpoint server;
+		private readonly LocalEndpoint server;
 		private ConnectionListener listener;
-		private System.Collections.IList connections;
+		private readonly System.Collections.IList connections;
 		
 		public LocalEndpoint()
 		{
@@ -54,10 +52,9 @@ namespace OpenFAST.Session
 			{
 				lock (this)
 				{
-					System.Object tempObject;
-					tempObject = connections[0];
+				    object tempObject = connections[0];
 					connections.RemoveAt(0);
-					Connection connection = (Connection) tempObject;
+					var connection = (Connection) tempObject;
 					listener.OnConnect(connection);
 				}
 			}
@@ -65,8 +62,8 @@ namespace OpenFAST.Session
 		
 		public virtual Connection Connect()
 		{
-			LocalConnection localConnection = new LocalConnection(server, this);
-			LocalConnection remoteConnection = new LocalConnection(localConnection);
+			var localConnection = new LocalConnection();
+			var remoteConnection = new LocalConnection(localConnection);
 			lock (server)
 			{
 				server.connections.Add(remoteConnection);

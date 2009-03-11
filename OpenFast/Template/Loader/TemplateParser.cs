@@ -19,17 +19,12 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using QName = OpenFAST.QName;
-using Field = OpenFAST.Template.Field;
-using MessageTemplate = OpenFAST.Template.MessageTemplate;
-
 namespace OpenFAST.Template.Loader
 {
 	public class TemplateParser:GroupParser
 	{
 		
-		private bool loadTemplateIdFromAuxId;
+		private readonly bool loadTemplateIdFromAuxId;
 		
 		public TemplateParser(bool loadTemplateIdFromAuxId)
 		{
@@ -38,7 +33,7 @@ namespace OpenFAST.Template.Loader
 		
 		public override Field Parse(System.Xml.XmlElement templateElement, bool optional, ParsingContext context)
 		{
-			MessageTemplate messageTemplate = new MessageTemplate(getTemplateName(templateElement, context), ParseFields(templateElement, context));
+			var messageTemplate = new MessageTemplate(getTemplateName(templateElement, context), ParseFields(templateElement, context));
 			ParseMore(templateElement, messageTemplate, context);
 			if (loadTemplateIdFromAuxId && templateElement.HasAttribute("id"))
 			{
@@ -57,7 +52,7 @@ namespace OpenFAST.Template.Loader
 			return messageTemplate;
 		}
 		
-		private QName getTemplateName(System.Xml.XmlElement templateElement, ParsingContext context)
+		private static QName getTemplateName(System.Xml.XmlElement templateElement, ParsingContext context)
 		{
 			return new QName(templateElement.GetAttribute("name"), context.TemplateNamespace);
 		}

@@ -26,9 +26,9 @@ using OpenFAST;
 using OpenFAST.Codec;
 using OpenFAST.Template;
 using NUnit.Framework;
+using openfast.Template.Operator;
 using OpenFAST.Template.Type;
 using UnitTest.Test;
-using OpenFAST.Template.operator_Renamed;
 using System.IO;
 
 namespace UnitTest

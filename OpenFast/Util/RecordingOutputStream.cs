@@ -19,20 +19,17 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using ByteUtil = OpenFAST.ByteUtil;
-
 namespace OpenFAST.util
 {
 	public sealed class RecordingOutputStream:System.IO.Stream
 	{
-		private byte[] buffer = new byte[1024];
-		private int index = 0;
-		private System.IO.Stream out_Renamed;
+		private readonly byte[] buffer = new byte[1024];
+		private int index;
+		private readonly System.IO.Stream out_Renamed;
 		
 		public RecordingOutputStream(System.IO.Stream outputStream)
 		{
-			this.out_Renamed = outputStream;
+			out_Renamed = outputStream;
 		}
 		
 		public  void  WriteByte(int b)
@@ -43,7 +40,7 @@ namespace OpenFAST.util
 
 		public override  void  WriteByte(byte b)
 		{
-			WriteByte((int) b);
+			WriteByte(b);
 		}
 		
 		public override string ToString()
@@ -69,12 +66,12 @@ namespace OpenFAST.util
 		{
 		}
 
-		public override System.Int32 Read(System.Byte[] buffer, System.Int32 offset, System.Int32 count)
+		public override System.Int32 Read(System.Byte[] readBuffer, System.Int32 offset, System.Int32 count)
 		{
 			return 0;
 		}
 
-		public override void  Write(System.Byte[] buffer, System.Int32 offset, System.Int32 count)
+		public override void  Write(System.Byte[] writeBuffer, System.Int32 offset, System.Int32 count)
 		{
 		}
 

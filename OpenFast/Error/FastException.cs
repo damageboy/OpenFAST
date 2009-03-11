@@ -24,7 +24,7 @@ using System;
 namespace OpenFAST.Error
 {
 	[Serializable]
-	public class FastException:System.SystemException
+	public class FastException:SystemException
 	{
 		virtual public ErrorCode Code
 		{
@@ -34,14 +34,14 @@ namespace OpenFAST.Error
 			}
 			
 		}
-		private const long serialVersionUID = 2L;
-		private ErrorCode code;
+
+	    private readonly ErrorCode code;
 		
 		public FastException(string message, ErrorCode code):base(message)
 		{
 			this.code = code;
 		}
-		public FastException(string message, ErrorCode code, System.Exception cause):base(message, cause)
+		public FastException(string message, ErrorCode code, Exception cause):base(message, cause)
 		{
 			this.code = code;
 		}

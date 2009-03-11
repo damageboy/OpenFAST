@@ -20,16 +20,14 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
 
 namespace OpenFAST
 {
     public sealed class PipedStream : Stream
     {
-        long position = 0;
-        Stream baseStream;
+        long position;
+        readonly Stream baseStream;
         public PipedStream()
         {
             baseStream = new MemoryStream();
@@ -81,9 +79,9 @@ namespace OpenFAST
         {
             lock (baseStream)
             {
-                long oldPosition = baseStream.Position;
+                var oldPosition = baseStream.Position;
                 baseStream.Position = position;
-                int bytesRead = baseStream.Read(buffer, offset, count);
+                var bytesRead = baseStream.Read(buffer, offset, count);
                 position = position + bytesRead;
                 baseStream.Position = oldPosition;
                 return bytesRead;
@@ -102,13 +100,13 @@ namespace OpenFAST
         }
         public void Write(byte[] buffer)
         {
-            this.Write(buffer, 0, buffer.Length);
+            Write(buffer, 0, buffer.Length);
         }
         public override void Write(byte[] buffer, int offset, int count)
         {
             lock (baseStream)
             {
-                long oldPosition = baseStream.Position;
+                var oldPosition = baseStream.Position;
                 baseStream.Position = position;
                 baseStream.Write(buffer, offset, count);
                 position = position + count;

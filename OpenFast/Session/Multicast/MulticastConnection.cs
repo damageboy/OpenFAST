@@ -19,9 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using Connection = OpenFAST.Session.Connection;
-
 namespace OpenFAST.Session.Multicast
 {
 	public sealed class MulticastConnection : Connection
