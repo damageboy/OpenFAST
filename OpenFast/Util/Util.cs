@@ -22,7 +22,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using ComposedScalar = OpenFAST.Template.ComposedScalar;
 using Scalar = OpenFAST.Template.Scalar;
 using TwinValue = OpenFAST.Template.TwinValue;
-using Operator = openfast.Template.Operator.Operator;
+using Operator = OpenFAST.Template.Operator.Operator;
 using DecimalConverter = OpenFAST.Template.Type.DecimalConverter;
 using Type = OpenFAST.Template.Type.FASTType;
 

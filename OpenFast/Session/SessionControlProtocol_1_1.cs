@@ -40,7 +40,7 @@ using Scalar = OpenFAST.Template.Scalar;
 using Sequence = OpenFAST.Template.Sequence;
 using StaticTemplateReference = OpenFAST.Template.StaticTemplateReference;
 using TemplateRegistry = OpenFAST.Template.TemplateRegistry;
-using Operator = openfast.Template.Operator.Operator;
+using Operator = OpenFAST.Template.Operator.Operator;
 using Type = OpenFAST.Template.Type.FASTType;
 using OpenFAST.Template;
 

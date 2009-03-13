@@ -19,9 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnitTest.Test;
 using OpenFAST;
 using NUnit.Framework;
@@ -34,8 +31,8 @@ namespace UnitTest
         [Test]
         public void TestEquals()
         {
-            ByteVectorValue expected = new ByteVectorValue(new byte[] { 0xff });
-            ByteVectorValue actual = new ByteVectorValue(new byte[] { 0xff });
+            var expected = new ByteVectorValue(new byte[] { 0xff });
+            var actual = new ByteVectorValue(new byte[] { 0xff });
             Assert.AreEqual(expected, actual);
         }
     }

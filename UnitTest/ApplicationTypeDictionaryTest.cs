@@ -19,9 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using System.Collections.Generic;
-using System.Text;
 using NUnit.Framework;
 using OpenFAST;
 using UnitTest.Test;
@@ -37,7 +34,7 @@ namespace UnitTest
             ObjectMother.AllocationInstruction().TypeReference = new QName("AllocationInstruction");
             ObjectMother.Allocations().TypeReference = new QName("Allocation");
 
-            Context context = new Context();
+            var context = new Context();
 
             context.Store("type", ObjectMother.AllocationInstruction(), new QName("ID"), String("1234"));
 

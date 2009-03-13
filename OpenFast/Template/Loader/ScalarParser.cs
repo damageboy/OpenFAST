@@ -19,7 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using Operator = openfast.Template.Operator.Operator;
 using FASTType = OpenFAST.Template.Type.FASTType;
 using Util = OpenFAST.util.Util;
 
@@ -47,7 +46,7 @@ namespace OpenFAST.Template.Loader
 		
 		public override Field Parse(System.Xml.XmlElement fieldNode, bool optional, ParsingContext context)
 		{
-			Operator operator_Renamed = Operator.NONE;
+            Operator.Operator operator_Renamed = Operator.Operator.NONE;
 			string defaultValue = null;
 			string key = null;
 			string ns = "";
@@ -56,7 +55,7 @@ namespace OpenFAST.Template.Loader
 			{
 				if (operatorElement.HasAttribute("value"))
 					defaultValue = operatorElement.GetAttribute("value");
-				operator_Renamed = Operator.GetOperator(operatorElement.Name);
+                operator_Renamed = Operator.Operator.GetOperator(operatorElement.Name);
 				if (operatorElement.HasAttribute("key"))
 					key = operatorElement.GetAttribute("key");
 				if (operatorElement.HasAttribute("ns"))
@@ -65,7 +64,7 @@ namespace OpenFAST.Template.Loader
 					context.Dictionary = operatorElement.GetAttribute("dictionary");
 			}
 			FASTType type = GetType(fieldNode, context);
-			Scalar scalar = new Scalar(GetName(fieldNode, context), type, operator_Renamed, type.GetValue(defaultValue), optional);
+			var scalar = new Scalar(GetName(fieldNode, context), type, operator_Renamed, type.GetValue(defaultValue), optional);
 			if (fieldNode.HasAttribute("id"))
 				scalar.Id = fieldNode.GetAttribute("id");
 			if (key != null)

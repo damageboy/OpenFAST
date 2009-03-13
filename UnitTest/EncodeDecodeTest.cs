@@ -19,16 +19,13 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using System.Collections.Generic;
-using System.Text;
-using openfast.Template.Operator;
 using UnitTest.Test;
 using OpenFAST;
 using NUnit.Framework;
 using System.IO;
 using OpenFAST.Template;
 using OpenFAST.Template.Type;
+using OpenFAST.Template.Operator;
 
 namespace UnitTest
 {
@@ -38,7 +35,7 @@ namespace UnitTest
         [Test]
         public void TestComplexMessage()
         {
-            MessageTemplate template = new MessageTemplate("Company",
+            var template = new MessageTemplate("Company",
                 new Field[] {
                 new Scalar("Name", FASTType.STRING, Operator.NONE, ScalarValue.UNDEFINED, false),
                 new Scalar("Id", FASTType.U32, Operator.INCREMENT, ScalarValue.UNDEFINED, false),
@@ -53,11 +50,11 @@ namespace UnitTest
                         new Scalar("EIN", FASTType.STRING, Operator.NONE, ScalarValue.UNDEFINED, false)
                     }, false)
             });
-            Message aaaInsurance = new Message(template);
+            var aaaInsurance = new Message(template);
             aaaInsurance.SetFieldValue(1, new StringValue("AAA Insurance"));
             aaaInsurance.SetFieldValue(2, new IntegerValue(5));
 
-            SequenceValue employees = new SequenceValue(template.GetSequence(
+            var employees = new SequenceValue(template.GetSequence(
                         "Employees"));
             employees.Add(new FieldValue[] {
                 new StringValue("John"), new StringValue("Doe"),
@@ -72,12 +69,12 @@ namespace UnitTest
                 new GroupValue(template.GetGroup("Tax Information"),
                     new FieldValue[] { new StringValue("99-99999999") }));
 
-            MemoryStream outStream = new MemoryStream();
-            MessageOutputStream output = new MessageOutputStream(outStream);
+            var outStream = new MemoryStream();
+            var output = new MessageOutputStream(outStream);
             output.RegisterTemplate(1, template);
             output.WriteMessage(aaaInsurance);
 
-            Message abcBuilding = new Message(template);
+            var abcBuilding = new Message(template);
             abcBuilding.SetFieldValue(1, new StringValue("ABC Building"));
             abcBuilding.SetFieldValue(2, new IntegerValue(6));
             employees = new SequenceValue(template.GetSequence("Employees"));
@@ -95,7 +92,7 @@ namespace UnitTest
                     new FieldValue[] { new StringValue("99-99999999") }));
             output.WriteMessage(abcBuilding);
 
-            MessageInputStream input = new MessageInputStream(new MemoryStream(
+            var input = new MessageInputStream(new MemoryStream(
                         outStream.ToArray()));
             input.RegisterTemplate(1, template);
 
@@ -108,12 +105,12 @@ namespace UnitTest
         [Test]
         public void TestMultipleMessages()
         {
-            MemoryStream outStream = new MemoryStream();
-            MessageOutputStream output = new MessageOutputStream(outStream);
+            var outStream = new MemoryStream();
+            var output = new MessageOutputStream(outStream);
             output.RegisterTemplate(ObjectMother.ALLOC_INSTRCTN_TEMPLATE_ID,
                 ObjectMother.AllocationInstruction());
 
-            SequenceValue allocations = new SequenceValue(ObjectMother.AllocationInstruction()
+            var allocations = new SequenceValue(ObjectMother.AllocationInstruction()
                                                                       .GetSequence("Allocations"));
             allocations.Add(ObjectMother.NewAllocation("fortyFiveFund", 22.5, 75.0));
             allocations.Add(ObjectMother.NewAllocation("fortyFund", 24.6, 25.0));
@@ -142,7 +139,7 @@ namespace UnitTest
             output.WriteMessage(ai3);
 
             byte[] bytes = outStream.ToArray();
-            MessageInputStream input = new MessageInputStream(new MemoryStream(
+            var input = new MessageInputStream(new MemoryStream(
                         bytes));
             input.RegisterTemplate(ObjectMother.ALLOC_INSTRCTN_TEMPLATE_ID,
                 ObjectMother.AllocationInstruction());

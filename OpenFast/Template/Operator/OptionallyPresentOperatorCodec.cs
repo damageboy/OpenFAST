@@ -20,12 +20,9 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using Global = OpenFAST.Global;
-using ScalarValue = OpenFAST.ScalarValue;
-using Scalar = OpenFAST.Template.Scalar;
 using FASTType = OpenFAST.Template.Type.FASTType;
 
-namespace openfast.Template.Operator
+namespace OpenFAST.Template.Operator
 {
     [Serializable]
     public abstract class OptionallyPresentOperatorCodec:OperatorCodec
@@ -55,7 +52,7 @@ namespace openfast.Template.Operator
             }
             else
             {
-                Global.HandleError(OpenFAST.Error.FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "The field \"" + field + " is not present.");
+                Global.HandleError(Error.FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "The field \"" + field + " is not present.");
             }
 			
             return null;

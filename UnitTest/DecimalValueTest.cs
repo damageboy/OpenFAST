@@ -20,8 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using System.Collections.Generic;
-using System.Text;
 using UnitTest.Test;
 using NUnit.Framework;
 using OpenFAST.Error;
@@ -46,13 +44,13 @@ namespace UnitTest
         [Test]
         public void TestMaxValue()
         {
-            DecimalValue max = new DecimalValue(int.MaxValue, 10);
+            var max = new DecimalValue(int.MaxValue, 10);
             AssertEquals(new Decimal(2147483647e10), max.ToBigDecimal());
         }
         [Test]
         public void TestMantissaAndExponent()
         {
-            DecimalValue value = new DecimalValue(9427.55);
+            var value = new DecimalValue(9427.55);
             AssertEquals(942755, value.mantissa);
             AssertEquals(-2, value.exponent);
 

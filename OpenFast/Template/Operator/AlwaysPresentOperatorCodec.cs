@@ -20,11 +20,9 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using OpenFAST;
-using OpenFAST.Template;
 using FASTType = OpenFAST.Template.Type.FASTType;
 
-namespace openfast.Template.Operator
+namespace OpenFAST.Template.Operator
 {
     [Serializable]
     public abstract class AlwaysPresentOperatorCodec:OperatorCodec

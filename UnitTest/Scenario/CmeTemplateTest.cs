@@ -19,9 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnitTest.Test;
 using System.IO;
 using OpenFAST.Template.Loader;
@@ -36,15 +33,14 @@ namespace UnitTest.Scenario
         [Test]
         public void TestDeltas()
         {
-            StreamReader templateSource = new StreamReader("CME/templates.xml");
-            XMLMessageTemplateLoader templateLoader = new XMLMessageTemplateLoader();
-            templateLoader.LoadTemplateIdFromAuxId = true;
+            var templateSource = new StreamReader("CME/templates.xml");
+            var templateLoader = new XMLMessageTemplateLoader {LoadTemplateIdFromAuxId = true};
             templateLoader.Load(templateSource.BaseStream);
 
 
 
-            StreamReader is1 = new StreamReader("CME/messages.fast");
-            MessageInputStream mis = new MessageInputStream(is1.BaseStream);
+            var is1 = new StreamReader("CME/messages.fast");
+            var mis = new MessageInputStream(is1.BaseStream);
             mis.SetTemplateRegistry(templateLoader.TemplateRegistry);
             Message md = mis.ReadMessage();
             Assert.AreEqual(-5025.0, md.GetSequence("MDEntries")[0].GetDouble("NetChgPrevDay"), .1);

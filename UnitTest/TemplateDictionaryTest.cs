@@ -19,15 +19,12 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using System.Collections.Generic;
-using System.Text;
 using NUnit.Framework;
 using OpenFAST;
 using OpenFAST.Template;
-using openfast.Template.Operator;
 using OpenFAST.Template.Type;
 using OpenFAST.Error;
+using OpenFAST.Template.Operator;
 
 namespace UnitTest
 {

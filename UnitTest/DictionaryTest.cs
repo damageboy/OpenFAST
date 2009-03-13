@@ -19,17 +19,14 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using System.Collections.Generic;
-using System.Text;
 using OpenFAST.Session;
 using System.IO;
 using NUnit.Framework;
-using openfast.Template.Operator;
 using OpenFAST.Template.Type;
 using OpenFAST.Template;
 using OpenFAST;
 using UnitTest.Test;
+using OpenFAST.Template.Operator;
 
 namespace UnitTest
 {
@@ -40,13 +37,13 @@ namespace UnitTest
         private StreamWriter output;
         public class MyConnection : Connection
         {
-            StreamWriter outStream;
-            StreamReader inStream;
+            readonly StreamWriter outStream;
+            readonly StreamReader inStream;
 
             public MyConnection(Stream outStream)
             {
                 this.outStream = new StreamWriter(outStream);
-                this.inStream = new StreamReader(outStream);
+                inStream = new StreamReader(outStream);
 
             }
             #region Connection Members
@@ -82,25 +79,25 @@ namespace UnitTest
         }
         [Test]
         public void TestMultipleDictionaryTypes() {
-        Scalar bid = new Scalar("bid", FASTType.DECIMAL, Operator.COPY, ScalarValue.UNDEFINED, false);
-        bid.Dictionary = Dictionary_Fields.TEMPLATE;
+        var bid = new Scalar("bid", FASTType.DECIMAL, Operator.COPY, ScalarValue.UNDEFINED, false)
+                      {Dictionary = Dictionary_Fields.TEMPLATE};
 
-        MessageTemplate quote = new MessageTemplate("quote", new Field[] { bid });
+            var quote = new MessageTemplate("quote", new Field[] { bid });
 
-        Scalar bidR = new Scalar("bid", FASTType.DECIMAL, Operator.COPY, ScalarValue.UNDEFINED, false);
-        MessageTemplate request = new MessageTemplate("request",
+        var bidR = new Scalar("bid", FASTType.DECIMAL, Operator.COPY, ScalarValue.UNDEFINED, false);
+        var request = new MessageTemplate("request",
                 new Field[] { bidR });
 
-        Message quote1 = new Message(quote);
+        var quote1 = new Message(quote);
         quote1.SetFieldValue(1, new DecimalValue(10.2));
 
-        Message request1 = new Message(request);
+        var request1 = new Message(request);
         request1.SetFieldValue(1, new DecimalValue(10.3));
 
-        Message quote2 = new Message(quote);
+        var quote2 = new Message(quote);
         quote2.SetFieldValue(1, new DecimalValue(10.2));
 
-        Message request2 = new Message(request);
+        var request2 = new Message(request);
         request2.SetFieldValue(1, new DecimalValue(10.2));
 
         session.MessageOutputStream.RegisterTemplate(1, request);
@@ -110,10 +107,10 @@ namespace UnitTest
         session.MessageOutputStream.WriteMessage(quote2);
         session.MessageOutputStream.WriteMessage(request2);
 
-        String expected = "11100000 10000010 11111111 00000000 11100110 " +
-            "11100000 10000001 11111111 00000000 11100111 " +
-            "11000000 10000010 " +
-            "11100000 10000001 11111111 00000000 11100110";
+        const string expected = "11100000 10000010 11111111 00000000 11100110 " +
+                                "11100000 10000001 11111111 00000000 11100111 " +
+                                "11000000 10000010 " +
+                                "11100000 10000001 11111111 00000000 11100110";
         TestUtil.AssertBitVectorEquals(expected,TestUtil.ToByte( output));
     }
     }

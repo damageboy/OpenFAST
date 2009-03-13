@@ -20,13 +20,9 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using DecimalValue = OpenFAST.DecimalValue;
-using Global = OpenFAST.Global;
-using ScalarValue = OpenFAST.ScalarValue;
-using Scalar = OpenFAST.Template.Scalar;
 using FASTType = OpenFAST.Template.Type.FASTType;
 
-namespace openfast.Template.Operator
+namespace OpenFAST.Template.Operator
 {
     [Serializable]
     public sealed class DeltaDecimalOperatorCodec:AlwaysPresentOperatorCodec
@@ -39,7 +35,7 @@ namespace openfast.Template.Operator
         {
             if (priorVal == null)
             {
-                Global.HandleError(OpenFAST.Error.FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "The field " + field + " must have a priorValue defined.");
+                Global.HandleError(Error.FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "The field " + field + " must have a priorValue defined.");
                 return null;
             }
 			
@@ -49,7 +45,7 @@ namespace openfast.Template.Operator
                 {
                     return ScalarValue.NULL;
                 }
-                Global.HandleError(OpenFAST.Error.FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "");
+                Global.HandleError(Error.FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "");
                 return null;
             }
 			
@@ -68,7 +64,7 @@ namespace openfast.Template.Operator
         {
             if (priorVal == null)
             {
-                Global.HandleError(OpenFAST.Error.FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "The field " + field + " must have a priorValue defined.");
+                Global.HandleError(Error.FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "The field " + field + " must have a priorValue defined.");
                 return null;
             }
 			

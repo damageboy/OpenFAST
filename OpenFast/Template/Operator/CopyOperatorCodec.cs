@@ -20,12 +20,9 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using Global = OpenFAST.Global;
-using ScalarValue = OpenFAST.ScalarValue;
-using Scalar = OpenFAST.Template.Scalar;
 using FASTType = OpenFAST.Template.Type.FASTType;
 
-namespace openfast.Template.Operator
+namespace OpenFAST.Template.Operator
 {
     [Serializable]
     public sealed class CopyOperatorCodec:OptionallyPresentOperatorCodec
@@ -56,7 +53,7 @@ namespace openfast.Template.Operator
                 return null;
             }
 			
-            Global.HandleError(OpenFAST.Error.FastConstants.D5_NO_DEFAULT_VALUE, "No default value for " + field);
+            Global.HandleError(Error.FastConstants.D5_NO_DEFAULT_VALUE, "No default value for " + field);
 			
             return null;
         }

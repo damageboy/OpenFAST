@@ -21,8 +21,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System;
 using FastException = OpenFAST.Error.FastException;
-using Operator = openfast.Template.Operator.Operator;
-using OperatorCodec = openfast.Template.Operator.OperatorCodec;
+using OperatorCodec = OpenFAST.Template.Operator.OperatorCodec;
 using FASTType = OpenFAST.Template.Type.FASTType;
 using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
 using RecordingInputStream = OpenFAST.util.RecordingInputStream;
@@ -56,7 +55,7 @@ namespace OpenFAST.Template
 			
 		}
 
-		public Operator Operator
+        public Operator.Operator Operator
 		{
 			get
 			{
@@ -126,18 +125,20 @@ namespace OpenFAST.Template
 			
 		}
 
-	    private readonly Operator operator_Renamed;
+        private readonly Operator.Operator operator_Renamed;
 		private readonly OperatorCodec operatorCodec;
 		private readonly FASTType type;
 		private readonly TypeCodec typeCodec;
 		private string dictionary;
 		private ScalarValue defaultValue;
 		private readonly ScalarValue initialValue;
-		
-		public Scalar(string name, FASTType type, Operator operator_Renamed, ScalarValue defaultValue, bool optional):this(new QName(name), type, operator_Renamed, defaultValue, optional)
+
+        public Scalar(string name, FASTType type, Operator.Operator operator_Renamed, ScalarValue defaultValue, bool optional)
+            : this(new QName(name), type, operator_Renamed, defaultValue, optional)
 		{
 		}
-		public Scalar(QName name, FASTType type, Operator operator_Renamed, ScalarValue defaultValue, bool optional):base(name, optional)
+        public Scalar(QName name, FASTType type, Operator.Operator operator_Renamed, ScalarValue defaultValue, bool optional)
+            : base(name, optional)
 		{
 			InitBlock();
 			this.operator_Renamed = operator_Renamed;
@@ -238,7 +239,7 @@ namespace OpenFAST.Template
 					value_Renamed = Decode(previousValue);
 				}
 				ValidateDecodedValueIsCorrectForType(value_Renamed, type);
-				if (!((Operator == Operator.DELTA) && (value_Renamed == null)))
+                if (!((Operator == Template.Operator.Operator.DELTA) && (value_Renamed == null)))
 				{
 					context.Store(Dictionary, decodeTemplate, Key, value_Renamed);
 				}

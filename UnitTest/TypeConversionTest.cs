@@ -19,9 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnitTest.Test;
 using NUnit.Framework;
 using OpenFAST.Template;
@@ -47,7 +44,7 @@ namespace UnitTest
                     "  <decimal name=\"decimal\"/>" +
                     "</template>");
 
-            Message message = new Message(template);
+            var message = new Message(template);
             message.SetByteVector("string", byt("7f001a"));
             message.SetDecimal("uint", 150.0);
             message.SetString("byte", "4");

@@ -20,7 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using Operator = openfast.Template.Operator.Operator;
 using FASTType = OpenFAST.Template.Type.FASTType;
 
 namespace OpenFAST.Template
@@ -122,7 +121,7 @@ namespace OpenFAST.Template
 		
 		private static Scalar CreateLength(QName name, bool optional)
 		{
-			return new Scalar(Global.CreateImplicitName(name), FASTType.U32, Operator.NONE, ScalarValue.UNDEFINED, optional);
+            return new Scalar(Global.CreateImplicitName(name), FASTType.U32, Operator.Operator.NONE, ScalarValue.UNDEFINED, optional);
 		}
 		
 		public virtual Field GetField(int index)

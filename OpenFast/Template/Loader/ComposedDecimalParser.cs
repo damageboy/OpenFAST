@@ -19,7 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using Operator = openfast.Template.Operator.Operator;
 using FASTType = OpenFAST.Template.Type.FASTType;
 using Util = OpenFAST.util.Util;
 
@@ -106,8 +105,8 @@ namespace OpenFAST.Template.Loader
 				if (operatorElement.HasAttribute("dictionary"))
 					exponentDictionary = operatorElement.GetAttribute("dictionary");
 			}
-			
-			ComposedScalar scalar = Util.ComposedDecimal(name, Operator.GetOperator(exponentOperator), exponentDefaultValue, Operator.GetOperator(mantissaOperator), mantissaDefaultValue, optional);
+
+            ComposedScalar scalar = Util.ComposedDecimal(name, Operator.Operator.GetOperator(exponentOperator), exponentDefaultValue, Operator.Operator.GetOperator(mantissaOperator), mantissaDefaultValue, optional);
 			
 			Scalar exponent = scalar.Fields[0];
 			exponent.Dictionary = exponentDictionary;

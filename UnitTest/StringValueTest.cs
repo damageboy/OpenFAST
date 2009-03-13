@@ -20,8 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using System.Collections.Generic;
-using System.Text;
 using UnitTest.Test;
 using OpenFAST;
 using NUnit.Framework;
@@ -56,7 +54,7 @@ namespace UnitTest
         public void TestToShort()
         {
             ScalarValue value = String("128");
-            Assert.AreEqual((short)0x80, value.ToShort());
+            Assert.AreEqual(0x80, value.ToShort());
         }
         [Test]
         public void TestToShortWithLargeValue()

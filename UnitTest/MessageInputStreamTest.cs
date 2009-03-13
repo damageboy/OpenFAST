@@ -19,9 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnitTest.Test;
 using OpenFAST.Error;
 using NUnit.Framework;
@@ -35,7 +32,7 @@ namespace UnitTest
         [Test]
         public void TestReadMessage()
         {
-            MessageInputStream input = new MessageInputStream(BitStream("11000000 10000100"));
+            var input = new MessageInputStream(BitStream("11000000 10000100"));
             try
             {
                 input.ReadMessage();

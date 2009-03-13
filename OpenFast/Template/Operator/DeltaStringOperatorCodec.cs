@@ -20,15 +20,10 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using Global = OpenFAST.Global;
-using ScalarValue = OpenFAST.ScalarValue;
-using StringValue = OpenFAST.StringValue;
-using Scalar = OpenFAST.Template.Scalar;
-using TwinValue = OpenFAST.Template.TwinValue;
 using FASTType = OpenFAST.Template.Type.FASTType;
 using Util = OpenFAST.util.Util;
 
-namespace openfast.Template.Operator
+namespace OpenFAST.Template.Operator
 {
     [Serializable]
     sealed class DeltaStringOperatorCodec:AlwaysPresentOperatorCodec
@@ -46,7 +41,7 @@ namespace openfast.Template.Operator
 			
             if (priorValue == null)
             {
-                Global.HandleError(OpenFAST.Error.FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "The field " + field + " must have a priorValue defined.");
+                Global.HandleError(Error.FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "The field " + field + " must have a priorValue defined.");
                 return null;
             }
 			
@@ -67,7 +62,7 @@ namespace openfast.Template.Operator
 			
             if (diffValue.first.ToInt() > base_Renamed.ToString().Length)
             {
-                Global.HandleError(OpenFAST.Error.FastConstants.D7_SUBTRCTN_LEN_LONG, "The string diff <" + diffValue + "> cannot be applied to the base value \"" + base_Renamed + "\" because the subtraction length is too long.");
+                Global.HandleError(Error.FastConstants.D7_SUBTRCTN_LEN_LONG, "The string diff <" + diffValue + "> cannot be applied to the base value \"" + base_Renamed + "\" because the subtraction length is too long.");
             }
             return Util.ApplyDifference((StringValue) base_Renamed, diffValue);
         }

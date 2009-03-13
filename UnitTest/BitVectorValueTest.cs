@@ -19,12 +19,8 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using System.Collections.Generic;
-using System.Text;
 using NUnit.Framework;
 using OpenFAST;
-using UnitTest.Test;
 
 namespace UnitTest
 {
@@ -34,9 +30,9 @@ namespace UnitTest
         [Test]
         public void TestEquals()
         {
-            BitVectorValue expected = new BitVectorValue(new BitVector(
+            var expected = new BitVectorValue(new BitVector(
                         new byte[] { 0xf0 }));
-            BitVectorValue actual = new BitVectorValue(new BitVector(7));
+            var actual = new BitVectorValue(new BitVector(7));
             actual.value_Renamed.set_Renamed(0);
             actual.value_Renamed.set_Renamed(1);
             actual.value_Renamed.set_Renamed(2);

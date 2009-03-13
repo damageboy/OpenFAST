@@ -20,15 +20,10 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using BitVectorBuilder = OpenFAST.BitVectorBuilder;
-using FieldValue = OpenFAST.FieldValue;
-using Global = OpenFAST.Global;
-using ScalarValue = OpenFAST.ScalarValue;
-using Scalar = OpenFAST.Template.Scalar;
 using FASTType = OpenFAST.Template.Type.FASTType;
 using Key = OpenFAST.util.Key;
 
-namespace openfast.Template.Operator
+namespace OpenFAST.Template.Operator
 {
     [Serializable]
     public abstract class OperatorCodec
@@ -74,7 +69,7 @@ namespace openfast.Template.Operator
 			
             if (!OPERATOR_MAP.ContainsKey(key))
             {
-                Global.HandleError(OpenFAST.Error.FastConstants.S2_OPERATOR_TYPE_INCOMP, "The operator \"" + operator_Renamed + "\" is not compatible with type \"" + type + "\"");
+                Global.HandleError(Error.FastConstants.S2_OPERATOR_TYPE_INCOMP, "The operator \"" + operator_Renamed + "\" is not compatible with type \"" + type + "\"");
                 throw new ArgumentException();
             }
 			

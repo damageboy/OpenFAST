@@ -19,7 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using Operator = openfast.Template.Operator.Operator;
 using FASTType = OpenFAST.Template.Type.FASTType;
 
 namespace OpenFAST.Template.Loader
@@ -83,7 +82,7 @@ namespace OpenFAST.Template.Loader
 			
 			if (lengthElements.Count == 0)
 			{
-				var implicitLength = new Scalar(Global.CreateImplicitName(name), FASTType.U32, Operator.NONE, ScalarValue.UNDEFINED, optional)
+                var implicitLength = new Scalar(Global.CreateImplicitName(name), FASTType.U32, Operator.Operator.NONE, ScalarValue.UNDEFINED, optional)
 				                         {Dictionary = parent.Dictionary};
 			    return implicitLength;
 			}

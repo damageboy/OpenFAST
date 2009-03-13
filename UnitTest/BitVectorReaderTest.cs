@@ -19,9 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using System.Collections.Generic;
-using System.Text;
 using OpenFAST;
 using NUnit.Framework;
 
@@ -34,7 +31,7 @@ namespace UnitTest
         [Test]
         public void TestRead()
         {
-            BitVectorReader reader = new BitVectorReader(new BitVector(ByteUtil.ConvertBitStringToFastByteArray("11000000")));
+            var reader = new BitVectorReader(new BitVector(ByteUtil.ConvertBitStringToFastByteArray("11000000")));
             Assert.IsTrue(reader.Read());
             Assert.IsFalse(reader.Read());
             Assert.IsFalse(reader.HasMoreBitsSet());

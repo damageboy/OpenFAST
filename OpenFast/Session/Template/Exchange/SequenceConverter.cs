@@ -24,7 +24,7 @@ using Group = OpenFAST.Template.Group;
 using Scalar = OpenFAST.Template.Scalar;
 using Sequence = OpenFAST.Template.Sequence;
 using TemplateRegistry = OpenFAST.Template.TemplateRegistry;
-using Operator = openfast.Template.Operator.Operator;
+using Operator = OpenFAST.Template.Operator.Operator;
 using Type = OpenFAST.Template.Type.FASTType;
 
 namespace OpenFAST.Session.Template.Exchange

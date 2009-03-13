@@ -20,7 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using Operator = openfast.Template.Operator.Operator;
 using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
 
 namespace OpenFAST.Template.Type
@@ -36,9 +35,9 @@ namespace OpenFAST.Template.Type
 			this.codec = codec;
 			this.nullableCodec = nullableCodec;
 		}
-		
 
-		public override TypeCodec GetCodec(Operator operator_Renamed, bool optional)
+
+        public override TypeCodec GetCodec(Operator.Operator operator_Renamed, bool optional)
 		{
 			if (optional)
 				return nullableCodec;

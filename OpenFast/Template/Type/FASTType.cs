@@ -20,7 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using Operator = openfast.Template.Operator.Operator;
 using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
 using Util = OpenFAST.util.Util;
 using System.Collections;
@@ -74,7 +73,7 @@ namespace OpenFAST.Template.Type
 		{
 			return value_Renamed.ToString();
 		}
-		public abstract TypeCodec GetCodec(Operator operator_Renamed, bool optional);
+        public abstract TypeCodec GetCodec(Operator.Operator operator_Renamed, bool optional);
 		public abstract ScalarValue GetValue(string value_Renamed);
 		public abstract bool IsValueOf(ScalarValue previousValue);
 		public virtual void  ValidateValue(ScalarValue value_Renamed)

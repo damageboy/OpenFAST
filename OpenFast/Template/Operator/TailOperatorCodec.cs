@@ -20,13 +20,9 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using Global = OpenFAST.Global;
-using ScalarValue = OpenFAST.ScalarValue;
-using StringValue = OpenFAST.StringValue;
-using Scalar = OpenFAST.Template.Scalar;
 using FASTType = OpenFAST.Template.Type.FASTType;
 
-namespace openfast.Template.Operator
+namespace OpenFAST.Template.Operator
 {
     [Serializable]
     sealed class TailOperatorCodec:OperatorCodec
@@ -65,7 +61,7 @@ namespace openfast.Template.Operator
                 return value_Renamed;
             if (val.Length < prior.Length)
             {
-                Global.HandleError(OpenFAST.Error.FastConstants.D3_CANT_ENCODE_VALUE, "The value " + val + " cannot be encoded by a tail operator with previous value " + priorValue);
+                Global.HandleError(Error.FastConstants.D3_CANT_ENCODE_VALUE, "The value " + val + " cannot be encoded by a tail operator with previous value " + priorValue);
             }
 			
             while (index < val.Length && val[index] == prior[index])
@@ -82,7 +78,7 @@ namespace openfast.Template.Operator
 			
             if ((previousValue == null) && !field.Optional)
             {
-                Global.HandleError(OpenFAST.Error.FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "");
+                Global.HandleError(Error.FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "");
                 return null;
             }
             if ((previousValue == null) || previousValue.Undefined)
@@ -117,7 +113,7 @@ namespace openfast.Template.Operator
                 value_Renamed = (field.DefaultValue.Undefined)?null:field.DefaultValue;
             if (value_Renamed == null && !field.Optional)
             {
-                Global.HandleError(OpenFAST.Error.FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "The field " + field + " was not present.");
+                Global.HandleError(Error.FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "The field " + field + " was not present.");
             }
             return value_Renamed;
         }

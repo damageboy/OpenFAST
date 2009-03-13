@@ -19,16 +19,13 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using System.Collections.Generic;
-using System.Text;
-using openfast.Template.Operator;
 using UnitTest.Test;
 using NUnit.Framework;
 using OpenFAST.Template;
 using OpenFAST.Codec;
 using OpenFAST;
 using OpenFAST.Template.Type;
+using OpenFAST.Template.Operator;
 
 namespace UnitTest.Scenario
 {
@@ -36,17 +33,16 @@ namespace UnitTest.Scenario
 public class ErrorCasesTest : OpenFastTestCase {
         [Test]
 	public void TestMantissaIsntPresentWhenExponentIsNull() {
-        String templateXml = 
-	        "<template name=\"SampleTemplate\">" +
-	        "  <decimal name=\"bid\" presence=\"optional\">" +
-	        "    <mantissa><copy /></mantissa>" +
-	        "    <exponent><copy value=\"-2\" /></exponent>" +
-	        "  </decimal>" +
-	        "</template>";
+        const string templateXml = "<template name=\"SampleTemplate\">" +
+                                   "  <decimal name=\"bid\" presence=\"optional\">" +
+                                   "    <mantissa><copy /></mantissa>" +
+                                   "    <exponent><copy value=\"-2\" /></exponent>" +
+                                   "  </decimal>" +
+                                   "</template>";
 		MessageTemplate template = Template(templateXml);
 		FastEncoder encoder = Encoder(template);
 		
-		Message message = new Message(template);
+		var message = new Message(template);
 		message.SetDecimal(1, 0.63);
 		AssertEquals("11010000 10000001 10111111", encoder.Encode(message));
 		
@@ -55,10 +51,10 @@ public class ErrorCasesTest : OpenFastTestCase {
 	}
 	[Test]
 	public void TestEncodeDecodeNestedSequence() {
-		Sequence nestedSequence = new Sequence("nested", new Field[] { new Scalar("string", FASTType.ASCII, Operator.COPY, ScalarValue.UNDEFINED, false) }, true);
-		Group group = new Group("group", new Field[] { nestedSequence }, true);
-		MessageTemplate t = new MessageTemplate("template", new Field[] { group });
-		Message message = new Message(t);
+		var nestedSequence = new Sequence("nested", new Field[] { new Scalar("string", FASTType.ASCII, Operator.COPY, ScalarValue.UNDEFINED, false) }, true);
+		var group = new Group("group", new Field[] { nestedSequence }, true);
+		var t = new MessageTemplate("template", new Field[] { group });
+		var message = new Message(t);
 		
 		FastEncoder encoder = Encoder(t);
 		AssertEquals("11000000 10000001", encoder.Encode(message));
@@ -68,25 +64,25 @@ public class ErrorCasesTest : OpenFastTestCase {
 	}
 	[Test]
 	public void TestDictionaryNotInherited() {
-		String templateDef = "<template name=\"OptDeltaDec\" id=\"58\" dictionary=\"template\">" +
-	    "    <string name=\"desc\"/>" +
-	    "    <decimal id=\"1\" presence=\"optional\" name=\"Line1\">" + 
-	    "         <exponent><copy/></exponent>" + 
-	    "         <mantissa><copy/></mantissa>" + 
-	    "    </decimal>" +
-	    "    <decimal id=\"1\" presence=\"optional\" name=\"Line2\">" +
-	    "         <exponent><copy/></exponent>" + 
-	    "         <mantissa><copy/></mantissa>" + 
-	    "    </decimal>    " +
-	    "    <decimal id=\"1\" presence=\"optional\" name=\"Line3\">" +
-	    "         <exponent><copy/></exponent> " +
-	    "         <mantissa><copy/></mantissa>" + 
-	    "    </decimal>" +    
-        "</template>";
+		const string templateDef = "<template name=\"OptDeltaDec\" id=\"58\" dictionary=\"template\">" +
+		                           "    <string name=\"desc\"/>" +
+		                           "    <decimal id=\"1\" presence=\"optional\" name=\"Line1\">" + 
+		                           "         <exponent><copy/></exponent>" + 
+		                           "         <mantissa><copy/></mantissa>" + 
+		                           "    </decimal>" +
+		                           "    <decimal id=\"1\" presence=\"optional\" name=\"Line2\">" +
+		                           "         <exponent><copy/></exponent>" + 
+		                           "         <mantissa><copy/></mantissa>" + 
+		                           "    </decimal>    " +
+		                           "    <decimal id=\"1\" presence=\"optional\" name=\"Line3\">" +
+		                           "         <exponent><copy/></exponent> " +
+		                           "         <mantissa><copy/></mantissa>" + 
+		                           "    </decimal>" +    
+		                           "</template>";
 		
 		MessageTemplate template = Template(templateDef);
 
-        Message m = new Message(template);
+        var m = new Message(template);
         
         m.SetString("desc", "prev");
         m.SetDecimal("Line2", 9427.61 );     

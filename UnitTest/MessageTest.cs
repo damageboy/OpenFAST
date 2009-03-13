@@ -19,14 +19,11 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using System.Collections.Generic;
-using System.Text;
 using NUnit.Framework;
 using OpenFAST.Template;
-using openfast.Template.Operator;
 using OpenFAST.Template.Type;
 using OpenFAST;
+using OpenFAST.Template.Operator;
 
 namespace UnitTest
 {
@@ -34,7 +31,7 @@ namespace UnitTest
 public class MessageTest {
     [Test]
     public void TestEquals() {
-        MessageTemplate template = new MessageTemplate("",
+        var template = new MessageTemplate("",
                 new Field[] {
                     new Scalar("1", FASTType.U32, Operator.COPY, ScalarValue.UNDEFINED, false)
                 });
@@ -48,14 +45,14 @@ public class MessageTest {
     }
     [Test]
     public void TestNotEquals() {
-        MessageTemplate template = new MessageTemplate("",
+        var template = new MessageTemplate("",
                 new Field[] {
                     new Scalar("1", FASTType.U32, Operator.COPY, ScalarValue.UNDEFINED, false)
                 });
-        Message message = new Message(template);
+        var message = new Message(template);
         message.SetInteger(1, 2);
 
-        Message other = new Message(template);
+        var other = new Message(template);
         Assert.IsFalse(message.equals(other));
         Assert.IsFalse(other.equals(message));
         other.SetInteger(1, 1);

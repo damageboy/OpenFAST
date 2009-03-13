@@ -20,12 +20,10 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using System.Collections.Generic;
-using System.Text;
 using OpenFAST.Template;
-using openfast.Template.Operator;
 using OpenFAST;
 using OpenFAST.Template.Type;
+using OpenFAST.Template.Operator;
 
 namespace UnitTest.Test
 {
@@ -85,7 +83,7 @@ namespace UnitTest.Test
 
         public static Message Quote(double bid, double ask)
         {
-            Message quote = new Message(QuoteTemplate());
+            var quote = new Message(QuoteTemplate());
             quote.SetDecimal(1, bid);
             quote.SetDecimal(2, ask);
 
@@ -96,7 +94,7 @@ namespace UnitTest.Test
             double quantity, double averagePrice, GroupValue instrument,
             SequenceValue allocations)
         {
-            Message allocInstrctn = new Message(AllocationInstruction());
+            var allocInstrctn = new Message(AllocationInstruction());
             allocInstrctn.SetFieldValue(1, allocations);
             allocInstrctn.SetFieldValue(2, instrument);
             allocInstrctn.SetFieldValue(3, new StringValue(id));
@@ -179,7 +177,7 @@ namespace UnitTest.Test
 
         private static SequenceValue BasicAllocations()
         {
-            SequenceValue value = new SequenceValue(AllocationInstruction().GetSequence("Allocations"));
+            var value = new SequenceValue(AllocationInstruction().GetSequence("Allocations"));
             value.Add(NewAllocation("general", 101.0, 15.0));
             value.Add(NewAllocation("specific", 103.0, 10.0));
             return value;

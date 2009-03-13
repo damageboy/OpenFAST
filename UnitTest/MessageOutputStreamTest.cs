@@ -19,9 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System;
-using System.Collections.Generic;
-using System.Text;
 using NUnit.Framework;
 using OpenFAST;
 using System.IO;
@@ -96,8 +93,8 @@ namespace UnitTest
         [Test]
         public void TestWriteMessageMessage()
         {
-            MemoryStream byteOut = new MemoryStream();
-            MessageOutputStream output = new MessageOutputStream(byteOut);
+            var byteOut = new MemoryStream();
+            var output = new MessageOutputStream(byteOut);
             try
             {
                 output.WriteMessage(new Message(ObjectMother.AllocationInstruction()));
@@ -111,7 +108,7 @@ namespace UnitTest
         [Test]
         public void TestIOErrorOnWrite()
         {
-            MessageOutputStream output = new MessageOutputStream(new IOExceptionThrowingStream());
+            var output = new MessageOutputStream(new IOExceptionThrowingStream());
             output.RegisterTemplate(ObjectMother.ALLOC_INSTRCTN_TEMPLATE_ID, ObjectMother.AllocationInstruction());
             Message message = ObjectMother.BasicAllocationInstruction();
             try
@@ -127,7 +124,7 @@ namespace UnitTest
         [Test]
         public void TestIOErrorOnClose()
         {
-            MessageOutputStream output = new MessageOutputStream(new IOExceptionOnCloseStream());
+            var output = new MessageOutputStream(new IOExceptionOnCloseStream());
             output.RegisterTemplate(ObjectMother.ALLOC_INSTRCTN_TEMPLATE_ID, ObjectMother.AllocationInstruction());
             Message message = ObjectMother.BasicAllocationInstruction();
             try
@@ -176,7 +173,7 @@ namespace UnitTest
         {
             get
             {
-                return 0; ;
+                return 0;
             }
             set
             {

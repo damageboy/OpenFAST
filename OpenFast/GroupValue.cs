@@ -24,7 +24,7 @@ using Field = OpenFAST.Template.Field;
 using Group = OpenFAST.Template.Group;
 using LongValue = OpenFAST.Template.LongValue;
 using Scalar = OpenFAST.Template.Scalar;
-using Operator = openfast.Template.Operator.Operator;
+using Operator = OpenFAST.Template.Operator.Operator;
 using Type = OpenFAST.Template.Type.FASTType;
 using ArrayIterator = OpenFAST.util.ArrayIterator;
 using System.Text;

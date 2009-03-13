@@ -20,12 +20,9 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using Global = OpenFAST.Global;
-using ScalarValue = OpenFAST.ScalarValue;
-using Scalar = OpenFAST.Template.Scalar;
 using FASTType = OpenFAST.Template.Type.FASTType;
 
-namespace openfast.Template.Operator
+namespace OpenFAST.Template.Operator
 {
     [Serializable]
     public class Operator
@@ -58,7 +55,7 @@ namespace openfast.Template.Operator
             {
                 if (scalar.DefaultValue.Undefined)
                 {
-                    Global.HandleError(OpenFAST.Error.FastConstants.S4_NO_INITIAL_VALUE_FOR_CONST, "The field " + scalar + " must have a default value defined.");
+                    Global.HandleError(Error.FastConstants.S4_NO_INITIAL_VALUE_FOR_CONST, "The field " + scalar + " must have a default value defined.");
                 }
             }
 			
@@ -83,7 +80,7 @@ namespace openfast.Template.Operator
             {
                 if (!scalar.Optional && scalar.DefaultValue.Undefined)
                 {
-                    Global.HandleError(OpenFAST.Error.FastConstants.S5_NO_INITVAL_MNDTRY_DFALT, "The field " + scalar + " must have a default value defined.");
+                    Global.HandleError(Error.FastConstants.S5_NO_INITVAL_MNDTRY_DFALT, "The field " + scalar + " must have a default value defined.");
                 }
             }
 			

@@ -23,7 +23,7 @@ using Field = OpenFAST.Template.Field;
 using Group = OpenFAST.Template.Group;
 using MessageTemplate = OpenFAST.Template.MessageTemplate;
 using Scalar = OpenFAST.Template.Scalar;
-using Operator = openfast.Template.Operator.Operator;
+using Operator = OpenFAST.Template.Operator.Operator;
 
 namespace OpenFAST.Session.Template.Exchange
 {
