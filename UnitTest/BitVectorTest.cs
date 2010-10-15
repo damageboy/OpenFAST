@@ -33,18 +33,15 @@ namespace UnitTest
         {
             var vector = new BitVector(new byte[] { 0x00, 0x00 });
             Assert.IsTrue(vector.Overlong);
-            TestUtil.AssertByteArrayEquals(new byte[] { 0x80 } ,
-                vector.TruncatedBytes);
+            Assert.AreEqual(new byte[] { 0x80 }, vector.TruncatedBytes);
 
             vector = new BitVector(new byte[] { 0x00 });
             Assert.IsFalse(vector.Overlong);
-            TestUtil.AssertByteArrayEquals(new byte[] { 0x80 },
-                vector.TruncatedBytes);
+            Assert.AreEqual(new byte[] { 0x80 }, vector.TruncatedBytes);
 
             vector = new BitVector(new byte[] { 0x60, 0x00, 0x04, 0x00 });
             Assert.IsTrue(vector.Overlong);
-            TestUtil.AssertByteArrayEquals(new byte[] { 0x60, 0x00, 0x84 },
-                vector.TruncatedBytes);
+            Assert.AreEqual(new byte[] { 0x60, 0x00, 0x84 }, vector.TruncatedBytes);
         }
 
         [Test]
