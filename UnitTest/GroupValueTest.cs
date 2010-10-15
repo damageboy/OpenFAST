@@ -26,7 +26,7 @@ using UnitTest.Test;
 namespace UnitTest
 {
     [TestFixture]
-    public class GroupValueTest 
+    public class GroupValueTest
     {
         [Test]
         public void TestEquals()

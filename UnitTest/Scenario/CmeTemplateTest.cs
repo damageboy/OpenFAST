@@ -19,11 +19,11 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using UnitTest.Test;
 using System.IO;
-using OpenFAST.Template.Loader;
-using OpenFAST;
 using NUnit.Framework;
+using OpenFAST;
+using OpenFAST.Template.Loader;
+using UnitTest.Test;
 
 namespace UnitTest.Scenario
 {
@@ -36,7 +36,6 @@ namespace UnitTest.Scenario
             var templateSource = new StreamReader("CME/templates.xml");
             var templateLoader = new XMLMessageTemplateLoader {LoadTemplateIdFromAuxId = true};
             templateLoader.Load(templateSource.BaseStream);
-
 
 
             var is1 = new StreamReader("CME/messages.fast");

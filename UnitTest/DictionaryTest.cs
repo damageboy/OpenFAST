@@ -19,33 +19,46 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using OpenFAST.Session;
 using System.IO;
 using NUnit.Framework;
-using OpenFAST.Template.Type;
-using OpenFAST.Template;
 using OpenFAST;
-using UnitTest.Test;
+using OpenFAST.Session;
+using OpenFAST.Template;
 using OpenFAST.Template.Operator;
+using OpenFAST.Template.Type;
+using UnitTest.Test;
 
 namespace UnitTest
 {
     [TestFixture]
     public class DictionaryTest
     {
+        #region Setup/Teardown
+
+        [SetUp]
+        protected void setUp()
+        {
+            output = new StreamWriter(new MemoryStream());
+            session = new Session(new MyConnection(output.BaseStream), SessionConstants.SCP_1_0,
+                                  TemplateRegistry_Fields.NULL, TemplateRegistry_Fields.NULL);
+        }
+
+        #endregion
+
         private Session session;
         private StreamWriter output;
+
         public class MyConnection : Connection
         {
-            readonly StreamWriter outStream;
-            readonly StreamReader inStream;
+            private readonly StreamReader inStream;
+            private readonly StreamWriter outStream;
 
             public MyConnection(Stream outStream)
             {
                 this.outStream = new StreamWriter(outStream);
                 inStream = new StreamReader(outStream);
-
             }
+
             #region Connection Members
 
             public StreamReader InputStream
@@ -71,47 +84,43 @@ namespace UnitTest
 
             #endregion
         }
-        [SetUp]
-        protected void setUp()
-        {
-            output = new StreamWriter(new MemoryStream());
-            session = new Session(new MyConnection(output.BaseStream), SessionConstants.SCP_1_0, TemplateRegistry_Fields.NULL, TemplateRegistry_Fields.NULL);
-        }
+
         [Test]
-        public void TestMultipleDictionaryTypes() {
-        var bid = new Scalar("bid", FASTType.DECIMAL, Operator.COPY, ScalarValue.UNDEFINED, false)
-                      {Dictionary = Dictionary_Fields.TEMPLATE};
+        public void TestMultipleDictionaryTypes()
+        {
+            var bid = new Scalar("bid", FASTType.DECIMAL, Operator.COPY, ScalarValue.UNDEFINED, false)
+                          {Dictionary = Dictionary_Fields.TEMPLATE};
 
-            var quote = new MessageTemplate("quote", new Field[] { bid });
+            var quote = new MessageTemplate("quote", new Field[] {bid});
 
-        var bidR = new Scalar("bid", FASTType.DECIMAL, Operator.COPY, ScalarValue.UNDEFINED, false);
-        var request = new MessageTemplate("request",
-                new Field[] { bidR });
+            var bidR = new Scalar("bid", FASTType.DECIMAL, Operator.COPY, ScalarValue.UNDEFINED, false);
+            var request = new MessageTemplate("request",
+                                              new Field[] {bidR});
 
-        var quote1 = new Message(quote);
-        quote1.SetFieldValue(1, new DecimalValue(10.2));
+            var quote1 = new Message(quote);
+            quote1.SetFieldValue(1, new DecimalValue(10.2));
 
-        var request1 = new Message(request);
-        request1.SetFieldValue(1, new DecimalValue(10.3));
+            var request1 = new Message(request);
+            request1.SetFieldValue(1, new DecimalValue(10.3));
 
-        var quote2 = new Message(quote);
-        quote2.SetFieldValue(1, new DecimalValue(10.2));
+            var quote2 = new Message(quote);
+            quote2.SetFieldValue(1, new DecimalValue(10.2));
 
-        var request2 = new Message(request);
-        request2.SetFieldValue(1, new DecimalValue(10.2));
+            var request2 = new Message(request);
+            request2.SetFieldValue(1, new DecimalValue(10.2));
 
-        session.MessageOutputStream.RegisterTemplate(1, request);
-        session.MessageOutputStream.RegisterTemplate(2, quote);
-        session.MessageOutputStream.WriteMessage(quote1);
-        session.MessageOutputStream.WriteMessage(request1);
-        session.MessageOutputStream.WriteMessage(quote2);
-        session.MessageOutputStream.WriteMessage(request2);
+            session.MessageOutputStream.RegisterTemplate(1, request);
+            session.MessageOutputStream.RegisterTemplate(2, quote);
+            session.MessageOutputStream.WriteMessage(quote1);
+            session.MessageOutputStream.WriteMessage(request1);
+            session.MessageOutputStream.WriteMessage(quote2);
+            session.MessageOutputStream.WriteMessage(request2);
 
-        const string expected = "11100000 10000010 11111111 00000000 11100110 " +
-                                "11100000 10000001 11111111 00000000 11100111 " +
-                                "11000000 10000010 " +
-                                "11100000 10000001 11111111 00000000 11100110";
-        TestUtil.AssertBitVectorEquals(expected,TestUtil.ToByte( output));
-    }
+            const string expected = "11100000 10000010 11111111 00000000 11100110 " +
+                                    "11100000 10000001 11111111 00000000 11100111 " +
+                                    "11000000 10000010 " +
+                                    "11100000 10000001 11111111 00000000 11100110";
+            TestUtil.AssertBitVectorEquals(expected, TestUtil.ToByte(output));
+        }
     }
 }

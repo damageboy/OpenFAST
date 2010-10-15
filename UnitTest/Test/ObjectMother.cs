@@ -20,10 +20,10 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using OpenFAST.Template;
 using OpenFAST;
-using OpenFAST.Template.Type;
+using OpenFAST.Template;
 using OpenFAST.Template.Operator;
+using OpenFAST.Template.Type;
 
 namespace UnitTest.Test
 {
@@ -43,10 +43,13 @@ namespace UnitTest.Test
             if (_quoteTemplate == null)
             {
                 _quoteTemplate = new MessageTemplate("Quote",
-                        new Field[] {
-                        new Scalar("bid", FASTType.DECIMAL, Operator.DELTA, ScalarValue.UNDEFINED, false),
-                        new Scalar("ask", FASTType.DECIMAL, Operator.DELTA, ScalarValue.UNDEFINED, false)
-                    });
+                                                     new Field[]
+                                                         {
+                                                             new Scalar("bid", FASTType.DECIMAL, Operator.DELTA,
+                                                                        ScalarValue.UNDEFINED, false),
+                                                             new Scalar("ask", FASTType.DECIMAL, Operator.DELTA,
+                                                                        ScalarValue.UNDEFINED, false)
+                                                         });
             }
 
             return _quoteTemplate;
@@ -57,12 +60,15 @@ namespace UnitTest.Test
             if (_batchTemplate == null)
             {
                 _batchTemplate = new MessageTemplate("Batch",
-                        new Field[] {
-        				new StaticTemplateReference(HeaderTemplate()),
-        				new Sequence("Batch", new Field[] {
-        						DynamicTemplateReference.INSTANCE
-        				}, false)
-                    });
+                                                     new Field[]
+                                                         {
+                                                             new StaticTemplateReference(HeaderTemplate()),
+                                                             new Sequence("Batch", new Field[]
+                                                                                       {
+                                                                                           DynamicTemplateReference.
+                                                                                               INSTANCE
+                                                                                       }, false)
+                                                         });
             }
 
             return _batchTemplate;
@@ -73,9 +79,11 @@ namespace UnitTest.Test
             if (_headerTemplate == null)
             {
                 _headerTemplate = new MessageTemplate("Header",
-                    new Field[] {
-        			new Scalar("Sent", FASTType.U32, Operator.DELTA, ScalarValue.UNDEFINED, false)
-                });
+                                                      new Field[]
+                                                          {
+                                                              new Scalar("Sent", FASTType.U32, Operator.DELTA,
+                                                                         ScalarValue.UNDEFINED, false)
+                                                          });
             }
 
             return _headerTemplate;
@@ -91,8 +99,8 @@ namespace UnitTest.Test
         }
 
         public static Message NewAllocInstrctn(String id, int side,
-            double quantity, double averagePrice, GroupValue instrument,
-            SequenceValue allocations)
+                                               double quantity, double averagePrice, GroupValue instrument,
+                                               SequenceValue allocations)
         {
             var allocInstrctn = new Message(AllocationInstruction());
             allocInstrctn.SetFieldValue(1, allocations);
@@ -110,14 +118,21 @@ namespace UnitTest.Test
             if (_allocationInstruction == null)
             {
                 _allocationInstruction = new MessageTemplate("AllocInstrctn",
-                    new Field[] {
-                    Allocations(), 
-                    Instrument(),
-                    new Scalar("ID",            FASTType.ASCII,   Operator.DELTA, ScalarValue.UNDEFINED, false),
-                    new Scalar("Side",          FASTType.U32,     Operator.COPY,  ScalarValue.UNDEFINED, false),
-                    new Scalar("Quantity",      FASTType.DECIMAL, Operator.DELTA, ScalarValue.UNDEFINED, false),
-                    new Scalar("Average Price", FASTType.DECIMAL, Operator.DELTA, ScalarValue.UNDEFINED, false)
-                });
+                                                             new Field[]
+                                                                 {
+                                                                     Allocations(),
+                                                                     Instrument(),
+                                                                     new Scalar("ID", FASTType.ASCII, Operator.DELTA,
+                                                                                ScalarValue.UNDEFINED, false),
+                                                                     new Scalar("Side", FASTType.U32, Operator.COPY,
+                                                                                ScalarValue.UNDEFINED, false),
+                                                                     new Scalar("Quantity", FASTType.DECIMAL,
+                                                                                Operator.DELTA, ScalarValue.UNDEFINED,
+                                                                                false),
+                                                                     new Scalar("Average Price", FASTType.DECIMAL,
+                                                                                Operator.DELTA, ScalarValue.UNDEFINED,
+                                                                                false)
+                                                                 });
             }
 
             return _allocationInstruction;
@@ -128,12 +143,17 @@ namespace UnitTest.Test
             if (_allocations == null)
             {
                 _allocations = new Sequence("Allocations",
-                    new Field[] {
-                    new Scalar("Account",       FASTType.ASCII,   Operator.COPY,  ScalarValue.UNDEFINED, false),
-                    new Scalar("Price",         FASTType.DECIMAL, Operator.DELTA, ScalarValue.UNDEFINED, false),
-                    new Scalar("Quantity",      FASTType.DECIMAL, Operator.DELTA, ScalarValue.UNDEFINED, false),
-                    new Scalar("Average Price", FASTType.DECIMAL, Operator.DELTA, ScalarValue.UNDEFINED, false)
-                }, false);
+                                            new Field[]
+                                                {
+                                                    new Scalar("Account", FASTType.ASCII, Operator.COPY,
+                                                               ScalarValue.UNDEFINED, false),
+                                                    new Scalar("Price", FASTType.DECIMAL, Operator.DELTA,
+                                                               ScalarValue.UNDEFINED, false),
+                                                    new Scalar("Quantity", FASTType.DECIMAL, Operator.DELTA,
+                                                               ScalarValue.UNDEFINED, false),
+                                                    new Scalar("Average Price", FASTType.DECIMAL, Operator.DELTA,
+                                                               ScalarValue.UNDEFINED, false)
+                                                }, false);
             }
 
             return _allocations;
@@ -144,10 +164,13 @@ namespace UnitTest.Test
             if (_instrument == null)
             {
                 _instrument = new Group("Instrmt",
-                    new Field[] {
-                    new Scalar("Symbol",        FASTType.ASCII,   Operator.COPY,  ScalarValue.UNDEFINED, false),
-                    new Scalar("MMY",           FASTType.ASCII,   Operator.DELTA, ScalarValue.UNDEFINED, false),
-                }, false);
+                                        new Field[]
+                                            {
+                                                new Scalar("Symbol", FASTType.ASCII, Operator.COPY,
+                                                           ScalarValue.UNDEFINED, false),
+                                                new Scalar("MMY", FASTType.ASCII, Operator.DELTA, ScalarValue.UNDEFINED,
+                                                           false),
+                                            }, false);
             }
 
             return _instrument;
@@ -156,18 +179,19 @@ namespace UnitTest.Test
         public static GroupValue NewInstrument(String symbol, String mmy)
         {
             return new GroupValue(Instrument(),
-                new FieldValue[] { new StringValue(symbol), new StringValue(mmy) });
+                                  new FieldValue[] {new StringValue(symbol), new StringValue(mmy)});
         }
 
         public static GroupValue NewAllocation(String account, double price,
-            double quantity)
+                                               double quantity)
         {
             StringValue acct = account != null ? new StringValue(account) : null;
             return new GroupValue(Allocations().Group,
-                new FieldValue[] {
-                acct, new DecimalValue(price),
-                new DecimalValue(quantity), new DecimalValue(0.0)
-            });
+                                  new FieldValue[]
+                                      {
+                                          acct, new DecimalValue(price),
+                                          new DecimalValue(quantity), new DecimalValue(0.0)
+                                      });
         }
 
         public static Message BasicAllocationInstruction()

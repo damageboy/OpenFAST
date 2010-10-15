@@ -19,11 +19,11 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using UnitTest.Test;
 using NUnit.Framework;
-using OpenFAST.Template;
 using OpenFAST;
 using OpenFAST.Codec;
+using OpenFAST.Template;
+using UnitTest.Test;
 
 namespace UnitTest
 {
@@ -34,15 +34,15 @@ namespace UnitTest
         public void TestConversions()
         {
             MessageTemplate template = Template(
-                    "<template>" +
-                    "  <string name=\"string\"/>" +
-                    "  <uInt32 name=\"uint\"/>" +
-                    "  <int8 name=\"byte\"/>" +
-                    "  <int16 name=\"short\"/>" +
-                    "  <int64 name=\"long\"/>" +
-                    "  <byteVector name=\"bytevector\"/>" +
-                    "  <decimal name=\"decimal\"/>" +
-                    "</template>");
+                "<template>" +
+                "  <string name=\"string\"/>" +
+                "  <uInt32 name=\"uint\"/>" +
+                "  <int8 name=\"byte\"/>" +
+                "  <int16 name=\"short\"/>" +
+                "  <int64 name=\"long\"/>" +
+                "  <byteVector name=\"bytevector\"/>" +
+                "  <decimal name=\"decimal\"/>" +
+                "</template>");
 
             var message = new Message(template);
             message.SetByteVector("string", byt("7f001a"));
@@ -69,5 +69,4 @@ namespace UnitTest
             Assert.AreEqual("61626364", decodedMessage.GetString("bytevector"));
         }
     }
-
 }

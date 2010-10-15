@@ -19,15 +19,14 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using OpenFAST;
 using NUnit.Framework;
+using OpenFAST;
 
 namespace UnitTest
 {
     [TestFixture]
     public class BitVectorReaderTest
     {
-
         [Test]
         public void TestRead()
         {
@@ -36,6 +35,5 @@ namespace UnitTest
             Assert.IsFalse(reader.Read());
             Assert.IsFalse(reader.HasMoreBitsSet());
         }
-
     }
 }

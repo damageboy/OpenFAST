@@ -20,9 +20,9 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using OpenFAST;
-using NUnit.Framework;
 using System.IO;
+using NUnit.Framework;
+using OpenFAST;
 
 namespace UnitTest.Test
 {
@@ -32,11 +32,11 @@ namespace UnitTest.Test
         {
             if (stream.BaseStream is MemoryStream)
             {
-                return ToByte((MemoryStream)stream.BaseStream);
-
+                return ToByte((MemoryStream) stream.BaseStream);
             }
             throw new Exception("Invalid base stream");
         }
+
         public static byte[] ToByte(MemoryStream stream)
         {
             var ret = new byte[stream.Length];
@@ -47,6 +47,7 @@ namespace UnitTest.Test
             }
             return ret;
         }
+
         public static void AssertBitVectorEquals(String bitString, byte[] encoding)
         {
             Assert.AreEqual(ByteUtil.ConvertBitStringToFastByteArray(

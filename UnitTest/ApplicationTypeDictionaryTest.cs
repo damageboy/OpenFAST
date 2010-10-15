@@ -38,8 +38,10 @@ namespace UnitTest
 
             context.Store("type", ObjectMother.AllocationInstruction(), new QName("ID"), String("1234"));
 
-            Assert.AreEqual(String("1234"), context.Lookup("type", ObjectMother.AllocationInstruction(), new QName("ID")));
-            Assert.AreEqual(ScalarValue.UNDEFINED, context.Lookup("type", ObjectMother.Allocations().Group, new QName("ID")));
+            Assert.AreEqual(String("1234"),
+                            context.Lookup("type", ObjectMother.AllocationInstruction(), new QName("ID")));
+            Assert.AreEqual(ScalarValue.UNDEFINED,
+                            context.Lookup("type", ObjectMother.Allocations().Group, new QName("ID")));
         }
     }
 }

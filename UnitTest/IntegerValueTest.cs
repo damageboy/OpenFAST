@@ -20,9 +20,9 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using UnitTest.Test;
 using NUnit.Framework;
 using OpenFAST.Error;
+using UnitTest.Test;
 
 namespace UnitTest
 {
@@ -30,25 +30,17 @@ namespace UnitTest
     public class IntegerValueTest : OpenFastTestCase
     {
         [Test]
-        public void TestToInt()
+        public void TestToBigDecimal()
         {
-            AssertEquals(125, i(125).ToInt());
+            Assert.AreEqual(new Decimal(125), i(125).ToBigDecimal());
         }
-        [Test]
-        public void TestToLong()
-        {
-            AssertEquals(125L, i(125).ToLong());
-        }
-        [Test]
-        public void TestToString()
-        {
-            Assert.AreEqual("105", i(105).ToString());
-        }
+
         [Test]
         public void TestToByte()
         {
             AssertEquals(0x7f, i(127).ToByte());
         }
+
         [Test]
         public void TestToByteWithLargeInt()
         {
@@ -62,11 +54,31 @@ namespace UnitTest
                 Assert.AreEqual(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE, e.Code);
             }
         }
+
+        [Test]
+        public void TestToDouble()
+        {
+            Assert.AreEqual(125.0, i(125).ToDouble(), 0.1);
+        }
+
+        [Test]
+        public void TestToInt()
+        {
+            AssertEquals(125, i(125).ToInt());
+        }
+
+        [Test]
+        public void TestToLong()
+        {
+            AssertEquals(125L, i(125).ToLong());
+        }
+
         [Test]
         public void TestToShort()
         {
-            AssertEquals((short)32767, i(32767).ToShort());
+            AssertEquals((short) 32767, i(32767).ToShort());
         }
+
         [Test]
         public void TestToShortWithLargeInt()
         {
@@ -80,17 +92,11 @@ namespace UnitTest
                 Assert.AreEqual(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE, e.Code);
             }
         }
-        [Test]
-        public void TestToDouble()
-        {
-            Assert.AreEqual(125.0, i(125).ToDouble(), 0.1);
-        }
-        [Test]
-        public void TestToBigDecimal()
-        {
-            Assert.AreEqual(new Decimal(125), i(125).ToBigDecimal());
-        }
 
+        [Test]
+        public void TestToString()
+        {
+            Assert.AreEqual("105", i(105).ToString());
+        }
     }
-
 }

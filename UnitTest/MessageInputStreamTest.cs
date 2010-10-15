@@ -19,10 +19,10 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using UnitTest.Test;
-using OpenFAST.Error;
 using NUnit.Framework;
 using OpenFAST;
+using OpenFAST.Error;
+using UnitTest.Test;
 
 namespace UnitTest
 {
@@ -43,6 +43,5 @@ namespace UnitTest
                 Assert.AreEqual(FastConstants.D9_TEMPLATE_NOT_REGISTERED, e.Code);
             }
         }
-
     }
 }

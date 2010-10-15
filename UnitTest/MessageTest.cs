@@ -20,46 +20,53 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using NUnit.Framework;
-using OpenFAST.Template;
-using OpenFAST.Template.Type;
 using OpenFAST;
+using OpenFAST.Template;
 using OpenFAST.Template.Operator;
+using OpenFAST.Template.Type;
 
 namespace UnitTest
 {
     [TestFixture]
-public class MessageTest {
-    [Test]
-    public void TestEquals() {
-        var template = new MessageTemplate("",
-                new Field[] {
-                    new Scalar("1", FASTType.U32, Operator.COPY, ScalarValue.UNDEFINED, false)
-                });
-        GroupValue message = new Message(template);
-        message.SetInteger(1, 1);
+    public class MessageTest
+    {
+        [Test]
+        public void TestEquals()
+        {
+            var template = new MessageTemplate("",
+                                               new Field[]
+                                                   {
+                                                       new Scalar("1", FASTType.U32, Operator.COPY,
+                                                                  ScalarValue.UNDEFINED, false)
+                                                   });
+            GroupValue message = new Message(template);
+            message.SetInteger(1, 1);
 
-        GroupValue other = new Message(template);
-        other.SetInteger(1, 1);
+            GroupValue other = new Message(template);
+            other.SetInteger(1, 1);
 
-        Assert.AreEqual(message, other);
+            Assert.AreEqual(message, other);
+        }
+
+        [Test]
+        public void TestNotEquals()
+        {
+            var template = new MessageTemplate("",
+                                               new Field[]
+                                                   {
+                                                       new Scalar("1", FASTType.U32, Operator.COPY,
+                                                                  ScalarValue.UNDEFINED, false)
+                                                   });
+            var message = new Message(template);
+            message.SetInteger(1, 2);
+
+            var other = new Message(template);
+            Assert.IsFalse(message.equals(other));
+            Assert.IsFalse(other.equals(message));
+            other.SetInteger(1, 1);
+
+            Assert.IsFalse(message.equals(other));
+            Assert.IsFalse(other.equals(message));
+        }
     }
-    [Test]
-    public void TestNotEquals() {
-        var template = new MessageTemplate("",
-                new Field[] {
-                    new Scalar("1", FASTType.U32, Operator.COPY, ScalarValue.UNDEFINED, false)
-                });
-        var message = new Message(template);
-        message.SetInteger(1, 2);
-
-        var other = new Message(template);
-        Assert.IsFalse(message.equals(other));
-        Assert.IsFalse(other.equals(message));
-        other.SetInteger(1, 1);
-
-        Assert.IsFalse(message.equals(other));
-        Assert.IsFalse(other.equals(message));
-    }
-}
-
 }

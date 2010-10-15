@@ -20,15 +20,16 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using OpenFAST;
-using OpenFAST.Template;
-using System.Xml;
 using System.IO;
+using System.Text;
+using System.Xml;
 using NUnit.Framework;
-using OpenFAST.Template.Type.Codec;
+using OpenFAST;
 using OpenFAST.Codec;
+using OpenFAST.Template;
 using OpenFAST.Template.Loader;
 using OpenFAST.Template.Operator;
+using OpenFAST.Template.Type.Codec;
 
 namespace UnitTest.Test
 {
@@ -76,7 +77,7 @@ namespace UnitTest.Test
 
         protected static Stream Stream(String source)
         {
-            return new MemoryStream(System.Text.Encoding.ASCII.GetBytes(source));
+            return new MemoryStream(Encoding.ASCII.GetBytes(source));
         }
 
         protected static Stream ByteStream(byte[] bytes)
@@ -118,8 +119,6 @@ namespace UnitTest.Test
         protected static DateTime Time(int hour, int min, int sec, int ms)
         {
             return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, min, sec, ms);
-
-
         }
 
         protected static byte[] byt(String hexString)
@@ -145,28 +144,31 @@ namespace UnitTest.Test
         protected static MessageTemplate Template(String templateXml)
         {
             MessageTemplate[] templates = new XMLMessageTemplateLoader().Load
-            (new MemoryStream(System.Text.Encoding.ASCII.GetBytes(templateXml)));
+                (new MemoryStream(Encoding.ASCII.GetBytes(templateXml)));
             return templates[0];
         }
 
         protected static MessageTemplate Template(Field field)
         {
-            return new MessageTemplate("Doesn't matter", new[] { field });
+            return new MessageTemplate("Doesn't matter", new[] {field});
         }
 
-        protected static void AssertScalarField(FieldSet fieldSet, int fieldIndex, Type type, String name, OperatorCodec operator_ren,
-                ScalarValue defaultValue)
+        protected static void AssertScalarField(FieldSet fieldSet, int fieldIndex, Type type, String name,
+                                                OperatorCodec operator_ren,
+                                                ScalarValue defaultValue)
         {
-            var field = (Scalar)fieldSet.GetField(fieldIndex);
+            var field = (Scalar) fieldSet.GetField(fieldIndex);
             AssertScalarField(field, type, name);
             Assert.AreEqual(operator_ren, field.OperatorCodec);
             Assert.AreEqual(defaultValue, field.DefaultValue);
         }
 
-        protected static void AssertComposedScalarField(FieldSet fieldSet, int fieldIndex, Type type, String name, Operator exponentOp,
-                ScalarValue exponentValue, Operator mantissaOp, ScalarValue mantissaValue)
+        protected static void AssertComposedScalarField(FieldSet fieldSet, int fieldIndex, Type type, String name,
+                                                        Operator exponentOp,
+                                                        ScalarValue exponentValue, Operator mantissaOp,
+                                                        ScalarValue mantissaValue)
         {
-            var field = (ComposedScalar)fieldSet.GetField(fieldIndex);
+            var field = (ComposedScalar) fieldSet.GetField(fieldIndex);
             Assert.AreEqual(type, field.Type);
             Assert.AreEqual(name, field.Name);
             Scalar[] fields = field.Fields;
@@ -177,10 +179,11 @@ namespace UnitTest.Test
             Assert.AreEqual(mantissaValue, fields[1].DefaultValue);
         }
 
-        protected static void AssertComposedScalarField(ComposedScalar field, Type type, String name, Operator exponentOp,
-                ScalarValue exponentValue, Operator mantissaOp, ScalarValue mantissaValue)
+        protected static void AssertComposedScalarField(ComposedScalar field, Type type, String name,
+                                                        Operator exponentOp,
+                                                        ScalarValue exponentValue, Operator mantissaOp,
+                                                        ScalarValue mantissaValue)
         {
-
             Assert.AreEqual(type, field.Type);
             Assert.AreEqual(name, field.Name);
             Scalar[] fields = field.Fields;
@@ -191,9 +194,10 @@ namespace UnitTest.Test
             Assert.AreEqual(mantissaValue, fields[1].DefaultValue);
         }
 
-        protected static void AssertScalarField(FieldSet fieldSet, int fieldIndex, Type type, String name, Operator operator_ren)
+        protected static void AssertScalarField(FieldSet fieldSet, int fieldIndex, Type type, String name,
+                                                Operator operator_ren)
         {
-            var field = (Scalar)fieldSet.GetField(fieldIndex);
+            var field = (Scalar) fieldSet.GetField(fieldIndex);
             AssertScalarField(field, type, name);
             Assert.AreEqual(operator_ren, field.Operator);
         }
@@ -207,19 +211,20 @@ namespace UnitTest.Test
 
         protected static void AssertSequence(MessageTemplate messageTemplate, int fieldIndex, int fieldCount)
         {
-            var sequence = (Sequence)messageTemplate.GetField(fieldIndex);
+            var sequence = (Sequence) messageTemplate.GetField(fieldIndex);
             AssertEquals(fieldCount, sequence.FieldCount);
         }
 
         protected static void AssertGroup(MessageTemplate messageTemplate, int fieldIndex, String name)
         {
-            var currentGroup = (Group)messageTemplate.GetField(fieldIndex);
+            var currentGroup = (Group) messageTemplate.GetField(fieldIndex);
             Assert.AreEqual(name, currentGroup.Name);
         }
 
-        protected static void AssertOptionalScalarField(FieldSet fieldSet, int fieldIndex, Type type, String name, Operator operator_ren)
+        protected static void AssertOptionalScalarField(FieldSet fieldSet, int fieldIndex, Type type, String name,
+                                                        Operator operator_ren)
         {
-            var field = (Scalar)fieldSet.GetField(fieldIndex);
+            var field = (Scalar) fieldSet.GetField(fieldIndex);
             AssertScalarField(field, type, name);
             Assert.AreEqual(operator_ren, field.Operator);
             Assert.IsTrue(field.Optional);
@@ -238,14 +243,18 @@ namespace UnitTest.Test
             return doc;
         }
 
-        protected static void AssertScalarField(Scalar scalar, Type type, String name, String id, String namespace_ren, String dictionary,
-                String key, Operator op, ScalarValue defaultVal, bool optional)
+        protected static void AssertScalarField(Scalar scalar, Type type, String name, String id, String namespace_ren,
+                                                String dictionary,
+                                                String key, Operator op, ScalarValue defaultVal, bool optional)
         {
-            AssertScalarField(scalar, type, name, id, namespace_ren, dictionary, key, namespace_ren, op, defaultVal, optional);
+            AssertScalarField(scalar, type, name, id, namespace_ren, dictionary, key, namespace_ren, op, defaultVal,
+                              optional);
         }
 
-        protected static void AssertScalarField(Scalar scalar, Type type, String name, String id, String namespace_ren, String dictionary,
-                String key, String keyNamespace, Operator op, ScalarValue defaultVal, bool optional)
+        protected static void AssertScalarField(Scalar scalar, Type type, String name, String id, String namespace_ren,
+                                                String dictionary,
+                                                String key, String keyNamespace, Operator op, ScalarValue defaultVal,
+                                                bool optional)
         {
             var qname = new QName(name, namespace_ren);
             Assert.AreEqual(type, scalar.Type);

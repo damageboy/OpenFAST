@@ -19,9 +19,9 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System.IO;
 using NUnit.Framework;
 using OpenFAST;
-using System.IO;
 using OpenFAST.Error;
 using UnitTest.Test;
 
@@ -44,11 +44,6 @@ namespace UnitTest
             get { throw new IOException("The method or operation is not implemented."); }
         }
 
-        public override void Flush()
-        {
-            throw new IOException("The method or operation is not implemented.");
-        }
-
         public override long Length
         {
             get { throw new IOException("The method or operation is not implemented."); }
@@ -56,14 +51,13 @@ namespace UnitTest
 
         public override long Position
         {
-            get
-            {
-                throw new IOException("The method or operation is not implemented.");
-            }
-            set
-            {
-                throw new IOException("The method or operation is not implemented.");
-            }
+            get { throw new IOException("The method or operation is not implemented."); }
+            set { throw new IOException("The method or operation is not implemented."); }
+        }
+
+        public override void Flush()
+        {
+            throw new IOException("The method or operation is not implemented.");
         }
 
         public override int Read(byte[] buffer, int offset, int count)
@@ -86,25 +80,28 @@ namespace UnitTest
             throw new IOException("The method or operation is not implemented.");
         }
     }
+
     [TestFixture]
     public class MessageOutputStreamTest
     {
-
         [Test]
-        public void TestWriteMessageMessage()
+        public void TestIOErrorOnClose()
         {
-            var byteOut = new MemoryStream();
-            var output = new MessageOutputStream(byteOut);
+            var output = new MessageOutputStream(new IOExceptionOnCloseStream());
+            output.RegisterTemplate(ObjectMother.ALLOC_INSTRCTN_TEMPLATE_ID, ObjectMother.AllocationInstruction());
+            Message message = ObjectMother.BasicAllocationInstruction();
             try
             {
-                output.WriteMessage(new Message(ObjectMother.AllocationInstruction()));
+                output.WriteMessage(message);
+                output.Close();
                 Assert.Fail();
             }
             catch (FastException e)
             {
-                Assert.AreEqual(FastConstants.D9_TEMPLATE_NOT_REGISTERED, e.Code);
+                Assert.AreEqual(FastConstants.IO_ERROR, e.Code);
             }
         }
+
         [Test]
         public void TestIOErrorOnWrite()
         {
@@ -121,21 +118,20 @@ namespace UnitTest
                 Assert.AreEqual(FastConstants.IO_ERROR, e.Code);
             }
         }
+
         [Test]
-        public void TestIOErrorOnClose()
+        public void TestWriteMessageMessage()
         {
-            var output = new MessageOutputStream(new IOExceptionOnCloseStream());
-            output.RegisterTemplate(ObjectMother.ALLOC_INSTRCTN_TEMPLATE_ID, ObjectMother.AllocationInstruction());
-            Message message = ObjectMother.BasicAllocationInstruction();
+            var byteOut = new MemoryStream();
+            var output = new MessageOutputStream(byteOut);
             try
             {
-                output.WriteMessage(message);
-                output.Close();
+                output.WriteMessage(new Message(ObjectMother.AllocationInstruction()));
                 Assert.Fail();
             }
             catch (FastException e)
             {
-                Assert.AreEqual(FastConstants.IO_ERROR, e.Code);
+                Assert.AreEqual(FastConstants.D9_TEMPLATE_NOT_REGISTERED, e.Code);
             }
         }
     }
@@ -157,13 +153,6 @@ namespace UnitTest
             get { return true; }
         }
 
-        public override void Flush()
-        {
-            throw new IOException("The method or operation is not implemented.");
-
-
-        }
-
         public override long Length
         {
             get { return 0; }
@@ -171,13 +160,13 @@ namespace UnitTest
 
         public override long Position
         {
-            get
-            {
-                return 0;
-            }
-            set
-            {
-            }
+            get { return 0; }
+            set { }
+        }
+
+        public override void Flush()
+        {
+            throw new IOException("The method or operation is not implemented.");
         }
 
         public override int Read(byte[] buffer, int offset, int count)
@@ -197,8 +186,6 @@ namespace UnitTest
         public override void Write(byte[] buffer, int offset, int count)
         {
             throw new IOException("The method or operation is not implemented.");
-
         }
     }
-
 }

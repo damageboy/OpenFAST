@@ -19,25 +19,20 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using UnitTest.Test;
-using OpenFAST.Template.Loader;
-using NUnit.Framework;
 using System.IO;
-using OpenFAST.Template;
+using NUnit.Framework;
 using OpenFAST;
+using OpenFAST.Template;
+using OpenFAST.Template.Loader;
+using UnitTest.Test;
 
 namespace UnitTest
 {
     [TestFixture]
     public class TemplateTest : OpenFastTestCase
     {
-        private const string SCP_1_1_NS = "http://www.fixprotocol.org/ns/fast/scp/1.1";
-        private const string PRE_TRADE_NS = "http://www.openfast.org/fix44/preTrade";
-        private const string SESSION_NS = "http://www.openfast.org/fix44/session";
-        private const string COMPONENTS_NS = "http://www.openfast.org/fix44/components";
-        private const string FIX_44_NS = "http://www.openfast.org/fix44";
-        private const string EXT_NS = "http://www.openfast.org/ext";
-        private MessageTemplateLoader loader;
+        #region Setup/Teardown
+
         [SetUp]
         protected void SetUp()
         {
@@ -46,6 +41,23 @@ namespace UnitTest
             loader.Load(new StreamReader("preTrade.xml").BaseStream);
             loader.Load(new StreamReader("session.xml").BaseStream);
         }
+
+        #endregion
+
+        private const string SCP_1_1_NS = "http://www.fixprotocol.org/ns/fast/scp/1.1";
+        private const string PRE_TRADE_NS = "http://www.openfast.org/fix44/preTrade";
+        private const string SESSION_NS = "http://www.openfast.org/fix44/session";
+        private const string COMPONENTS_NS = "http://www.openfast.org/fix44/components";
+        private const string FIX_44_NS = "http://www.openfast.org/fix44";
+        private const string EXT_NS = "http://www.openfast.org/ext";
+        private MessageTemplateLoader loader;
+
+        public void TestTemplateExtension()
+        {
+            MessageTemplate logon = loader.TemplateRegistry.get_Renamed(new QName("Logon", SESSION_NS));
+            Assert.IsTrue(logon.HasAttribute(new QName("reset", SCP_1_1_NS)));
+        }
+
         [Test]
         public void TestTemplates()
         {
@@ -57,12 +69,5 @@ namespace UnitTest
             Assert.AreEqual(1, quote.StaticTemplateReferences.Length);
             Assert.IsNotNull(quote.GetStaticTemplateReference(new QName("Instrument", COMPONENTS_NS)));
         }
-
-        public void TestTemplateExtension()
-        {
-            MessageTemplate logon = loader.TemplateRegistry.get_Renamed(new QName("Logon", SESSION_NS));
-            Assert.IsTrue(logon.HasAttribute(new QName("reset", SCP_1_1_NS)));
-        }
     }
-
 }
