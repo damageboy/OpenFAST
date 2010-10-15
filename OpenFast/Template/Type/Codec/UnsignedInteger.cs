@@ -33,28 +33,28 @@ namespace OpenFAST.Template.Type.Codec
 
         public override byte[] EncodeValue(ScalarValue scalarValue)
         {
-            long value_Renamed = scalarValue.ToLong();
-            int size = GetUnsignedIntegerSize(value_Renamed);
+            long value = scalarValue.ToLong();
+            int size = GetUnsignedIntegerSize(value);
             var encoded = new byte[size];
 
             for (int factor = 0; factor < size; factor++)
             {
-                encoded[size - factor - 1] = (byte) ((value_Renamed >> (factor*7)) & 0x7f);
+                encoded[size - factor - 1] = (byte) ((value >> (factor*7)) & 0x7f);
             }
 
             return encoded;
         }
 
-        public override ScalarValue Decode(Stream in_Renamed)
+        public override ScalarValue Decode(Stream inStream)
         {
-            long value_Renamed = 0;
+            long value = 0;
             uint byt;
             try
             {
                 do
                 {
-                    byt = (uint) in_Renamed.ReadByte();
-                    value_Renamed = (value_Renamed << 7) | (byt & 0x7f);
+                    byt = (uint) inStream.ReadByte();
+                    value = (value << 7) | (byt & 0x7f);
                 } while ((byt & STOP_BIT) == 0);
             }
             catch (IOException e)
@@ -62,7 +62,7 @@ namespace OpenFAST.Template.Type.Codec
                 throw new RuntimeException(e);
             }
 
-            return CreateValue(value_Renamed);
+            return CreateValue(value);
         }
 
         public override bool Equals(object obj)

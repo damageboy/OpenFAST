@@ -25,7 +25,7 @@ using OpenFAST.Template;
 
 namespace OpenFAST.Session
 {
-    public abstract class AbstractSessionControlProtocol : SessionProtocol
+    public abstract class AbstractSessionControlProtocol : ISessionProtocol
     {
         internal const int FAST_RESET_TEMPLATE_ID = 120;
 
@@ -38,7 +38,7 @@ namespace OpenFAST.Session
             RESET = new RESETMessageBase(FAST_RESET_TEMPLATE);
         }
 
-        #region SessionProtocol Members
+        #region ISessionProtocol Members
 
         public virtual Message ResetMessage
         {
@@ -48,11 +48,11 @@ namespace OpenFAST.Session
         public abstract Message CloseMessage { get; }
 
         public abstract Message CreateTemplateDefinitionMessage(MessageTemplate param1);
-        public abstract Session OnNewConnection(string param1, Connection param2);
+        public abstract Session OnNewConnection(string param1, IConnection param2);
 
-        public abstract Session Connect(string param1, Connection param2, TemplateRegistry inboundRegistry,
-                                        TemplateRegistry outboundRegistry, MessageListener messageListener,
-                                        SessionListener sessionListener);
+        public abstract Session Connect(string param1, IConnection param2, ITemplateRegistry inboundRegistry,
+                                        ITemplateRegistry outboundRegistry, IMessageListener messageListener,
+                                        ISessionListener sessionListener);
 
         public abstract void HandleMessage(Session param1, Message param2);
         public abstract void OnError(Session param1, ErrorCode param2, string param3);

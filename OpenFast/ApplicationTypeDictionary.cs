@@ -25,9 +25,9 @@ using OpenFAST.Template;
 
 namespace OpenFAST
 {
-    public sealed class ApplicationTypeDictionary : Dictionary
+    public sealed class ApplicationTypeDictionary : IDictionary
     {
-        private Dictionary<QName, Dictionary<QName, ScalarValue>> dictionary =
+        private Dictionary<QName, Dictionary<QName, ScalarValue>> _dictionary =
             new Dictionary<QName, Dictionary<QName, ScalarValue>>();
 
         #region Dictionary Members
@@ -35,7 +35,7 @@ namespace OpenFAST
         public ScalarValue Lookup(Group template, QName key, QName applicationType)
         {
             Dictionary<QName, ScalarValue> value;
-            if (dictionary.TryGetValue(template.TypeReference, out value))
+            if (_dictionary.TryGetValue(template.TypeReference, out value))
             {
                 ScalarValue value2;
                 if (value.TryGetValue(key, out value2))
@@ -46,17 +46,15 @@ namespace OpenFAST
 
         public void Reset()
         {
-            dictionary = new Dictionary<QName, Dictionary<QName, ScalarValue>>();
+            _dictionary = new Dictionary<QName, Dictionary<QName, ScalarValue>>();
         }
 
-        public void Store(Group group, QName applicationType, QName key, ScalarValue value_Renamed)
+        public void Store(Group group, QName applicationType, QName key, ScalarValue value)
         {
-            Dictionary<QName, ScalarValue> value;
-
-            if (!dictionary.TryGetValue(group.TypeReference, out value))
-                dictionary[group.TypeReference] = value = new Dictionary<QName, ScalarValue>();
-
-            value[key] = value_Renamed;
+            Dictionary<QName, ScalarValue> dict;
+            if (!_dictionary.TryGetValue(group.TypeReference, out dict))
+                _dictionary[group.TypeReference] = dict = new Dictionary<QName, ScalarValue>();
+            dict[key] = value;
         }
 
         #endregion
@@ -64,7 +62,7 @@ namespace OpenFAST
         public override string ToString()
         {
             var builder = new StringBuilder();
-            foreach (var val in dictionary)
+            foreach (var val in _dictionary)
             {
                 builder.Append("Dictionary: Type=").Append(val.Key);
 

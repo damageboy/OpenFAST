@@ -34,7 +34,7 @@ namespace OpenFAST.Session
             NULL = new NullConnectionListener();
         }
 
-        public virtual void OnConnect(Connection connection)
+        public virtual void OnConnect(IConnection connection)
         {
         }
     }

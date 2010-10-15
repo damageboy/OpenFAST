@@ -23,8 +23,8 @@ using OpenFAST.Codec;
 
 namespace OpenFAST
 {
-    public interface MessageHandler
+    public interface IMessageHandler
     {
-        void HandleMessage(Message readMessage, Context context, Coder coder);
+        void HandleMessage(Message readMessage, Context context, ICoder coder);
     }
 }

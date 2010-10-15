@@ -19,25 +19,28 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System.Collections;
+using System.Collections.Generic;
 
 namespace OpenFAST.Template
 {
-    public struct TemplateRegistry_Fields
+    public struct TemplateRegistryFields
     {
-        public static readonly TemplateRegistry NULL;
+        public static readonly ITemplateRegistry NULL;
 
-        static TemplateRegistry_Fields()
+        static TemplateRegistryFields()
         {
             NULL = new NullTemplateRegistry();
         }
     }
 
-    public interface TemplateRegistry
+    public interface ITemplateRegistry
     {
         MessageTemplate[] Templates { get; }
+        MessageTemplate this[int id] { get; }
+        MessageTemplate this[string name] { get; }
+        MessageTemplate this[QName name] { get; }
 
-        void RegisterAll(TemplateRegistry registry);
+        void RegisterAll(ITemplateRegistry registry);
         void Register(int id, MessageTemplate template);
         void Register(int id, string name);
         void Register(int id, QName name);
@@ -48,10 +51,6 @@ namespace OpenFAST.Template
         void Remove(QName name);
         void Remove(MessageTemplate template);
         void Remove(int id);
-
-        MessageTemplate get_Renamed(int id);
-        MessageTemplate get_Renamed(string name);
-        MessageTemplate get_Renamed(QName name);
 
         int GetId(string name);
         int GetId(QName name);
@@ -64,11 +63,9 @@ namespace OpenFAST.Template
         bool IsDefined(string name);
         bool IsDefined(QName name);
 
-        void AddTemplateRegisteredListener(TemplateRegisteredListener templateRegisteredListener);
-        void RemoveTemplateRegisteredListener(TemplateRegisteredListener templateRegisteredListener);
+        void AddTemplateRegisteredListener(ITemplateRegisteredListener templateRegisteredListener);
+        void RemoveTemplateRegisteredListener(ITemplateRegisteredListener templateRegisteredListener);
 
-        IEnumerator NameIterator();
-
-        IEnumerator Iterator();
+        ICollection<QName> Names();
     }
 }

@@ -22,34 +22,28 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System.Collections.Generic;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
+using OpenFAST.util;
 
 namespace OpenFAST.Session.Template.Exchange
 {
-    public abstract class AbstractFieldInstructionConverter : FieldInstructionConverter
+    public abstract class AbstractFieldInstructionConverter : IFieldInstructionConverter
     {
-        private static readonly Dictionary<Operator, MessageTemplate> OPERATOR_TEMPLATE_MAP =
-            new Dictionary<Operator, MessageTemplate>();
+        private static readonly Dictionary<Operator, MessageTemplate> OperatorTemplateMap =
+            new Dictionary<Operator, MessageTemplate>
+                {
+                    {Operator.CONSTANT, SessionControlProtocol_1_1.ConstantOp},
+                    {Operator.DEFAULT, SessionControlProtocol_1_1.DEFAULT_OP},
+                    {Operator.COPY, SessionControlProtocol_1_1.COPY_OP},
+                    {Operator.INCREMENT, SessionControlProtocol_1_1.INCREMENT_OP},
+                    {Operator.DELTA, SessionControlProtocol_1_1.DELTA_OP},
+                    {Operator.TAIL, SessionControlProtocol_1_1.TAIL_OP},
+                };
 
-        private static readonly Dictionary<MessageTemplate, Operator> TEMPLATE_OPERATOR_MAP =
-            new Dictionary<MessageTemplate, Operator>();
+        private static readonly Dictionary<MessageTemplate, Operator> TemplateOperatorMap;
 
         static AbstractFieldInstructionConverter()
         {
-            {
-                OPERATOR_TEMPLATE_MAP[Operator.CONSTANT] = SessionControlProtocol_1_1.CONSTANT_OP;
-                OPERATOR_TEMPLATE_MAP[Operator.DEFAULT] = SessionControlProtocol_1_1.DEFAULT_OP;
-                OPERATOR_TEMPLATE_MAP[Operator.COPY] = SessionControlProtocol_1_1.COPY_OP;
-                OPERATOR_TEMPLATE_MAP[Operator.INCREMENT] = SessionControlProtocol_1_1.INCREMENT_OP;
-                OPERATOR_TEMPLATE_MAP[Operator.DELTA] = SessionControlProtocol_1_1.DELTA_OP;
-                OPERATOR_TEMPLATE_MAP[Operator.TAIL] = SessionControlProtocol_1_1.TAIL_OP;
-
-                TEMPLATE_OPERATOR_MAP[SessionControlProtocol_1_1.CONSTANT_OP] = Operator.CONSTANT;
-                TEMPLATE_OPERATOR_MAP[SessionControlProtocol_1_1.DEFAULT_OP] = Operator.DEFAULT;
-                TEMPLATE_OPERATOR_MAP[SessionControlProtocol_1_1.COPY_OP] = Operator.COPY;
-                TEMPLATE_OPERATOR_MAP[SessionControlProtocol_1_1.INCREMENT_OP] = Operator.INCREMENT;
-                TEMPLATE_OPERATOR_MAP[SessionControlProtocol_1_1.DELTA_OP] = Operator.DELTA;
-                TEMPLATE_OPERATOR_MAP[SessionControlProtocol_1_1.TAIL_OP] = Operator.TAIL;
-            }
+            TemplateOperatorMap = Util.ReverseDictionary(OperatorTemplateMap);
         }
 
         #region FieldInstructionConverter Members
@@ -58,7 +52,7 @@ namespace OpenFAST.Session.Template.Exchange
 
         public abstract GroupValue Convert(Field param1, ConversionContext param2);
 
-        public abstract Field Convert(GroupValue param1, TemplateRegistry param2,
+        public abstract Field Convert(GroupValue param1, ITemplateRegistry param2,
                                       ConversionContext param3);
 
         public abstract bool ShouldConvert(Field param1);
@@ -81,10 +75,10 @@ namespace OpenFAST.Session.Template.Exchange
         public static GroupValue CreateOperator(Scalar scalar)
         {
             MessageTemplate operatorTemplate;
-            if (!OPERATOR_TEMPLATE_MAP.TryGetValue(scalar.Operator, out operatorTemplate))
+            if (!OperatorTemplateMap.TryGetValue(scalar.Operator, out operatorTemplate))
                 return null;
             GroupValue operatorMessage = new Message(operatorTemplate);
-            if (!scalar.Dictionary.Equals(Dictionary_Fields.GLOBAL))
+            if (!scalar.Dictionary.Equals(DictionaryFields.GLOBAL))
                 operatorMessage.SetString("Dictionary", scalar.Dictionary);
             if (!scalar.Key.Equals(scalar.QName))
             {
@@ -101,7 +95,7 @@ namespace OpenFAST.Session.Template.Exchange
         {
             var msgTemplate = group as MessageTemplate;
             Operator value;
-            if (msgTemplate != null && TEMPLATE_OPERATOR_MAP.TryGetValue(msgTemplate, out value))
+            if (msgTemplate != null && TemplateOperatorMap.TryGetValue(msgTemplate, out value))
                 return value;
             return null;
         }

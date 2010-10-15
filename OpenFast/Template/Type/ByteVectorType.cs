@@ -37,9 +37,9 @@ namespace OpenFAST.Template.Type
             get { return new ByteVectorValue(new byte[] {}); }
         }
 
-        public override ScalarValue GetVal(string value_Renamed)
+        public override ScalarValue GetVal(string value)
         {
-            return new ByteVectorValue(Encoding.UTF8.GetBytes(value_Renamed));
+            return new ByteVectorValue(Encoding.UTF8.GetBytes(value));
         }
 
         public override bool IsValueOf(ScalarValue previousValue)

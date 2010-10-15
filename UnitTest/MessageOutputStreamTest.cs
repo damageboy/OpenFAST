@@ -27,7 +27,7 @@ using UnitTest.Test;
 
 namespace UnitTest
 {
-    public class IOExceptionThrowingStream : Stream
+    public class IoExceptionThrowingStream : Stream
     {
         public override bool CanRead
         {
@@ -85,10 +85,10 @@ namespace UnitTest
     public class MessageOutputStreamTest
     {
         [Test]
-        public void TestIOErrorOnClose()
+        public void TestIoErrorOnClose()
         {
-            var output = new MessageOutputStream(new IOExceptionOnCloseStream());
-            output.RegisterTemplate(ObjectMother.ALLOC_INSTRCTN_TEMPLATE_ID, ObjectMother.AllocationInstruction());
+            var output = new MessageOutputStream(new IoExceptionOnCloseStream());
+            output.RegisterTemplate(ObjectMother.AllocInstrctnTemplateId, ObjectMother.AllocationInstruction());
             Message message = ObjectMother.BasicAllocationInstruction();
             try
             {
@@ -103,10 +103,10 @@ namespace UnitTest
         }
 
         [Test]
-        public void TestIOErrorOnWrite()
+        public void TestIoErrorOnWrite()
         {
-            var output = new MessageOutputStream(new IOExceptionThrowingStream());
-            output.RegisterTemplate(ObjectMother.ALLOC_INSTRCTN_TEMPLATE_ID, ObjectMother.AllocationInstruction());
+            var output = new MessageOutputStream(new IoExceptionThrowingStream());
+            output.RegisterTemplate(ObjectMother.AllocInstrctnTemplateId, ObjectMother.AllocationInstruction());
             Message message = ObjectMother.BasicAllocationInstruction();
             try
             {
@@ -136,7 +136,7 @@ namespace UnitTest
         }
     }
 
-    public class IOExceptionOnCloseStream : Stream
+    public class IoExceptionOnCloseStream : Stream
     {
         public override bool CanRead
         {

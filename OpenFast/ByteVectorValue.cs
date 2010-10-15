@@ -27,24 +27,29 @@ namespace OpenFAST
     [Serializable]
     public sealed class ByteVectorValue : ScalarValue
     {
-        public byte[] value_Renamed;
+        private readonly byte[] _value;
 
-        public ByteVectorValue(byte[] value_Renamed)
+        public ByteVectorValue(byte[] value)
         {
-            this.value_Renamed = value_Renamed;
+            _value = value;
         }
 
         public override byte[] Bytes
         {
-            get { return value_Renamed; }
+            get { return _value; }
+        }
+
+        public byte[] Value
+        {
+            get { return _value; }
         }
 
         public override string ToString()
         {
-            var builder = new StringBuilder(value_Renamed.Length*2);
-            for (int i = 0; i < value_Renamed.Length; i++)
+            var builder = new StringBuilder(_value.Length*2);
+            for (int i = 0; i < _value.Length; i++)
             {
-                string hex = Convert.ToString(value_Renamed[i], 16);
+                string hex = Convert.ToString(_value[i], 16);
                 if (hex.Length == 1)
                     builder.Append('0');
                 builder.Append(hex);
@@ -64,13 +69,13 @@ namespace OpenFAST
 
         public bool Equals(ByteVectorValue other)
         {
-            if (value_Renamed.Length != other.value_Renamed.Length)
+            if (_value.Length != other._value.Length)
             {
                 return false;
             }
 
-            for (int i = 0; i < value_Renamed.Length; i++)
-                if (value_Renamed[i] != other.value_Renamed[i])
+            for (int i = 0; i < _value.Length; i++)
+                if (_value[i] != other._value[i])
                 {
                     return false;
                 }
@@ -80,7 +85,7 @@ namespace OpenFAST
 
         public override int GetHashCode()
         {
-            return value_Renamed.GetHashCode();
+            return _value.GetHashCode();
         }
     }
 }

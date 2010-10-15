@@ -25,17 +25,13 @@ namespace OpenFAST.Error
 {
     public struct ErrorHandler_Fields
     {
-        public static readonly ErrorHandler DEFAULT;
-        public static readonly ErrorHandler NULL;
-
-        static ErrorHandler_Fields()
-        {
-            DEFAULT = new DefaultErrorHandler();
-            NULL = new NullErrorHandler();
-        }
+// ReSharper disable InconsistentNaming
+        public static readonly IErrorHandler DEFAULT = new DefaultErrorHandler();
+        public static readonly IErrorHandler NULL = new NullErrorHandler();
+// ReSharper restore InconsistentNaming
     }
 
-    public class DefaultErrorHandler : ErrorHandler
+    public class DefaultErrorHandler : IErrorHandler
     {
         #region ErrorHandler Members
 
@@ -52,7 +48,7 @@ namespace OpenFAST.Error
         #endregion
     }
 
-    public class NullErrorHandler : ErrorHandler
+    public class NullErrorHandler : IErrorHandler
     {
         #region ErrorHandler Members
 
@@ -67,7 +63,7 @@ namespace OpenFAST.Error
         #endregion
     }
 
-    public interface ErrorHandler
+    public interface IErrorHandler
     {
         void Error(ErrorCode code, string message);
         void Error(ErrorCode code, string message, Exception t);

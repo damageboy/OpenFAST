@@ -28,11 +28,16 @@ namespace OpenFAST
     [Serializable]
     public sealed class IntegerValue : NumericValue
     {
-        public int value_Renamed;
+        private readonly int _value;
 
-        public IntegerValue(int value_Renamed)
+        public IntegerValue(int value)
         {
-            this.value_Renamed = value_Renamed;
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
         }
 
         public override bool Equals(object obj)
@@ -47,37 +52,37 @@ namespace OpenFAST
 
         private bool Equals(ScalarValue otherValue)
         {
-            return value_Renamed == otherValue.ToLong();
+            return _value == otherValue.ToLong();
         }
 
         public override int GetHashCode()
         {
-            return value_Renamed;
+            return _value;
         }
 
         public override bool EqualsValue(string defaultValue)
         {
-            return Int32.Parse(defaultValue) == value_Renamed;
+            return Int32.Parse(defaultValue) == _value;
         }
 
         public override NumericValue Increment()
         {
-            return new IntegerValue(value_Renamed + 1);
+            return new IntegerValue(_value + 1);
         }
 
         public override NumericValue Decrement()
         {
-            return new IntegerValue(value_Renamed - 1);
+            return new IntegerValue(_value - 1);
         }
 
         public override NumericValue Subtract(NumericValue subend)
         {
             if (subend is LongValue)
             {
-                return new LongValue(value_Renamed - subend.ToLong());
+                return new LongValue(_value - subend.ToLong());
             }
 
-            return new IntegerValue(value_Renamed - subend.ToInt());
+            return new IntegerValue(_value - subend.ToInt());
         }
 
         public override NumericValue Add(NumericValue addend)
@@ -87,58 +92,58 @@ namespace OpenFAST
                 return addend.Add(this);
             }
 
-            return new IntegerValue(value_Renamed + addend.ToInt());
+            return new IntegerValue(_value + addend.ToInt());
         }
 
         public string Serialize()
         {
-            return Convert.ToString(value_Renamed);
+            return Convert.ToString(_value);
         }
 
         public override bool Equals(int valueRenamed)
         {
-            return valueRenamed == value_Renamed;
+            return valueRenamed == _value;
         }
 
         public override long ToLong()
         {
-            return value_Renamed;
+            return _value;
         }
 
         public override int ToInt()
         {
-            return value_Renamed;
+            return _value;
         }
 
         public override string ToString()
         {
-            return Convert.ToString(value_Renamed);
+            return Convert.ToString(_value);
         }
 
         public override byte ToByte()
         {
-            if (value_Renamed > SByte.MaxValue || value_Renamed < SByte.MinValue)
+            if (_value > SByte.MaxValue || _value < SByte.MinValue)
                 Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
-                                   "The value \"" + value_Renamed + "\" is too large for a byte.");
-            return (byte) value_Renamed;
+                                   "The value \"" + _value + "\" is too large for a byte.");
+            return (byte) _value;
         }
 
         public override short ToShort()
         {
-            if (value_Renamed > Int16.MaxValue || value_Renamed < Int16.MinValue)
+            if (_value > Int16.MaxValue || _value < Int16.MinValue)
                 Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
-                                   "The value \"" + value_Renamed + "\" is too large for a short.");
-            return (short) value_Renamed;
+                                   "The value \"" + _value + "\" is too large for a short.");
+            return (short) _value;
         }
 
         public override double ToDouble()
         {
-            return value_Renamed;
+            return _value;
         }
 
         public override Decimal ToBigDecimal()
         {
-            return new Decimal(value_Renamed);
+            return new Decimal(_value);
         }
     }
 }

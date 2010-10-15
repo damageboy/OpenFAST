@@ -32,7 +32,7 @@ namespace OpenFAST.Session.Template.Exchange
             get { return new Group[] {SessionControlProtocol_1_1.COMP_DECIMAL_INSTR}; }
         }
 
-        public override Field Convert(GroupValue fieldDef, TemplateRegistry templateRegistry, ConversionContext context)
+        public override Field Convert(GroupValue fieldDef, ITemplateRegistry templateRegistry, ConversionContext context)
         {
             var name = new QName(fieldDef.GetString("Name"), fieldDef.GetString("Ns"));
             bool optional = fieldDef.GetBool("Optional");

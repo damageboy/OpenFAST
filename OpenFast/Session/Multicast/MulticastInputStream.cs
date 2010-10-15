@@ -27,15 +27,15 @@ namespace OpenFAST.Session.Multicast
 {
     public sealed class MulticastInputStream : Stream
     {
-        private const int BUFFER_SIZE = 4*1024*1024;
-        private readonly ByteBuffer buffer; //SHARIQ
-        private readonly UdpClient socket;
+        private const int BufferSize = 4*1024*1024;
+        private readonly ByteBuffer _buffer; //SHARIQ
+        private readonly UdpClient _socket;
 
         public MulticastInputStream(UdpClient socket)
         {
-            this.socket = socket;
-            buffer = ByteBuffer.Allocate(BUFFER_SIZE);
-            buffer.flip(); //SHARIQ
+            _socket = socket;
+            _buffer = ByteBuffer.Allocate(BufferSize);
+            _buffer.flip(); //SHARIQ
         }
 
         public override Boolean CanRead
@@ -67,16 +67,17 @@ namespace OpenFAST.Session.Multicast
 
         public override int ReadByte()
         {
-            if (!socket.Client.Connected)
+            if (!_socket.Client.Connected)
                 return - 1;
-            if (!buffer.hasRemaining())
+            if (!_buffer.hasRemaining())
             {
-                buffer.flip(); //SHARIQ
-                SupportClass.PacketSupport packet = new DatagramPacket(buffer.array(), buffer.array().Length);
-                SupportClass.UdpClientSupport.Receive(socket, out packet);
-                buffer.limit(packet.Length); //SHARIQ
+                _buffer.flip(); //SHARIQ
+#warning Bug? why allocate DatagramPacket and than pass it in as an out param
+                SupportClass.PacketSupport packet = new DatagramPacket(_buffer.array(), _buffer.array().Length);
+                SupportClass.UdpClientSupport.Receive(_socket, out packet);
+                _buffer.limit(packet.Length); //SHARIQ
             }
-            return buffer.get_Renamed(); //SHARIQ
+            return _buffer.Get(); //SHARIQ
         }
 
         public override void Flush()

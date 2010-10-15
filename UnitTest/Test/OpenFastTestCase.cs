@@ -35,11 +35,11 @@ namespace UnitTest.Test
 {
     public abstract class OpenFastTestCase
     {
-        protected static readonly ScalarValue NULL = ScalarValue.NULL;
+        protected static readonly ScalarValue Null = ScalarValue.NULL;
 
-        protected static readonly ScalarValue UNDEF = ScalarValue.UNDEFINED;
+        protected static readonly ScalarValue Undef = ScalarValue.UNDEFINED;
 
-        public static DecimalValue d(double value)
+        protected static DecimalValue Decimal(double value)
         {
             return new DecimalValue(value);
         }
@@ -85,7 +85,7 @@ namespace UnitTest.Test
             return new MemoryStream(bytes);
         }
 
-        protected static ByteVectorValue byt(byte[] value)
+        protected static ByteVectorValue Byte(byte[] value)
         {
             return new ByteVectorValue(value);
         }
@@ -121,17 +121,17 @@ namespace UnitTest.Test
             return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, min, sec, ms);
         }
 
-        protected static byte[] byt(String hexString)
+        protected static byte[] Byte(String hexString)
         {
             return ByteUtil.ConvertHexStringToByteArray(hexString);
         }
 
-        protected static byte[] bytes(String binaryString)
+        protected static byte[] Bytes(String binaryString)
         {
             return ByteUtil.ConvertBitStringToFastByteArray(binaryString);
         }
 
-        protected static DecimalValue d(int mantissa, int exponent)
+        protected static DecimalValue Decimal(int mantissa, int exponent)
         {
             return new DecimalValue(mantissa, exponent);
         }
@@ -153,17 +153,17 @@ namespace UnitTest.Test
             return new MessageTemplate("Doesn't matter", new[] {field});
         }
 
-        protected static void AssertScalarField(FieldSet fieldSet, int fieldIndex, Type type, String name,
-                                                OperatorCodec operator_ren,
+        protected static void AssertScalarField(IFieldSet fieldSet, int fieldIndex, Type type, String name,
+                                                OperatorCodec operatorCodec,
                                                 ScalarValue defaultValue)
         {
             var field = (Scalar) fieldSet.GetField(fieldIndex);
             AssertScalarField(field, type, name);
-            Assert.AreEqual(operator_ren, field.OperatorCodec);
+            Assert.AreEqual(operatorCodec, field.OperatorCodec);
             Assert.AreEqual(defaultValue, field.DefaultValue);
         }
 
-        protected static void AssertComposedScalarField(FieldSet fieldSet, int fieldIndex, Type type, String name,
+        protected static void AssertComposedScalarField(IFieldSet fieldSet, int fieldIndex, Type type, String name,
                                                         Operator exponentOp,
                                                         ScalarValue exponentValue, Operator mantissaOp,
                                                         ScalarValue mantissaValue)
@@ -194,7 +194,7 @@ namespace UnitTest.Test
             Assert.AreEqual(mantissaValue, fields[1].DefaultValue);
         }
 
-        protected static void AssertScalarField(FieldSet fieldSet, int fieldIndex, Type type, String name,
+        protected static void AssertScalarField(IFieldSet fieldSet, int fieldIndex, Type type, String name,
                                                 Operator operator_ren)
         {
             var field = (Scalar) fieldSet.GetField(fieldIndex);
@@ -221,7 +221,7 @@ namespace UnitTest.Test
             Assert.AreEqual(name, currentGroup.Name);
         }
 
-        protected static void AssertOptionalScalarField(FieldSet fieldSet, int fieldIndex, Type type, String name,
+        protected static void AssertOptionalScalarField(IFieldSet fieldSet, int fieldIndex, Type type, String name,
                                                         Operator operator_ren)
         {
             var field = (Scalar) fieldSet.GetField(fieldIndex);

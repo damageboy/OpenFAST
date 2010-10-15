@@ -23,13 +23,13 @@ using OpenFAST.Template;
 
 namespace OpenFAST
 {
-    public struct Dictionary_Fields
+    public struct DictionaryFields
     {
         public static readonly string TEMPLATE = "template";
         public static readonly string GLOBAL = "global";
     }
 
-    public interface Dictionary
+    public interface IDictionary
     {
         ScalarValue Lookup(Group template, QName key, QName currentApplicationType);
         void Store(Group group, QName applicationType, QName key, ScalarValue valueToEncode);

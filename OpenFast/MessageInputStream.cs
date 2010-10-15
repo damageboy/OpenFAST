@@ -26,20 +26,17 @@ using OpenFAST.Template;
 
 namespace OpenFAST
 {
-    public sealed class MessageInputStream : MessageStream
+    public sealed class MessageInputStream : IMessageStream
     {
-        private readonly Context context;
-        private readonly FastDecoder decoder;
+        private readonly Context _context;
+        private readonly FastDecoder _decoder;
+        private readonly List<IMessageHandler> _handlers = new List<IMessageHandler>();
+        private readonly Stream _inStream;
 
-        private readonly List<MessageHandler> handlers =
-            new List<MessageHandler>();
+        private readonly Dictionary<MessageTemplate, IMessageHandler> _templateHandlers =
+            new Dictionary<MessageTemplate, IMessageHandler>();
 
-        private readonly Stream in_Renamed;
-
-        private readonly Dictionary<MessageTemplate, MessageHandler> templateHandlers =
-            new Dictionary<MessageTemplate, MessageHandler>();
-
-        private MessageBlockReader blockReader = MessageBlockReader_Fields.NULL;
+        private IMessageBlockReader _blockReader = MessageBlockReader_Fields.NULL;
 
         public MessageInputStream(Stream inputStream) : this(inputStream, new Context())
         {
@@ -47,33 +44,33 @@ namespace OpenFAST
 
         public MessageInputStream(Stream inputStream, Context context)
         {
-            in_Renamed = inputStream;
-            this.context = context;
-            decoder = new FastDecoder(context, in_Renamed);
+            _inStream = inputStream;
+            _context = context;
+            _decoder = new FastDecoder(context, _inStream);
         }
 
         public Stream UnderlyingStream
         {
-            get { return in_Renamed; }
+            get { return _inStream; }
         }
 
         public Context Context
         {
-            get { return context; }
+            get { return _context; }
         }
 
-        public MessageBlockReader BlockReader
+        public IMessageBlockReader BlockReader
         {
-            set { blockReader = value; }
+            set { _blockReader = value; }
         }
 
-        #region MessageStream Members
+        #region IMessageStream Members
 
         public void Close()
         {
             try
             {
-                in_Renamed.Close();
+                _inStream.Close();
             }
             catch (IOException e)
             {
@@ -81,51 +78,51 @@ namespace OpenFAST
             }
         }
 
-        public void AddMessageHandler(MessageTemplate template, MessageHandler handler)
+        public void AddMessageHandler(MessageTemplate template, IMessageHandler handler)
         {
-            templateHandlers[template] = handler;
+            _templateHandlers[template] = handler;
         }
 
-        public void AddMessageHandler(MessageHandler handler)
+        public void AddMessageHandler(IMessageHandler handler)
         {
-            handlers.Add(handler);
+            _handlers.Add(handler);
         }
 
-        public TemplateRegistry GetTemplateRegistry()
+        public ITemplateRegistry GetTemplateRegistry()
         {
-            return context.TemplateRegistry;
+            return _context.TemplateRegistry;
         }
 
         #endregion
 
         public Message ReadMessage()
         {
-            if (context.TraceEnabled)
-                context.StartTrace();
+            if (_context.TraceEnabled)
+                _context.StartTrace();
 
-            bool keepReading = blockReader.ReadBlock(in_Renamed);
+            bool keepReading = _blockReader.ReadBlock(_inStream);
 
             if (!keepReading)
                 return null;
 
-            Message message = decoder.ReadMessage();
+            Message message = _decoder.ReadMessage();
 
             if (message == null)
             {
                 return null;
             }
 
-            blockReader.MessageRead(in_Renamed, message);
+            _blockReader.MessageRead(_inStream, message);
 
-            foreach (MessageHandler t in handlers)
+            foreach (IMessageHandler t in _handlers)
             {
-                t.HandleMessage(message, context, decoder);
+                t.HandleMessage(message, _context, _decoder);
             }
 
-            MessageHandler handler;
-            if (templateHandlers.TryGetValue(message.Template, out handler))
+            IMessageHandler handler;
+            if (_templateHandlers.TryGetValue(message.Template, out handler))
             {
-                handler.HandleMessage(message, context, decoder);
+                handler.HandleMessage(message, _context, _decoder);
 
                 return ReadMessage();
             }
@@ -135,12 +132,12 @@ namespace OpenFAST
 
         public void RegisterTemplate(int templateId, MessageTemplate template)
         {
-            context.RegisterTemplate(templateId, template);
+            _context.RegisterTemplate(templateId, template);
         }
 
-        public void SetTemplateRegistry(TemplateRegistry registry)
+        public void SetTemplateRegistry(ITemplateRegistry registry)
         {
-            context.TemplateRegistry = registry;
+            _context.TemplateRegistry = registry;
         }
 
         //public void  AddTemplateRegisteredListener(TemplateRegisteredListener templateRegisteredListener)
@@ -149,7 +146,7 @@ namespace OpenFAST
 
         public void Reset()
         {
-            decoder.Reset();
+            _decoder.Reset();
         }
     }
 }

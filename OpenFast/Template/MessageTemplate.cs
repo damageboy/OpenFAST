@@ -27,7 +27,7 @@ using OpenFAST.Template.Type;
 namespace OpenFAST.Template
 {
     [Serializable]
-    public sealed class MessageTemplate : Group, FieldSet
+    public sealed class MessageTemplate : Group, IFieldSet
     {
         public MessageTemplate(QName name, Field[] fields) : base(name, AddTemplateIdField(fields), false)
         {
@@ -46,8 +46,8 @@ namespace OpenFAST.Template
         {
             get
             {
-                var f = new Field[fields.Length - 1];
-                Array.Copy(fields, 1, f, 0, fields.Length - 1);
+                var f = new Field[Fields.Length - 1];
+                Array.Copy(Fields, 1, f, 0, Fields.Length - 1);
                 return f;
             }
         }
@@ -56,7 +56,7 @@ namespace OpenFAST.Template
 
         public override Field GetField(int index)
         {
-            return fields[index];
+            return Fields[index];
         }
 
         #endregion
@@ -86,14 +86,13 @@ namespace OpenFAST.Template
             return Encode(message, this, context);
         }
 
-        public Message Decode(Stream in_Renamed, int templateId, BitVectorReader presenceMapReader,
-                              Context context)
+        public Message Decode(Stream inStream, int templateId, BitVectorReader presenceMapReader, Context context)
         {
             try
             {
                 if (context.TraceEnabled)
                     context.DecodeTrace.GroupStart(this);
-                FieldValue[] fieldValues = DecodeFieldValues(in_Renamed, this, presenceMapReader, context);
+                IFieldValue[] fieldValues = DecodeFieldValues(inStream, this, presenceMapReader, context);
                 fieldValues[0] = new IntegerValue(templateId);
                 var message = new Message(this, fieldValues);
                 if (context.TraceEnabled)
@@ -108,10 +107,10 @@ namespace OpenFAST.Template
 
         public override string ToString()
         {
-            return name.Name;
+            return Name;
         }
 
-        public override FieldValue CreateValue(string value_Renamed)
+        public override IFieldValue CreateValue(string value)
         {
             return new Message(this);
         }
@@ -127,13 +126,13 @@ namespace OpenFAST.Template
 
         public bool Equals(MessageTemplate other)
         {
-            if (!name.Equals(other.name))
+            if (!QName.Equals(other.QName))
                 return false;
-            if (fields.Length != other.fields.Length)
+            if (Fields.Length != other.Fields.Length)
                 return false;
-            for (int i = 0; i < fields.Length; i++)
+            for (int i = 0; i < Fields.Length; i++)
             {
-                if (!fields[i].Equals(other.fields[i]))
+                if (!Fields[i].Equals(other.Fields[i]))
                     return false;
             }
             return true;
@@ -141,9 +140,9 @@ namespace OpenFAST.Template
 
         public override int GetHashCode()
         {
-            int hashCode = (name != null) ? name.GetHashCode() : 0;
-            for (int i = 0; i < fields.Length; i++)
-                hashCode += fields[i].GetHashCode();
+            int hashCode = (QName != null) ? QName.GetHashCode() : 0;
+            for (int i = 0; i < Fields.Length; i++)
+                hashCode += Fields[i].GetHashCode();
             return hashCode;
         }
     }

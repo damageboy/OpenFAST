@@ -23,7 +23,7 @@ using System.Xml;
 
 namespace OpenFAST.Template.Loader
 {
-    public interface FieldParser
+    public interface IFieldParser
     {
         Field Parse(XmlElement fieldNode, ParsingContext context);
         bool CanParse(XmlElement element, ParsingContext context);

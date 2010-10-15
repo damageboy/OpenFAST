@@ -29,20 +29,14 @@ namespace OpenFAST.Session.Template.Exchange
     {
         public override Group[] TemplateExchangeTemplates
         {
-            get
-            {
-                return new Group[]
-                           {SessionControlProtocol_1_1.BYTE_VECTOR_INSTR, SessionControlProtocol_1_1.UNICODE_INSTR};
-            }
+            get { return new[] {SessionControlProtocol_1_1.BYTE_VECTOR_INSTR, SessionControlProtocol_1_1.UNICODE_INSTR}; }
         }
 
-        public override Field Convert(GroupValue fieldDef, TemplateRegistry templateRegistry, ConversionContext context)
+        public override Field Convert(GroupValue fieldDef, ITemplateRegistry templateRegistry, ConversionContext context)
         {
             var scalar = (Scalar) base.Convert(fieldDef, templateRegistry, context);
             if (fieldDef.IsDefined("Length"))
-            {
                 scalar.AddAttribute(FastConstants.LENGTH_FIELD, fieldDef.GetGroup("Length").GetString("Name"));
-            }
             return scalar;
         }
 
@@ -50,10 +44,11 @@ namespace OpenFAST.Session.Template.Exchange
         {
             var scalar = (Scalar) field;
             GroupValue fieldDef = base.Convert(field, context);
-            if (scalar.HasAttribute(FastConstants.LENGTH_FIELD))
+            string value;
+            if (scalar.TryGetAttribute(FastConstants.LENGTH_FIELD, out value))
             {
                 var lengthDef = new GroupValue(fieldDef.GetGroup().GetGroup("Length"));
-                lengthDef.SetString("Name", scalar.GetAttribute(FastConstants.LENGTH_FIELD));
+                lengthDef.SetString("Name", value);
                 fieldDef.SetFieldValue("Length", lengthDef);
             }
             return fieldDef;

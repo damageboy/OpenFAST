@@ -28,20 +28,20 @@ using OpenFAST.Template;
 
 namespace OpenFAST.Session
 {
-    public class Session : ErrorHandler
+    public class Session : IErrorHandler
     {
-        private readonly Connection connection;
-        private readonly SessionProtocol protocol;
-        private ErrorHandler errorHandler = ErrorHandler_Fields.DEFAULT;
+        private readonly IConnection connection;
+        private readonly ISessionProtocol protocol;
+        private IErrorHandler errorHandler = ErrorHandler_Fields.DEFAULT;
         private MessageInputStream in_stream;
         private bool listening;
         private SupportClass.ThreadClass listeningThread;
-        private MessageListener messageListener;
+        private IMessageListener messageListener;
         private MessageOutputStream out_stream;
-        private SessionListener sessionListener = SessionListener_Fields.NULL;
+        private ISessionListener sessionListener = SessionListenerFields.Null;
 
-        public Session(Connection connection, SessionProtocol protocol, TemplateRegistry inboundRegistry,
-                       TemplateRegistry outboundRegistry)
+        public Session(IConnection connection, ISessionProtocol protocol, ITemplateRegistry inboundRegistry,
+                       ITemplateRegistry outboundRegistry)
         {
             var inContext = new Context();
             inContext.TemplateRegistry.RegisterAll(inboundRegistry);
@@ -65,9 +65,9 @@ namespace OpenFAST.Session
             protocol.ConfigureSession(this);
         }
 
-        public virtual Client Client { get; set; }
+        public virtual IClient Client { get; set; }
 
-        public virtual ErrorHandler ErrorHandler
+        public virtual IErrorHandler ErrorHandler
         {
             get { return errorHandler; }
 
@@ -82,12 +82,12 @@ namespace OpenFAST.Session
             }
         }
 
-        public virtual Connection Connection
+        public virtual IConnection Connection
         {
             get { return connection; }
         }
 
-        public virtual MessageListener MessageHandler
+        public virtual IMessageListener MessageHandler
         {
             set
             {
@@ -106,7 +106,7 @@ namespace OpenFAST.Session
             }
         }
 
-        public virtual SessionListener SessionListener
+        public virtual ISessionListener SessionListener
         {
             set { sessionListener = value; }
         }
@@ -181,7 +181,7 @@ namespace OpenFAST.Session
             listeningThread.Start();
         }
 
-        public virtual void SendTemplates(TemplateRegistry registry)
+        public virtual void SendTemplates(ITemplateRegistry registry)
         {
             if (!protocol.SupportsTemplateExchange())
             {

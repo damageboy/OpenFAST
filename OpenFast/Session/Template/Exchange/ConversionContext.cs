@@ -27,35 +27,32 @@ namespace OpenFAST.Session.Template.Exchange
 {
     public class ConversionContext
     {
-        private readonly Dictionary<Group, FieldInstructionConverter> converterTemplateMap =
-            new Dictionary<Group, FieldInstructionConverter>();
+        private readonly Dictionary<Group, IFieldInstructionConverter> _converterTemplateMap =
+            new Dictionary<Group, IFieldInstructionConverter>();
 
-        private readonly List<FieldInstructionConverter> converters =
-            new List<FieldInstructionConverter>();
+        private readonly List<IFieldInstructionConverter> _converters =
+            new List<IFieldInstructionConverter>();
 
-        public virtual void AddFieldInstructionConverter(FieldInstructionConverter converter)
+        public virtual void AddFieldInstructionConverter(IFieldInstructionConverter converter)
         {
-            Group[] templateExchangeTemplates = converter.TemplateExchangeTemplates;
-            for (int i = 0; i < templateExchangeTemplates.Length; i++)
-            {
-                converterTemplateMap[templateExchangeTemplates[i]] = converter;
-            }
-            converters.Add(converter);
+            Group[] templs = converter.TemplateExchangeTemplates;
+            for (int i = 0; i < templs.Length; i++)
+                _converterTemplateMap[templs[i]] = converter;
+
+            _converters.Add(converter);
         }
 
-        public virtual FieldInstructionConverter GetConverter(Group group)
+        public virtual IFieldInstructionConverter GetConverter(Group group)
         {
-            return converterTemplateMap[group];
+            return _converterTemplateMap[group];
         }
 
-        public virtual FieldInstructionConverter GetConverter(Field field)
+        public virtual IFieldInstructionConverter GetConverter(Field field)
         {
-            for (int i = converters.Count - 1; i >= 0; i--)
-            {
-                FieldInstructionConverter converter = converters[i];
-                if (converter.ShouldConvert(field))
-                    return converter;
-            }
+            for (int i = _converters.Count - 1; i >= 0; i--)
+                if (_converters[i].ShouldConvert(field))
+                    return _converters[i];
+
             throw new SystemException("No valid converter found for the field: " + field);
         }
     }

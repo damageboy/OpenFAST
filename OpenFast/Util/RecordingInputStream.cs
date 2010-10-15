@@ -26,21 +26,21 @@ namespace OpenFAST.util
 {
     public sealed class RecordingInputStream : Stream
     {
-        private readonly byte[] buffer = new byte[1024];
-        private readonly Stream in_Renamed;
-        private int index;
+        private readonly byte[] _buffer = new byte[1024];
+        private readonly Stream _inStream;
+        private int _index;
 
         public RecordingInputStream(Stream inputStream)
         {
-            in_Renamed = inputStream;
+            _inStream = inputStream;
         }
 
         public byte[] Buffer
         {
             get
             {
-                var b = new byte[index];
-                Array.Copy(buffer, 0, b, 0, index);
+                var b = new byte[_index];
+                Array.Copy(_buffer, 0, b, 0, _index);
 
                 return b;
             }
@@ -76,19 +76,19 @@ namespace OpenFAST.util
 
         public override int ReadByte()
         {
-            int read = in_Renamed.ReadByte();
-            buffer[index++] = (byte) read;
+            int read = _inStream.ReadByte();
+            _buffer[_index++] = (byte) read;
             return read;
         }
 
         public override string ToString()
         {
-            return ByteUtil.ConvertByteArrayToBitString(buffer, index);
+            return ByteUtil.ConvertByteArrayToBitString(_buffer, _index);
         }
 
         public void Clear()
         {
-            index = 0;
+            _index = 0;
         }
 
         public override void Flush()

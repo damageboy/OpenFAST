@@ -34,9 +34,9 @@ namespace OpenFAST.Template.Type.Codec
             get { return new ByteVectorValue(new byte[] {}); }
         }
 
-        public override ScalarValue Decode(Stream in_Renamed)
+        public override ScalarValue Decode(Stream inStream)
         {
-            ScalarValue decode = NULLABLE_UNSIGNED_INTEGER.Decode(in_Renamed);
+            ScalarValue decode = NULLABLE_UNSIGNED_INTEGER.Decode(inStream);
             if (decode == null)
                 return null;
             int length = decode.ToInt();
@@ -45,7 +45,7 @@ namespace OpenFAST.Template.Type.Codec
             for (int i = 0; i < length; i++)
                 try
                 {
-                    encoding[i] = (byte) in_Renamed.ReadByte();
+                    encoding[i] = (byte) inStream.ReadByte();
                 }
                 catch (IOException e)
                 {
@@ -55,22 +55,22 @@ namespace OpenFAST.Template.Type.Codec
             return new ByteVectorValue(encoding);
         }
 
-        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        public override byte[] EncodeValue(ScalarValue value)
         {
-            if (value_Renamed.Null)
+            if (value.Null)
                 return NULLABLE_UNSIGNED_INTEGER.EncodeValue(ScalarValue.NULL);
-            var byteVectorValue = (ByteVectorValue) value_Renamed;
-            int lengthSize = IntegerCodec.GetUnsignedIntegerSize(byteVectorValue.value_Renamed.Length);
-            var encoding = new byte[byteVectorValue.value_Renamed.Length + lengthSize];
-            byte[] length = NULLABLE_UNSIGNED_INTEGER.Encode(new IntegerValue(byteVectorValue.value_Renamed.Length));
+            var byteVectorValue = (ByteVectorValue) value;
+            int lengthSize = IntegerCodec.GetUnsignedIntegerSize(byteVectorValue.Value.Length);
+            var encoding = new byte[byteVectorValue.Value.Length + lengthSize];
+            byte[] length = NULLABLE_UNSIGNED_INTEGER.Encode(new IntegerValue(byteVectorValue.Value.Length));
             Array.Copy(length, 0, encoding, 0, lengthSize);
-            Array.Copy(byteVectorValue.value_Renamed, 0, encoding, lengthSize, byteVectorValue.value_Renamed.Length);
+            Array.Copy(byteVectorValue.Value, 0, encoding, lengthSize, byteVectorValue.Value.Length);
             return encoding;
         }
 
-        public static ScalarValue FromString(string value_Renamed)
+        public static ScalarValue FromString(string value)
         {
-            return new ByteVectorValue(Encoding.UTF8.GetBytes(value_Renamed));
+            return new ByteVectorValue(Encoding.UTF8.GetBytes(value));
         }
 
         public override bool Equals(object obj)

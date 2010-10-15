@@ -23,7 +23,7 @@ using System;
 
 namespace OpenFAST.Session
 {
-    public sealed class BasicClient : Client
+    public sealed class BasicClient : IClient
     {
         private readonly string name;
 

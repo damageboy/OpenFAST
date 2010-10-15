@@ -26,9 +26,9 @@ namespace OpenFAST.Template.Type.Codec
     [Serializable]
     public abstract class NotStopBitEncodedTypeCodec : TypeCodec
     {
-        public override byte[] Encode(ScalarValue value_Renamed)
+        public override byte[] Encode(ScalarValue value)
         {
-            return EncodeValue(value_Renamed);
+            return EncodeValue(value);
         }
 
         public override bool Equals(Object obj)

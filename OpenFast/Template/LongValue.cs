@@ -26,11 +26,16 @@ namespace OpenFAST.Template
     [Serializable]
     public class LongValue : NumericValue
     {
-        public long value_Renamed;
+        private readonly long _value;
 
-        public LongValue(long value_Renamed)
+        public LongValue(long value)
         {
-            this.value_Renamed = value_Renamed;
+            _value = value;
+        }
+
+        public long Value
+        {
+            get { return _value; }
         }
 
         public override bool Equals(Object obj)
@@ -45,62 +50,62 @@ namespace OpenFAST.Template
 
         private bool Equals(ScalarValue otherValue)
         {
-            return value_Renamed == otherValue.ToLong();
+            return _value == otherValue.ToLong();
         }
 
         public override int GetHashCode()
         {
-            return (int) value_Renamed;
+            return (int) _value;
         }
 
         public override bool EqualsValue(string defaultValue)
         {
-            return Int32.Parse(defaultValue) == value_Renamed;
+            return Int32.Parse(defaultValue) == _value;
         }
 
         public override NumericValue Increment()
         {
-            return new LongValue(value_Renamed + 1);
+            return new LongValue(_value + 1);
         }
 
         public override NumericValue Decrement()
         {
-            return new LongValue(value_Renamed - 1);
+            return new LongValue(_value - 1);
         }
 
         public override string ToString()
         {
-            return Convert.ToString(value_Renamed);
+            return Convert.ToString(_value);
         }
 
         public override NumericValue Subtract(NumericValue subend)
         {
-            return new LongValue(value_Renamed - subend.ToLong());
+            return new LongValue(_value - subend.ToLong());
         }
 
         public override NumericValue Add(NumericValue addend)
         {
-            return new LongValue(value_Renamed + addend.ToLong());
+            return new LongValue(_value + addend.ToLong());
         }
 
         public virtual string Serialize()
         {
-            return Convert.ToString(value_Renamed);
+            return Convert.ToString(_value);
         }
 
         public override bool Equals(int valueRenamed)
         {
-            return valueRenamed == value_Renamed;
+            return valueRenamed == _value;
         }
 
         public override long ToLong()
         {
-            return value_Renamed;
+            return _value;
         }
 
         public override int ToInt()
         {
-            return (int) value_Renamed;
+            return (int) _value;
         }
     }
 }

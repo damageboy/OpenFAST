@@ -26,16 +26,16 @@ namespace OpenFAST.Error
     [Serializable]
     public class FastDynamicError : SystemException
     {
-        private readonly ErrorCode error;
+        private readonly ErrorCode _error;
 
         public FastDynamicError(ErrorCode error) : base(error.ShortName + ": " + error.Description)
         {
-            this.error = error;
+            _error = error;
         }
 
         public virtual ErrorCode Error
         {
-            get { return error; }
+            get { return _error; }
         }
     }
 }

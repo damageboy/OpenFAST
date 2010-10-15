@@ -63,12 +63,12 @@ namespace OpenFAST.Template.Type.Codec
             get { return false; }
         }
 
-        public abstract byte[] EncodeValue(ScalarValue value_Renamed);
-        public abstract ScalarValue Decode(Stream in_Renamed);
+        public abstract byte[] EncodeValue(ScalarValue value);
+        public abstract ScalarValue Decode(Stream inStream);
 
-        public virtual byte[] Encode(ScalarValue value_Renamed)
+        public virtual byte[] Encode(ScalarValue value)
         {
-            byte[] encoding = EncodeValue(value_Renamed);
+            byte[] encoding = EncodeValue(value);
             encoding[encoding.Length - 1] |= STOP_BIT; // add stop bit;
             return encoding;
         }

@@ -34,8 +34,8 @@ namespace UnitTest
         public void TestMantissaAndExponent()
         {
             var value = new DecimalValue(9427.55);
-            AssertEquals(942755, value.mantissa);
-            AssertEquals(-2, value.exponent);
+            AssertEquals(942755, value.Mantissa);
+            AssertEquals(-2, value.Exponent);
 
             value = new DecimalValue(942755, -2);
             AssertEquals(((decimal) 9427.55), value.ToBigDecimal());
@@ -58,7 +58,7 @@ namespace UnitTest
         [Test]
         public void TestToByte()
         {
-            AssertEquals(100, d(100.0).ToByte());
+            AssertEquals(100, Decimal(100.0).ToByte());
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace UnitTest
         {
             try
             {
-                d(100.1).ToByte();
+                Decimal(100.1).ToByte();
                 Assert.Fail();
             }
             catch (FastException e)
@@ -84,7 +84,7 @@ namespace UnitTest
         [Test]
         public void TestToInt()
         {
-            AssertEquals(100, d(100.0).ToInt());
+            AssertEquals(100, Decimal(100.0).ToInt());
         }
 
         [Test]
@@ -92,7 +92,7 @@ namespace UnitTest
         {
             try
             {
-                d(100.1).ToInt();
+                Decimal(100.1).ToInt();
                 Assert.Fail();
             }
             catch (FastException e)
@@ -104,7 +104,7 @@ namespace UnitTest
         [Test]
         public void TestToLong()
         {
-            AssertEquals(10000000000000L, d(10000000000000.0).ToLong());
+            AssertEquals(10000000000000L, Decimal(10000000000000.0).ToLong());
         }
 
         [Test]
@@ -112,7 +112,7 @@ namespace UnitTest
         {
             try
             {
-                d(100.1).ToLong();
+                Decimal(100.1).ToLong();
                 Assert.Fail();
             }
             catch (FastException e)
@@ -124,7 +124,7 @@ namespace UnitTest
         [Test]
         public void TestToShort()
         {
-            AssertEquals(128, d(128.0).ToShort());
+            AssertEquals(128, Decimal(128.0).ToShort());
         }
 
         [Test]
@@ -132,7 +132,7 @@ namespace UnitTest
         {
             try
             {
-                d(100.1).ToShort();
+                Decimal(100.1).ToShort();
                 Assert.Fail();
             }
             catch (FastException e)

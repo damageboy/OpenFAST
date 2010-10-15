@@ -30,70 +30,76 @@ namespace OpenFAST.Template.Operator
     [Serializable]
     public abstract class OperatorCodec
     {
-        private static readonly Dictionary<Key, OperatorCodec> OPERATOR_MAP =
+        private static readonly Dictionary<Key, OperatorCodec> OperatorMap =
             new Dictionary<Key, OperatorCodec>();
 
-        protected internal static readonly OperatorCodec NONE_ALL;
-        protected internal static readonly OperatorCodec CONSTANT_ALL;
-        protected internal static readonly OperatorCodec DEFAULT_ALL;
-        protected internal static readonly OperatorCodec COPY_ALL = new CopyOperatorCodec();
-        protected internal static readonly OperatorCodec INCREMENT_INTEGER;
-        protected internal static readonly OperatorCodec DELTA_INTEGER;
-        protected internal static readonly OperatorCodec DELTA_STRING = new DeltaStringOperatorCodec();
-        protected internal static readonly OperatorCodec DELTA_DECIMAL = new DeltaDecimalOperatorCodec();
-        protected internal static readonly OperatorCodec TAIL;
-        private readonly Operator operator_Renamed;
+        protected internal static readonly OperatorCodec NoneAll =
+            new NoneOperatorCodec(Operator.NONE, FASTType.ALL_TYPES());
 
-        static OperatorCodec()
-        {
-            NONE_ALL = new NoneOperatorCodec(Operator.NONE, FASTType.ALL_TYPES());
-            CONSTANT_ALL = new ConstantOperatorCodec(Operator.CONSTANT, FASTType.ALL_TYPES());
-            DEFAULT_ALL = new DefaultOperatorCodec(Operator.DEFAULT, FASTType.ALL_TYPES());
-            INCREMENT_INTEGER = new IncrementIntegerOperatorCodec(Operator.INCREMENT, FASTType.INTEGER_TYPES);
-            DELTA_INTEGER = new DeltaIntegerOperatorCodec(Operator.DELTA, FASTType.INTEGER_TYPES);
-            TAIL = new TailOperatorCodec(Operator.TAIL,
-                                         new[] {FASTType.ASCII, FASTType.STRING, FASTType.UNICODE, FASTType.BYTE_VECTOR});
-        }
+        protected internal static readonly OperatorCodec ConstantAll
+            = new ConstantOperatorCodec(Operator.CONSTANT, FASTType.ALL_TYPES());
 
-        protected internal OperatorCodec(Operator operator_Renamed, FASTType[] types)
+        protected internal static readonly OperatorCodec DefaultAll
+            = new DefaultOperatorCodec(Operator.DEFAULT, FASTType.ALL_TYPES());
+
+        protected internal static readonly OperatorCodec CopyAll
+            = new CopyOperatorCodec();
+
+        protected internal static readonly OperatorCodec IncrementInteger
+            = new IncrementIntegerOperatorCodec(Operator.INCREMENT, FASTType.INTEGER_TYPES);
+
+        protected internal static readonly OperatorCodec DeltaInteger
+            = new DeltaIntegerOperatorCodec(Operator.DELTA, FASTType.INTEGER_TYPES);
+
+        protected internal static readonly OperatorCodec DeltaString
+            = new DeltaStringOperatorCodec();
+
+        protected internal static readonly OperatorCodec DeltaDecimal
+            = new DeltaDecimalOperatorCodec();
+
+        protected internal static readonly OperatorCodec Tail =
+            new TailOperatorCodec(
+                Operator.TAIL, new[] {FASTType.ASCII, FASTType.STRING, FASTType.UNICODE, FASTType.BYTE_VECTOR});
+
+        private readonly Operator _operator;
+
+        protected internal OperatorCodec(Operator op, FASTType[] types)
         {
-            this.operator_Renamed = operator_Renamed;
+            _operator = op;
             for (int i = 0; i < types.Length; i++)
             {
-                var key = new Key(operator_Renamed, types[i]);
+                var key = new Key(op, types[i]);
 
-                if (!OPERATOR_MAP.ContainsKey(key))
-                {
-                    OPERATOR_MAP[key] = this;
-                }
+                if (!OperatorMap.ContainsKey(key))
+                    OperatorMap[key] = this;
             }
         }
 
         public virtual Operator Operator
         {
-            get { return operator_Renamed; }
+            get { return _operator; }
         }
 
-        public static OperatorCodec GetCodec(Operator operator_Renamed, FASTType type)
+        public static OperatorCodec GetCodec(Operator op, FASTType type)
         {
-            var key = new Key(operator_Renamed, type);
+            var key = new Key(op, type);
 
-            if (!OPERATOR_MAP.ContainsKey(key))
+            if (!OperatorMap.ContainsKey(key))
             {
                 Global.HandleError(FastConstants.S2_OPERATOR_TYPE_INCOMP,
-                                   "The operator \"" + operator_Renamed + "\" is not compatible with type \"" + type +
+                                   "The operator \"" + op + "\" is not compatible with type \"" + type +
                                    "\"");
                 throw new ArgumentException();
             }
 
-            return OPERATOR_MAP[key];
+            return OperatorMap[key];
         }
 
-        public abstract ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar field);
+        public abstract ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar field);
 
         public abstract ScalarValue DecodeValue(ScalarValue newValue, ScalarValue priorValue, Scalar field);
 
-        public virtual bool IsPresenceMapBitSet(byte[] encoding, FieldValue fieldValue)
+        public virtual bool IsPresenceMapBitSet(byte[] encoding, IFieldValue fieldValue)
         {
             return encoding.Length != 0;
         }
@@ -105,18 +111,18 @@ namespace OpenFAST.Template.Operator
             return true;
         }
 
-        public virtual ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar scalar,
+        public virtual ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar scalar,
                                                     BitVectorBuilder presenceMapBuilder)
         {
-            ScalarValue valueToEncode = GetValueToEncode(value_Renamed, priorValue, scalar);
+            ScalarValue valueToEncode = GetValueToEncode(value, priorValue, scalar);
             if (valueToEncode == null)
                 presenceMapBuilder.Skip();
             else
-                presenceMapBuilder.set_Renamed();
+                presenceMapBuilder.Set();
             return valueToEncode;
         }
 
-        public virtual bool CanEncode(ScalarValue value_Renamed, Scalar field)
+        public virtual bool CanEncode(ScalarValue value, Scalar field)
         {
             return true;
         }
@@ -133,7 +139,7 @@ namespace OpenFAST.Template.Operator
 
         public override string ToString()
         {
-            return operator_Renamed.ToString();
+            return _operator.ToString();
         }
 
         public override int GetHashCode()

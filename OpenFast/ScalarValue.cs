@@ -24,10 +24,9 @@ using System;
 namespace OpenFAST
 {
     [Serializable]
-    public class ScalarValue : FieldValue
+    public class ScalarValue : IFieldValue
     {
         public static readonly ScalarValue UNDEFINED;
-
         public static readonly ScalarValue NULL;
 
         static ScalarValue()
@@ -53,7 +52,7 @@ namespace OpenFAST
 
         #region FieldValue Members
 
-        public virtual FieldValue Copy()
+        public virtual IFieldValue Copy()
         {
             return this; // immutable objects don't need actual copies.
         }

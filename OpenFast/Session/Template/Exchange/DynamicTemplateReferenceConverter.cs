@@ -23,7 +23,7 @@ using OpenFAST.Template;
 
 namespace OpenFAST.Session.Template.Exchange
 {
-    public class DynamicTemplateReferenceConverter : FieldInstructionConverter
+    public class DynamicTemplateReferenceConverter : IFieldInstructionConverter
     {
         #region FieldInstructionConverter Members
 
@@ -32,7 +32,7 @@ namespace OpenFAST.Session.Template.Exchange
             get { return new Group[] {SessionControlProtocol_1_1.DYN_TEMP_REF_INSTR}; }
         }
 
-        public virtual Field Convert(GroupValue groupValue, TemplateRegistry templateRegistry, ConversionContext context)
+        public virtual Field Convert(GroupValue groupValue, ITemplateRegistry templateRegistry, ConversionContext context)
         {
             return DynamicTemplateReference.INSTANCE;
         }

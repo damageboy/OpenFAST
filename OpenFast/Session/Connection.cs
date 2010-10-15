@@ -23,7 +23,7 @@ using System.IO;
 
 namespace OpenFAST.Session
 {
-    public interface Connection
+    public interface IConnection
     {
         StreamReader InputStream { get; }
         StreamWriter OutputStream { get; }

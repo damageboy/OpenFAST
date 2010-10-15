@@ -20,7 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using System.Collections;
 using System.Text;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
@@ -30,20 +29,18 @@ using Type = OpenFAST.Template.Type.FASTType;
 namespace OpenFAST
 {
     [Serializable]
-    public class GroupValue : FieldValue
+    public class GroupValue : IFieldValue
     {
-        private readonly Group group;
-        protected internal FieldValue[] values;
+        private readonly Group _group;
+        protected internal IFieldValue[] Values;
 
-        public GroupValue(Group group, FieldValue[] values)
+        public GroupValue(Group group, IFieldValue[] values)
         {
             if (group == null)
-            {
-                throw new NullReferenceException();
-            }
+                throw new ArgumentNullException("group");
 
-            this.group = group;
-            this.values = values;
+            _group = group;
+            Values = values;
 
             for (int i = 0; i < group.FieldCount; i++)
             {
@@ -56,33 +53,28 @@ namespace OpenFAST
             }
         }
 
-        public GroupValue(Group group) : this(group, new FieldValue[group.FieldCount])
+        public GroupValue(Group group) : this(group, new IFieldValue[group.FieldCount])
         {
         }
 
         public virtual int FieldCount
         {
-            get { return values.Length; }
+            get { return Values.Length; }
         }
 
         #region FieldValue Members
 
-        public virtual FieldValue Copy()
+        public virtual IFieldValue Copy()
         {
-            var copies = new FieldValue[values.Length];
+            var copies = new IFieldValue[Values.Length];
             for (int i = 0; i < copies.Length; i++)
             {
-                copies[i] = values[i].Copy();
+                copies[i] = Values[i].Copy();
             }
-            return new GroupValue(group, values);
+            return new GroupValue(_group, Values);
         }
 
         #endregion
-
-        public virtual IEnumerator Iterator()
-        {
-            return new ArrayIterator(values);
-        }
 
         public virtual int GetInt(int fieldIndex)
         {
@@ -92,11 +84,11 @@ namespace OpenFAST
         public virtual int GetInt(string fieldName)
         {
             // BAD ABSTRACTION
-            if (!group.HasField(fieldName))
+            if (!_group.HasField(fieldName))
             {
-                if (group.HasIntrospectiveField(fieldName))
+                if (_group.HasIntrospectiveField(fieldName))
                 {
-                    Scalar scalar = group.GetIntrospectiveField(fieldName);
+                    Scalar scalar = _group.GetIntrospectiveField(fieldName);
                     if (scalar.Type.Equals(Type.UNICODE) || scalar.Type.Equals(Type.STRING) ||
                         scalar.Type.Equals(Type.ASCII))
                         return GetString(scalar.Name).Length;
@@ -151,8 +143,8 @@ namespace OpenFAST
 
         public virtual string GetString(string fieldName)
         {
-            FieldValue value_Renamed = GetValue(fieldName);
-            return (value_Renamed == null) ? null : value_Renamed.ToString();
+            IFieldValue value = GetValue(fieldName);
+            return (value == null) ? null : value.ToString();
         }
 
         public virtual double GetDouble(int fieldIndex)
@@ -215,51 +207,50 @@ namespace OpenFAST
             return (GroupValue) GetValue(fieldName);
         }
 
-        public virtual FieldValue GetValue(int fieldIndex)
+        public virtual IFieldValue GetValue(int fieldIndex)
         {
-            return values[fieldIndex];
+            return Values[fieldIndex];
         }
 
-        public virtual FieldValue GetValue(string fieldName)
+        public virtual IFieldValue GetValue(string fieldName)
         {
-            if (!group.HasField(fieldName))
+            if (!_group.HasField(fieldName))
             {
-                throw new ArgumentException("The field \"" + fieldName + "\" does not exist in group " + group);
+                throw new ArgumentException("The field \"" + fieldName + "\" does not exist in group " + _group);
             }
 
-            return values[group.GetFieldIndex(fieldName)];
+            return Values[_group.GetFieldIndex(fieldName)];
         }
 
         public virtual Group GetGroup()
         {
-            return group;
+            return _group;
         }
 
-        public virtual void SetString(Field field, string value_Renamed)
+        public virtual void SetString(Field field, string value)
         {
-            if (field == null)
-                throw new ArgumentException("Field must not be null [value=" + value_Renamed + "]");
-            SetFieldValue(field, field.CreateValue(value_Renamed));
+            if (field == null) throw new ArgumentNullException("field", "Field must not be null [value=" + value + "]");
+            SetFieldValue(field, field.CreateValue(value));
         }
 
-        public virtual void SetFieldValue(Field field, FieldValue value_Renamed)
+        public virtual void SetFieldValue(Field field, IFieldValue value)
         {
-            SetFieldValue(group.GetFieldIndex(field), value_Renamed);
+            SetFieldValue(_group.GetFieldIndex(field), value);
         }
 
-        public virtual void SetFieldValue(int fieldIndex, FieldValue value_Renamed)
+        public virtual void SetFieldValue(int fieldIndex, IFieldValue value)
         {
-            values[fieldIndex] = value_Renamed;
+            Values[fieldIndex] = value;
         }
 
         public virtual void SetBitVector(int fieldIndex, BitVector vector)
         {
-            values[fieldIndex] = new BitVectorValue(vector);
+            Values[fieldIndex] = new BitVectorValue(vector);
         }
 
         public virtual void SetByteVector(int fieldIndex, byte[] bytes)
         {
-            values[fieldIndex] = new ByteVectorValue(bytes);
+            Values[fieldIndex] = new ByteVectorValue(bytes);
         }
 
         public virtual void SetByteVector(string fieldName, byte[] bytes)
@@ -267,59 +258,59 @@ namespace OpenFAST
             SetFieldValue(fieldName, new ByteVectorValue(bytes));
         }
 
-        public virtual void SetDecimal(int fieldIndex, double value_Renamed)
+        public virtual void SetDecimal(int fieldIndex, double value)
         {
-            values[fieldIndex] = new DecimalValue(value_Renamed);
+            Values[fieldIndex] = new DecimalValue(value);
         }
 
-        public virtual void SetDecimal(string fieldName, double value_Renamed)
+        public virtual void SetDecimal(string fieldName, double value)
         {
-            SetFieldValue(fieldName, new DecimalValue(value_Renamed));
+            SetFieldValue(fieldName, new DecimalValue(value));
         }
 
-        public virtual void SetDecimal(int fieldIndex, Decimal value_Renamed)
+        public virtual void SetDecimal(int fieldIndex, Decimal value)
         {
-            values[fieldIndex] = new DecimalValue(value_Renamed);
+            Values[fieldIndex] = new DecimalValue(value);
         }
 
-        public virtual void SetDecimal(string fieldName, Decimal value_Renamed)
+        public virtual void SetDecimal(string fieldName, Decimal value)
         {
-            SetFieldValue(fieldName, new DecimalValue(value_Renamed));
+            SetFieldValue(fieldName, new DecimalValue(value));
         }
 
-        public virtual void SetInteger(string fieldName, int value_Renamed)
+        public virtual void SetInteger(string fieldName, int value)
         {
-            SetFieldValue(fieldName, new IntegerValue(value_Renamed));
+            SetFieldValue(fieldName, new IntegerValue(value));
         }
 
-        public virtual void SetInteger(int fieldIndex, int value_Renamed)
+        public virtual void SetInteger(int fieldIndex, int value)
         {
-            values[fieldIndex] = new IntegerValue(value_Renamed);
+            Values[fieldIndex] = new IntegerValue(value);
         }
 
-        public virtual void SetBool(string fieldName, bool value_Renamed)
+        public virtual void SetBool(string fieldName, bool value)
         {
-            SetFieldValue(fieldName, new IntegerValue(value_Renamed ? 1 : 0));
+            SetFieldValue(fieldName, new IntegerValue(value ? 1 : 0));
         }
 
-        public virtual void SetLong(string fieldName, long value_Renamed)
+        public virtual void SetLong(string fieldName, long value)
         {
-            SetFieldValue(fieldName, new LongValue(value_Renamed));
+            SetFieldValue(fieldName, new LongValue(value));
         }
 
-        public virtual void SetLong(int fieldIndex, long value_Renamed)
+        public virtual void SetLong(int fieldIndex, long value)
         {
-            values[fieldIndex] = new LongValue(value_Renamed);
+            Values[fieldIndex] = new LongValue(value);
         }
 
-        public virtual void SetString(int fieldIndex, string value_Renamed)
+        public virtual void SetString(int fieldIndex, string value)
         {
-            values[fieldIndex] = new StringValue(value_Renamed);
+            Values[fieldIndex] = new StringValue(value);
         }
 
-        public virtual void SetString(string fieldName, string value_Renamed)
+        public virtual void SetString(string fieldName, string value)
         {
-            SetFieldValue(fieldName, group.GetField(fieldName).CreateValue(value_Renamed));
+            SetFieldValue(fieldName, _group.GetField(fieldName).CreateValue(value));
         }
 
         public override bool Equals(Object other)
@@ -339,19 +330,19 @@ namespace OpenFAST
 
         private bool Equals(GroupValue other)
         {
-            if (values.Length != other.values.Length)
+            if (Values.Length != other.Values.Length)
             {
                 return false;
             }
 
-            for (int i = 0; i < values.Length; i++)
+            for (int i = 0; i < Values.Length; i++)
             {
-                if (values[i] == null)
+                if (Values[i] == null)
                 {
-                    if (other.values[i] != null)
+                    if (other.Values[i] != null)
                         return false;
                 }
-                else if (!values[i].Equals(other.values[i]))
+                else if (!Values[i].Equals(other.Values[i]))
                 {
                     return false;
                 }
@@ -362,41 +353,41 @@ namespace OpenFAST
 
         public override int GetHashCode()
         {
-            return values.GetHashCode();
+            return Values.GetHashCode();
         }
 
         public override string ToString()
         {
             var builder = new StringBuilder();
 
-            builder.Append(group).Append(" -> {");
-            for (int i = 0; i < values.Length; i++)
+            builder.Append(_group).Append(" -> {");
+            for (int i = 0; i < Values.Length; i++)
             {
-                builder.Append(values[i]).Append(", ");
+                builder.Append(Values[i]).Append(", ");
             }
 
             builder.Append("}");
             return builder.ToString();
         }
 
-        public virtual void SetFieldValue(string fieldName, FieldValue value_Renamed)
+        public virtual void SetFieldValue(string fieldName, IFieldValue value)
         {
-            if (!group.HasField(fieldName))
+            if (!_group.HasField(fieldName))
             {
-                throw new ArgumentException("The field " + fieldName + " does not exist in group " + group);
+                throw new ArgumentException("The field " + fieldName + " does not exist in group " + _group);
             }
-            int index = group.GetFieldIndex(fieldName);
-            SetFieldValue(index, value_Renamed);
+            int index = _group.GetFieldIndex(fieldName);
+            SetFieldValue(index, value);
         }
 
-        public virtual void SetFieldValue(string fieldName, string value_Renamed)
+        public virtual void SetFieldValue(string fieldName, string value)
         {
-            SetFieldValue(fieldName, group.GetField(fieldName).CreateValue(value_Renamed));
+            SetFieldValue(fieldName, _group.GetField(fieldName).CreateValue(value));
         }
 
         public virtual bool IsDefined(int fieldIndex)
         {
-            return fieldIndex < values.Length && values[fieldIndex] != null;
+            return fieldIndex < Values.Length && Values[fieldIndex] != null;
         }
 
         public virtual bool IsDefined(string fieldName)

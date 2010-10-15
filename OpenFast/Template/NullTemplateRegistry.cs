@@ -19,31 +19,31 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System.Collections;
+using System.Collections.Generic;
 
 namespace OpenFAST.Template
 {
-    internal sealed class NullTemplateRegistry : TemplateRegistry
+    internal sealed class NullTemplateRegistry : ITemplateRegistry
     {
-        #region TemplateRegistry Members
+        #region ITemplateRegistry Members
 
         public MessageTemplate[] Templates
         {
             get { return null; }
         }
 
-        public void AddTemplateRegisteredListener(TemplateRegisteredListener templateRegisteredListener)
+        public void AddTemplateRegisteredListener(ITemplateRegisteredListener templateRegisteredListener)
         {
         }
 
-        public MessageTemplate get_Renamed(int templateId)
+        public MessageTemplate this[int templateId]
         {
-            return null;
+            get { return null; }
         }
 
-        public MessageTemplate get_Renamed(string templateName)
+        public MessageTemplate this[string templateName]
         {
-            return null;
+            get { return null; }
         }
 
         public bool IsRegistered(string templateName)
@@ -81,9 +81,9 @@ namespace OpenFAST.Template
         {
         }
 
-        public MessageTemplate get_Renamed(QName name)
+        public MessageTemplate this[QName name]
         {
-            return null;
+            get { return null; }
         }
 
         public int GetId(string name)
@@ -114,7 +114,7 @@ namespace OpenFAST.Template
         {
         }
 
-        public void RemoveTemplateRegisteredListener(TemplateRegisteredListener templateRegisteredListener)
+        public void RemoveTemplateRegisteredListener(ITemplateRegisteredListener templateRegisteredListener)
         {
         }
 
@@ -132,18 +132,13 @@ namespace OpenFAST.Template
         {
         }
 
-        public void RegisterAll(TemplateRegistry registry)
+        public void RegisterAll(ITemplateRegistry registry)
         {
         }
 
-        public IEnumerator NameIterator()
+        public ICollection<QName> Names()
         {
-            return new ArrayList().GetEnumerator();
-        }
-
-        public IEnumerator Iterator()
-        {
-            return null;
+            return new QName[0];
         }
 
         #endregion

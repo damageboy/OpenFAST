@@ -33,7 +33,7 @@ namespace OpenFAST.Session
         internal const int FAST_ALERT_TEMPLATE_ID = 16001;
         public static readonly MessageTemplate FAST_ALERT_TEMPLATE;
         public static readonly MessageTemplate FAST_HELLO_TEMPLATE;
-        private static readonly MessageHandler RESET_HANDLER;
+        private static readonly IMessageHandler RESET_HANDLER;
 
         static SessionControlProtocol_1_0()
         {
@@ -63,9 +63,9 @@ namespace OpenFAST.Session
             get { return CreateFastAlertMessage(SessionConstants.CLOSE); }
         }
 
-        public override Session OnNewConnection(string serverName, Connection connection)
+        public override Session OnNewConnection(string serverName, IConnection connection)
         {
-            var session = new Session(connection, this, TemplateRegistry_Fields.NULL, TemplateRegistry_Fields.NULL);
+            var session = new Session(connection, this, TemplateRegistryFields.NULL, TemplateRegistryFields.NULL);
             Message message = session.MessageInputStream.ReadMessage();
             session.MessageOutputStream.WriteMessage(CreateHelloMessage(serverName));
             string clientName = message.GetString(1);
@@ -73,11 +73,11 @@ namespace OpenFAST.Session
             return session;
         }
 
-        public override Session Connect(string senderName, Connection connection, TemplateRegistry inboundRegistry,
-                                        TemplateRegistry outboundRegistry, MessageListener messageListener,
-                                        SessionListener sessionListener)
+        public override Session Connect(string senderName, IConnection connection, ITemplateRegistry inboundRegistry,
+                                        ITemplateRegistry outboundRegistry, IMessageListener messageListener,
+                                        ISessionListener sessionListener)
         {
-            var session = new Session(connection, this, TemplateRegistry_Fields.NULL, TemplateRegistry_Fields.NULL);
+            var session = new Session(connection, this, TemplateRegistryFields.NULL, TemplateRegistryFields.NULL);
             session.MessageOutputStream.WriteMessage(CreateHelloMessage(senderName));
             Message message = session.MessageInputStream.ReadMessage();
             string serverName = message.GetString(1);
@@ -90,7 +90,7 @@ namespace OpenFAST.Session
             session.MessageOutputStream.WriteMessage(CreateFastAlertMessage(code));
         }
 
-        public virtual void RegisterSessionTemplates(TemplateRegistry registry)
+        public virtual void RegisterSessionTemplates(ITemplateRegistry registry)
         {
             registry.Register(FAST_HELLO_TEMPLATE_ID, FAST_HELLO_TEMPLATE);
             registry.Register(FAST_ALERT_TEMPLATE_ID, FAST_ALERT_TEMPLATE);
@@ -162,11 +162,11 @@ namespace OpenFAST.Session
 
         #region Nested type: RESETMessageHandler
 
-        public class RESETMessageHandler : MessageHandler
+        public class RESETMessageHandler : IMessageHandler
         {
             #region MessageHandler Members
 
-            public virtual void HandleMessage(Message readMessage, Context context, Coder coder)
+            public virtual void HandleMessage(Message readMessage, Context context, ICoder coder)
             {
                 coder.Reset();
             }

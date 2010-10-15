@@ -42,7 +42,7 @@ namespace OpenFAST.Template.Type
             get
             {
                 var tempAux = new DateTime(0);
-                return new DateValue(ref tempAux);
+                return new DateValue(tempAux);
             }
         }
 
@@ -51,19 +51,19 @@ namespace OpenFAST.Template.Type
             return previousValue is DateValue;
         }
 
-        public override TypeCodec GetCodec(Operator.Operator operator_Renamed, bool optional)
+        public override TypeCodec GetCodec(Operator.Operator op, bool optional)
         {
             return dateCodec;
         }
 
-        public override ScalarValue GetValue(string value_Renamed)
+        public override ScalarValue GetValue(string value)
         {
-            if (value_Renamed == null)
+            if (value == null)
                 return ScalarValue.UNDEFINED;
             try
             {
-                DateTime tempAux = DateTime.Parse(value_Renamed, dateFormatter);
-                return new DateValue(ref tempAux);
+                DateTime tempAux = DateTime.Parse(value, dateFormatter);
+                return new DateValue(tempAux);
             }
             catch (FormatException e)
             {
@@ -71,9 +71,9 @@ namespace OpenFAST.Template.Type
             }
         }
 
-        public override string Serialize(ScalarValue value_Renamed)
+        public override string Serialize(ScalarValue value)
         {
-            return SupportClass.FormatDateTime(dateFormatter, ((DateValue) value_Renamed).value_Renamed);
+            return SupportClass.FormatDateTime(dateFormatter, ((DateValue) value).Value);
         }
 
         public override int GetHashCode()

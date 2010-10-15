@@ -23,10 +23,10 @@ namespace OpenFAST.Session
 {
     public struct MessageListener_Fields
     {
-        public static readonly MessageListener NULL = new NULLMessageListener();
+        public static readonly IMessageListener NULL = new NULLMessageListener();
     }
 
-    public sealed class NULLMessageListener : MessageListener
+    public sealed class NULLMessageListener : IMessageListener
     {
         #region MessageListener Members
 
@@ -37,7 +37,7 @@ namespace OpenFAST.Session
         #endregion
     }
 
-    public interface MessageListener
+    public interface IMessageListener
     {
         void OnMessage(Session session, Message message);
     }

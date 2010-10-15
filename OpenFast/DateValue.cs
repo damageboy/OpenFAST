@@ -26,21 +26,26 @@ namespace OpenFAST
     [Serializable]
     public sealed class DateValue : ScalarValue
     {
-        public DateTime value_Renamed;
+        private readonly DateTime _value;
 
-        public DateValue(ref DateTime date)
+        public DateValue(DateTime date)
         {
-            value_Renamed = date;
+            _value = date;
+        }
+
+        public DateTime Value
+        {
+            get { return _value; }
         }
 
         public override long ToLong()
         {
-            return value_Renamed.Ticks;
+            return _value.Ticks;
         }
 
         public override string ToString()
         {
-            return value_Renamed.ToString("r");
+            return _value.ToString("r");
         }
 
         public override bool Equals(Object other)
@@ -54,12 +59,12 @@ namespace OpenFAST
 
         private bool Equals(DateValue other)
         {
-            return other.value_Renamed.Equals(value_Renamed);
+            return other._value.Equals(_value);
         }
 
         public override int GetHashCode()
         {
-            return value_Renamed.GetHashCode();
+            return _value.GetHashCode();
         }
     }
 }

@@ -27,15 +27,15 @@ namespace OpenFAST.Template.Operator
     [Serializable]
     internal sealed class ConstantOperatorCodec : OperatorCodec
     {
-        internal ConstantOperatorCodec(Operator operator_Renamed, FASTType[] types) : base(operator_Renamed, types)
+        internal ConstantOperatorCodec(Operator op, FASTType[] types) : base(op, types)
         {
         }
 
-        public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar field,
+        public override ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar field,
                                                      BitVectorBuilder presenceMapBuilder)
         {
             if (field.Optional)
-                presenceMapBuilder.OnValueSkipOnNull = value_Renamed;
+                presenceMapBuilder.OnValueSkipOnNull = value;
             return null; // Never encode constant value.
         }
 
@@ -44,7 +44,7 @@ namespace OpenFAST.Template.Operator
             return field.DefaultValue;
         }
 
-        public override bool IsPresenceMapBitSet(byte[] encoding, FieldValue fieldValue)
+        public override bool IsPresenceMapBitSet(byte[] encoding, IFieldValue fieldValue)
         {
             return fieldValue != null;
         }
@@ -68,16 +68,16 @@ namespace OpenFAST.Template.Operator
             return optional;
         }
 
-        public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar field)
+        public override ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar field)
         {
             throw new NotSupportedException();
         }
 
-        public override bool CanEncode(ScalarValue value_Renamed, Scalar field)
+        public override bool CanEncode(ScalarValue value, Scalar field)
         {
-            if (field.Optional && value_Renamed == null)
+            if (field.Optional && value == null)
                 return true;
-            return field.DefaultValue.Equals(value_Renamed);
+            return field.DefaultValue.Equals(value);
         }
 
         public override bool Equals(Object obj)

@@ -33,9 +33,9 @@ namespace UnitTest
             var expected = new BitVectorValue(new BitVector(
                         new byte[] { 0xf0 }));
             var actual = new BitVectorValue(new BitVector(7));
-            actual.value_Renamed.set_Renamed(0);
-            actual.value_Renamed.set_Renamed(1);
-            actual.value_Renamed.set_Renamed(2);
+            actual.Value.Set(0);
+            actual.Value.Set(1);
+            actual.Value.Set(2);
             Assert.AreEqual(expected, actual);
         }
     }

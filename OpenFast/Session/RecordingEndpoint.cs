@@ -24,11 +24,11 @@ using OpenFAST.util;
 
 namespace OpenFAST.Session
 {
-    public class RecordingEndpoint : Endpoint
+    public class RecordingEndpoint : IEndpoint
     {
-        private readonly Endpoint underlyingEndpoint;
+        private readonly IEndpoint underlyingEndpoint;
 
-        public RecordingEndpoint(Endpoint endpoint)
+        public RecordingEndpoint(IEndpoint endpoint)
         {
             underlyingEndpoint = endpoint;
         }
@@ -45,10 +45,10 @@ namespace OpenFAST.Session
             underlyingEndpoint.Accept();
         }
 
-        public virtual Connection Connect()
+        public virtual IConnection Connect()
         {
-            Connection connection = underlyingEndpoint.Connect();
-            Connection connectionWrapper = new RecordingConnection(connection);
+            IConnection connection = underlyingEndpoint.Connect();
+            IConnection connectionWrapper = new RecordingConnection(connection);
             return connectionWrapper;
         }
 
@@ -61,7 +61,7 @@ namespace OpenFAST.Session
 
         #region Nested type: RecordingConnection
 
-        private sealed class RecordingConnection : Connection
+        private sealed class RecordingConnection : IConnection
         {
             private readonly StreamReader in_stream;
             private readonly StreamWriter out_stream;
@@ -69,7 +69,7 @@ namespace OpenFAST.Session
             private readonly RecordingInputStream recordingInputStream;
             private readonly RecordingOutputStream recordingOutputStream;
 
-            internal RecordingConnection(Connection connection)
+            internal RecordingConnection(IConnection connection)
             {
                 try
                 {

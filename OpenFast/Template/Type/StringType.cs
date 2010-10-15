@@ -37,16 +37,16 @@ namespace OpenFAST.Template.Type
             get { return new StringValue(""); }
         }
 
-        public override ScalarValue GetVal(string value_Renamed)
+        public override ScalarValue GetVal(string value)
         {
-            return new StringValue(value_Renamed);
+            return new StringValue(value);
         }
 
-        public override TypeCodec GetCodec(Operator.Operator operator_Renamed, bool optional)
+        public override TypeCodec GetCodec(Operator.Operator op, bool optional)
         {
-            if (operator_Renamed == Operator.Operator.DELTA)
+            if (op == Operator.Operator.DELTA)
                 return (optional) ? TypeCodec.NULLABLE_STRING_DELTA : TypeCodec.STRING_DELTA;
-            return base.GetCodec(operator_Renamed, optional);
+            return base.GetCodec(op, optional);
         }
 
         public override bool IsValueOf(ScalarValue previousValue)

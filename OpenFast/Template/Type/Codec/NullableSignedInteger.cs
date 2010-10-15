@@ -36,14 +36,14 @@ namespace OpenFAST.Template.Type.Codec
             get { return true; }
         }
 
-        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        public override byte[] EncodeValue(ScalarValue value)
         {
-            if (value_Renamed.Null)
+            if (value.Null)
             {
                 return NULL_VALUE_ENCODING;
             }
 
-            var intValue = (NumericValue) value_Renamed;
+            var intValue = (NumericValue) value;
 
             if (intValue.ToLong() >= 0)
             {
@@ -52,20 +52,15 @@ namespace OpenFAST.Template.Type.Codec
             return INTEGER.EncodeValue(intValue);
         }
 
-        public override ScalarValue Decode(Stream in_Renamed)
+        public override ScalarValue Decode(Stream inStream)
         {
-            var numericValue = ((NumericValue) INTEGER.Decode(in_Renamed));
-            long value_Renamed = numericValue.ToLong();
-
-            if (value_Renamed == 0)
-            {
+            var numericValue = (NumericValue) INTEGER.Decode(inStream);
+            
+            long value = numericValue.ToLong();
+            if (value == 0)
                 return null;
-            }
-
-            if (value_Renamed > 0)
-            {
+            if (value > 0)
                 return numericValue.Decrement();
-            }
 
             return numericValue;
         }

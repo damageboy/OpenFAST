@@ -27,8 +27,8 @@ namespace OpenFAST.Template.Operator
     [Serializable]
     public abstract class AlwaysPresentOperatorCodec : OperatorCodec
     {
-        protected internal AlwaysPresentOperatorCodec(Operator operator_Renamed, FASTType[] types)
-            : base(operator_Renamed, types)
+        protected internal AlwaysPresentOperatorCodec(Operator op, FASTType[] types)
+            : base(op, types)
         {
         }
 
@@ -37,10 +37,10 @@ namespace OpenFAST.Template.Operator
             return false;
         }
 
-        public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar scalar,
+        public override ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar scalar,
                                                      BitVectorBuilder presenceMapBuilder)
         {
-            return GetValueToEncode(value_Renamed, priorValue, scalar);
+            return GetValueToEncode(value, priorValue, scalar);
         }
 
         public override bool Equals(Object obj)

@@ -33,9 +33,9 @@ namespace OpenFAST.Template.Operator
         {
         }
 
-        public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar field)
+        public override ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar field)
         {
-            if (value_Renamed == null)
+            if (value == null)
             {
                 return ScalarValue.NULL;
             }
@@ -47,9 +47,8 @@ namespace OpenFAST.Template.Operator
                 return null;
             }
 
-            ScalarValue base_Renamed = (priorValue.Undefined) ? field.BaseValue : priorValue;
-
-            return Util.GetDifference((StringValue) value_Renamed, (StringValue) base_Renamed);
+            ScalarValue v = (priorValue.Undefined) ? field.BaseValue : priorValue;
+            return Util.GetDifference((StringValue) value, (StringValue) v);
         }
 
         public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue previousValue, Scalar field)
@@ -60,15 +59,14 @@ namespace OpenFAST.Template.Operator
             }
 
             var diffValue = (TwinValue) newValue;
-            ScalarValue base_Renamed = (previousValue.Undefined) ? field.BaseValue : previousValue;
-
-            if (diffValue.first.ToInt() > base_Renamed.ToString().Length)
+            ScalarValue v = (previousValue.Undefined) ? field.BaseValue : previousValue;
+            if (diffValue.first.ToInt() > v.ToString().Length)
             {
                 Global.HandleError(FastConstants.D7_SUBTRCTN_LEN_LONG,
                                    "The string diff <" + diffValue + "> cannot be applied to the base value \"" +
-                                   base_Renamed + "\" because the subtraction length is too long.");
+                                   v + "\" because the subtraction length is too long.");
             }
-            return Util.ApplyDifference((StringValue) base_Renamed, diffValue);
+            return Util.ApplyDifference((StringValue) v, diffValue);
         }
 
         public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)

@@ -32,16 +32,16 @@ namespace OpenFAST.Template
         private const System.Type ScalarValueType = null;
         private readonly Scalar[] fields;
         private readonly FASTType type;
-        private readonly ComposedValueConverter valueConverter;
+        private readonly IComposedValueConverter valueConverter;
 
         public ComposedScalar(string name, FASTType type, Scalar[] fields, bool optional,
-                              ComposedValueConverter valueConverter)
+                              IComposedValueConverter valueConverter)
             : this(new QName(name), type, fields, optional, valueConverter)
         {
         }
 
         public ComposedScalar(QName name, FASTType type, Scalar[] fields, bool optional,
-                              ComposedValueConverter valueConverter) : base(name, optional)
+                              IComposedValueConverter valueConverter) : base(name, optional)
         {
             this.fields = fields;
             this.valueConverter = valueConverter;
@@ -68,34 +68,34 @@ namespace OpenFAST.Template
             get { return fields; }
         }
 
-        public override FieldValue CreateValue(string value_Renamed)
+        public override IFieldValue CreateValue(string value)
         {
-            return type.GetValue(value_Renamed);
+            return type.GetValue(value);
         }
 
-        public override FieldValue Decode(Stream in_Renamed, Group decodeTemplate, Context context,
+        public override IFieldValue Decode(Stream inStream, Group decodeTemplate, Context context,
                                           BitVectorReader presenceMapReader)
         {
-            var values = new FieldValue[fields.Length];
+            var values = new IFieldValue[fields.Length];
             for (int i = 0; i < fields.Length; i++)
             {
-                values[i] = fields[i].Decode(in_Renamed, decodeTemplate, context, presenceMapReader);
+                values[i] = fields[i].Decode(inStream, decodeTemplate, context, presenceMapReader);
                 if (i == 0 && values[0] == null)
                     return null;
             }
             return valueConverter.Compose(values);
         }
 
-        public override byte[] Encode(FieldValue value_Renamed, Group encodeTemplate, Context context,
+        public override byte[] Encode(IFieldValue value, Group encodeTemplate, Context context,
                                       BitVectorBuilder presenceMapBuilder)
         {
-            if (value_Renamed == null)
+            if (value == null)
             {
                 // Only encode null in the first field.
                 return fields[0].Encode(null, encodeTemplate, context, presenceMapBuilder);
             }
             var buffer = new MemoryStream(fields.Length*8);
-            FieldValue[] values = valueConverter.Split(value_Renamed);
+            IFieldValue[] values = valueConverter.Split(value);
             for (int i = 0; i < fields.Length; i++)
             {
                 try
@@ -111,7 +111,7 @@ namespace OpenFAST.Template
             return buffer.ToArray();
         }
 
-        public override bool IsPresenceMapBitSet(byte[] encoding, FieldValue fieldValue)
+        public override bool IsPresenceMapBitSet(byte[] encoding, IFieldValue fieldValue)
         {
             return false;
         }
@@ -152,7 +152,7 @@ namespace OpenFAST.Template
 
         public override int GetHashCode()
         {
-            return name.GetHashCode();
+            return QName.GetHashCode();
         }
 
         public override string ToString()

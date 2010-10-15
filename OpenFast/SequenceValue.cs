@@ -20,7 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using OpenFAST.Template;
@@ -28,81 +27,68 @@ using OpenFAST.Template;
 namespace OpenFAST
 {
     [Serializable]
-    public sealed class SequenceValue : FieldValue
+    public sealed class SequenceValue : IFieldValue
     {
-        private readonly List<GroupValue> elements = new List<GroupValue>();
-        private readonly Sequence sequence;
+        private readonly List<GroupValue> _elements = new List<GroupValue>();
+        private readonly Sequence _sequence;
 
         public SequenceValue(Sequence sequence)
         {
             if (sequence == null)
-            {
-                throw new NullReferenceException();
-            }
+                throw new ArgumentNullException("sequence");
 
-            this.sequence = sequence;
+            _sequence = sequence;
         }
 
         public int Length
         {
-            get { return elements.Count; }
+            get { return _elements.Count; }
         }
 
         public Sequence Sequence
         {
-            get { return sequence; }
+            get { return _sequence; }
         }
 
-        public GroupValue[] Values
+        public IList<GroupValue> Elements
         {
-            get { return elements.ToArray(); }
+            get { return _elements; }
         }
 
         public GroupValue this[int index]
         {
-            get { return elements[index]; }
+            get { return _elements[index]; }
         }
 
         #region FieldValue Members
 
-        public FieldValue Copy()
+        public IFieldValue Copy()
         {
-            var value_Renamed = new SequenceValue(sequence);
-            for (int i = 0; i < elements.Count; i++)
-            {
-                value_Renamed.Add((GroupValue) elements[i].Copy());
-            }
-            return value_Renamed;
+            var copy = new SequenceValue(_sequence);
+            for (int i = 0; i < _elements.Count; i++)
+                copy.Add((GroupValue) _elements[i].Copy());
+            return copy;
         }
 
         #endregion
 
-        public IEnumerator Iterator()
+        public void Add(GroupValue value)
         {
-            return elements.GetEnumerator();
+            _elements.Add(value);
         }
 
-        public void Add(GroupValue value_Renamed)
+        public void Add(IFieldValue[] values)
         {
-            elements.Add(value_Renamed);
-        }
-
-        public void Add(FieldValue[] values)
-        {
-            elements.Add(new GroupValue(sequence.Group, values));
+            _elements.Add(new GroupValue(_sequence.Group, values));
         }
 
         public override bool Equals(object other)
         {
             if (other == this)
-            {
                 return true;
-            }
 
             if ((other == null) || !(other is SequenceValue))
-            {
                 return false;
-            }
 
             return equals((SequenceValue) other);
         }
@@ -110,37 +96,27 @@ namespace OpenFAST
         private bool equals(SequenceValue other)
         {
             if (Length != other.Length)
-            {
                 return false;
-            }
 
             for (int i = 0; i < Length; i++)
-            {
-                if (!elements[i].Equals(other.elements[i]))
-                {
+                if (!_elements[i].Equals(other._elements[i]))
                     return false;
-                }
-            }
 
             return true;
         }
 
         public override int GetHashCode()
         {
-            return elements.GetHashCode()*37 + sequence.GetHashCode();
+            return _elements.GetHashCode()*37 + _sequence.GetHashCode();
         }
 
         public override string ToString()
         {
             var builder = new StringBuilder();
-            IEnumerator iter = elements.GetEnumerator();
             builder.Append("[ ");
-
-            while (iter.MoveNext())
-            {
-                var value_Renamed = (GroupValue) iter.Current;
-                builder.Append('[').Append(value_Renamed).Append("] ");
-            }
+            
+            foreach (var v in _elements)
+                builder.Append('[').Append(v).Append("] ");
 
             builder.Append("]");
 

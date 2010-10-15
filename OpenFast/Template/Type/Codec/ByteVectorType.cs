@@ -28,9 +28,9 @@ namespace OpenFAST.Template.Type.Codec
     [Serializable]
     internal sealed class ByteVectorType : TypeCodec
     {
-        public override byte[] Encode(ScalarValue value_Renamed)
+        public override byte[] Encode(ScalarValue value)
         {
-            byte[] bytes = value_Renamed.Bytes;
+            byte[] bytes = value.Bytes;
             int lengthSize = IntegerCodec.GetUnsignedIntegerSize(bytes.Length);
             var encoding = new byte[bytes.Length + lengthSize];
             byte[] length = UINT.Encode(new IntegerValue(bytes.Length));
@@ -39,14 +39,14 @@ namespace OpenFAST.Template.Type.Codec
             return encoding;
         }
 
-        public override ScalarValue Decode(Stream in_Renamed)
+        public override ScalarValue Decode(Stream inStream)
         {
-            int length = ((IntegerValue) UINT.Decode(in_Renamed)).value_Renamed;
+            int length = ((IntegerValue) UINT.Decode(inStream)).Value;
             var encoding = new byte[length];
             for (int i = 0; i < length; i++)
                 try
                 {
-                    encoding[i] = (byte) in_Renamed.ReadByte();
+                    encoding[i] = (byte) inStream.ReadByte();
                 }
                 catch (IOException e)
                 {
@@ -55,14 +55,14 @@ namespace OpenFAST.Template.Type.Codec
             return new ByteVectorValue(encoding);
         }
 
-        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        public override byte[] EncodeValue(ScalarValue value)
         {
             throw new NotSupportedException();
         }
 
-        public static ScalarValue FromString(string value_Renamed)
+        public static ScalarValue FromString(string value)
         {
-            return new ByteVectorValue(Encoding.UTF8.GetBytes(value_Renamed));
+            return new ByteVectorValue(Encoding.UTF8.GetBytes(value));
         }
 
         public override bool Equals(Object obj)

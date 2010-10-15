@@ -27,15 +27,15 @@ namespace OpenFAST.Session
 {
     public sealed class FastServer : ConnectionListener
     {
-        private readonly Endpoint endpoint;
+        private readonly IEndpoint endpoint;
         private readonly string serverName;
-        private readonly SessionProtocol sessionProtocol;
-        private ErrorHandler errorHandler = ErrorHandler_Fields.DEFAULT;
+        private readonly ISessionProtocol sessionProtocol;
+        private IErrorHandler errorHandler = ErrorHandler_Fields.DEFAULT;
         private bool listening;
         private SupportClass.ThreadClass serverThread;
-        private SessionHandler sessionHandler = SessionHandler_Fields.NULL;
+        private ISessionHandler sessionHandler = SessionHandlerFields.Null;
 
-        public FastServer(string serverName, SessionProtocol sessionProtocol, Endpoint endpoint)
+        public FastServer(string serverName, ISessionProtocol sessionProtocol, IEndpoint endpoint)
         {
             if (endpoint == null || sessionProtocol == null)
             {
@@ -47,7 +47,7 @@ namespace OpenFAST.Session
             endpoint.ConnectionListener = this;
         }
 
-        public ErrorHandler ErrorHandler
+        public IErrorHandler ErrorHandler
         {
             // ************* OPTIONAL DEPENDENCY SETTERS **************
             set
@@ -61,7 +61,7 @@ namespace OpenFAST.Session
             }
         }
 
-        public SessionHandler SessionHandler
+        public ISessionHandler SessionHandler
         {
             set { sessionHandler = value; }
         }
@@ -83,7 +83,7 @@ namespace OpenFAST.Session
             endpoint.Close();
         }
 
-        public override void OnConnect(Connection connection)
+        public override void OnConnect(IConnection connection)
         {
             Session session = sessionProtocol.OnNewConnection(serverName, connection);
             sessionHandler.NewSession(session);

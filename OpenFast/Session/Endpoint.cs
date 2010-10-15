@@ -21,10 +21,10 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST.Session
 {
-    public interface Endpoint
+    public interface IEndpoint
     {
         ConnectionListener ConnectionListener { set; }
-        Connection Connect();
+        IConnection Connect();
         void Accept();
         void Close();
     }

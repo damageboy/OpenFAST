@@ -20,140 +20,129 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using OpenFAST.util;
 
 namespace OpenFAST.Template
 {
     public sealed class BasicTemplateRegistry : AbstractTemplateRegistry
     {
-        private readonly Dictionary<int, MessageTemplate> idMap =
-            new Dictionary<int, MessageTemplate>();
+        private readonly Dictionary<int, MessageTemplate> _idMap = new Dictionary<int, MessageTemplate>();
+        private readonly Dictionary<QName, MessageTemplate> _nameMap = new Dictionary<QName, MessageTemplate>();
+        private readonly Dictionary<MessageTemplate, int> _templateMap = new Dictionary<MessageTemplate, int>();
 
-        private readonly Dictionary<object, MessageTemplate> nameMap =
-            new Dictionary<object, MessageTemplate>();
-
-        private readonly Dictionary<MessageTemplate, int> templateMap =
-            new Dictionary<MessageTemplate, int>();
-
-        private readonly IList templates = new ArrayList();
+#warning todo: don't think its needed, unless the order of additions must be preserved
+        private readonly List<MessageTemplate> _templates = new List<MessageTemplate>();
 
         public override MessageTemplate[] Templates
         {
-            get
-            {
-                return
-                    SupportClass.ICollectionSupport.ToArray<MessageTemplate>(
-                        new SupportClass.HashSetSupport(templateMap.Keys));
-            }
+            get { return Util.ToArray(_templateMap.Keys); }
         }
 
         public override void Register(int id, MessageTemplate template)
         {
             Define(template);
             int tid = id;
-            idMap[tid] = template;
-            templateMap[template] = tid;
+            _idMap[tid] = template;
+            _templateMap[template] = tid;
             NotifyTemplateRegistered(template, id);
         }
 
         public override void Register(int id, QName name)
         {
-            if (!nameMap.ContainsKey(name))
-            {
-                throw new ArgumentException("The template named " + name + " is not defined.");
-            }
+            if (!_nameMap.ContainsKey(name))
+                throw new ArgumentOutOfRangeException("name", name, "The template is not defined.");
             int tid = id;
-            MessageTemplate template = nameMap[name];
-            templateMap[template] = tid;
-            idMap[tid] = template;
+            MessageTemplate template = _nameMap[name];
+            _templateMap[template] = tid;
+            _idMap[tid] = template;
             NotifyTemplateRegistered(template, id);
         }
 
         public override void Define(MessageTemplate template)
         {
-            if (!templates.Contains(template))
+            if (!_templates.Contains(template))
             {
-                nameMap[template.QName] = template;
-                templates.Add(template);
+                _nameMap[template.QName] = template;
+                _templates.Add(template);
             }
         }
 
         public override int GetId(QName name)
         {
-            MessageTemplate template = nameMap[name];
-            if (template == null || !templateMap.ContainsKey(template))
+            MessageTemplate template = _nameMap[name];
+            if (template == null || !_templateMap.ContainsKey(template))
                 return - 1;
-            return templateMap[template];
+            return _templateMap[template];
         }
 
-        public override MessageTemplate get_Renamed(int templateId)
+        public override MessageTemplate this[int templateId]
         {
-            return idMap[templateId];
+            get { return _idMap[templateId]; }
         }
 
-        public override MessageTemplate get_Renamed(QName name)
+        public override MessageTemplate this[QName name]
         {
-            return nameMap[name];
+            get { return _nameMap[name]; }
         }
 
         public override int GetId(MessageTemplate template)
         {
             if (!IsRegistered(template))
                 return - 1;
-            return templateMap[template];
+            return _templateMap[template];
         }
 
         public override bool IsRegistered(QName name)
         {
-            return nameMap.ContainsKey(name);
+            return _nameMap.ContainsKey(name);
         }
 
         public override bool IsRegistered(int templateId)
         {
-            return idMap.ContainsKey(templateId);
+            return _idMap.ContainsKey(templateId);
         }
 
         public override bool IsRegistered(MessageTemplate template)
         {
-            return templateMap.ContainsKey(template);
+            return _templateMap.ContainsKey(template);
         }
 
         public override bool IsDefined(QName name)
         {
-            return nameMap.ContainsKey(name);
+            return _nameMap.ContainsKey(name);
         }
 
         public override void Remove(QName name)
         {
-            object tempObject = nameMap[name];
-            nameMap.Remove(name);
+            object tempObject = _nameMap[name];
+            _nameMap.Remove(name);
             var template = (MessageTemplate) tempObject;
-            int id = templateMap[template];
-            templateMap.Remove(template);
-            idMap.Remove(id);
-            templates.Remove(template);
+            int id = _templateMap[template];
+            _templateMap.Remove(template);
+            _idMap.Remove(id);
+            _templates.Remove(template);
         }
 
         //[Obsolete("dont call this method")]
         public override void Remove(MessageTemplate template)
         {
-            int id = templateMap[template];
-            templateMap.Remove(template);
-            nameMap.Remove(template.Name);
+            int id = _templateMap[template];
+            _templateMap.Remove(template);
+            _nameMap.Remove(template.QName);
             //wrong approach, what if the hashcode is matched for the string.... because its an algo in QNameclass GetHashCode() dont use it.
-            idMap.Remove(id);
+            _idMap.Remove(id);
         }
 
         public override void Remove(int id)
         {
-            MessageTemplate template = idMap[id];
-            idMap.Remove(id);
-            templateMap.Remove(template);
-            nameMap.Remove(template.Name);
+            MessageTemplate template = _idMap[id];
+            _idMap.Remove(id);
+            _templateMap.Remove(template);
+            _nameMap.Remove(template.QName);
         }
 
-        public override void RegisterAll(TemplateRegistry registry)
+        public override void RegisterAll(ITemplateRegistry registry)
         {
             if (registry == null) return;
             MessageTemplate[] templatesp = registry.Templates;
@@ -164,14 +153,9 @@ namespace OpenFAST.Template
             }
         }
 
-        public override IEnumerator NameIterator()
+        public override ICollection<QName> Names()
         {
-            return new SupportClass.HashSetSupport(nameMap.Keys).GetEnumerator();
-        }
-
-        public override IEnumerator Iterator()
-        {
-            return templates.GetEnumerator();
+            return _nameMap.Keys;
         }
     }
 }

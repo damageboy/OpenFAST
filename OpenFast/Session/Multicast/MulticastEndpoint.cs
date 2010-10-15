@@ -26,15 +26,15 @@ using System.Net.Sockets;
 
 namespace OpenFAST.Session.Multicast
 {
-    public sealed class MulticastEndpoint : Endpoint
+    public sealed class MulticastEndpoint : IEndpoint
     {
-        private readonly string group;
-        private readonly int port;
+        private readonly string _group;
+        private readonly int _port;
 
         public MulticastEndpoint(int port, string group)
         {
-            this.port = port;
-            this.group = group;
+            _port = port;
+            _group = group;
         }
 
         #region Endpoint Members
@@ -53,12 +53,12 @@ namespace OpenFAST.Session.Multicast
         {
         }
 
-        public Connection Connect()
+        public IConnection Connect()
         {
             try
             {
-                var socket = new UdpClient(port);
-                IPAddress groupAddress = Dns.GetHostEntry(group).AddressList[0];
+                var socket = new UdpClient(_port);
+                IPAddress groupAddress = Dns.GetHostEntry(_group).AddressList[0];
                 socket.JoinMulticastGroup(groupAddress);
                 return new MulticastConnection(socket, groupAddress);
             }

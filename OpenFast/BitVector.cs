@@ -80,7 +80,7 @@ namespace OpenFAST
             get { return (bytes.Length > 1) && ((bytes[bytes.Length - 1] & VALUE_BITS_SET) == 0); }
         }
 
-        public void set_Renamed(int fieldIndex)
+        public void Set(int fieldIndex)
         {
             bytes[fieldIndex/7] |= (byte) ((1 << (6 - (fieldIndex%7))));
         }

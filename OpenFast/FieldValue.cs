@@ -21,8 +21,8 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST
 {
-    public interface FieldValue
+    public interface IFieldValue
     {
-        FieldValue Copy();
+        IFieldValue Copy();
     }
 }

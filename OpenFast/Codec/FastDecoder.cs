@@ -19,59 +19,73 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using OpenFAST.Template;
 using OpenFAST.Template.Type.Codec;
 
 namespace OpenFAST.Codec
 {
-    public sealed class FastDecoder : Coder
+    public sealed class FastDecoder : ICoder, IEnumerable<Message>
     {
-        private readonly Context context;
-        private readonly Stream in_Renamed;
+        private readonly Context _context;
+        private readonly Stream _inStream;
 
-        public FastDecoder(Context context, Stream in_Renamed)
+        public FastDecoder(Context context, Stream inStream)
         {
-            this.in_Renamed = in_Renamed;
-            this.context = context;
+            _inStream = inStream;
+            _context = context;
         }
 
         #region Coder Members
 
         public void Reset()
         {
-            context.Reset();
+            _context.Reset();
         }
 
         #endregion
 
         public Message ReadMessage()
         {
-            var bitVectorValue = (BitVectorValue) TypeCodec.BIT_VECTOR.Decode(in_Renamed);
+            var bitVectorValue = (BitVectorValue) TypeCodec.BIT_VECTOR.Decode(_inStream);
 
             if (bitVectorValue == null)
-            {
                 return null; // Must have reached end of stream;
-            }
 
-            BitVector pmap = bitVectorValue.value_Renamed;
+            BitVector pmap = bitVectorValue.Value;
             var presenceMapReader = new BitVectorReader(pmap);
 
             // if template id is not present, use previous, else decode template id
             int templateId = (presenceMapReader.Read())
-                                 ? ((IntegerValue) TypeCodec.UINT.Decode(in_Renamed)).value_Renamed
-                                 : context.LastTemplateId;
-            MessageTemplate template = context.GetTemplate(templateId);
+                                 ? ((IntegerValue) TypeCodec.UINT.Decode(_inStream)).Value
+                                 : _context.LastTemplateId;
+            MessageTemplate template = _context.GetTemplate(templateId);
 
             if (template == null)
             {
                 return null;
             }
-            context.NewMessage(template);
+            _context.NewMessage(template);
 
-            context.LastTemplateId = templateId;
+            _context.LastTemplateId = templateId;
 
-            return template.Decode(in_Renamed, templateId, presenceMapReader, context);
+            return template.Decode(_inStream, templateId, presenceMapReader, _context);
+        }
+
+        public IEnumerator<Message> GetEnumerator()
+        {
+            Reset();
+            Message msg;
+            while ((msg = ReadMessage()) != null)
+                yield return msg;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

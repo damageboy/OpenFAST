@@ -31,7 +31,7 @@ namespace OpenFAST.Session.Template.Exchange
             get { return new Group[] {SessionControlProtocol_1_1.GROUP_INSTR}; }
         }
 
-        public override Field Convert(GroupValue fieldDef, TemplateRegistry templateRegistry, ConversionContext context)
+        public override Field Convert(GroupValue fieldDef, ITemplateRegistry templateRegistry, ConversionContext context)
         {
             string name = fieldDef.GetString("Name");
             Field[] fields = ParseFieldInstructions(fieldDef, templateRegistry, context);
@@ -62,17 +62,17 @@ namespace OpenFAST.Session.Template.Exchange
             for (; i < fields.Length; i++)
             {
                 Field field = fields[i];
-                FieldInstructionConverter converter = context.GetConverter(field);
+                IFieldInstructionConverter converter = context.GetConverter(field);
                 if (converter == null)
                     throw new SystemException("No converter found for type " + field.GetType());
-                FieldValue value_Renamed = converter.Convert(field, context);
-                instructions.Add(new[] {value_Renamed});
+                IFieldValue v = converter.Convert(field, context);
+                instructions.Add(new[] {v});
             }
             groupMsg.SetFieldValue("Instructions", instructions);
             return groupMsg;
         }
 
-        public static Field[] ParseFieldInstructions(GroupValue groupDef, TemplateRegistry registry,
+        public static Field[] ParseFieldInstructions(GroupValue groupDef, ITemplateRegistry registry,
                                                      ConversionContext context)
         {
             SequenceValue instructions = groupDef.GetSequence("Instructions");
@@ -80,7 +80,7 @@ namespace OpenFAST.Session.Template.Exchange
             for (int i = 0; i < fields.Length; i++)
             {
                 GroupValue fieldDef = instructions[i].GetGroup(0);
-                FieldInstructionConverter converter = context.GetConverter(fieldDef.GetGroup());
+                IFieldInstructionConverter converter = context.GetConverter(fieldDef.GetGroup());
                 if (converter == null)
                 {
                     throw new SystemException("Encountered unknown group " + fieldDef.GetGroup() +

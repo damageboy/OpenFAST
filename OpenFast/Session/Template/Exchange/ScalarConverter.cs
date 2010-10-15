@@ -19,53 +19,45 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System.Collections;
+using System.Collections.Generic;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
-using Type = OpenFAST.Template.Type.FASTType;
+using OpenFAST.Template.Type;
+using OpenFAST.util;
 
 namespace OpenFAST.Session.Template.Exchange
 {
     public class ScalarConverter : AbstractFieldInstructionConverter
     {
-        private readonly IDictionary TEMPLATE_TYPE_MAP = new Hashtable();
-        private readonly IDictionary TYPE_TEMPLATE_MAP = new Hashtable();
+        private readonly Dictionary<Group, FASTType> _templateTypeMap
+            = new Dictionary<Group, FASTType>
+                  {
+                      {SessionControlProtocol_1_1.INT32_INSTR, FASTType.I32},
+                      {SessionControlProtocol_1_1.UINT32_INSTR, FASTType.U32},
+                      {SessionControlProtocol_1_1.INT64_INSTR, FASTType.I64},
+                      {SessionControlProtocol_1_1.UINT64_INSTR, FASTType.U64},
+                      {SessionControlProtocol_1_1.DECIMAL_INSTR, FASTType.DECIMAL},
+                      {SessionControlProtocol_1_1.UNICODE_INSTR, FASTType.UNICODE},
+                      {SessionControlProtocol_1_1.ASCII_INSTR, FASTType.ASCII},
+                      {SessionControlProtocol_1_1.BYTE_VECTOR_INSTR, FASTType.BYTE_VECTOR},
+                  };
+
+        private readonly Dictionary<FASTType, Group> _typeTemplateMap;
 
         public ScalarConverter()
         {
-            TYPE_TEMPLATE_MAP[Type.I32] = SessionControlProtocol_1_1.INT32_INSTR;
-            TYPE_TEMPLATE_MAP[Type.U32] = SessionControlProtocol_1_1.UINT32_INSTR;
-            TYPE_TEMPLATE_MAP[Type.I64] = SessionControlProtocol_1_1.INT64_INSTR;
-            TYPE_TEMPLATE_MAP[Type.U64] = SessionControlProtocol_1_1.UINT64_INSTR;
-            TYPE_TEMPLATE_MAP[Type.DECIMAL] = SessionControlProtocol_1_1.DECIMAL_INSTR;
-            TYPE_TEMPLATE_MAP[Type.UNICODE] = SessionControlProtocol_1_1.UNICODE_INSTR;
-            TYPE_TEMPLATE_MAP[Type.ASCII] = SessionControlProtocol_1_1.ASCII_INSTR;
-            TYPE_TEMPLATE_MAP[Type.STRING] = SessionControlProtocol_1_1.ASCII_INSTR;
-            TYPE_TEMPLATE_MAP[Type.BYTE_VECTOR] = SessionControlProtocol_1_1.BYTE_VECTOR_INSTR;
-
-            TEMPLATE_TYPE_MAP[SessionControlProtocol_1_1.INT32_INSTR] = Type.I32;
-            TEMPLATE_TYPE_MAP[SessionControlProtocol_1_1.UINT32_INSTR] = Type.U32;
-            TEMPLATE_TYPE_MAP[SessionControlProtocol_1_1.INT64_INSTR] = Type.I64;
-            TEMPLATE_TYPE_MAP[SessionControlProtocol_1_1.UINT64_INSTR] = Type.U64;
-            TEMPLATE_TYPE_MAP[SessionControlProtocol_1_1.DECIMAL_INSTR] = Type.DECIMAL;
-            TEMPLATE_TYPE_MAP[SessionControlProtocol_1_1.UNICODE_INSTR] = Type.UNICODE;
-            TEMPLATE_TYPE_MAP[SessionControlProtocol_1_1.ASCII_INSTR] = Type.ASCII;
-            TEMPLATE_TYPE_MAP[SessionControlProtocol_1_1.BYTE_VECTOR_INSTR] = Type.BYTE_VECTOR;
+            _typeTemplateMap = Util.ReverseDictionary(_templateTypeMap);
+            _typeTemplateMap[FASTType.STRING] = SessionControlProtocol_1_1.ASCII_INSTR;
         }
 
         public override Group[] TemplateExchangeTemplates
         {
-            get
-            {
-                return
-                    SupportClass.ICollectionSupport.ToArray<Group>(
-                        new SupportClass.HashSetSupport(TEMPLATE_TYPE_MAP.Keys));
-            }
+            get { return Util.ToArray(_templateTypeMap.Keys); }
         }
 
-        public override Field Convert(GroupValue fieldDef, TemplateRegistry templateRegistry, ConversionContext context)
+        public override Field Convert(GroupValue fieldDef, ITemplateRegistry templateRegistry, ConversionContext context)
         {
-            var type = (Type) TEMPLATE_TYPE_MAP[fieldDef.GetGroup()];
+            FASTType type = _templateTypeMap[fieldDef.GetGroup()];
             bool optional = fieldDef.GetBool("Optional");
             ScalarValue initialValue = ScalarValue.UNDEFINED;
             if (fieldDef.IsDefined("InitialValue"))
@@ -74,8 +66,8 @@ namespace OpenFAST.Session.Template.Exchange
             if (fieldDef.IsDefined("Operator"))
             {
                 GroupValue operatorGroup = fieldDef.GetGroup("Operator").GetGroup(0);
-                Operator operator_Renamed = GetOperator(operatorGroup.GetGroup());
-                var scalar = new Scalar(fieldDef.GetString("Name"), type, operator_Renamed, initialValue, optional);
+                Operator op = GetOperator(operatorGroup.GetGroup());
+                var scalar = new Scalar(fieldDef.GetString("Name"), type, op, initialValue, optional);
                 if (operatorGroup.IsDefined("Dictionary"))
                     scalar.Dictionary = operatorGroup.GetString("Dictionary");
                 if (operatorGroup.IsDefined("Key"))
@@ -92,16 +84,19 @@ namespace OpenFAST.Session.Template.Exchange
         public override GroupValue Convert(Field field, ConversionContext context)
         {
             var scalar = (Scalar) field;
-            var scalarTemplate = (MessageTemplate) TYPE_TEMPLATE_MAP[scalar.Type];
+            var scalarTemplate = (MessageTemplate) _typeTemplateMap[scalar.Type];
             var scalarMsg = new Message(scalarTemplate);
             SetNameAndId(scalar, scalarMsg);
             scalarMsg.SetInteger("Optional", scalar.Optional ? 1 : 0);
+            
             if (!scalar.Operator.Equals(Operator.NONE))
-                scalarMsg.SetFieldValue("Operator",
-                                        new GroupValue(scalarTemplate.GetGroup("Operator"),
-                                                       new FieldValue[] {CreateOperator(scalar)}));
+                scalarMsg.SetFieldValue(
+                    "Operator",
+                    new GroupValue(scalarTemplate.GetGroup("Operator"), new IFieldValue[] {CreateOperator(scalar)}));
+
             if (!scalar.DefaultValue.Undefined)
                 scalarMsg.SetFieldValue("InitialValue", scalar.DefaultValue);
+
             return scalarMsg;
         }
 

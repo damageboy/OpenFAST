@@ -37,7 +37,7 @@ namespace OpenFAST.Template.Type
         }
 
 
-        public override TypeCodec GetCodec(Operator.Operator operator_Renamed, bool optional)
+        public override TypeCodec GetCodec(Operator.Operator op, bool optional)
         {
             if (optional)
                 return nullableCodec;
@@ -45,13 +45,13 @@ namespace OpenFAST.Template.Type
         }
 
 
-        public override ScalarValue GetValue(string value_Renamed)
+        public override ScalarValue GetValue(string value)
         {
-            if (value_Renamed == null)
+            if (value == null)
                 return null;
-            return GetVal(value_Renamed);
+            return GetVal(value);
         }
 
-        public abstract ScalarValue GetVal(string value_Renamed);
+        public abstract ScalarValue GetVal(string value);
     }
 }

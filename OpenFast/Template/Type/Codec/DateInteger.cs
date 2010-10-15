@@ -28,20 +28,20 @@ namespace OpenFAST.Template.Type.Codec
     [Serializable]
     public sealed class DateInteger : TypeCodec
     {
-        public override ScalarValue Decode(Stream in_Renamed)
+        public override ScalarValue Decode(Stream inStream)
         {
-            long longValue = UINT.Decode(in_Renamed).ToLong();
+            long longValue = UINT.Decode(inStream).ToLong();
             var year = (int) (longValue/10000);
             var month = (int) ((longValue - (year*10000))/100);
             var day = (int) (longValue%100);
             DateTime tempAux = Util.Date(year, month, day);
-            return new DateValue(ref tempAux);
+            return new DateValue(tempAux);
         }
 
-        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        public override byte[] EncodeValue(ScalarValue value)
         {
-            DateTime date = ((DateValue) value_Renamed).value_Renamed;
-            int intValue = Util.DateToInt(ref date);
+            DateTime date = ((DateValue) value).Value;
+            int intValue = Util.DateToInt(date);
             return UINT.Encode(new IntegerValue(intValue));
         }
 

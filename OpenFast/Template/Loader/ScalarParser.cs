@@ -41,12 +41,12 @@ namespace OpenFAST.Template.Loader
 
         public override bool CanParse(XmlElement element, ParsingContext context)
         {
-            return context.TypeMap.Contains(GetTypeName(element));
+            return context.TypeMap.ContainsKey(GetTypeName(element));
         }
 
         public override Field Parse(XmlElement fieldNode, bool optional, ParsingContext context)
         {
-            Operator.Operator operator_Renamed = Operator.Operator.NONE;
+            Operator.Operator op = Operator.Operator.NONE;
             string defaultValue = null;
             string key = null;
             string ns = "";
@@ -55,7 +55,7 @@ namespace OpenFAST.Template.Loader
             {
                 if (operatorElement.HasAttribute("value"))
                     defaultValue = operatorElement.GetAttribute("value");
-                operator_Renamed = Operator.Operator.GetOperator(operatorElement.Name);
+                op = Operator.Operator.GetOperator(operatorElement.Name);
                 if (operatorElement.HasAttribute("key"))
                     key = operatorElement.GetAttribute("key");
                 if (operatorElement.HasAttribute("ns"))
@@ -64,7 +64,7 @@ namespace OpenFAST.Template.Loader
                     context.Dictionary = operatorElement.GetAttribute("dictionary");
             }
             FASTType type = GetType(fieldNode, context);
-            var scalar = new Scalar(GetName(fieldNode, context), type, operator_Renamed, type.GetValue(defaultValue),
+            var scalar = new Scalar(GetName(fieldNode, context), type, op, type.GetValue(defaultValue),
                                     optional);
             if (fieldNode.HasAttribute("id"))
                 scalar.Id = fieldNode.GetAttribute("id");
@@ -77,20 +77,20 @@ namespace OpenFAST.Template.Loader
 
         protected internal virtual QName GetName(XmlElement fieldNode, ParsingContext context)
         {
-            return context.GetName();
+            return context.Name;
         }
 
         protected internal virtual FASTType GetType(XmlElement fieldNode, ParsingContext context)
         {
             string typeName = GetTypeName(fieldNode);
-            if (!context.TypeMap.Contains(typeName))
+            FASTType value;
+            if (!context.TypeMap.TryGetValue(typeName, out value))
             {
-                context.ErrorHandler.Error(XMLMessageTemplateLoader.INVALID_TYPE,
+                context.ErrorHandler.Error(XMLMessageTemplateLoader.InvalidType,
                                            "The type " + typeName + " is not defined.  Possible types: " +
-                                           Util.CollectionToString(
-                                               new SupportClass.HashSetSupport(context.TypeMap.Keys), ", "));
+                                           Util.CollectionToString(context.TypeMap.Keys, ", "));
             }
-            return (FASTType) context.TypeMap[typeName];
+            return value;
         }
 
         protected internal virtual string GetTypeName(XmlElement fieldNode)

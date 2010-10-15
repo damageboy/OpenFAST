@@ -26,35 +26,31 @@ namespace OpenFAST
 {
     public static class Global
     {
-        private static ErrorHandler errorHandler = ErrorHandler_Fields.DEFAULT;
-        private static int currentImplicitId = (int) ((DateTime.Now.Ticks - 621355968000000000)/10000%10000);
+        private static IErrorHandler _errorHandler = ErrorHandler_Fields.DEFAULT;
+        private static int _currentImplicitId = (int) ((DateTime.Now.Ticks - 621355968000000000)/10000%10000);
 
-        public static ErrorHandler ErrorHandler
+        public static IErrorHandler ErrorHandler
         {
             set
             {
-                if (value == null)
-                {
-                    throw new NullReferenceException();
-                }
-
-                errorHandler = value;
+                if (value == null) throw new ArgumentNullException("value");
+                _errorHandler = value;
             }
         }
 
         public static void HandleError(ErrorCode error, string message)
         {
-            errorHandler.Error(error, message);
+            _errorHandler.Error(error, message);
         }
 
         public static void HandleError(ErrorCode error, string message, Exception source)
         {
-            errorHandler.Error(error, message, source);
+            _errorHandler.Error(error, message, source);
         }
 
         public static QName CreateImplicitName(QName name)
         {
-            return new QName(name + "@" + currentImplicitId++, name.Namespace);
+            return new QName(name + "@" + _currentImplicitId++, name.Namespace);
         }
     }
 }

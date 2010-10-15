@@ -37,16 +37,16 @@ namespace OpenFAST.Template.Type
             get { return new DecimalValue(0.0); }
         }
 
-        public override ScalarValue GetVal(string value_Renamed)
+        public override ScalarValue GetVal(string value)
         {
             try
             {
-                return new DecimalValue(Double.Parse(value_Renamed));
+                return new DecimalValue(Double.Parse(value));
             }
             catch (FormatException)
             {
                 Global.HandleError(FastConstants.S3_INITIAL_VALUE_INCOMP,
-                                   "The value \"" + value_Renamed + "\" is not compatible with type " + this);
+                                   "The value \"" + value + "\" is not compatible with type " + this);
                 return null;
             }
         }

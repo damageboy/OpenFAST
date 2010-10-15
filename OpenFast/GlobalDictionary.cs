@@ -25,9 +25,9 @@ using OpenFAST.Template;
 
 namespace OpenFAST
 {
-    public sealed class GlobalDictionary : Dictionary
+    public sealed class GlobalDictionary : IDictionary
     {
-        internal Dictionary<QName, ScalarValue> table =
+        private readonly Dictionary<QName, ScalarValue> _table =
             new Dictionary<QName, ScalarValue>();
 
         #region Dictionary Members
@@ -35,17 +35,17 @@ namespace OpenFAST
         public ScalarValue Lookup(Group template, QName key, QName applicationType)
         {
             ScalarValue value;
-            return table.TryGetValue(key, out value) ? value : ScalarValue.UNDEFINED;
+            return _table.TryGetValue(key, out value) ? value : ScalarValue.UNDEFINED;
         }
 
-        public void Store(Group group, QName applicationType, QName key, ScalarValue value_Renamed)
+        public void Store(Group group, QName applicationType, QName key, ScalarValue value)
         {
-            table[key] = value_Renamed;
+            _table[key] = value;
         }
 
         public void Reset()
         {
-            table.Clear();
+            _table.Clear();
         }
 
         #endregion
@@ -53,10 +53,10 @@ namespace OpenFAST
         public override string ToString()
         {
             var builder = new StringBuilder();
-            foreach (QName key in table.Keys)
+            foreach (QName key in _table.Keys)
             {
                 builder.Append("Dictionary: Global");
-                builder.Append(key).Append("=").Append(table[key]).Append("\n");
+                builder.Append(key).Append("=").Append(_table[key]).Append("\n");
             }
             return builder.ToString();
         }

@@ -26,11 +26,16 @@ namespace OpenFAST
     [Serializable]
     public class BitVectorValue : ScalarValue
     {
-        public BitVector value_Renamed;
+        private readonly BitVector _value;
 
-        public BitVectorValue(BitVector value_Renamed)
+        public BitVectorValue(BitVector value)
         {
-            this.value_Renamed = value_Renamed;
+            _value = value;
+        }
+
+        public BitVector Value
+        {
+            get { return _value; }
         }
 
         public override bool Equals(Object obj)
@@ -45,12 +50,12 @@ namespace OpenFAST
 
         public bool Equals(BitVectorValue other)
         {
-            return other.value_Renamed.Equals(value_Renamed);
+            return other._value.Equals(_value);
         }
 
         public override int GetHashCode()
         {
-            return value_Renamed.GetHashCode();
+            return _value.GetHashCode();
         }
     }
 }

@@ -21,7 +21,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
-using Type = OpenFAST.Template.Type.FASTType;
+using OpenFAST.Template.Type;
 
 namespace OpenFAST.Session.Template.Exchange
 {
@@ -32,7 +32,7 @@ namespace OpenFAST.Session.Template.Exchange
             get { return new Group[] {SessionControlProtocol_1_1.SEQUENCE_INSTR}; }
         }
 
-        public override Field Convert(GroupValue fieldDef, TemplateRegistry templateRegistry, ConversionContext context)
+        public override Field Convert(GroupValue fieldDef, ITemplateRegistry templateRegistry, ConversionContext context)
         {
             string name = fieldDef.GetString("Name");
             string ns = fieldDef.GetString("Ns");
@@ -54,13 +54,13 @@ namespace OpenFAST.Session.Template.Exchange
                 }
                 else
                     lengthName = Global.CreateImplicitName(qname);
-                Operator operator_Renamed = Operator.NONE;
+                Operator op = Operator.NONE;
                 if (lengthDef.IsDefined("Operator"))
-                    operator_Renamed = GetOperator(lengthDef.GetGroup("Operator").GetGroup(0).GetGroup());
+                    op = GetOperator(lengthDef.GetGroup("Operator").GetGroup(0).GetGroup());
                 ScalarValue initialValue = ScalarValue.UNDEFINED;
                 if (lengthDef.IsDefined("InitialValue"))
                     initialValue = (ScalarValue) lengthDef.GetValue("InitialValue");
-                length = new Scalar(lengthName, Type.U32, operator_Renamed, initialValue, optional) {Id = id};
+                length = new Scalar(lengthName, FASTType.U32, op, initialValue, optional) {Id = id};
             }
 
             return new Sequence(qname, length, fields, optional);

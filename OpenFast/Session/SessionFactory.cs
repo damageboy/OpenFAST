@@ -21,17 +21,17 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST.Session
 {
-    public struct SessionFactory_Fields
+    public struct SessionFactoryFields
     {
-        public static readonly SessionFactory NULL;
+        public static readonly ISessionFactory Null;
 
-        static SessionFactory_Fields()
+        static SessionFactoryFields()
         {
-            NULL = new NULLSessionFactory();
+            Null = new NullSessionFactory();
         }
     }
 
-    public class NULLSessionFactory : SessionFactory
+    public class NullSessionFactory : ISessionFactory
     {
         #region SessionFactory Members
 
@@ -44,7 +44,7 @@ namespace OpenFAST.Session
         {
         }
 
-        public virtual Client GetClient(string serverName)
+        public virtual IClient GetClient(string serverName)
         {
             return null;
         }
@@ -52,11 +52,11 @@ namespace OpenFAST.Session
         #endregion
     }
 
-    public interface SessionFactory
+    public interface ISessionFactory
     {
         Session Session { get; }
 
-        Client GetClient(string serverName);
+        IClient GetClient(string serverName);
 
         void Close();
     }

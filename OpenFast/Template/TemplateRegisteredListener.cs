@@ -21,7 +21,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST.Template
 {
-    public interface TemplateRegisteredListener
+    public interface ITemplateRegisteredListener
     {
         void TemplateRegistered(MessageTemplate template, int templateId);
     }

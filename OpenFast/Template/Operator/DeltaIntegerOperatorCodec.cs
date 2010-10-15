@@ -28,11 +28,11 @@ namespace OpenFAST.Template.Operator
     [Serializable]
     internal sealed class DeltaIntegerOperatorCodec : AlwaysPresentOperatorCodec
     {
-        internal DeltaIntegerOperatorCodec(Operator operator_Renamed, FASTType[] types) : base(operator_Renamed, types)
+        internal DeltaIntegerOperatorCodec(Operator op, FASTType[] types) : base(op, types)
         {
         }
 
-        public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar field)
+        public override ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar field)
         {
             if (priorValue == null)
             {
@@ -41,7 +41,7 @@ namespace OpenFAST.Template.Operator
                 return null;
             }
 
-            if (value_Renamed == null)
+            if (value == null)
             {
                 if (field.Optional)
                 {
@@ -55,7 +55,7 @@ namespace OpenFAST.Template.Operator
                 priorValue = field.BaseValue;
             }
 
-            return ((NumericValue) value_Renamed).Subtract((NumericValue) priorValue);
+            return ((NumericValue) value).Subtract((NumericValue) priorValue);
         }
 
         public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue previousValue, Scalar field)

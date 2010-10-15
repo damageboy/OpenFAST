@@ -21,17 +21,17 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST.Session
 {
-    public struct SessionListener_Fields
+    public struct SessionListenerFields
     {
-        public static readonly SessionListener NULL;
+        public static readonly ISessionListener Null;
 
-        static SessionListener_Fields()
+        static SessionListenerFields()
         {
-            NULL = new NULLSessionListener();
+            Null = new NullSessionListener();
         }
     }
 
-    public class NULLSessionListener : SessionListener
+    public class NullSessionListener : ISessionListener
     {
         #region SessionListener Members
 
@@ -42,7 +42,7 @@ namespace OpenFAST.Session
         #endregion
     }
 
-    public interface SessionListener
+    public interface ISessionListener
     {
         void OnClose();
     }

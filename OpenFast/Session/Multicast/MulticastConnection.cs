@@ -26,25 +26,24 @@ using System.Net.Sockets;
 
 namespace OpenFAST.Session.Multicast
 {
-    public sealed class MulticastConnection : Connection
+    public sealed class MulticastConnection : IConnection
     {
-        private readonly IPAddress group;
-        private readonly StreamReader in_stream;
-
-        private readonly UdpClient socket;
+        private readonly IPAddress _group;
+        private readonly StreamReader _inputStream;
+        private readonly UdpClient _socket;
 
         public MulticastConnection(UdpClient socket, IPAddress group)
         {
-            this.socket = socket;
-            this.group = group;
-            in_stream = new StreamReader(new MulticastInputStream(socket));
+            _socket = socket;
+            _group = group;
+            _inputStream = new StreamReader(new MulticastInputStream(socket));
         }
 
         #region Connection Members
 
         public StreamReader InputStream
         {
-            get { return in_stream; }
+            get { return _inputStream; }
         }
 
         public StreamWriter OutputStream
@@ -56,8 +55,8 @@ namespace OpenFAST.Session.Multicast
         {
             try
             {
-                socket.DropMulticastGroup(group);
-                socket.Close();
+                _socket.DropMulticastGroup(_group);
+                _socket.Close();
             }
             catch (IOException)
             {

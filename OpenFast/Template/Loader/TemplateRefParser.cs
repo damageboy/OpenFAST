@@ -24,7 +24,7 @@ using OpenFAST.Error;
 
 namespace OpenFAST.Template.Loader
 {
-    public class TemplateRefParser : FieldParser
+    public class TemplateRefParser : IFieldParser
     {
         #region FieldParser Members
 
@@ -37,7 +37,7 @@ namespace OpenFAST.Template.Loader
                                          : new QName(element.GetAttribute("name"), "");
 
                 if (context.TemplateRegistry.IsDefined(templateName))
-                    return new StaticTemplateReference(context.TemplateRegistry.get_Renamed(templateName));
+                    return new StaticTemplateReference(context.TemplateRegistry[templateName]);
                 context.ErrorHandler.Error(FastConstants.D8_TEMPLATE_NOT_EXIST,
                                            "The template \"" + templateName + "\" was not found.");
                 return null;

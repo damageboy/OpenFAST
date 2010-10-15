@@ -20,7 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using OpenFAST.Template;
@@ -32,86 +32,87 @@ namespace OpenFAST.util
 {
     public class Util
     {
-        private static readonly TwinValue NO_DIFF = new TwinValue(new IntegerValue(0), new StringValue(""));
+        private static readonly TwinValue NoDiff = new TwinValue(new IntegerValue(0), new StringValue(""));
 
-        public static bool IsBiggerThanInt(long value_Renamed)
+        public static bool IsBiggerThanInt(long value)
         {
-            return (value_Renamed > Int32.MaxValue) || (value_Renamed < Int32.MinValue);
+            return (value > Int32.MaxValue) || (value < Int32.MinValue);
         }
 
         public static ScalarValue GetDifference(StringValue newValue, StringValue priorValue)
         {
-            string value_Renamed = newValue.value_Renamed;
+            string value = newValue.Value;
 
-            if ((priorValue == null) || (priorValue.value_Renamed.Length == 0))
+            if ((priorValue == null) || (priorValue.Value.Length == 0))
             {
                 return new TwinValue(new IntegerValue(0), newValue);
             }
 
             if (priorValue.Equals(newValue))
             {
-                return NO_DIFF;
+                return NoDiff;
             }
 
-            string base_Renamed = priorValue.value_Renamed;
+            string baseVal = priorValue.Value;
             int appendIndex = 0;
 
-            while ((appendIndex < base_Renamed.Length) && (appendIndex < value_Renamed.Length) &&
-                   (value_Renamed[appendIndex] == base_Renamed[appendIndex]))
+            while ((appendIndex < baseVal.Length) && (appendIndex < value.Length) &&
+                   (value[appendIndex] == baseVal[appendIndex]))
                 appendIndex++;
 
-            string append = value_Renamed.Substring(appendIndex);
+            string append = value.Substring(appendIndex);
 
             int prependIndex = 1;
 
-            while ((prependIndex <= value_Renamed.Length) && (prependIndex <= base_Renamed.Length) &&
-                   (value_Renamed[value_Renamed.Length - prependIndex] ==
-                    base_Renamed[base_Renamed.Length - prependIndex]))
+            while ((prependIndex <= value.Length) && (prependIndex <= baseVal.Length) &&
+                   (value[value.Length - prependIndex] ==
+                    baseVal[baseVal.Length - prependIndex]))
                 prependIndex++;
 
-            string prepend = value_Renamed.Substring(0, (value_Renamed.Length - prependIndex + 1) - (0));
+            string prepend = value.Substring(0, (value.Length - prependIndex + 1) - (0));
 
             if (prepend.Length < append.Length)
             {
-                return new TwinValue(new IntegerValue(prependIndex - base_Renamed.Length - 2), new StringValue(prepend));
+                return new TwinValue(new IntegerValue(prependIndex - baseVal.Length - 2), new StringValue(prepend));
             }
 
-            return new TwinValue(new IntegerValue(base_Renamed.Length - appendIndex), new StringValue(append));
+            return new TwinValue(new IntegerValue(baseVal.Length - appendIndex), new StringValue(append));
         }
 
         public static StringValue ApplyDifference(StringValue baseValue, TwinValue diffValue)
         {
-            int subtraction = ((IntegerValue) diffValue.first).value_Renamed;
-            string base_Renamed = baseValue.value_Renamed;
-            string diff = ((StringValue) diffValue.second).value_Renamed;
+            int subtraction = ((IntegerValue) diffValue.first).Value;
+            string baseVal = baseValue.Value;
+            string diff = ((StringValue) diffValue.second).Value;
 
             if (subtraction < 0)
             {
                 subtraction = ((- 1)*subtraction) - 1;
 
-                return new StringValue(diff + base_Renamed.Substring(subtraction, (base_Renamed.Length) - (subtraction)));
+                return new StringValue(diff + baseVal.Substring(subtraction, (baseVal.Length) - (subtraction)));
             }
 
-            return new StringValue(base_Renamed.Substring(0, (base_Renamed.Length - subtraction) - (0)) + diff);
+            return new StringValue(baseVal.Substring(0, (baseVal.Length - subtraction) - (0)) + diff);
         }
 
-        public static string CollectionToString(ICollection set_Renamed)
+        public static string CollectionToString(IEnumerable<string> set)
         {
-            return CollectionToString(set_Renamed, ",");
+            return CollectionToString(set, ",");
         }
 
-        public static string CollectionToString(ICollection set_Renamed, string sep)
+        public static string CollectionToString(IEnumerable<string> set, string sep)
         {
-            var buffer = new StringBuilder();
-            IEnumerator iter = set_Renamed.GetEnumerator();
-            buffer.Append("{");
-            while (iter.MoveNext())
-            {
-                buffer.Append(iter.Current).Append(sep);
-            }
-            buffer.Remove(buffer.Length - sep.Length, 1);
-            buffer.Append("}");
-            return buffer.ToString();
+            var str = new StringBuilder();
+
+            str.Append("{");
+
+            foreach (var v in set)
+                str.Append(v).Append(sep);
+
+            str.Length = str.Length - sep.Length;
+            str.Append("}");
+
+            return str.ToString();
         }
 
         public static int MillisecondsSinceMidnight(ref DateTime date)
@@ -132,7 +133,13 @@ namespace OpenFAST.util
             return SupportClass.CalendarManager.manager.GetDateTime(cal);
         }
 
+        [Obsolete("Use non-ref method")]
         public static int DateToInt(ref DateTime date)
+        {
+            return DateToInt(date);
+        }
+        
+        public static int DateToInt(DateTime date)
         {
             Calendar cal = new GregorianCalendar();
             SupportClass.CalendarManager.manager.SetDateTime(cal, date);
@@ -141,7 +148,13 @@ namespace OpenFAST.util
                    SupportClass.CalendarManager.manager.Get(cal, SupportClass.CalendarManager.DATE);
         }
 
+        [Obsolete("Use non-ref method")]
         public static int TimeToInt(ref DateTime date)
+        {
+            return TimeToInt(date);
+        }
+
+        public static int TimeToInt(DateTime date)
         {
             Calendar cal = new GregorianCalendar();
             SupportClass.CalendarManager.manager.SetDateTime(cal, date);
@@ -153,24 +166,24 @@ namespace OpenFAST.util
 
         public static int TimestampToInt(ref DateTime date)
         {
-            return DateToInt(ref date)*1000000000 + TimeToInt(ref date);
+            return DateToInt(date)*1000000000 + TimeToInt(date);
         }
 
-        public static DateTime ToTimestamp(long value_Renamed)
+        public static DateTime ToTimestamp(long value)
         {
             Calendar cal = new GregorianCalendar();
-            var year = (int) (value_Renamed/10000000000000L);
-            value_Renamed %= 10000000000000L;
-            var month = (int) (value_Renamed/100000000000L);
-            value_Renamed %= 100000000000L;
-            var day = (int) (value_Renamed/1000000000);
-            value_Renamed %= 1000000000;
-            var hour = (int) (value_Renamed/10000000);
-            value_Renamed %= 10000000;
-            var min = (int) (value_Renamed/100000);
-            value_Renamed %= 100000;
-            var sec = (int) (value_Renamed/1000);
-            var ms = (int) (value_Renamed%1000);
+            var year = (int) (value/10000000000000L);
+            value %= 10000000000000L;
+            var month = (int) (value/100000000000L);
+            value %= 100000000000L;
+            var day = (int) (value/1000000000);
+            value %= 1000000000;
+            var hour = (int) (value/10000000);
+            value %= 10000000;
+            var min = (int) (value/100000);
+            value %= 100000;
+            var sec = (int) (value/1000);
+            var ms = (int) (value%1000);
             SupportClass.CalendarManager.manager.Set(cal, year, month - 1, day, hour, min, sec);
             SupportClass.CalendarManager.manager.Set(cal, SupportClass.CalendarManager.MILLISECOND, ms);
             return SupportClass.CalendarManager.manager.GetDateTime(cal);
@@ -179,9 +192,9 @@ namespace OpenFAST.util
         public static ComposedScalar ComposedDecimal(QName name, Operator exponentOp, ScalarValue exponentVal,
                                                      Operator mantissaOp, ScalarValue mantissaVal, bool optional)
         {
-            var exponentScalar = new Scalar(Global.CreateImplicitName(name), Type.I32, exponentOp, exponentVal, optional);
-            var mantissaScalar = new Scalar(Global.CreateImplicitName(name), Type.I64, mantissaOp, mantissaVal, false);
-            return new ComposedScalar(name, Type.DECIMAL, new[] {exponentScalar, mantissaScalar}, optional,
+            var exponentScalar = new Scalar(Global.CreateImplicitName(name), FASTType.I32, exponentOp, exponentVal, optional);
+            var mantissaScalar = new Scalar(Global.CreateImplicitName(name), FASTType.I64, mantissaOp, mantissaVal, false);
+            return new ComposedScalar(name, FASTType.DECIMAL, new[] {exponentScalar, mantissaScalar}, optional,
                                       new DecimalConverter());
         }
 
@@ -195,6 +208,25 @@ namespace OpenFAST.util
             {
                 return 0;
             }
+        }
+
+        public static T[] ToArray<T>(ICollection<T> c)
+        {
+            var array = new T[c.Count];
+
+            int i = 0;
+            foreach (var v in c)
+                array[i++] = v;
+
+            return array;
+        }
+
+        public static Dictionary<TValue, TKey> ReverseDictionary<TKey,TValue>(Dictionary<TKey, TValue> from)
+        {
+            var dict = new Dictionary<TValue, TKey>();
+            foreach (var kv in from)
+                dict[kv.Value] = kv.Key;
+            return dict;
         }
     }
 }

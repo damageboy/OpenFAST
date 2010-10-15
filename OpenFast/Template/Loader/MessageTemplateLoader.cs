@@ -23,9 +23,9 @@ using System.IO;
 
 namespace OpenFAST.Template.Loader
 {
-    public interface MessageTemplateLoader
+    public interface IMessageTemplateLoader
     {
-        TemplateRegistry TemplateRegistry { get; set; }
+        ITemplateRegistry TemplateRegistry { get; set; }
         MessageTemplate[] Load(Stream source);
     }
 }

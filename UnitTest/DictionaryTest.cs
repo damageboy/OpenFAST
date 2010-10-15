@@ -36,46 +36,46 @@ namespace UnitTest
         #region Setup/Teardown
 
         [SetUp]
-        protected void setUp()
+        protected void SetUp()
         {
-            output = new StreamWriter(new MemoryStream());
-            session = new Session(new MyConnection(output.BaseStream), SessionConstants.SCP_1_0,
-                                  TemplateRegistry_Fields.NULL, TemplateRegistry_Fields.NULL);
+            _output = new StreamWriter(new MemoryStream());
+            _session = new Session(new MyConnection(_output.BaseStream), SessionConstants.SCP_1_0,
+                                  TemplateRegistryFields.NULL, TemplateRegistryFields.NULL);
         }
 
         #endregion
 
-        private Session session;
-        private StreamWriter output;
+        private Session _session;
+        private StreamWriter _output;
 
-        public class MyConnection : Connection
+        private class MyConnection : IConnection
         {
-            private readonly StreamReader inStream;
-            private readonly StreamWriter outStream;
+            private readonly StreamReader _inStream;
+            private readonly StreamWriter _outStream;
 
             public MyConnection(Stream outStream)
             {
-                this.outStream = new StreamWriter(outStream);
-                inStream = new StreamReader(outStream);
+                _outStream = new StreamWriter(outStream);
+                _inStream = new StreamReader(outStream);
             }
 
             #region Connection Members
 
             public StreamReader InputStream
             {
-                get { return inStream; }
+                get { return _inStream; }
             }
 
             public StreamWriter OutputStream
             {
-                get { return outStream; }
+                get { return _outStream; }
             }
 
             public void Close()
             {
                 try
                 {
-                    outStream.Close();
+                    _outStream.Close();
                 }
                 catch (IOException)
                 {
@@ -89,7 +89,7 @@ namespace UnitTest
         public void TestMultipleDictionaryTypes()
         {
             var bid = new Scalar("bid", FASTType.DECIMAL, Operator.COPY, ScalarValue.UNDEFINED, false)
-                          {Dictionary = Dictionary_Fields.TEMPLATE};
+                          {Dictionary = DictionaryFields.TEMPLATE};
 
             var quote = new MessageTemplate("quote", new Field[] {bid});
 
@@ -109,18 +109,18 @@ namespace UnitTest
             var request2 = new Message(request);
             request2.SetFieldValue(1, new DecimalValue(10.2));
 
-            session.MessageOutputStream.RegisterTemplate(1, request);
-            session.MessageOutputStream.RegisterTemplate(2, quote);
-            session.MessageOutputStream.WriteMessage(quote1);
-            session.MessageOutputStream.WriteMessage(request1);
-            session.MessageOutputStream.WriteMessage(quote2);
-            session.MessageOutputStream.WriteMessage(request2);
+            _session.MessageOutputStream.RegisterTemplate(1, request);
+            _session.MessageOutputStream.RegisterTemplate(2, quote);
+            _session.MessageOutputStream.WriteMessage(quote1);
+            _session.MessageOutputStream.WriteMessage(request1);
+            _session.MessageOutputStream.WriteMessage(quote2);
+            _session.MessageOutputStream.WriteMessage(request2);
 
             const string expected = "11100000 10000010 11111111 00000000 11100110 " +
                                     "11100000 10000001 11111111 00000000 11100111 " +
                                     "11000000 10000010 " +
                                     "11100000 10000001 11111111 00000000 11100110";
-            TestUtil.AssertBitVectorEquals(expected, TestUtil.ToByte(output));
+            TestUtil.AssertBitVectorEquals(expected, TestUtil.ToByte(_output));
         }
     }
 }

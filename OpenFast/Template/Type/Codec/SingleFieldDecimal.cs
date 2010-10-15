@@ -41,20 +41,21 @@ namespace OpenFAST.Template.Type.Codec
             }
 
             var buffer = new MemoryStream();
-            var value_Renamed = (DecimalValue) v;
+            var value = (DecimalValue) v;
 
             try
             {
-                if (Math.Abs(value_Renamed.exponent) > 63)
+                if (Math.Abs(value.Exponent) > 63)
                 {
                     Global.HandleError(FastConstants.R1_LARGE_DECIMAL,
-                                       "Encountered exponent of size " + value_Renamed.exponent);
+                                       "Encountered exponent of size " + value.Exponent);
                 }
 
-                byte[] temp_byteArray = INTEGER.Encode(new IntegerValue(value_Renamed.exponent));
-                buffer.Write(temp_byteArray, 0, temp_byteArray.Length);
-                byte[] temp_byteArray2 = INTEGER.Encode(new LongValue(value_Renamed.mantissa));
-                buffer.Write(temp_byteArray2, 0, temp_byteArray2.Length);
+                byte[] tmp = INTEGER.Encode(new IntegerValue(value.Exponent));
+                buffer.Write(tmp, 0, tmp.Length);
+
+                tmp = INTEGER.Encode(new LongValue(value.Mantissa));
+                buffer.Write(tmp, 0, tmp.Length);
             }
             catch (IOException e)
             {
@@ -64,24 +65,24 @@ namespace OpenFAST.Template.Type.Codec
             return buffer.ToArray();
         }
 
-        public override ScalarValue Decode(Stream in_Renamed)
+        public override ScalarValue Decode(Stream inStream)
         {
-            int exponent = ((IntegerValue) INTEGER.Decode(in_Renamed)).value_Renamed;
+            int exponent = ((IntegerValue) INTEGER.Decode(inStream)).Value;
 
             if (Math.Abs(exponent) > 63)
             {
                 Global.HandleError(FastConstants.R1_LARGE_DECIMAL, "Encountered exponent of size " + exponent);
             }
 
-            long mantissa = INTEGER.Decode(in_Renamed).ToLong();
+            long mantissa = INTEGER.Decode(inStream).ToLong();
             var decimalValue = new DecimalValue(mantissa, exponent);
 
             return decimalValue;
         }
 
-        public static ScalarValue FromString(string value_Renamed)
+        public static ScalarValue FromString(string value)
         {
-            return new DecimalValue(Double.Parse(value_Renamed));
+            return new DecimalValue(Double.Parse(value));
         }
 
         public override bool Equals(Object obj)

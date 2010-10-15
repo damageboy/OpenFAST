@@ -20,7 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using System.Collections;
 using System.IO;
 using OpenFAST.Error;
 using OpenFAST.Template.Type;
@@ -28,16 +27,16 @@ using OpenFAST.Template.Type;
 namespace OpenFAST.Template
 {
     [Serializable]
-    public class Sequence : Field, FieldSet
+    public class Sequence : Field, IFieldSet
     {
-        private readonly Group group;
-        private readonly bool implicitLength;
-        private readonly Scalar length;
+        private readonly Group _group;
+        private readonly bool _implicitLength;
+        private readonly Scalar _length;
 
         public Sequence(QName name, Field[] fields, bool optional)
             : this(name, CreateLength(name, optional), fields, optional)
         {
-            implicitLength = true;
+            _implicitLength = true;
         }
 
         public Sequence(string name, Field[] fields, bool optional) : this(new QName(name), fields, optional)
@@ -46,22 +45,22 @@ namespace OpenFAST.Template
 
         public Sequence(QName name, Scalar length, Field[] fields, bool optional) : base(name, optional)
         {
-            group = new Group(name, fields, optional);
+            _group = new Group(name, fields, optional);
 
             if (length == null)
             {
-                this.length = CreateLength(name, optional);
-                implicitLength = true;
+                _length = CreateLength(name, optional);
+                _implicitLength = true;
             }
             else
             {
-                this.length = length;
+                _length = length;
             }
         }
 
         public virtual Scalar Length
         {
-            get { return length; }
+            get { return _length; }
         }
 
         public override System.Type ValueType
@@ -76,31 +75,31 @@ namespace OpenFAST.Template
 
         public virtual Group Group
         {
-            get { return group; }
+            get { return _group; }
         }
 
         public virtual bool ImplicitLength
         {
-            get { return implicitLength; }
+            get { return _implicitLength; }
         }
 
         public virtual QName TypeReference
         {
-            get { return group.TypeReference; }
+            get { return _group.TypeReference; }
 
-            set { group.TypeReference = value; }
+            set { _group.TypeReference = value; }
         }
 
-        #region FieldSet Members
+        #region IFieldSet Members
 
         public virtual int FieldCount
         {
-            get { return group.FieldCount; }
+            get { return _group.FieldCount; }
         }
 
         public virtual Field GetField(int index)
         {
-            return group.GetField(index);
+            return _group.GetField(index);
         }
 
         #endregion
@@ -113,39 +112,35 @@ namespace OpenFAST.Template
 
         public override bool UsesPresenceMapBit()
         {
-            return length.UsesPresenceMapBit();
+            return _length.UsesPresenceMapBit();
         }
 
-        public override bool IsPresenceMapBitSet(byte[] encoding, FieldValue fieldValue)
+        public override bool IsPresenceMapBitSet(byte[] encoding, IFieldValue fieldValue)
         {
-            return length.IsPresenceMapBitSet(encoding, fieldValue);
+            return _length.IsPresenceMapBitSet(encoding, fieldValue);
         }
 
-        public override byte[] Encode(FieldValue value_Renamed, Group encodeTemplate, Context context,
+        public override byte[] Encode(IFieldValue value, Group encodeTemplate, Context context,
                                       BitVectorBuilder presenceMapBuilder)
         {
             if (HasTypeReference())
                 context.CurrentApplicationType = TypeReference;
-            if (value_Renamed == null)
-            {
-                return length.Encode(null, encodeTemplate, context, presenceMapBuilder);
-            }
+            if (value == null)
+                return _length.Encode(null, encodeTemplate, context, presenceMapBuilder);
 
             var buffer = new MemoryStream();
-            var val = (SequenceValue) value_Renamed;
+            var val = (SequenceValue) value;
             int len = val.Length;
 
             try
             {
-                byte[] temp_byteArray = length.Encode(new IntegerValue(len), encodeTemplate, context, presenceMapBuilder);
-                buffer.Write(temp_byteArray, 0, temp_byteArray.Length);
+                byte[] tmp = _length.Encode(new IntegerValue(len), encodeTemplate, context, presenceMapBuilder);
+                buffer.Write(tmp, 0, tmp.Length);
 
-                IEnumerator iter = val.Iterator();
-
-                while (iter.MoveNext())
+                foreach (GroupValue v in val.Elements)
                 {
-                    byte[] temp_byteArray2 = group.Encode((FieldValue) iter.Current, encodeTemplate, context);
-                    buffer.Write(temp_byteArray2, 0, temp_byteArray2.Length);
+                    tmp = _group.Encode(v, encodeTemplate, context);
+                    buffer.Write(tmp, 0, tmp.Length);
                 }
             }
             catch (IOException e)
@@ -156,52 +151,52 @@ namespace OpenFAST.Template
             return buffer.ToArray();
         }
 
-        public override FieldValue Decode(Stream in_Renamed, Group decodeTemplate, Context context,
-                                          BitVectorReader pmapReader)
+        public override IFieldValue Decode(Stream inStream, Group decodeTemplate, Context context,
+                                           BitVectorReader pmapReader)
         {
             var sequenceValue = new SequenceValue(this);
-            FieldValue lengthValue = length.Decode(in_Renamed, decodeTemplate, context, pmapReader);
+            IFieldValue lengthValue = _length.Decode(inStream, decodeTemplate, context, pmapReader);
 
             if ((lengthValue == ScalarValue.NULL) || (lengthValue == null))
             {
                 return null;
             }
 
-            int len = ((IntegerValue) lengthValue).value_Renamed;
+            int len = ((IntegerValue) lengthValue).Value;
 
             for (int i = 0; i < len; i++)
                 sequenceValue.Add(
-                    (GroupValue) group.Decode(in_Renamed, decodeTemplate, context, BitVectorReader.INFINITE_TRUE));
+                    (GroupValue) _group.Decode(inStream, decodeTemplate, context, BitVectorReader.INFINITE_TRUE));
 
             return sequenceValue;
         }
 
-        public override FieldValue CreateValue(string value_Renamed)
+        public override IFieldValue CreateValue(string value)
         {
             return new SequenceValue(this);
         }
 
         public virtual bool HasField(string fieldName)
         {
-            return group.HasField(fieldName);
+            return _group.HasField(fieldName);
         }
 
         public virtual bool HasTypeReference()
         {
-            return group.HasTypeReference();
+            return _group.HasTypeReference();
         }
 
         public override string ToString()
         {
-            return name.Name;
+            return Name;
         }
 
         public override int GetHashCode()
         {
             const int prime = 31;
             int result = 1;
-            result = prime*result + ((group == null) ? 0 : group.GetHashCode());
-            result = prime*result + ((length == null) ? 0 : length.GetHashCode());
+            result = prime*result + ((_group == null) ? 0 : _group.GetHashCode());
+            result = prime*result + ((_length == null) ? 0 : _length.GetHashCode());
             return result;
         }
 
@@ -213,23 +208,27 @@ namespace OpenFAST.Template
                 return false;
 
             var other = (Sequence) obj;
-            if (!group.Equals(other.group))
+            if (!_group.Equals(other._group))
                 return false;
             if (ImplicitLength != other.ImplicitLength)
                 return false;
-            if (!ImplicitLength && !length.Equals(other.length))
+            if (!ImplicitLength && !_length.Equals(other._length))
                 return false;
             return true;
         }
 
         public override bool HasAttribute(QName attributeName)
         {
-            return group.HasAttribute(attributeName);
+            return _group.HasAttribute(attributeName);
         }
 
-        public override string GetAttribute(QName qname)
+        public override bool TryGetAttribute(QName qname, out string value)
         {
-            return group.GetAttribute(qname);
+            if (_group != null)
+                return _group.TryGetAttribute(qname, out value);
+
+            value = null;
+            return false;
         }
     }
 }

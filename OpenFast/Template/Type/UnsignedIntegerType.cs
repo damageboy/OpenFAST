@@ -32,14 +32,14 @@ namespace OpenFAST.Template.Type
         {
         }
 
-        public override TypeCodec GetCodec(Operator.Operator operator_Renamed, bool optional)
+        public override TypeCodec GetCodec(Operator.Operator op, bool optional)
         {
-            if (operator_Renamed.Equals(Operator.Operator.DELTA))
+            if (op.Equals(Operator.Operator.DELTA))
                 if (optional)
                     return TypeCodec.NULLABLE_INTEGER;
                 else
                     return TypeCodec.INTEGER;
-            return base.GetCodec(operator_Renamed, optional);
+            return base.GetCodec(op, optional);
         }
     }
 }

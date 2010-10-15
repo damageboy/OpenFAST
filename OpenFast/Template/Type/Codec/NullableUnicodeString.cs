@@ -37,27 +37,27 @@ namespace OpenFAST.Template.Type.Codec
             get { return new StringValue(""); }
         }
 
-        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        public override byte[] EncodeValue(ScalarValue value)
         {
-            if (value_Renamed.Null)
+            if (value.Null)
                 return NULLABLE_BYTE_VECTOR_TYPE.EncodeValue(ScalarValue.NULL);
 
-            byte[] utf8encoding = Encoding.UTF8.GetBytes(((StringValue) value_Renamed).value_Renamed);
+            byte[] utf8encoding = Encoding.UTF8.GetBytes(((StringValue) value).Value);
             return NULLABLE_BYTE_VECTOR_TYPE.Encode(new ByteVectorValue(utf8encoding));
         }
 
-        public override ScalarValue Decode(Stream in_Renamed)
+        public override ScalarValue Decode(Stream inStream)
         {
-            ScalarValue decodedValue = NULLABLE_BYTE_VECTOR_TYPE.Decode(in_Renamed);
+            ScalarValue decodedValue = NULLABLE_BYTE_VECTOR_TYPE.Decode(inStream);
             if (decodedValue == null)
                 return null;
-            var value_Renamed = (ByteVectorValue) decodedValue;
-            return new StringValue(Encoding.UTF8.GetString(value_Renamed.value_Renamed));
+            var value = (ByteVectorValue)decodedValue;
+            return new StringValue(Encoding.UTF8.GetString(value.Value));
         }
 
-        public static ScalarValue FromString(string value_Renamed)
+        public static ScalarValue FromString(string value)
         {
-            return new StringValue(value_Renamed);
+            return new StringValue(value);
         }
 
         public override bool Equals(Object obj)

@@ -1,16 +1,18 @@
 ﻿using System;
+using System.Threading;
+
 namespace TCPClient
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            System.Threading.Thread.Sleep(1000);
+            Thread.Sleep(1000);
             try
             {
                 var client = new FASTClient("127.0.0.1", 16121);
                 client.Connect();
-                System.Threading.Thread.Sleep(1000);
+                Thread.Sleep(1000);
                 while (true)
                 {
                     DateTime startTime = DateTime.Now;
@@ -23,7 +25,7 @@ namespace TCPClient
                     Console.WriteLine("MSG/S:" + (64000/seconds).ToString("0"));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }

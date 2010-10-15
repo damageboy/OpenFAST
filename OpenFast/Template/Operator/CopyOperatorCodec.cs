@@ -32,28 +32,24 @@ namespace OpenFAST.Template.Operator
         {
         }
 
-        protected internal override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue,
+        protected internal override ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue,
                                                                  ScalarValue defaultValue)
         {
-            if ((priorValue == ScalarValue.UNDEFINED) && value_Renamed.Equals(defaultValue))
+            if ((priorValue == ScalarValue.UNDEFINED) && value.Equals(defaultValue))
             {
                 return null;
             }
 
-            return (value_Renamed.Equals(priorValue)) ? null : value_Renamed;
+            return (value.Equals(priorValue)) ? null : value;
         }
 
         protected internal override ScalarValue GetInitialValue(Scalar field)
         {
             if (!field.DefaultValue.Undefined)
-            {
                 return field.DefaultValue;
-            }
 
             if (field.Optional)
-            {
                 return null;
-            }
 
             Global.HandleError(FastConstants.D5_NO_DEFAULT_VALUE, "No default value for " + field);
 

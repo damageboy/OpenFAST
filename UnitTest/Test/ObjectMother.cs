@@ -35,21 +35,22 @@ namespace UnitTest.Test
         private static Sequence _allocations;
         private static MessageTemplate _batchTemplate;
         private static MessageTemplate _headerTemplate;
-        public static readonly int QUOTE_TEMPLATE_ID = 10;
-        public static readonly int ALLOC_INSTRCTN_TEMPLATE_ID = 25;
+        public static readonly int QuoteTemplateId = 10;
+        public static readonly int AllocInstrctnTemplateId = 25;
 
         public static MessageTemplate QuoteTemplate()
         {
             if (_quoteTemplate == null)
             {
-                _quoteTemplate = new MessageTemplate("Quote",
-                                                     new Field[]
-                                                         {
-                                                             new Scalar("bid", FASTType.DECIMAL, Operator.DELTA,
-                                                                        ScalarValue.UNDEFINED, false),
-                                                             new Scalar("ask", FASTType.DECIMAL, Operator.DELTA,
-                                                                        ScalarValue.UNDEFINED, false)
-                                                         });
+                _quoteTemplate = new MessageTemplate(
+                    "Quote",
+                    new Field[]
+                        {
+                            new Scalar("bid", FASTType.DECIMAL, Operator.DELTA,
+                                       ScalarValue.UNDEFINED, false),
+                            new Scalar("ask", FASTType.DECIMAL, Operator.DELTA,
+                                       ScalarValue.UNDEFINED, false)
+                        });
             }
 
             return _quoteTemplate;
@@ -59,16 +60,13 @@ namespace UnitTest.Test
         {
             if (_batchTemplate == null)
             {
-                _batchTemplate = new MessageTemplate("Batch",
-                                                     new Field[]
-                                                         {
-                                                             new StaticTemplateReference(HeaderTemplate()),
-                                                             new Sequence("Batch", new Field[]
-                                                                                       {
-                                                                                           DynamicTemplateReference.
-                                                                                               INSTANCE
-                                                                                       }, false)
-                                                         });
+                _batchTemplate = new MessageTemplate(
+                    "Batch",
+                    new Field[]
+                        {
+                            new StaticTemplateReference(HeaderTemplate()),
+                            new Sequence("Batch", new Field[] {DynamicTemplateReference.INSTANCE}, false)
+                        });
             }
 
             return _batchTemplate;
@@ -78,12 +76,12 @@ namespace UnitTest.Test
         {
             if (_headerTemplate == null)
             {
-                _headerTemplate = new MessageTemplate("Header",
-                                                      new Field[]
-                                                          {
-                                                              new Scalar("Sent", FASTType.U32, Operator.DELTA,
-                                                                         ScalarValue.UNDEFINED, false)
-                                                          });
+                _headerTemplate = new MessageTemplate(
+                    "Header",
+                    new Field[]
+                        {
+                            new Scalar("Sent", FASTType.U32, Operator.DELTA, ScalarValue.UNDEFINED, false)
+                        });
             }
 
             return _headerTemplate;
@@ -117,22 +115,17 @@ namespace UnitTest.Test
         {
             if (_allocationInstruction == null)
             {
-                _allocationInstruction = new MessageTemplate("AllocInstrctn",
-                                                             new Field[]
-                                                                 {
-                                                                     Allocations(),
-                                                                     Instrument(),
-                                                                     new Scalar("ID", FASTType.ASCII, Operator.DELTA,
-                                                                                ScalarValue.UNDEFINED, false),
-                                                                     new Scalar("Side", FASTType.U32, Operator.COPY,
-                                                                                ScalarValue.UNDEFINED, false),
-                                                                     new Scalar("Quantity", FASTType.DECIMAL,
-                                                                                Operator.DELTA, ScalarValue.UNDEFINED,
-                                                                                false),
-                                                                     new Scalar("Average Price", FASTType.DECIMAL,
-                                                                                Operator.DELTA, ScalarValue.UNDEFINED,
-                                                                                false)
-                                                                 });
+                _allocationInstruction = new MessageTemplate(
+                    "AllocInstrctn",
+                    new Field[]
+                        {
+                            Allocations(),
+                            Instrument(),
+                            new Scalar("ID", FASTType.ASCII, Operator.DELTA, ScalarValue.UNDEFINED, false),
+                            new Scalar("Side", FASTType.U32, Operator.COPY, ScalarValue.UNDEFINED, false),
+                            new Scalar("Quantity", FASTType.DECIMAL, Operator.DELTA, ScalarValue.UNDEFINED, false),
+                            new Scalar("Average Price", FASTType.DECIMAL, Operator.DELTA, ScalarValue.UNDEFINED, false)
+                        });
             }
 
             return _allocationInstruction;
@@ -142,18 +135,15 @@ namespace UnitTest.Test
         {
             if (_allocations == null)
             {
-                _allocations = new Sequence("Allocations",
-                                            new Field[]
-                                                {
-                                                    new Scalar("Account", FASTType.ASCII, Operator.COPY,
-                                                               ScalarValue.UNDEFINED, false),
-                                                    new Scalar("Price", FASTType.DECIMAL, Operator.DELTA,
-                                                               ScalarValue.UNDEFINED, false),
-                                                    new Scalar("Quantity", FASTType.DECIMAL, Operator.DELTA,
-                                                               ScalarValue.UNDEFINED, false),
-                                                    new Scalar("Average Price", FASTType.DECIMAL, Operator.DELTA,
-                                                               ScalarValue.UNDEFINED, false)
-                                                }, false);
+                _allocations = new Sequence(
+                    "Allocations",
+                    new Field[]
+                        {
+                            new Scalar("Account", FASTType.ASCII, Operator.COPY, ScalarValue.UNDEFINED, false),
+                            new Scalar("Price", FASTType.DECIMAL, Operator.DELTA, ScalarValue.UNDEFINED, false),
+                            new Scalar("Quantity", FASTType.DECIMAL, Operator.DELTA, ScalarValue.UNDEFINED, false),
+                            new Scalar("Average Price", FASTType.DECIMAL, Operator.DELTA, ScalarValue.UNDEFINED, false)
+                        }, false);
             }
 
             return _allocations;
@@ -163,14 +153,13 @@ namespace UnitTest.Test
         {
             if (_instrument == null)
             {
-                _instrument = new Group("Instrmt",
-                                        new Field[]
-                                            {
-                                                new Scalar("Symbol", FASTType.ASCII, Operator.COPY,
-                                                           ScalarValue.UNDEFINED, false),
-                                                new Scalar("MMY", FASTType.ASCII, Operator.DELTA, ScalarValue.UNDEFINED,
-                                                           false),
-                                            }, false);
+                _instrument = new Group(
+                    "Instrmt",
+                    new Field[]
+                        {
+                            new Scalar("Symbol", FASTType.ASCII, Operator.COPY, ScalarValue.UNDEFINED, false),
+                            new Scalar("MMY", FASTType.ASCII, Operator.DELTA, ScalarValue.UNDEFINED, false),
+                        }, false);
             }
 
             return _instrument;
@@ -179,19 +168,19 @@ namespace UnitTest.Test
         public static GroupValue NewInstrument(String symbol, String mmy)
         {
             return new GroupValue(Instrument(),
-                                  new FieldValue[] {new StringValue(symbol), new StringValue(mmy)});
+                                  new IFieldValue[] {new StringValue(symbol), new StringValue(mmy)});
         }
 
         public static GroupValue NewAllocation(String account, double price,
                                                double quantity)
         {
             StringValue acct = account != null ? new StringValue(account) : null;
-            return new GroupValue(Allocations().Group,
-                                  new FieldValue[]
-                                      {
-                                          acct, new DecimalValue(price),
-                                          new DecimalValue(quantity), new DecimalValue(0.0)
-                                      });
+            return new GroupValue(
+                Allocations().Group,
+                new IFieldValue[]
+                    {
+                        acct, new DecimalValue(price), new DecimalValue(quantity), new DecimalValue(0.0)
+                    });
         }
 
         public static Message BasicAllocationInstruction()

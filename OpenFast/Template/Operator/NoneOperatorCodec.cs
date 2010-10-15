@@ -27,18 +27,18 @@ namespace OpenFAST.Template.Operator
     [Serializable]
     internal sealed class NoneOperatorCodec : AlwaysPresentOperatorCodec
     {
-        internal NoneOperatorCodec(Operator operator_Renamed, FASTType[] types) : base(operator_Renamed, types)
+        internal NoneOperatorCodec(Operator op, FASTType[] types) : base(op, types)
         {
         }
 
-        public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar field)
+        public override ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar field)
         {
-            if (value_Renamed == null)
+            if (value == null)
             {
                 return ScalarValue.NULL;
             }
 
-            return value_Renamed;
+            return value;
         }
 
         public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue previousValue, Scalar field)

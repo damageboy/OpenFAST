@@ -27,11 +27,11 @@ namespace OpenFAST.Template
     [Serializable]
     public class StaticTemplateReference : Field
     {
-        private readonly MessageTemplate template;
+        private readonly MessageTemplate _template;
 
         public StaticTemplateReference(MessageTemplate template) : base(template.QName, false)
         {
-            this.template = template;
+            _template = template;
         }
 
         public override string TypeName
@@ -46,27 +46,27 @@ namespace OpenFAST.Template
 
         public virtual MessageTemplate Template
         {
-            get { return template; }
+            get { return _template; }
         }
 
-        public override FieldValue CreateValue(string value_Renamed)
+        public override IFieldValue CreateValue(string value)
         {
             return null;
         }
 
-        public override FieldValue Decode(Stream in_Renamed, Group decodeTemplate, Context context,
-                                          BitVectorReader pmapReader)
+        public override IFieldValue Decode(Stream inStream, Group decodeTemplate, Context context,
+                                           BitVectorReader pmapReader)
         {
             return null;
         }
 
-        public override byte[] Encode(FieldValue value_Renamed, Group encodeTemplate, Context context,
+        public override byte[] Encode(IFieldValue value, Group encodeTemplate, Context context,
                                       BitVectorBuilder presenceMapBuilder)
         {
             return null;
         }
 
-        public override bool IsPresenceMapBitSet(byte[] encoding, FieldValue fieldValue)
+        public override bool IsPresenceMapBitSet(byte[] encoding, IFieldValue fieldValue)
         {
             return false;
         }
@@ -83,7 +83,7 @@ namespace OpenFAST.Template
             if (obj == null || obj.GetType() != GetType())
                 return false;
             var other = (StaticTemplateReference) obj;
-            return template.Equals(other.template);
+            return _template.Equals(other._template);
         }
 
         public override int GetHashCode()

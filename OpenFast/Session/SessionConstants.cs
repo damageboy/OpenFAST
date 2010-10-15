@@ -34,8 +34,8 @@ namespace OpenFAST.Session
         public static readonly ErrorCode PROTCOL_ERROR;
         public static readonly ErrorCode CLOSE;
         public static readonly ErrorCode UNDEFINED;
-        public static readonly SessionProtocol SCP_1_0;
-        public static readonly SessionProtocol SCP_1_1;
+        public static readonly ISessionProtocol SCP_1_0;
+        public static readonly ISessionProtocol SCP_1_1;
         public static readonly string VENDOR_ID = "http://OpenFAST.org/OpenFAST/1.1";
 
         static SessionConstants()

@@ -23,23 +23,23 @@ using System.IO;
 
 namespace OpenFAST.Session
 {
-    public class LocalConnection : Connection
+    public class LocalConnection : IConnection
     {
-        private readonly StreamReader in_Renamed;
-        private readonly StreamWriter out_Renamed;
+        private readonly StreamReader _reader;
+        private readonly StreamWriter _writer;
 
         public LocalConnection()
         {
-            in_Renamed = new StreamReader(new MemoryStream());
-            out_Renamed = new StreamWriter(new MemoryStream());
+            _reader = new StreamReader(new MemoryStream());
+            _writer = new StreamWriter(new MemoryStream());
         }
 
-        public LocalConnection(Connection localConnection)
+        public LocalConnection(IConnection localConnection)
         {
             try
             {
-                in_Renamed = new StreamReader(localConnection.OutputStream.BaseStream);
-                out_Renamed = new StreamWriter(localConnection.InputStream.BaseStream);
+                _reader = new StreamReader(localConnection.OutputStream.BaseStream);
+                _writer = new StreamWriter(localConnection.InputStream.BaseStream);
             }
             catch (IOException e)
             {
@@ -51,26 +51,26 @@ namespace OpenFAST.Session
 
         public virtual StreamReader InputStream
         {
-            get { return in_Renamed; }
+            get { return _reader; }
         }
 
         public virtual StreamWriter OutputStream
         {
-            get { return out_Renamed; }
+            get { return _writer; }
         }
 
         public virtual void Close()
         {
             try
             {
-                in_Renamed.Close();
+                _reader.Close();
             }
             catch (IOException)
             {
             }
             try
             {
-                out_Renamed.Close();
+                _writer.Close();
             }
             catch (IOException)
             {

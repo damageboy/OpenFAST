@@ -21,7 +21,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST.Session
 {
-    public interface Client
+    public interface IClient
     {
         string Name { get; }
         string VendorId { get; }

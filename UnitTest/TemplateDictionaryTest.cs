@@ -34,7 +34,7 @@ namespace UnitTest
         [Test]
         public void TestExistingTemplateValueLookup()
         {
-            Dictionary dictionary = new TemplateDictionary();
+            IDictionary dictionary = new TemplateDictionary();
             Group template = new MessageTemplate("Position",
                                                  new Field[]
                                                      {
@@ -50,7 +50,7 @@ namespace UnitTest
         [Test]
         public void TestLookupMultipleValuesForTemplate()
         {
-            Dictionary dictionary = new TemplateDictionary();
+            IDictionary dictionary = new TemplateDictionary();
             Group template = new MessageTemplate("Position",
                                                  new Field[]
                                                      {
@@ -70,7 +70,7 @@ namespace UnitTest
         [Test]
         public void TestReset()
         {
-            Dictionary dictionary = new TemplateDictionary();
+            IDictionary dictionary = new TemplateDictionary();
             Group template = new MessageTemplate("Position",
                                                  new Field[]
                                                      {
@@ -89,7 +89,7 @@ namespace UnitTest
         [Test]
         public void TestTemplateValueLookup()
         {
-            Dictionary dictionary = new TemplateDictionary();
+            IDictionary dictionary = new TemplateDictionary();
             Group template = new MessageTemplate("Position",
                                                  new Field[]
                                                      {

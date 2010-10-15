@@ -28,9 +28,9 @@ namespace OpenFAST.Template.Type.Codec
     [Serializable]
     public sealed class TimeInteger : TypeCodec
     {
-        public override ScalarValue Decode(Stream in_Renamed)
+        public override ScalarValue Decode(Stream inStream)
         {
-            int intValue = ((IntegerValue) UINT.Decode(in_Renamed)).value_Renamed;
+            int intValue = ((IntegerValue) UINT.Decode(inStream)).Value;
             int hour = intValue/10000000;
             intValue -= hour*10000000;
             int minute = intValue/100000;
@@ -39,13 +39,13 @@ namespace OpenFAST.Template.Type.Codec
             intValue -= second*1000;
             int millisecond = intValue%1000;
             var tempAux = new DateTime(hour*3600000 + minute*60000 + second*1000 + millisecond);
-            return new DateValue(ref tempAux);
+            return new DateValue(tempAux);
         }
 
-        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        public override byte[] EncodeValue(ScalarValue value)
         {
-            DateTime date = ((DateValue) value_Renamed).value_Renamed;
-            int intValue = Util.TimeToInt(ref date);
+            DateTime date = ((DateValue) value).Value;
+            int intValue = Util.TimeToInt(date);
             return UINT.Encode(new IntegerValue(intValue));
         }
 

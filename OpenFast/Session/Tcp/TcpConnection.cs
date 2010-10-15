@@ -25,39 +25,38 @@ using System.Net.Sockets;
 
 namespace OpenFAST.Session.Tcp
 {
-    internal sealed class TcpConnection : Connection
+    internal sealed class TcpConnection : IConnection
     {
-        private readonly StreamReader in_stream;
-        private readonly StreamWriter out_stream;
-
-        private readonly TcpClient socket;
+        private readonly StreamReader _inputStream;
+        private readonly StreamWriter _outputStream;
+        private readonly TcpClient _socket;
 
         public TcpConnection(TcpClient socket)
         {
             if (socket == null)
                 throw new NullReferenceException();
-            this.socket = socket;
-            in_stream = new StreamReader(socket.GetStream());
-            out_stream = new StreamWriter(socket.GetStream());
+            _socket = socket;
+            _inputStream = new StreamReader(socket.GetStream());
+            _outputStream = new StreamWriter(socket.GetStream());
         }
 
         #region Connection Members
 
         public StreamReader InputStream
         {
-            get { return in_stream; }
+            get { return _inputStream; }
         }
 
         public StreamWriter OutputStream
         {
-            get { return out_stream; }
+            get { return _outputStream; }
         }
 
         public void Close()
         {
             try
             {
-                socket.Close();
+                _socket.Close();
             }
             catch (IOException)
             {

@@ -31,14 +31,12 @@ namespace OpenFAST.Session.Template.Exchange
             get { return new Group[] {SessionControlProtocol_1_1.STAT_TEMP_REF_INSTR}; }
         }
 
-        public override Field Convert(GroupValue fieldDef, TemplateRegistry templateRegistry, ConversionContext context)
+        public override Field Convert(GroupValue fieldDef, ITemplateRegistry templateRegistry, ConversionContext context)
         {
             var name = new QName(fieldDef.GetString("Name"), fieldDef.GetString("Ns"));
             if (!templateRegistry.IsDefined(name))
-            {
                 throw new SystemException("Referenced template " + name + " not defined.");
-            }
-            return new StaticTemplateReference(templateRegistry.get_Renamed(name));
+            return new StaticTemplateReference(templateRegistry[name]);
         }
 
         public override GroupValue Convert(Field field, ConversionContext context)

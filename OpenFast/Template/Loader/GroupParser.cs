@@ -33,7 +33,7 @@ namespace OpenFAST.Template.Loader
 
         public override Field Parse(XmlElement groupElement, bool optional, ParsingContext context)
         {
-            var group = new Group(context.GetName(), ParseFields(groupElement, context), optional);
+            var group = new Group(context.Name, ParseFields(groupElement, context), optional);
             ParseMore(groupElement, group, context);
             return group;
         }
@@ -61,7 +61,7 @@ namespace OpenFAST.Template.Loader
                     if ("typeRef".Equals(item.Name) || "length".Equals(item.Name))
                         continue;
                     var element = (XmlElement) item;
-                    FieldParser fieldParser = context.GetFieldParser(element);
+                    IFieldParser fieldParser = context.GetFieldParser(element);
                     if (fieldParser == null)
                         context.ErrorHandler.Error(FastConstants.PARSE_ERROR,
                                                    "No parser registered for " + element.Name);

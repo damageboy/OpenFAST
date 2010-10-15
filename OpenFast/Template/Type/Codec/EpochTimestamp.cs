@@ -27,15 +27,15 @@ namespace OpenFAST.Template.Type.Codec
     [Serializable]
     public sealed class EpochTimestamp : TypeCodec
     {
-        public override ScalarValue Decode(Stream in_Renamed)
+        public override ScalarValue Decode(Stream inStream)
         {
-            var tempAux = new DateTime(INTEGER.Decode(in_Renamed).ToLong());
-            return new DateValue(ref tempAux);
+            var tempAux = new DateTime(INTEGER.Decode(inStream).ToLong());
+            return new DateValue(tempAux);
         }
 
-        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        public override byte[] EncodeValue(ScalarValue value)
         {
-            return INTEGER.EncodeValue(new LongValue(value_Renamed.ToLong()));
+            return INTEGER.EncodeValue(new LongValue(value.ToLong()));
         }
 
         public override bool Equals(Object obj)

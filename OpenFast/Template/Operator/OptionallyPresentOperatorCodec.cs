@@ -28,8 +28,8 @@ namespace OpenFAST.Template.Operator
     [Serializable]
     public abstract class OptionallyPresentOperatorCodec : OperatorCodec
     {
-        protected internal OptionallyPresentOperatorCodec(Operator operator_Renamed, FASTType[] types)
-            : base(operator_Renamed, types)
+        protected internal OptionallyPresentOperatorCodec(Operator op, FASTType[] types)
+            : base(op, types)
         {
         }
 
@@ -38,11 +38,11 @@ namespace OpenFAST.Template.Operator
             return priorValue == ScalarValue.UNDEFINED ? GetInitialValue(field) : GetEmptyValue(priorValue);
         }
 
-        public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar field)
+        public override ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar field)
         {
-            if (value_Renamed != null)
+            if (value != null)
             {
-                return GetValueToEncode(value_Renamed, priorValue, field.DefaultValue);
+                return GetValueToEncode(value, priorValue, field.DefaultValue);
             }
 
             if (field.Optional)
@@ -62,7 +62,7 @@ namespace OpenFAST.Template.Operator
             return null;
         }
 
-        protected internal abstract ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue,
+        protected internal abstract ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue,
                                                                  ScalarValue defaultValue);
 
         protected internal abstract ScalarValue GetInitialValue(Scalar field);

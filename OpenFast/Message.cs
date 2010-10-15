@@ -29,7 +29,7 @@ namespace OpenFAST
     {
         private readonly MessageTemplate template;
 
-        public Message(MessageTemplate template, FieldValue[] fieldValues) : base(template, fieldValues)
+        public Message(MessageTemplate template, IFieldValue[] fieldValues) : base(template, fieldValues)
         {
             this.template = template;
         }
@@ -40,7 +40,7 @@ namespace OpenFAST
 
         public override int FieldCount
         {
-            get { return values.Length; }
+            get { return Values.Length; }
         }
 
         public virtual MessageTemplate Template
@@ -48,9 +48,9 @@ namespace OpenFAST
             get { return template; }
         }
 
-        private static FieldValue[] InitializeFieldValues(int fieldCount)
+        private static IFieldValue[] InitializeFieldValues(int fieldCount)
         {
-            var fields = new FieldValue[fieldCount];
+            var fields = new IFieldValue[fieldCount];
             return fields;
         }
 
@@ -88,14 +88,14 @@ namespace OpenFAST
             return base.GetHashCode() + template.GetHashCode();
         }
 
-        public override FieldValue Copy()
+        public override IFieldValue Copy()
         {
-            var copies = new FieldValue[values.Length];
+            var copies = new IFieldValue[Values.Length];
             for (int i = 0; i < copies.Length; i++)
             {
-                copies[i] = values[i].Copy();
+                copies[i] = Values[i].Copy();
             }
-            return new Message(template, values);
+            return new Message(template, Values);
         }
     }
 }

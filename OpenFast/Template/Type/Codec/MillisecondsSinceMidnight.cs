@@ -29,9 +29,10 @@ namespace OpenFAST.Template.Type.Codec
     [Serializable]
     public sealed class MillisecondsSinceMidnight : TypeCodec
     {
-        public override ScalarValue Decode(Stream in_Renamed)
+        public override ScalarValue Decode(Stream inStream)
         {
-            int millisecondsSinceMidnight = INTEGER.Decode(in_Renamed).ToInt();
+            int millisecondsSinceMidnight = INTEGER.Decode(inStream).ToInt();
+            
             Calendar cal = new GregorianCalendar();
             int hour = millisecondsSinceMidnight/3600000;
             millisecondsSinceMidnight -= hour*3600000;
@@ -45,12 +46,12 @@ namespace OpenFAST.Template.Type.Codec
             int millisecond = millisecondsSinceMidnight;
             SupportClass.CalendarManager.manager.Set(cal, SupportClass.CalendarManager.MILLISECOND, millisecond);
             DateTime tempAux = SupportClass.CalendarManager.manager.GetDateTime(cal);
-            return new DateValue(ref tempAux);
+            return new DateValue(tempAux);
         }
 
-        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        public override byte[] EncodeValue(ScalarValue value)
         {
-            DateTime date = ((DateValue) value_Renamed).value_Renamed;
+            DateTime date = ((DateValue) value).Value;
             int millisecondsSinceMidnight = Util.MillisecondsSinceMidnight(ref date);
             return INTEGER.EncodeValue(new IntegerValue(millisecondsSinceMidnight));
         }

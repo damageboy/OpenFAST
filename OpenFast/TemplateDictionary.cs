@@ -19,43 +19,41 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using OpenFAST.Template;
 
 namespace OpenFAST
 {
-    public sealed class TemplateDictionary : Dictionary
+    public sealed class TemplateDictionary : IDictionary
     {
-        internal Dictionary<Group, Dictionary<QName, ScalarValue>>
-            table =
-                new Dictionary<Group, Dictionary<QName, ScalarValue>>();
+        private readonly Dictionary<Group, Dictionary<QName, ScalarValue>> _table =
+            new Dictionary<Group, Dictionary<QName, ScalarValue>>();
 
         #region Dictionary Members
 
         public ScalarValue Lookup(Group template, QName key, QName applicationType)
         {
-            if (table.ContainsKey(template))
+            if (_table.ContainsKey(template))
             {
-                return (table[template]).ContainsKey(key) ? table[template][key] : ScalarValue.UNDEFINED;
+                return (_table[template]).ContainsKey(key) ? _table[template][key] : ScalarValue.UNDEFINED;
             }
             return ScalarValue.UNDEFINED;
         }
 
         public void Reset()
         {
-            table.Clear();
+            _table.Clear();
         }
 
         public void Store(Group group, QName applicationType, QName key, ScalarValue valueToEncode)
         {
-            if (!table.ContainsKey(group))
+            if (!_table.ContainsKey(group))
             {
-                table[group] = new Dictionary<QName, ScalarValue>();
+                _table[group] = new Dictionary<QName, ScalarValue>();
             }
 
-            table[group][key] = valueToEncode;
+            _table[group][key] = valueToEncode;
         }
 
         #endregion
@@ -63,17 +61,13 @@ namespace OpenFAST
         public override string ToString()
         {
             var builder = new StringBuilder();
-            foreach (Group template in table.Keys)
+            foreach (Group template in _table.Keys)
             {
                 builder.Append("Dictionary: Template=" + template);
-                IDictionary templateMap = table[template];
-                IEnumerator keyIterator =
-                    new SupportClass.HashSetSupport(templateMap.Keys).GetEnumerator();
-                while (keyIterator.MoveNext())
-                {
-                    object key = keyIterator.Current;
-                    builder.Append(key).Append("=").Append(templateMap[key]).Append("\n");
-                }
+                var tmplMap = _table[template];
+
+                foreach (var kv in tmplMap)
+                    builder.Append(kv.Key).Append("=").Append(kv.Value).Append("\n");
             }
             return builder.ToString();
         }

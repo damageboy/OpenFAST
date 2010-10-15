@@ -29,18 +29,23 @@ namespace OpenFAST
     [Serializable]
     public class StringValue : ScalarValue
     {
-        public string value_Renamed;
+        private readonly string _value;
 
-        public StringValue(string value_Renamed)
+        public StringValue(string value)
         {
-            if (value_Renamed == null)
+            if (value == null)
                 throw new NullReferenceException();
-            this.value_Renamed = value_Renamed;
+            _value = value;
         }
 
         public override byte[] Bytes
         {
-            get { return Encoding.UTF8.GetBytes(value_Renamed); }
+            get { return Encoding.UTF8.GetBytes(_value); }
+        }
+
+        public string Value
+        {
+            get { return _value; }
         }
 
         public override byte ToByte()
@@ -71,12 +76,12 @@ namespace OpenFAST
         {
             try
             {
-                return Int32.Parse(value_Renamed);
+                return Int32.Parse(_value);
             }
             catch (Exception e)
             {
                 Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
-                                   "The value \"" + value_Renamed + "\" is too large to fit into an int.", e);
+                                   "The value \"" + _value + "\" is too large to fit into an int.", e);
                 return 0;
             }
         }
@@ -85,12 +90,12 @@ namespace OpenFAST
         {
             try
             {
-                return Int64.Parse(value_Renamed);
+                return Int64.Parse(_value);
             }
             catch (FormatException e)
             {
                 Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
-                                   "The value \"" + value_Renamed + "\" is too large to fit into a long.", e);
+                                   "The value \"" + _value + "\" is too large to fit into a long.", e);
                 return 0;
             }
         }
@@ -99,24 +104,24 @@ namespace OpenFAST
         {
             try
             {
-                return Double.Parse(value_Renamed);
+                return Double.Parse(_value);
             }
             catch (FormatException e)
             {
                 Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
-                                   "The value\"" + value_Renamed + "\" is too large to fit into a double.", e);
+                                   "The value\"" + _value + "\" is too large to fit into a double.", e);
                 return 0.0;
             }
         }
 
         public override Decimal ToBigDecimal()
         {
-            return Decimal.Parse(value_Renamed, NumberStyles.Any);
+            return Decimal.Parse(_value, NumberStyles.Any);
         }
 
         public override string ToString()
         {
-            return value_Renamed;
+            return _value;
         }
 
         public override bool Equals(Object obj)
@@ -130,17 +135,17 @@ namespace OpenFAST
 
         internal bool Equals(StringValue otherValue)
         {
-            return value_Renamed.Equals(otherValue.value_Renamed);
+            return _value.Equals(otherValue._value);
         }
 
         public override int GetHashCode()
         {
-            return value_Renamed.GetHashCode();
+            return _value.GetHashCode();
         }
 
         public override bool EqualsValue(string defaultValue)
         {
-            return value_Renamed.Equals(defaultValue);
+            return _value.Equals(defaultValue);
         }
     }
 }

@@ -23,11 +23,11 @@ using OpenFAST.Template;
 
 namespace OpenFAST
 {
-    public interface MessageStream
+    public interface IMessageStream
     {
-        void AddMessageHandler(MessageTemplate template, MessageHandler handler);
-        void AddMessageHandler(MessageHandler handler);
+        void AddMessageHandler(MessageTemplate template, IMessageHandler handler);
+        void AddMessageHandler(IMessageHandler handler);
         void Close();
-        TemplateRegistry GetTemplateRegistry();
+        ITemplateRegistry GetTemplateRegistry();
     }
 }

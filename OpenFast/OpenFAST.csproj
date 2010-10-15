@@ -29,7 +29,7 @@
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -96,6 +96,9 @@
   <ItemGroup>
     <Reference Include="System">
       <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data">
       <Name>System.Data</Name>
@@ -174,7 +177,7 @@
     <Compile Include="Session\SessionHandler.cs" />
     <Compile Include="Session\SessionListener.cs" />
     <Compile Include="Session\SessionMessageHandler.cs" />
-    <Compile Include="Session\SessionProtocol.cs" />
+    <Compile Include="Session\ISessionProtocol.cs" />
     <Compile Include="Session\Tcp\TcpConnection.cs" />
     <Compile Include="Session\Tcp\TcpEndpoint.cs" />
     <Compile Include="Session\Template\Exchange\AbstractFieldInstructionConverter.cs" />
@@ -268,7 +271,6 @@
     <Compile Include="Template\Type\StringType.cs" />
     <Compile Include="Template\Type\FASTType.cs" />
     <Compile Include="Template\Type\UnsignedIntegerType.cs" />
-    <Compile Include="Util\ArrayIterator.cs" />
     <Compile Include="Util\Key.cs" />
     <Compile Include="Util\RecordingInputStream.cs" />
     <Compile Include="Util\RecordingOutputStream.cs" />

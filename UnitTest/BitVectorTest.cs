@@ -33,9 +33,9 @@ namespace UnitTest
         {
             var expected = new BitVector(new byte[] {0xf0});
             var actual = new BitVector(7);
-            actual.set_Renamed(0);
-            actual.set_Renamed(1);
-            actual.set_Renamed(2);
+            actual.Set(0);
+            actual.Set(1);
+            actual.Set(2);
             Assert.AreEqual(expected, actual);
         }
 
@@ -76,10 +76,10 @@ namespace UnitTest
         {
             var vector = new BitVector(7);
             Assert.IsFalse(vector.IsSet(1));
-            vector.set_Renamed(1);
+            vector.Set(1);
             Assert.IsTrue(vector.IsSet(1));
             Assert.IsFalse(vector.IsSet(6));
-            vector.set_Renamed(6);
+            vector.Set(6);
             Assert.IsTrue(vector.IsSet(6));
             Assert.IsFalse(vector.IsSet(7));
             Assert.IsFalse(vector.IsSet(8));
@@ -89,16 +89,16 @@ namespace UnitTest
         public void TestSetWithMultipleBytes()
         {
             var vector = new BitVector(15);
-            vector.set_Renamed(0);
+            vector.Set(0);
             TestUtil.AssertBitVectorEquals("01000000 00000000 10000000",
                                            vector.Bytes);
-            vector.set_Renamed(4);
+            vector.Set(4);
             TestUtil.AssertBitVectorEquals("01000100 00000000 10000000",
                                            vector.Bytes);
-            vector.set_Renamed(9);
+            vector.Set(9);
             TestUtil.AssertBitVectorEquals("01000100 00010000 10000000",
                                            vector.Bytes);
-            vector.set_Renamed(14);
+            vector.Set(14);
             TestUtil.AssertBitVectorEquals("01000100 00010000 11000000",
                                            vector.Bytes);
         }
@@ -107,11 +107,11 @@ namespace UnitTest
         public void TestSetWithOneByte()
         {
             var vector = new BitVector(7);
-            vector.set_Renamed(0);
+            vector.Set(0);
             TestUtil.AssertBitVectorEquals("11000000", vector.Bytes);
-            vector.set_Renamed(3);
+            vector.Set(3);
             TestUtil.AssertBitVectorEquals("11001000", vector.Bytes);
-            vector.set_Renamed(6);
+            vector.Set(6);
             TestUtil.AssertBitVectorEquals("11001001", vector.Bytes);
         }
     }

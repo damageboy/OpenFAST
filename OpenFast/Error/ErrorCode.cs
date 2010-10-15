@@ -20,53 +20,67 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using System.Collections;
+using System.Collections.Generic;
 
 namespace OpenFAST.Error
 {
-    public sealed class ErrorCode
+    public sealed class ErrorCode : IEquatable<ErrorCode>
     {
-        private static readonly IDictionary ALERT_CODES = new Hashtable();
-        private readonly int code;
-        private readonly string description;
-        private readonly FastAlertSeverity severity;
-        private readonly string shortName;
-        private readonly ErrorType type;
+        private static readonly Dictionary<int, ErrorCode> AlertCodes = new Dictionary<int, ErrorCode>();
+
+        private readonly int _code;
+        private readonly string _description;
+        private readonly FastAlertSeverity _severity;
+        private readonly string _shortName;
+        private readonly ErrorType _type;
 
         public ErrorCode(ErrorType type, int code, string shortName, string description, FastAlertSeverity severity)
         {
-            ALERT_CODES[code] = this;
-            this.type = type;
-            this.code = code;
-            this.shortName = shortName;
-            this.description = description;
-            this.severity = severity;
+            AlertCodes[code] = this;
+            _type = type;
+            _code = code;
+            _shortName = shortName;
+            _description = description;
+            _severity = severity;
         }
 
         public int Code
         {
-            get { return code; }
+            get { return _code; }
         }
 
         public string Description
         {
-            get { return description; }
+            get { return _description; }
         }
 
         public string ShortName
         {
-            get { return shortName; }
+            get { return _shortName; }
         }
 
         public FastAlertSeverity Severity
         {
-            get { return severity; }
+            get { return _severity; }
         }
 
         public ErrorType Type
         {
-            get { return type; }
+            get { return _type; }
         }
+
+        #region IEquatable<ErrorCode> Members
+
+        public bool Equals(ErrorCode other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return other._code == _code && Equals(other._description, _description) &&
+                   Equals(other._severity, _severity) && Equals(other._shortName, _shortName) &&
+                   Equals(other._type, _type);
+        }
+
+        #endregion
 
         public void ThrowException(string message)
         {
@@ -75,27 +89,33 @@ namespace OpenFAST.Error
 
         public static ErrorCode GetAlertCode(Message alertMsg)
         {
-            return (ErrorCode) ALERT_CODES[alertMsg.GetInt(2)];
+            return AlertCodes[alertMsg.GetInt(2)];
         }
 
         public override string ToString()
         {
-            return shortName + ": " + description;
+            return _shortName + ": " + _description;
         }
 
-        public override bool Equals(Object obj)
+        public override bool Equals(object obj)
         {
-            if (obj == this)
-                return true;
-            if (obj == null || !(obj is ErrorCode))
-                return false;
-            var other = (ErrorCode) obj;
-            return other.code == code && other.Type.Equals(Type);
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != typeof (ErrorCode)) return false;
+            return Equals((ErrorCode) obj);
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            unchecked
+            {
+                int result = _code;
+                result = (result*397) ^ (_description != null ? _description.GetHashCode() : 0);
+                result = (result*397) ^ (_severity != null ? _severity.GetHashCode() : 0);
+                result = (result*397) ^ (_shortName != null ? _shortName.GetHashCode() : 0);
+                result = (result*397) ^ (_type != null ? _type.GetHashCode() : 0);
+                return result;
+            }
         }
     }
 }

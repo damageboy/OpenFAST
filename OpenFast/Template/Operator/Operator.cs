@@ -20,7 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using OpenFAST.Error;
 using OpenFAST.Template.Type;
 
@@ -29,7 +29,7 @@ namespace OpenFAST.Template.Operator
     [Serializable]
     public class Operator
     {
-        private static readonly IDictionary OPERATOR_NAME_MAP = new Hashtable();
+        private static readonly Dictionary<string, Operator> OperatorNameMap = new Dictionary<string,Operator>();
 
         public static readonly Operator NONE;
 
@@ -58,7 +58,7 @@ namespace OpenFAST.Template.Operator
         public Operator(string name)
         {
             this.name = name;
-            OPERATOR_NAME_MAP[name] = this;
+            OperatorNameMap[name] = this;
         }
 
         public virtual string Name
@@ -68,9 +68,11 @@ namespace OpenFAST.Template.Operator
 
         public static Operator GetOperator(string name)
         {
-            if (!OPERATOR_NAME_MAP.Contains(name))
-                throw new ArgumentException("The operator \"" + name + "\" does not exist.");
-            return (Operator) OPERATOR_NAME_MAP[name];
+            Operator value;
+            if (OperatorNameMap.TryGetValue(name, out value))
+                return value;
+
+            throw new ArgumentOutOfRangeException("name", name, "Operator does not exist");
         }
 
         public virtual OperatorCodec GetCodec(FASTType type)
@@ -83,7 +85,7 @@ namespace OpenFAST.Template.Operator
             return name;
         }
 
-        public virtual bool ShouldStoreValue(ScalarValue value_Renamed)
+        public virtual bool ShouldStoreValue(ScalarValue value)
         {
             return true;
         }
@@ -111,9 +113,9 @@ namespace OpenFAST.Template.Operator
             return name.GetHashCode();
         }
 
-        public virtual bool UsesDictionary()
+        public virtual bool UsesDictionary
         {
-            return true;
+            get { return true; }
         }
 
         #region Nested type: ConstantOperator
@@ -121,7 +123,7 @@ namespace OpenFAST.Template.Operator
         [Serializable]
         public sealed class ConstantOperator : Operator
         {
-            internal ConstantOperator(string Param1) : base(Param1)
+            internal ConstantOperator(string name) : base(name)
             {
             }
 
@@ -134,14 +136,14 @@ namespace OpenFAST.Template.Operator
                 }
             }
 
-            public override bool ShouldStoreValue(ScalarValue value_Renamed)
+            public override bool ShouldStoreValue(ScalarValue value)
             {
                 return false;
             }
 
-            public override bool UsesDictionary()
+            public override bool UsesDictionary
             {
-                return false;
+                get { return false; }
             }
         }
 
@@ -152,13 +154,13 @@ namespace OpenFAST.Template.Operator
         [Serializable]
         public sealed class CopyOperator : Operator
         {
-            internal CopyOperator(string Param1) : base(Param1)
+            internal CopyOperator(string name) : base(name)
             {
             }
 
             public override OperatorCodec GetCodec(FASTType type)
             {
-                return OperatorCodec.COPY_ALL;
+                return OperatorCodec.CopyAll;
             }
         }
 
@@ -169,7 +171,7 @@ namespace OpenFAST.Template.Operator
         [Serializable]
         public sealed class DefaultOperator : Operator
         {
-            internal DefaultOperator(string Param1) : base(Param1)
+            internal DefaultOperator(string name) : base(name)
             {
             }
 
@@ -182,9 +184,9 @@ namespace OpenFAST.Template.Operator
                 }
             }
 
-            public override bool ShouldStoreValue(ScalarValue value_Renamed)
+            public override bool ShouldStoreValue(ScalarValue value)
             {
-                return value_Renamed != null;
+                return value != null;
             }
         }
 
@@ -195,13 +197,13 @@ namespace OpenFAST.Template.Operator
         [Serializable]
         public sealed class DeltaOperator : Operator
         {
-            internal DeltaOperator(string Param1) : base(Param1)
+            internal DeltaOperator(string name) : base(name)
             {
             }
 
-            public override bool ShouldStoreValue(ScalarValue value_Renamed)
+            public override bool ShouldStoreValue(ScalarValue value)
             {
-                return value_Renamed != null;
+                return value != null;
             }
         }
 
@@ -212,16 +214,16 @@ namespace OpenFAST.Template.Operator
         [Serializable]
         public sealed class NoneOperator : Operator
         {
-            internal NoneOperator(string Param1) : base(Param1)
+            internal NoneOperator(string name) : base(name)
             {
             }
 
-            public override bool UsesDictionary()
+            public override bool UsesDictionary
             {
-                return false;
+                get { return false; }
             }
 
-            public override bool ShouldStoreValue(ScalarValue value_Renamed)
+            public override bool ShouldStoreValue(ScalarValue value)
             {
                 return false;
             }

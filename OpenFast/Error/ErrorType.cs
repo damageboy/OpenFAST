@@ -23,16 +23,16 @@ namespace OpenFAST.Error
 {
     public sealed class ErrorType
     {
-        private readonly string name;
+        private readonly string _name;
 
         public ErrorType(string name)
         {
-            this.name = name;
+            _name = name;
         }
 
         public string Name
         {
-            get { return name; }
+            get { return _name; }
         }
     }
 }

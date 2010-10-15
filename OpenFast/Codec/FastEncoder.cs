@@ -23,20 +23,20 @@ using OpenFAST.Template;
 
 namespace OpenFAST.Codec
 {
-    public sealed class FastEncoder : Coder
+    public sealed class FastEncoder : ICoder
     {
-        private readonly Context context;
+        private readonly Context _context;
 
         public FastEncoder(Context context)
         {
-            this.context = context;
+            _context = context;
         }
 
         #region Coder Members
 
         public void Reset()
         {
-            context.Reset();
+            _context.Reset();
         }
 
         #endregion
@@ -44,13 +44,13 @@ namespace OpenFAST.Codec
         public byte[] Encode(Message message)
         {
             MessageTemplate template = message.Template;
-            context.NewMessage(template);
-            return template.Encode(message, context);
+            _context.NewMessage(template);
+            return template.Encode(message, _context);
         }
 
         public void RegisterTemplate(int templateId, MessageTemplate template)
         {
-            context.RegisterTemplate(templateId, template);
+            _context.RegisterTemplate(templateId, template);
         }
     }
 }

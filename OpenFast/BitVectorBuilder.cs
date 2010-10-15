@@ -45,7 +45,7 @@ namespace OpenFAST
                 if (value == null)
                     Skip();
                 else
-                    set_Renamed();
+                    Set();
             }
         }
 
@@ -54,9 +54,9 @@ namespace OpenFAST
             get { return index; }
         }
 
-        public void set_Renamed()
+        public void Set()
         {
-            vector.set_Renamed(index);
+            vector.Set(index);
             index++;
         }
 

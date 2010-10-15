@@ -21,17 +21,17 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST.Session
 {
-    public struct SessionHandler_Fields
+    public struct SessionHandlerFields
     {
-        public static readonly SessionHandler NULL;
+        public static readonly ISessionHandler Null;
 
-        static SessionHandler_Fields()
+        static SessionHandlerFields()
         {
-            NULL = new NULLSessionHandler();
+            Null = new NullSessionHandler();
         }
     }
 
-    public class NULLSessionHandler : SessionHandler
+    public class NullSessionHandler : ISessionHandler
     {
         #region SessionHandler Members
 
@@ -42,7 +42,7 @@ namespace OpenFAST.Session
         #endregion
     }
 
-    public interface SessionHandler
+    public interface ISessionHandler
     {
         void NewSession(Session session);
     }

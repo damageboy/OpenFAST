@@ -19,47 +19,48 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System.Collections;
+using System.Collections.Generic;
 using System.Xml;
 using OpenFAST.Error;
+using OpenFAST.Template.Type;
 
 namespace OpenFAST.Template.Loader
 {
     public class ParsingContext
     {
-        internal static readonly ParsingContext NULL = new ParsingContext();
+        private static readonly ParsingContext Null = new ParsingContext();
 
-        private readonly ParsingContext parent;
+        private readonly ParsingContext _parent;
 
-        private string dictionary;
-        private ErrorHandler errorHandler;
-        private IList fieldParsers;
+        private string _dictionary;
+        private IErrorHandler _errorHandler;
+        private List<IFieldParser> _fieldParsers;
 
-        private QName name;
-        private string namespace_Renamed;
-        private string templateNamespace;
-        private TemplateRegistry templateRegistry;
-        private IDictionary typeMap;
+        private readonly QName _name;
+        private string _namespace;
+        private string _templateNamespace;
+        private ITemplateRegistry _templateRegistry;
+        private Dictionary<string, FASTType> _typeMap;
 
         static ParsingContext()
         {
-            NULL.Dictionary = "global";
-            NULL.Namespace = "";
-            NULL.TemplateNamespace = "";
+            Null.Dictionary = "global";
+            Null.Namespace = "";
+            Null.TemplateNamespace = "";
         }
 
-        public ParsingContext() : this(NULL)
+        public ParsingContext() : this(Null)
         {
         }
 
         public ParsingContext(ParsingContext parent)
         {
-            this.parent = parent;
+            _parent = parent;
         }
 
         public ParsingContext(XmlElement node, ParsingContext parent)
         {
-            this.parent = parent;
+            _parent = parent;
             if (node.HasAttribute("templateNs"))
                 TemplateNamespace = node.GetAttribute("templateNs");
             if (node.HasAttribute("ns"))
@@ -67,121 +68,74 @@ namespace OpenFAST.Template.Loader
             if (node.HasAttribute("dictionary"))
                 Dictionary = node.GetAttribute("dictionary");
             if (node.HasAttribute("name"))
-                setName(new QName(node.GetAttribute("name"), Namespace));
+                _name = new QName(node.GetAttribute("name"), Namespace);
         }
 
         public string TemplateNamespace
         {
-            get
-            {
-                if (templateNamespace == null)
-                    return parent.TemplateNamespace;
-                return templateNamespace;
-            }
-
-            set { templateNamespace = value; }
+            get { return _templateNamespace ?? _parent.TemplateNamespace; }
+            set { _templateNamespace = value; }
         }
 
         public string Namespace
         {
-            get
-            {
-                if (namespace_Renamed == null)
-                    return parent.Namespace;
-                return namespace_Renamed;
-            }
-
-            set { namespace_Renamed = value; }
+            get { return _namespace ?? _parent.Namespace; }
+            set { _namespace = value; }
         }
 
         public string Dictionary
         {
-            get
-            {
-                if (dictionary == null)
-                    return parent.Dictionary;
-                return dictionary;
-            }
-
-            set { dictionary = value; }
+            get { return _dictionary ?? _parent.Dictionary; }
+            set { _dictionary = value; }
         }
 
-        public virtual ErrorHandler ErrorHandler
+        public virtual IErrorHandler ErrorHandler
         {
-            get
-            {
-                if (errorHandler == null)
-                    return parent.ErrorHandler;
-                return errorHandler;
-            }
-
-            set { errorHandler = value; }
+            get { return _errorHandler ?? _parent.ErrorHandler; }
+            set { _errorHandler = value; }
         }
 
-        public virtual TemplateRegistry TemplateRegistry
+        public virtual ITemplateRegistry TemplateRegistry
         {
-            get
-            {
-                if (templateRegistry == null)
-                    return parent.TemplateRegistry;
-                return templateRegistry;
-            }
-
-            set { templateRegistry = value; }
+            get { return _templateRegistry ?? _parent.TemplateRegistry; }
+            set { _templateRegistry = value; }
         }
 
-        public virtual IDictionary TypeMap
+        public virtual Dictionary<string,FASTType> TypeMap
         {
-            get
-            {
-                if (typeMap == null)
-                    return parent.TypeMap;
-                return typeMap;
-            }
-
-            set { typeMap = value; }
+            get { return _typeMap ?? _parent.TypeMap; }
+            set { _typeMap = value; }
         }
 
-        public virtual IList FieldParsers
+        public virtual List<IFieldParser> FieldParsers
         {
-            get
-            {
-                if (fieldParsers == null)
-                    return parent.FieldParsers;
-                return fieldParsers;
-            }
-
-            set { fieldParsers = value; }
+            get { return _fieldParsers ?? _parent.FieldParsers; }
+            set { _fieldParsers = value; }
         }
 
         public virtual ParsingContext Parent
         {
-            get { return parent; }
+            get { return _parent; }
         }
 
-        private void setName(QName qname)
+        public virtual IFieldParser GetFieldParser(XmlElement element)
         {
-            name = qname;
-        }
-
-        public virtual FieldParser GetFieldParser(XmlElement element)
-        {
-            IList parsers = FieldParsers;
+            var parsers = FieldParsers;
             for (int i = parsers.Count - 1; i >= 0; i--)
             {
-                var fieldParser = ((FieldParser) parsers[i]);
+                var fieldParser = parsers[i];
                 if (fieldParser.CanParse(element, this))
                     return fieldParser;
             }
             return null;
         }
 
-        public virtual QName GetName()
+        public virtual QName Name
         {
-            return name;
+            get { return _name; }
         }
 
-        public virtual void AddFieldParser(FieldParser parser)
+        public virtual void AddFieldParser(IFieldParser parser)
         {
             FieldParsers.Add(parser);
         }

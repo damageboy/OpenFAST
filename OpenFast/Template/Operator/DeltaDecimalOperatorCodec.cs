@@ -57,10 +57,10 @@ namespace OpenFAST.Template.Operator
             }
 
             DecimalValue priorValue = priorVal.Undefined ? (DecimalValue) field.DefaultValue : (DecimalValue) priorVal;
-            var value_Renamed = (DecimalValue) val;
-
-            return new DecimalValue(value_Renamed.mantissa - priorValue.mantissa,
-                                    value_Renamed.exponent - priorValue.exponent);
+            
+            var v = (DecimalValue) val;
+            return new DecimalValue(v.Mantissa - priorValue.Mantissa,
+                                    v.Exponent - priorValue.Exponent);
         }
 
         public override ScalarValue DecodeValue(ScalarValue val, ScalarValue priorVal, Scalar field)
@@ -95,10 +95,9 @@ namespace OpenFAST.Template.Operator
                 priorValue = (DecimalValue) priorVal;
             }
 
-            var value_Renamed = (DecimalValue) val;
-
-            return new DecimalValue(value_Renamed.mantissa + priorValue.mantissa,
-                                    value_Renamed.exponent + priorValue.exponent);
+            var v = (DecimalValue) val;
+            return new DecimalValue(v.Mantissa + priorValue.Mantissa,
+                                    v.Exponent + priorValue.Exponent);
         }
 
         public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)

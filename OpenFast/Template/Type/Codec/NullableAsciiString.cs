@@ -29,8 +29,8 @@ namespace OpenFAST.Template.Type.Codec
     [Serializable]
     internal sealed class NullableAsciiString : TypeCodec
     {
-        private static readonly byte[] NULLABLE_EMPTY_STRING = new byte[] {0x00, 0x00};
-        private static readonly byte[] ZERO_ENCODING = new byte[] {0x00, 0x00, 0x00};
+        private static readonly byte[] NullableEmptyString = new byte[] {0x00, 0x00};
+        private static readonly byte[] ZeroEncoding = new byte[] {0x00, 0x00, 0x00};
 
         public static ScalarValue DefaultValue
         {
@@ -42,39 +42,37 @@ namespace OpenFAST.Template.Type.Codec
             get { return true; }
         }
 
-        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        public override byte[] EncodeValue(ScalarValue value)
         {
-            if (value_Renamed.Null)
+            if (value.Null)
             {
                 return NULL_VALUE_ENCODING;
             }
 
-            string string_Renamed = ((StringValue) value_Renamed).value_Renamed;
+            string str = ((StringValue) value).Value;
 
-            if (string_Renamed != null)
+            if (str != null)
             {
-                if ((string_Renamed.Length == 0))
+                if ((str.Length == 0))
                 {
-                    return NULLABLE_EMPTY_STRING;
+                    return NullableEmptyString;
                 }
 
-                if (string_Renamed.StartsWith("\u0000"))
-                    return ZERO_ENCODING;
-                return Encoding.UTF8.GetBytes(string_Renamed);
+                return str.StartsWith("\u0000") ? ZeroEncoding : Encoding.UTF8.GetBytes(str);
             }
-            return ZERO_ENCODING;
+            return ZeroEncoding;
         }
 
-        public override ScalarValue Decode(Stream in_Renamed)
+        public override ScalarValue Decode(Stream inStream)
         {
             var buffer = new MemoryStream();
-            int byt;
 
             try
             {
+                int byt;
                 do
                 {
-                    byt = in_Renamed.ReadByte();
+                    byt = inStream.ReadByte();
                     buffer.WriteByte((byte) byt);
                 } while ((byt & STOP_BIT) == 0);
             }
@@ -107,9 +105,9 @@ namespace OpenFAST.Template.Type.Codec
             return new StringValue(Encoding.UTF8.GetString(bytes));
         }
 
-        public static ScalarValue FromString(string value_Renamed)
+        public static ScalarValue FromString(string value)
         {
-            return new StringValue(value_Renamed);
+            return new StringValue(value);
         }
 
         public override bool Equals(Object obj)

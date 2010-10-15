@@ -23,11 +23,11 @@ using OpenFAST.Template;
 
 namespace OpenFAST.Session.Template.Exchange
 {
-    public interface FieldInstructionConverter
+    public interface IFieldInstructionConverter
     {
         Group[] TemplateExchangeTemplates { get; }
         bool ShouldConvert(Field field);
-        Field Convert(GroupValue fieldDef, TemplateRegistry templateRegistry, ConversionContext context);
+        Field Convert(GroupValue fieldDef, ITemplateRegistry templateRegistry, ConversionContext context);
         GroupValue Convert(Field field, ConversionContext context);
     }
 }

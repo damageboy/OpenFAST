@@ -32,30 +32,29 @@ namespace OpenFAST
     {
         public static readonly QName NULL = new QName("", "");
 
-        private readonly string name;
-        private readonly string namespace_Renamed;
+        private readonly string _name;
+        private readonly string _namespace;
 
         public QName(string name) : this(name, "")
         {
         }
 
-        public QName(string name, string namespace_Renamed)
+        public QName(string name, string ns)
         {
-            if (name == null)
-                throw new NullReferenceException();
-            this.name = name;
-            this.namespace_Renamed = namespace_Renamed ?? "";
+            if (name == null) throw new ArgumentNullException("name");
+            _name = name;
+            _namespace = ns ?? "";
         }
 
         public string Namespace
         {
-            get { return namespace_Renamed; }
+            get { return _namespace; }
         }
 
         //must be less then or equal to 31 bytes
         public string Name
         {
-            get { return name; }
+            get { return _name; }
         }
 
         #region IEquatable<QName> Members
@@ -64,7 +63,7 @@ namespace OpenFAST
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(other.namespace_Renamed, namespace_Renamed) && Equals(other.name, name);
+            return Equals(other._namespace, _namespace) && Equals(other._name, _name);
         }
 
         #endregion
@@ -81,15 +80,15 @@ namespace OpenFAST
         {
             unchecked
             {
-                return (namespace_Renamed.GetHashCode()*397) ^ name.GetHashCode();
+                return (_namespace.GetHashCode()*397) ^ _name.GetHashCode();
             }
         }
 
         public override string ToString()
         {
-            if (namespace_Renamed == "")
-                return name;
-            return name + "[" + namespace_Renamed + "]";
+            if (_namespace == "")
+                return _name;
+            return _name + "[" + _namespace + "]";
         }
     }
 }

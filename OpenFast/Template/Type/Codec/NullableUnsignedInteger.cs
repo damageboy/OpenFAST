@@ -39,23 +39,19 @@ namespace OpenFAST.Template.Type.Codec
         public override byte[] EncodeValue(ScalarValue v)
         {
             if (v.Null)
-            {
                 return NULL_VALUE_ENCODING;
-            }
 
             return UINT.EncodeValue(((NumericValue) v).Increment());
         }
 
-        public override ScalarValue Decode(Stream in_Renamed)
+        public override ScalarValue Decode(Stream inStream)
         {
-            var value_Renamed = (NumericValue) UINT.Decode(in_Renamed);
+            var value = (NumericValue)UINT.Decode(inStream);
 
-            if (value_Renamed.Equals(0))
-            {
+            if (value.Equals(0))
                 return null;
-            }
 
-            return value_Renamed.Decrement();
+            return value.Decrement();
         }
 
         public override bool Equals(Object obj)

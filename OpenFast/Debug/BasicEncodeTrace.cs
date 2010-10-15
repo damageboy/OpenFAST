@@ -20,23 +20,22 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using OpenFAST.Template;
 
 namespace OpenFAST.Debug
 {
-    public sealed class BasicEncodeTrace : Trace
+    public sealed class BasicEncodeTrace : ITrace
     {
-        private readonly ArrayList stack = new ArrayList();
+        private readonly Stack<TraceGroup> _stack = new Stack<TraceGroup>();
 
-        private StreamWriter out_Renamed = new StreamWriter(Console.OpenStandardOutput(),
-                                                            Encoding.Default);
+        private StreamWriter _writer = new StreamWriter(Console.OpenStandardOutput(), Encoding.Default);
 
         public StreamWriter Writer
         {
-            set { out_Renamed = value; }
+            set { _writer = value; }
         }
 
         #region Trace Members
@@ -44,30 +43,28 @@ namespace OpenFAST.Debug
         public void GroupStart(Group group)
         {
             var traceGroup = new TraceGroup(group);
-            if (!(stack.Count == 0))
-            {
-                ((TraceGroup) stack[stack.Count - 1]).AddGroup(traceGroup);
-            }
-            stack.Add(traceGroup);
+            
+            if (_stack.Count != 0)
+                _stack.Peek().AddGroup(traceGroup);
+
+            _stack.Push(traceGroup);
         }
 
-        public void Field(Field field, FieldValue value_Renamed, FieldValue encoded, byte[] encoding, int pmapIndex)
+        public void Field(Field field, IFieldValue value, IFieldValue encoded, byte[] encoding, int pmapIndex)
         {
-            ((TraceGroup) stack[stack.Count - 1]).AddField(field, value_Renamed, encoded, pmapIndex, encoding);
+            _stack.Peek().AddField(field, value, encoded, pmapIndex, encoding);
         }
 
         public void GroupEnd()
         {
-            var group = (TraceGroup) SupportClass.StackSupport.Pop(stack);
-            if ((stack.Count == 0))
-            {
-                out_Renamed.WriteLine(group);
-            }
+            var group = _stack.Pop();
+            if (_stack.Count == 0)
+                _writer.WriteLine(group);
         }
 
         public void Pmap(byte[] pmap)
         {
-            ((TraceGroup) stack[stack.Count - 1]).Pmap = pmap;
+            _stack.Peek().Pmap = pmap;
         }
 
         #endregion
@@ -80,37 +77,46 @@ namespace OpenFAST.Debug
             return tab;
         }
 
+        #region Nested type: ITraceNode
+
+        private interface ITraceNode
+        {
+            StringBuilder Serialize(StringBuilder builder, int indent);
+        }
+
+        #endregion
+
         #region Nested type: TraceField
 
-        private class TraceField : TraceNode
+        private sealed class TraceField : ITraceNode
         {
-            private readonly FieldValue encoded;
-            private readonly byte[] encoding;
-            private readonly Field field;
+            private readonly IFieldValue _encoded;
+            private readonly byte[] _encoding;
+            private readonly Field _field;
 
-            private readonly int pmapIndex;
+            private readonly int _pmapIndex;
 
-            private readonly FieldValue value_Renamed;
+            private readonly IFieldValue _value;
 
-            public TraceField(Field field, FieldValue value_Renamed, FieldValue encoded, int pmapIndex, byte[] encoding)
+            public TraceField(Field field, IFieldValue value, IFieldValue encoded, int pmapIndex, byte[] encoding)
             {
-                this.field = field;
-                this.value_Renamed = value_Renamed;
-                this.encoded = encoded;
-                this.pmapIndex = pmapIndex;
-                this.encoding = encoding;
+                _field = field;
+                _value = value;
+                _encoded = encoded;
+                _pmapIndex = pmapIndex;
+                _encoding = encoding;
             }
 
-            #region TraceNode Members
+            #region ITraceNode Members
 
-            public virtual StringBuilder Serialize(StringBuilder builder, int indent)
+            public StringBuilder Serialize(StringBuilder builder, int indent)
             {
                 builder.Append(Indent(indent));
-                builder.Append(field.Name).Append("[");
-                if (field.UsesPresenceMapBit())
-                    builder.Append("pmapIndex:").Append(pmapIndex);
-                builder.Append("]: ").Append(value_Renamed).Append(" = ").Append(encoded).Append(" -> ");
-                builder.Append(ByteUtil.ConvertByteArrayToBitString(encoding));
+                builder.Append(_field.Name).Append("[");
+                if (_field.UsesPresenceMapBit())
+                    builder.Append("pmapIndex:").Append(_pmapIndex);
+                builder.Append("]: ").Append(_value).Append(" = ").Append(_encoded).Append(" -> ");
+                builder.Append(ByteUtil.ConvertByteArrayToBitString(_encoding));
                 builder.Append("\n");
                 return builder;
             }
@@ -122,36 +128,36 @@ namespace OpenFAST.Debug
 
         #region Nested type: TraceGroup
 
-        private class TraceGroup : TraceNode
+        private sealed class TraceGroup : ITraceNode
         {
-            private readonly Group group;
-            private readonly IList nodes;
+            private readonly Group _group;
+            private readonly List<ITraceNode> _nodes;
 
-            private byte[] pmap;
+            private byte[] _pmap;
 
             public TraceGroup(Group group)
             {
-                this.group = group;
-                nodes = new ArrayList(group.FieldCount);
+                _group = group;
+                _nodes = new List<ITraceNode>(group.FieldCount);
             }
 
-            public virtual byte[] Pmap
+            public byte[] Pmap
             {
-                set { pmap = value; }
+                set { _pmap = value; }
             }
 
-            #region TraceNode Members
+            #region ITraceNode Members
 
-            public virtual StringBuilder Serialize(StringBuilder builder, int indent)
+            public StringBuilder Serialize(StringBuilder builder, int indent)
             {
-                builder.Append(Indent(indent)).Append(group.Name).Append("\n");
+                builder.Append(Indent(indent)).Append(_group.Name).Append("\n");
                 indent += 2;
-                if (pmap != null)
-                    builder.Append(Indent(indent)).Append("PMAP: ").Append(ByteUtil.ConvertByteArrayToBitString(pmap)).
+                if (_pmap != null)
+                    builder.Append(Indent(indent)).Append("PMAP: ").Append(ByteUtil.ConvertByteArrayToBitString(_pmap)).
                         Append("\n");
-                for (int i = 0; i < nodes.Count; i++)
+                for (int i = 0; i < _nodes.Count; i++)
                 {
-                    ((TraceNode) nodes[i]).Serialize(builder, indent);
+                    _nodes[i].Serialize(builder, indent);
                 }
                 //indent -= 2;
                 return builder;
@@ -159,30 +165,21 @@ namespace OpenFAST.Debug
 
             #endregion
 
-            public virtual void AddField(Field field, FieldValue value_Renamed, FieldValue encoded, int fieldIndex,
-                                         byte[] encoding)
+            public void AddField(Field field, IFieldValue value, IFieldValue encoded, int fieldIndex,
+                                 byte[] encoding)
             {
-                nodes.Add(new TraceField(field, value_Renamed, encoded, fieldIndex, encoding));
+                _nodes.Add(new TraceField(field, value, encoded, fieldIndex, encoding));
             }
 
-            public virtual void AddGroup(TraceGroup traceGroup)
+            public void AddGroup(TraceGroup traceGroup)
             {
-                nodes.Add(traceGroup);
+                _nodes.Add(traceGroup);
             }
 
             public override string ToString()
             {
                 return Serialize(new StringBuilder(), 0).ToString();
             }
-        }
-
-        #endregion
-
-        #region Nested type: TraceNode
-
-        private interface TraceNode
-        {
-            StringBuilder Serialize(StringBuilder builder, int indent);
         }
 
         #endregion

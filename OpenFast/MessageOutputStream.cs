@@ -27,18 +27,15 @@ using OpenFAST.Template;
 
 namespace OpenFAST
 {
-    public sealed class MessageOutputStream : MessageStream
+    public sealed class MessageOutputStream : IMessageStream
     {
-        private readonly Context context;
-        private readonly FastEncoder encoder;
+        private readonly Context _context;
+        private readonly FastEncoder _encoder;
+        private readonly List<IMessageHandler> _handlers = new List<IMessageHandler>();
+        private readonly Stream _outStream;
 
-        private readonly List<MessageHandler> handlers =
-            new List<MessageHandler>();
-
-        private readonly Stream out_Renamed;
-
-        private readonly Dictionary<MessageTemplate, MessageHandler> templateHandlers =
-            new Dictionary<MessageTemplate, MessageHandler>();
+        private readonly Dictionary<MessageTemplate, IMessageHandler> _templateHandlers =
+            new Dictionary<MessageTemplate, IMessageHandler>();
 
 
         public MessageOutputStream(Stream outputStream) : this(outputStream, new Context())
@@ -47,28 +44,28 @@ namespace OpenFAST
 
         public MessageOutputStream(Stream outputStream, Context context)
         {
-            out_Renamed = outputStream;
-            encoder = new FastEncoder(context);
-            this.context = context;
+            _outStream = outputStream;
+            _encoder = new FastEncoder(context);
+            _context = context;
         }
 
         public Stream UnderlyingStream
         {
-            get { return out_Renamed; }
+            get { return _outStream; }
         }
 
         public Context Context
         {
-            get { return context; }
+            get { return _context; }
         }
 
-        #region MessageStream Members
+        #region IMessageStream Members
 
         public void Close()
         {
             try
             {
-                out_Renamed.Close();
+                _outStream.Close();
             }
             catch (IOException e)
             {
@@ -76,19 +73,19 @@ namespace OpenFAST
             }
         }
 
-        public void AddMessageHandler(MessageTemplate template, MessageHandler handler)
+        public void AddMessageHandler(MessageTemplate template, IMessageHandler handler)
         {
-            templateHandlers[template] = handler;
+            _templateHandlers[template] = handler;
         }
 
-        public void AddMessageHandler(MessageHandler handler)
+        public void AddMessageHandler(IMessageHandler handler)
         {
-            handlers.Add(handler);
+            _handlers.Add(handler);
         }
 
-        public TemplateRegistry GetTemplateRegistry()
+        public ITemplateRegistry GetTemplateRegistry()
         {
-            return context.TemplateRegistry;
+            return _context.TemplateRegistry;
         }
 
         #endregion
@@ -102,52 +99,52 @@ namespace OpenFAST
         {
             try
             {
-                if (context.TraceEnabled)
-                    context.StartTrace();
+                if (_context.TraceEnabled)
+                    _context.StartTrace();
 
-                foreach (MessageHandler t in handlers)
+                foreach (IMessageHandler t in _handlers)
                 {
-                    t.HandleMessage(message, context, encoder);
+                    t.HandleMessage(message, _context, _encoder);
                 }
 
-                MessageHandler handler;
-                if (templateHandlers.TryGetValue(message.Template, out handler))
+                IMessageHandler handler;
+                if (_templateHandlers.TryGetValue(message.Template, out handler))
                 {
-                    handler.HandleMessage(message, context, encoder);
+                    handler.HandleMessage(message, _context, _encoder);
                 }
 
-                byte[] data = encoder.Encode(message);
+                byte[] data = _encoder.Encode(message);
 
                 if ((data == null) || (data.Length == 0))
                 {
                     return;
                 }
 
-                byte[] temp_byteArray = data;
-                out_Renamed.Write(temp_byteArray, 0, temp_byteArray.Length);
+                byte[] tmp = data;
+                _outStream.Write(tmp, 0, tmp.Length);
                 if (flush)
-                    out_Renamed.Flush();
+                    _outStream.Flush();
             }
             catch (IOException e)
             {
-                Global.HandleError(FastConstants.IO_ERROR, "An IO error occurred while writing message " + message,
-                                   e);
+                Global.HandleError(
+                    FastConstants.IO_ERROR, "An IO error occurred while writing message " + message, e);
             }
         }
 
         public void Reset()
         {
-            encoder.Reset();
+            _encoder.Reset();
         }
 
         public void RegisterTemplate(int templateId, MessageTemplate template)
         {
-            encoder.RegisterTemplate(templateId, template);
+            _encoder.RegisterTemplate(templateId, template);
         }
 
-        public void SetTemplateRegistry(TemplateRegistry registry)
+        public void SetTemplateRegistry(ITemplateRegistry registry)
         {
-            context.TemplateRegistry = registry;
+            _context.TemplateRegistry = registry;
         }
     }
 }

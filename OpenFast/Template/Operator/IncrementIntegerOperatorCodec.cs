@@ -27,18 +27,18 @@ namespace OpenFAST.Template.Operator
     [Serializable]
     internal sealed class IncrementIntegerOperatorCodec : OperatorCodec
     {
-        internal IncrementIntegerOperatorCodec(Operator operator_Renamed, FASTType[] types)
-            : base(operator_Renamed, types)
+        internal IncrementIntegerOperatorCodec(Operator op, FASTType[] types)
+            : base(op, types)
         {
         }
 
-        public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar field)
+        public override ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar field)
         {
             if (priorValue == null)
             {
-                return value_Renamed;
+                return value;
             }
-            if (value_Renamed == null)
+            if (value == null)
             {
                 if (field.Optional)
                 {
@@ -52,15 +52,15 @@ namespace OpenFAST.Template.Operator
             }
             if (priorValue.Undefined)
             {
-                if (value_Renamed.Equals(field.DefaultValue))
+                if (value.Equals(field.DefaultValue))
                 {
                     return null;
                 }
-                return value_Renamed;
+                return value;
             }
-            if (!value_Renamed.Equals(((NumericValue) priorValue).Increment()))
+            if (!value.Equals(((NumericValue) priorValue).Increment()))
             {
-                return value_Renamed;
+                return value;
             }
             return null;
         }

@@ -40,8 +40,8 @@ namespace OpenFAST.Template.Loader
 
         public override Field Parse(XmlElement sequenceElement, bool optional, ParsingContext context)
         {
-            var sequence = new Sequence(context.GetName(),
-                                        ParseSequenceLengthField(context.GetName(), sequenceElement, optional, context),
+            var sequence = new Sequence(context.Name,
+                                        ParseSequenceLengthField(context.Name, sequenceElement, optional, context),
                                         GroupParser.ParseFields(sequenceElement, context), optional);
             GroupParser.ParseMore(sequenceElement, sequence.Group, context);
             return sequence;
@@ -93,9 +93,9 @@ namespace OpenFAST.Template.Loader
 
             protected internal override QName GetName(XmlElement fieldNode, ParsingContext context)
             {
-                if (context.GetName() == null)
-                    return Global.CreateImplicitName(context.Parent.GetName());
-                return context.GetName();
+                if (context.Name == null)
+                    return Global.CreateImplicitName(context.Parent.Name);
+                return context.Name;
             }
         }
 

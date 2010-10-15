@@ -33,22 +33,22 @@ namespace OpenFAST.Template.Type.Codec
             get { return new StringValue(""); }
         }
 
-        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        public override byte[] EncodeValue(ScalarValue value)
         {
-            byte[] utf8encoding = Encoding.UTF8.GetBytes(((StringValue) value_Renamed).value_Renamed);
+            byte[] utf8encoding = Encoding.UTF8.GetBytes(((StringValue) value).Value);
             return BYTE_VECTOR.Encode(new ByteVectorValue(utf8encoding));
         }
 
 
-        public override ScalarValue Decode(Stream in_Renamed)
+        public override ScalarValue Decode(Stream inStream)
         {
-            var value_Renamed = (ByteVectorValue) BYTE_VECTOR.Decode(in_Renamed);
-            return new StringValue(Encoding.UTF8.GetString(value_Renamed.value_Renamed));
+            var value = (ByteVectorValue)BYTE_VECTOR.Decode(inStream);
+            return new StringValue(Encoding.UTF8.GetString(value.Value));
         }
 
-        public static ScalarValue FromString(string value_Renamed)
+        public static ScalarValue FromString(string value)
         {
-            return new StringValue(value_Renamed);
+            return new StringValue(value);
         }
     }
 }

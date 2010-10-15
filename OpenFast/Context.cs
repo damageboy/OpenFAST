@@ -28,96 +28,96 @@ namespace OpenFAST
 {
     public sealed class Context
     {
-        private readonly Dictionary<string, Dictionary> dictionaries =
-            new Dictionary<string, Dictionary>();
+        private readonly Dictionary<string, IDictionary> _dictionaries =
+            new Dictionary<string, IDictionary>();
 
-        private QName currentApplicationType;
-        private Trace encodeTraceInternal;
-        private ErrorHandler errorHandler = ErrorHandler_Fields.DEFAULT;
-        private TemplateRegistry templateRegistry = new BasicTemplateRegistry();
+        private QName _currentApplicationType;
+        private ITrace _encodeTraceInternal;
+        private IErrorHandler _errorHandler = ErrorHandler_Fields.DEFAULT;
+        private ITemplateRegistry _templateRegistry = new BasicTemplateRegistry();
 
         public Context()
         {
-            dictionaries["global"] = new GlobalDictionary();
-            dictionaries["template"] = new TemplateDictionary();
-            dictionaries["type"] = new ApplicationTypeDictionary();
+            _dictionaries["global"] = new GlobalDictionary();
+            _dictionaries["template"] = new TemplateDictionary();
+            _dictionaries["type"] = new ApplicationTypeDictionary();
         }
 
         public int LastTemplateId { get; set; }
 
-        public ErrorHandler ErrorHandler
+        public IErrorHandler ErrorHandler
         {
-            set { errorHandler = value; }
+            set { _errorHandler = value; }
         }
 
         public QName CurrentApplicationType
         {
-            set { currentApplicationType = value; }
+            set { _currentApplicationType = value; }
         }
 
-        public TemplateRegistry TemplateRegistry
+        public ITemplateRegistry TemplateRegistry
         {
-            get { return templateRegistry; }
+            get { return _templateRegistry; }
 
-            set { templateRegistry = value; }
+            set { _templateRegistry = value; }
         }
 
         public bool TraceEnabled { get; set; }
 
-        public Trace DecodeTrace { get; set; }
+        public ITrace DecodeTrace { get; set; }
 
         public int GetTemplateId(MessageTemplate template)
         {
-            if (!templateRegistry.IsRegistered(template))
+            if (!_templateRegistry.IsRegistered(template))
             {
-                errorHandler.Error(FastConstants.D9_TEMPLATE_NOT_REGISTERED,
+                _errorHandler.Error(FastConstants.D9_TEMPLATE_NOT_REGISTERED,
                                    "The template " + template + " has not been registered.");
                 return 0;
             }
-            return templateRegistry.GetId(template);
+            return _templateRegistry.GetId(template);
         }
 
         public MessageTemplate GetTemplate(int templateId)
         {
-            if (!templateRegistry.IsRegistered(templateId))
+            if (!_templateRegistry.IsRegistered(templateId))
             {
-                errorHandler.Error(FastConstants.D9_TEMPLATE_NOT_REGISTERED,
+                _errorHandler.Error(FastConstants.D9_TEMPLATE_NOT_REGISTERED,
                                    "The template with id " + templateId + " has not been registered.");
                 return null;
             }
-            return templateRegistry.get_Renamed(templateId);
+            return _templateRegistry[templateId];
         }
 
         public void RegisterTemplate(int templateId, MessageTemplate template)
         {
-            templateRegistry.Register(templateId, template);
+            _templateRegistry.Register(templateId, template);
         }
 
         public ScalarValue Lookup(string dictionary, Group group, QName key)
         {
             if (group.HasTypeReference())
-                currentApplicationType = group.TypeReference;
-            return GetDictionary(dictionary).Lookup(group, key, currentApplicationType);
+                _currentApplicationType = group.TypeReference;
+            return GetDictionary(dictionary).Lookup(group, key, _currentApplicationType);
         }
 
-        private Dictionary GetDictionary(string dictionary)
+        private IDictionary GetDictionary(string dictionary)
         {
-            Dictionary value;
-            if (!dictionaries.TryGetValue(dictionary, out value))
-                dictionaries[dictionary] = value = new GlobalDictionary();
+            IDictionary value;
+            if (!_dictionaries.TryGetValue(dictionary, out value))
+                _dictionaries[dictionary] = value = new GlobalDictionary();
             return value;
         }
 
         public void Store(string dictionary, Group group, QName key, ScalarValue valueToEncode)
         {
             if (group.HasTypeReference())
-                currentApplicationType = group.TypeReference;
-            GetDictionary(dictionary).Store(group, currentApplicationType, key, valueToEncode);
+                _currentApplicationType = group.TypeReference;
+            GetDictionary(dictionary).Store(group, _currentApplicationType, key, valueToEncode);
         }
 
         public void Reset()
         {
-            foreach (Dictionary dict in dictionaries.Values)
+            foreach (IDictionary dict in _dictionaries.Values)
             {
                 dict.Reset();
             }
@@ -125,7 +125,7 @@ namespace OpenFAST
 
         public void NewMessage(MessageTemplate template)
         {
-            currentApplicationType = (template.HasTypeReference())
+            _currentApplicationType = (template.HasTypeReference())
                                          ? template.TypeReference
                                          : FastConstants.ANY_TYPE;
         }
@@ -138,12 +138,12 @@ namespace OpenFAST
 
         public void SetEncodeTrace(BasicEncodeTrace encodeTrace)
         {
-            encodeTraceInternal = encodeTrace;
+            _encodeTraceInternal = encodeTrace;
         }
 
-        public Trace GetEncodeTrace()
+        public ITrace GetEncodeTrace()
         {
-            return encodeTraceInternal;
+            return _encodeTraceInternal;
         }
     }
 }

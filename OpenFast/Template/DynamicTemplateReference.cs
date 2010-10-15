@@ -44,28 +44,28 @@ namespace OpenFAST.Template
             get { return null; }
         }
 
-        public override FieldValue CreateValue(string value_Renamed)
+        public override IFieldValue CreateValue(string value)
         {
             return null;
         }
 
 
-        public override FieldValue Decode(Stream in_Renamed, Group decodeTemplate, Context context,
+        public override IFieldValue Decode(Stream inStream, Group decodeTemplate, Context context,
                                           BitVectorReader pmapReader)
         {
-            return new FastDecoder(context, in_Renamed).ReadMessage();
+            return new FastDecoder(context, inStream).ReadMessage();
         }
 
 
-        public override byte[] Encode(FieldValue value_Renamed, Group encodeTemplate, Context context,
+        public override byte[] Encode(IFieldValue value, Group encodeTemplate, Context context,
                                       BitVectorBuilder presenceMapBuilder)
         {
-            var message = (Message) value_Renamed;
+            var message = (Message) value;
             return message.Template.Encode(message, context);
         }
 
 
-        public override bool IsPresenceMapBitSet(byte[] encoding, FieldValue fieldValue)
+        public override bool IsPresenceMapBitSet(byte[] encoding, IFieldValue fieldValue)
         {
             return false;
         }

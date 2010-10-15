@@ -20,7 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using OpenFAST.Template.Type.Codec;
 using OpenFAST.util;
 
@@ -29,7 +29,7 @@ namespace OpenFAST.Template.Type
     [Serializable]
     public abstract class FASTType
     {
-        private static readonly IDictionary TYPE_NAME_MAP = new Hashtable();
+        private static readonly Dictionary<string, FASTType> TypeNameMap = new Dictionary<string, FASTType>();
 
         public static readonly FASTType U8 = new UnsignedIntegerType(8, 256);
         public static readonly FASTType U16 = new UnsignedIntegerType(16, 65536);
@@ -60,7 +60,7 @@ namespace OpenFAST.Template.Type
         protected FASTType(string typeName)
         {
             name = typeName;
-            TYPE_NAME_MAP[typeName] = this;
+            TypeNameMap[typeName] = this;
         }
 
         public virtual string Name
@@ -70,19 +70,20 @@ namespace OpenFAST.Template.Type
 
         public abstract ScalarValue DefaultValue { get; }
 
-        public static IDictionary RegisteredTypeMap
+        public static Dictionary<string, FASTType> RegisteredTypeMap
         {
-            get { return TYPE_NAME_MAP; }
+            get { return TypeNameMap; }
         }
 
         public static FASTType GetType(string typeName)
         {
-            if (!TYPE_NAME_MAP.Contains(typeName))
+            FASTType value;
+            if (!TypeNameMap.TryGetValue(typeName, out value))
             {
                 throw new ArgumentException("The type named " + typeName + " does not exist.  Existing types are " +
-                                            Util.CollectionToString(new SupportClass.HashSetSupport(TYPE_NAME_MAP.Keys)));
+                                            Util.CollectionToString(TypeNameMap.Keys));
             }
-            return (FASTType) TYPE_NAME_MAP[typeName];
+            return value;
         }
 
         public override string ToString()
@@ -90,16 +91,16 @@ namespace OpenFAST.Template.Type
             return name;
         }
 
-        public virtual string Serialize(ScalarValue value_Renamed)
+        public virtual string Serialize(ScalarValue value)
         {
-            return value_Renamed.ToString();
+            return value.ToString();
         }
 
-        public abstract TypeCodec GetCodec(Operator.Operator operator_Renamed, bool optional);
-        public abstract ScalarValue GetValue(string value_Renamed);
+        public abstract TypeCodec GetCodec(Operator.Operator op, bool optional);
+        public abstract ScalarValue GetValue(string value);
         public abstract bool IsValueOf(ScalarValue previousValue);
 
-        public virtual void ValidateValue(ScalarValue value_Renamed)
+        public virtual void ValidateValue(ScalarValue value)
         {
         }
 

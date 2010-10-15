@@ -20,64 +20,63 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using System.Collections;
 using System.IO;
 using System.Xml;
 using OpenFAST.Error;
 using OpenFAST.Template.Type;
+using System.Collections.Generic;
 
 namespace OpenFAST.Template.Loader
 {
-    public sealed class XMLMessageTemplateLoader : MessageTemplateLoader
+    public sealed class XMLMessageTemplateLoader : IMessageTemplateLoader
     {
-        internal const string TEMPLATE_DEFINITION_NS = "http://www.fixprotocol.org/ns/fast/td/1.1";
+        internal const string TemplateDefinitionNs = "http://www.fixprotocol.org/ns/fast/td/1.1";
 
-        internal static readonly ErrorCode IO_ERROR;
+        internal static readonly ErrorCode IoError;
 
-        internal static readonly ErrorCode XML_PARSING_ERROR;
+        internal static readonly ErrorCode XmlParsingError;
 
-        internal static readonly ErrorCode INVALID_TYPE;
+        internal static readonly ErrorCode InvalidType;
 
-        private readonly ParsingContext initialContext;
+        private readonly ParsingContext _initialContext;
 
-        private bool loadTemplateIdFromAuxId;
+        private bool _loadTemplateIdFromAuxId;
 
         static XMLMessageTemplateLoader()
         {
-            IO_ERROR = new ErrorCode(FastConstants.STATIC, - 1, "IOERROR", "IO Error", FastAlertSeverity.ERROR);
-            XML_PARSING_ERROR = new ErrorCode(FastConstants.STATIC, - 1, "XMLPARSEERR", "XML Parsing Error",
+            IoError = new ErrorCode(FastConstants.STATIC, - 1, "IOERROR", "IO Error", FastAlertSeverity.ERROR);
+            XmlParsingError = new ErrorCode(FastConstants.STATIC, - 1, "XMLPARSEERR", "XML Parsing Error",
                                               FastAlertSeverity.ERROR);
-            INVALID_TYPE = new ErrorCode(FastConstants.STATIC, - 1, "INVALIDTYPE", "Invalid Type",
+            InvalidType = new ErrorCode(FastConstants.STATIC, - 1, "INVALIDTYPE", "Invalid Type",
                                          FastAlertSeverity.ERROR);
         }
 
         public XMLMessageTemplateLoader()
         {
-            initialContext = CreateInitialContext();
+            _initialContext = CreateInitialContext();
         }
 
-        public ErrorHandler ErrorHandler
+        public IErrorHandler ErrorHandler
         {
-            set { initialContext.ErrorHandler = value; }
+            set { _initialContext.ErrorHandler = value; }
         }
 
-        public IDictionary TypeMap
+        public Dictionary<string, FASTType> TypeMap
         {
-            set { initialContext.TypeMap = value; }
+            set { _initialContext.TypeMap = value; }
         }
 
         public bool LoadTemplateIdFromAuxId
         {
-            set { loadTemplateIdFromAuxId = value; }
+            set { _loadTemplateIdFromAuxId = value; }
         }
 
         #region MessageTemplateLoader Members
 
-        public TemplateRegistry TemplateRegistry
+        public ITemplateRegistry TemplateRegistry
         {
-            get { return initialContext.TemplateRegistry; }
-
-            set { initialContext.TemplateRegistry = value; }
+            get { return _initialContext.TemplateRegistry; }
+            set { _initialContext.TemplateRegistry = value; }
         }
 
         public MessageTemplate[] Load(Stream source)
@@ -85,22 +84,20 @@ namespace OpenFAST.Template.Loader
             XmlDocument document = ParseXml(source);
 
             if (document == null)
-            {
-                return new MessageTemplate[] {};
-            }
+                return new MessageTemplate[0];
 
             XmlElement root = document.DocumentElement;
 
-            var templateParser = new TemplateParser(loadTemplateIdFromAuxId);
+            var templateParser = new TemplateParser(_loadTemplateIdFromAuxId);
             if (root != null)
             {
                 if (root.Name.Equals("template"))
                 {
-                    return new[] {(MessageTemplate) templateParser.Parse(root, initialContext)};
+                    return new[] {(MessageTemplate) templateParser.Parse(root, _initialContext)};
                 }
                 if (root.Name.Equals("templates"))
                 {
-                    var context = new ParsingContext(root, initialContext);
+                    var context = new ParsingContext(root, _initialContext);
 
                     XmlNodeList templateTags = root.GetElementsByTagName("template");
                     var templates = new MessageTemplate[templateTags.Count];
@@ -111,7 +108,7 @@ namespace OpenFAST.Template.Loader
                     }
                     return templates;
                 }
-                initialContext.ErrorHandler.Error(FastConstants.S1_INVALID_XML,
+                _initialContext.ErrorHandler.Error(FastConstants.S1_INVALID_XML,
                                                   "Invalid root node " + root.Name +
                                                   ", \"template\" or \"templates\" expected.");
             }
@@ -127,7 +124,7 @@ namespace OpenFAST.Template.Loader
                                          ErrorHandler = ErrorHandler_Fields.DEFAULT,
                                          TemplateRegistry = new BasicTemplateRegistry(),
                                          TypeMap = FASTType.RegisteredTypeMap,
-                                         FieldParsers = new ArrayList()
+                                         FieldParsers = new List<IFieldParser>()
                                      };
             initialContext.AddFieldParser(new ScalarParser());
             initialContext.AddFieldParser(new GroupParser());
@@ -139,29 +136,28 @@ namespace OpenFAST.Template.Loader
             return initialContext;
         }
 
-        public void AddFieldParser(FieldParser fieldParser)
+        public void AddFieldParser(IFieldParser fieldParser)
         {
-            initialContext.FieldParsers.Add(fieldParser);
+            _initialContext.FieldParsers.Add(fieldParser);
         }
 
         private XmlDocument ParseXml(Stream templateStream)
         {
             try
             {
-                var builder = new XmlDocument();
-                var inputSource = new XmlSourceSupport(templateStream);
-                XmlDocument document = SupportClass.ParseDocument(builder, inputSource);
-                return document;
+                var doc = new XmlDocument();
+                doc.Load(templateStream);
+                return doc;
             }
             catch (IOException e)
             {
-                initialContext.ErrorHandler.Error(IO_ERROR,
-                                                  "Error occurred while trying to read xml template: " + e.Message, e);
+                _initialContext.ErrorHandler.Error(
+                    IoError, "Error occurred while trying to read xml template: " + e.Message, e);
             }
             catch (Exception e)
             {
-                initialContext.ErrorHandler.Error(XML_PARSING_ERROR,
-                                                  "Error occurred while parsing xml template: " + e.Message, e);
+                _initialContext.ErrorHandler.Error(
+                    XmlParsingError, "Error occurred while parsing xml template: " + e.Message, e);
             }
 
             return null;

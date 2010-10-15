@@ -26,33 +26,33 @@ namespace OpenFAST.Session
     public sealed class FastClient
     {
         private readonly string clientName;
-        private readonly Endpoint endpoint;
+        private readonly IEndpoint endpoint;
 
-        private readonly SessionListener sessionListener = SessionListener_Fields.NULL;
-        private readonly SessionProtocol sessionProtocol;
-        private TemplateRegistry inboundRegistry = TemplateRegistry_Fields.NULL;
-        private MessageListener messageListener = MessageListener_Fields.NULL;
-        private TemplateRegistry outboundRegistry = TemplateRegistry_Fields.NULL;
+        private readonly ISessionListener sessionListener = SessionListenerFields.Null;
+        private readonly ISessionProtocol sessionProtocol;
+        private ITemplateRegistry inboundRegistry = TemplateRegistryFields.NULL;
+        private IMessageListener messageListener = MessageListener_Fields.NULL;
+        private ITemplateRegistry outboundRegistry = TemplateRegistryFields.NULL;
 
-        public FastClient(string clientName, SessionProtocol sessionProtocol, Endpoint endpoint)
+        public FastClient(string clientName, ISessionProtocol sessionProtocol, IEndpoint endpoint)
         {
             this.clientName = clientName;
             this.sessionProtocol = sessionProtocol;
             this.endpoint = endpoint;
         }
 
-        public MessageListener MessageListener
+        public IMessageListener MessageListener
         {
             set { messageListener = value; }
         }
 
-        public TemplateRegistry InboundTemplateRegistry
+        public ITemplateRegistry InboundTemplateRegistry
         {
             set { inboundRegistry = value; }
             get { return inboundRegistry; }
         }
 
-        public TemplateRegistry OutboundTemplateRegistry
+        public ITemplateRegistry OutboundTemplateRegistry
         {
             set { outboundRegistry = value; }
             get { return outboundRegistry; }
@@ -60,7 +60,7 @@ namespace OpenFAST.Session
 
         public Session Connect()
         {
-            Connection connection = endpoint.Connect();
+            IConnection connection = endpoint.Connect();
             Session session = sessionProtocol.Connect(clientName, connection, inboundRegistry, outboundRegistry,
                                                       messageListener, sessionListener);
             return session;

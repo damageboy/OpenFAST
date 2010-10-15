@@ -21,7 +21,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST.Codec
 {
-    public interface Coder
+    public interface ICoder
     {
         void Reset();
     }

@@ -45,7 +45,7 @@ namespace UnitTest
                 "</template>");
 
             var message = new Message(template);
-            message.SetByteVector("string", byt("7f001a"));
+            message.SetByteVector("string", Byte("7f001a"));
             message.SetDecimal("uint", 150.0);
             message.SetString("byte", "4");
             message.SetString("short", "-5");

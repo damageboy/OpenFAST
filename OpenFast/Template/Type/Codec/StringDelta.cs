@@ -32,22 +32,22 @@ namespace OpenFAST.Template.Type.Codec
             get { return new StringValue(""); }
         }
 
-        public override ScalarValue Decode(Stream in_Renamed)
+        public override ScalarValue Decode(Stream inStream)
         {
-            ScalarValue subtractionLength = INTEGER.Decode(in_Renamed);
-            ScalarValue difference = ASCII.Decode(in_Renamed);
+            ScalarValue subtractionLength = INTEGER.Decode(inStream);
+            ScalarValue difference = ASCII.Decode(inStream);
 
             return new TwinValue(subtractionLength, difference);
         }
 
-        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        public override byte[] EncodeValue(ScalarValue value)
         {
-            if ((value_Renamed == null) || (value_Renamed == ScalarValue.NULL))
+            if ((value == null) || (value == ScalarValue.NULL))
             {
                 throw new SystemException("Cannot have null values for non-nullable string delta");
             }
 
-            var diff = (TwinValue) value_Renamed;
+            var diff = (TwinValue) value;
             byte[] subtractionLength = INTEGER.Encode(diff.first);
             byte[] difference = ASCII.Encode(diff.second);
             var encoded = new byte[subtractionLength.Length + difference.Length];
@@ -57,9 +57,9 @@ namespace OpenFAST.Template.Type.Codec
             return encoded;
         }
 
-        public static ScalarValue FromString(string value_Renamed)
+        public static ScalarValue FromString(string value)
         {
-            return new StringValue(value_Renamed);
+            return new StringValue(value);
         }
 
         public override bool Equals(Object obj)

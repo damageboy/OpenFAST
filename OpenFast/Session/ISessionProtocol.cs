@@ -24,17 +24,17 @@ using OpenFAST.Template;
 
 namespace OpenFAST.Session
 {
-    public interface SessionProtocol
+    public interface ISessionProtocol
     {
         Message ResetMessage { get; }
         Message CloseMessage { get; }
         void ConfigureSession(Session session);
 
-        Session Connect(string senderName, Connection connection, TemplateRegistry inboundRegistry,
-                        TemplateRegistry outboundRegistry, MessageListener messageListener,
-                        SessionListener sessionListener);
+        Session Connect(string senderName, IConnection connection, ITemplateRegistry inboundRegistry,
+                        ITemplateRegistry outboundRegistry, IMessageListener messageListener,
+                        ISessionListener sessionListener);
 
-        Session OnNewConnection(string serverName, Connection connection);
+        Session OnNewConnection(string serverName, IConnection connection);
         void OnError(Session session, ErrorCode code, string message);
         bool IsProtocolMessage(Message message);
         void HandleMessage(Session session, Message message);

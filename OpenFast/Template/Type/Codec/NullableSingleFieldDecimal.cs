@@ -46,19 +46,20 @@ namespace OpenFAST.Template.Type.Codec
             }
 
             var buffer = new MemoryStream();
-            var value_Renamed = (DecimalValue) v;
+            var value = (DecimalValue) v;
 
             try
             {
-                if (Math.Abs(value_Renamed.exponent) > 63)
+                if (Math.Abs(value.Exponent) > 63)
                 {
                     Global.HandleError(FastConstants.R1_LARGE_DECIMAL, "");
                 }
 
-                byte[] temp_byteArray = NULLABLE_INTEGER.Encode(new IntegerValue(value_Renamed.exponent));
-                buffer.Write(temp_byteArray, 0, temp_byteArray.Length);
-                byte[] temp_byteArray2 = INTEGER.Encode(new LongValue(value_Renamed.mantissa));
-                buffer.Write(temp_byteArray2, 0, temp_byteArray2.Length);
+                byte[] tmp = NULLABLE_INTEGER.Encode(new IntegerValue(value.Exponent));
+                buffer.Write(tmp, 0, tmp.Length);
+
+                tmp = INTEGER.Encode(new LongValue(value.Mantissa));
+                buffer.Write(tmp, 0, tmp.Length);
             }
             catch (IOException e)
             {
@@ -68,9 +69,9 @@ namespace OpenFAST.Template.Type.Codec
             return buffer.ToArray();
         }
 
-        public override ScalarValue Decode(Stream in_Renamed)
+        public override ScalarValue Decode(Stream inStream)
         {
-            ScalarValue exp = NULLABLE_INTEGER.Decode(in_Renamed);
+            ScalarValue exp = NULLABLE_INTEGER.Decode(inStream);
 
             if ((exp == null) || exp.Null)
             {
@@ -78,15 +79,15 @@ namespace OpenFAST.Template.Type.Codec
             }
 
             int exponent = exp.ToInt();
-            long mantissa = INTEGER.Decode(in_Renamed).ToLong();
+            long mantissa = INTEGER.Decode(inStream).ToLong();
             var decimalValue = new DecimalValue(mantissa, exponent);
 
             return decimalValue;
         }
 
-        public static ScalarValue FromString(string value_Renamed)
+        public static ScalarValue FromString(string value)
         {
-            return new DecimalValue(Double.Parse(value_Renamed));
+            return new DecimalValue(Double.Parse(value));
         }
 
         public override bool Equals(Object obj)

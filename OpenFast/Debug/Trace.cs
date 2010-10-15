@@ -23,11 +23,11 @@ using OpenFAST.Template;
 
 namespace OpenFAST.Debug
 {
-    public interface Trace
+    public interface ITrace
     {
         void GroupStart(Group group);
         void GroupEnd();
-        void Field(Field field, FieldValue value_Renamed, FieldValue encoded, byte[] encoding, int pmapIndex);
+        void Field(Field field, IFieldValue value, IFieldValue encoded, byte[] encoding, int pmapIndex);
         void Pmap(byte[] pmap);
     }
 }

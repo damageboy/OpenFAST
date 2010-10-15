@@ -43,7 +43,7 @@ namespace OpenFAST
             throw new Exception("The method or operation is not implemented.");
         }
 
-        public int get_Renamed()
+        public int Get()
         {
             throw new Exception("The method or operation is not implemented.");
         }

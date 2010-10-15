@@ -1,40 +1,49 @@
 ﻿using System;
-using OpenFAST.Session;
-using OpenFAST.Error;
 using OpenFAST;
+using OpenFAST.Error;
+using OpenFAST.Session;
+using OpenFAST.Session.Tcp;
 
 namespace TCPServer
 {
     public class FASTServer
     {
-        public class ServerErrorHandler:ErrorHandler
+        public ISessionProtocol ScpSessionProtocol = SessionConstants.SCP_1_1;
+        public FASTSessionHandler SessionHandler;
+
+        public FASTServer()
         {
+            var endpoint = new TcpEndpoint(16121);
+
+            SessionHandler = new FASTSessionHandler();
+
+            var fs = new FastServer("test", ScpSessionProtocol, endpoint);
+
+            Global.ErrorHandler = new ServerErrorHandler();
+            fs.SessionHandler = SessionHandler;
+
+            fs.Listen();
+        }
+
+        #region Nested type: ServerErrorHandler
+
+        public class ServerErrorHandler : IErrorHandler
+        {
+            #region ErrorHandler Members
+
             public void Error(ErrorCode code, string message)
             {
                 Console.WriteLine(message);
-                
             }
 
             public void Error(ErrorCode code, string message, Exception t)
             {
                 Console.WriteLine(message);
             }
+
+            #endregion
         }
-        public FASTSessionHandler sessionHandler;
 
-        public SessionProtocol SCPSessionProtocol = SessionConstants.SCP_1_1;
-        public FASTServer()
-        {
-            var endpoint = new OpenFAST.Session.Tcp.TcpEndpoint(16121);
-
-            sessionHandler = new FASTSessionHandler();
-
-            var fs = new FastServer("test", SCPSessionProtocol, endpoint);
-            
-            Global.ErrorHandler = new ServerErrorHandler();
-            fs.SessionHandler = sessionHandler;
-            
-            fs.Listen();
-        }
+        #endregion
     }
 }

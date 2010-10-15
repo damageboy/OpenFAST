@@ -44,17 +44,17 @@ namespace OpenFAST.Template.Type
             get { return new IntegerValue(0); }
         }
 
-        public override ScalarValue GetVal(string value_Renamed)
+        public override ScalarValue GetVal(string value)
         {
             long longValue;
             try
             {
-                longValue = Int64.Parse(value_Renamed);
+                longValue = Int64.Parse(value);
             }
             catch (FormatException)
             {
                 Global.HandleError(FastConstants.S3_INITIAL_VALUE_INCOMP,
-                                   "The value \"" + value_Renamed + "\" is not compatable with type " + this);
+                                   "The value \"" + value + "\" is not compatable with type " + this);
                 return null;
             }
             if (Util.IsBiggerThanInt(longValue))
@@ -69,14 +69,14 @@ namespace OpenFAST.Template.Type
             return previousValue is IntegerValue || previousValue is LongValue;
         }
 
-        public override void ValidateValue(ScalarValue value_Renamed)
+        public override void ValidateValue(ScalarValue value)
         {
-            if (value_Renamed == null || value_Renamed.Undefined)
+            if (value == null || value.Undefined)
                 return;
-            if (value_Renamed.ToLong() > maxValue || value_Renamed.ToLong() < minValue)
+            if (value.ToLong() > maxValue || value.ToLong() < minValue)
             {
                 Global.HandleError(FastConstants.D2_INT_OUT_OF_RANGE,
-                                   "The value " + value_Renamed + " is out of range for type " + this);
+                                   "The value " + value + " is out of range for type " + this);
             }
         }
     }

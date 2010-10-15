@@ -25,7 +25,7 @@ namespace OpenFAST
 {
     public struct MessageBlockReader_Fields
     {
-        public static readonly MessageBlockReader NULL;
+        public static readonly IMessageBlockReader NULL;
 
         static MessageBlockReader_Fields()
         {
@@ -33,25 +33,25 @@ namespace OpenFAST
         }
     }
 
-    public sealed class NullMessageBlockReader : MessageBlockReader
+    public sealed class NullMessageBlockReader : IMessageBlockReader
     {
         #region MessageBlockReader Members
 
-        public bool ReadBlock(Stream in_Renamed)
+        public bool ReadBlock(Stream inStream)
         {
             return true;
         }
 
-        public void MessageRead(Stream in_Renamed, Message message)
+        public void MessageRead(Stream inStream, Message message)
         {
         }
 
         #endregion
     }
 
-    public interface MessageBlockReader
+    public interface IMessageBlockReader
     {
-        bool ReadBlock(Stream in_Renamed);
-        void MessageRead(Stream in_Renamed, Message message);
+        bool ReadBlock(Stream inStream);
+        void MessageRead(Stream inStream, Message message);
     }
 }

@@ -50,18 +50,18 @@ namespace UnitTest
         private const string COMPONENTS_NS = "http://www.openfast.org/fix44/components";
         private const string FIX_44_NS = "http://www.openfast.org/fix44";
         private const string EXT_NS = "http://www.openfast.org/ext";
-        private MessageTemplateLoader loader;
+        private IMessageTemplateLoader loader;
 
         public void TestTemplateExtension()
         {
-            MessageTemplate logon = loader.TemplateRegistry.get_Renamed(new QName("Logon", SESSION_NS));
+            MessageTemplate logon = loader.TemplateRegistry[new QName("Logon", SESSION_NS)];
             Assert.IsTrue(logon.HasAttribute(new QName("reset", SCP_1_1_NS)));
         }
 
         [Test]
         public void TestTemplates()
         {
-            MessageTemplate quote = loader.TemplateRegistry.get_Renamed(new QName("Quote", PRE_TRADE_NS));
+            MessageTemplate quote = loader.TemplateRegistry[new QName("Quote", PRE_TRADE_NS)];
 
             Assert.AreEqual(FIX_44_NS, quote.GetField("QuoteID").QName.Namespace);
             Assert.IsNotNull(quote.GetField(new QName("Group", EXT_NS)));

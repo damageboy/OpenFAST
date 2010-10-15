@@ -36,12 +36,12 @@ namespace OpenFAST.Template.Type.Codec
             get { return new BitVectorValue(new BitVector(0)); }
         }
 
-        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        public override byte[] EncodeValue(ScalarValue value)
         {
-            return ((BitVectorValue) value_Renamed).value_Renamed.Bytes;
+            return ((BitVectorValue) value).Value.Bytes;
         }
 
-        public override ScalarValue Decode(Stream in_Renamed)
+        public override ScalarValue Decode(Stream inStream)
         {
             var buffer = new MemoryStream();
             int byt;
@@ -49,7 +49,7 @@ namespace OpenFAST.Template.Type.Codec
             {
                 try
                 {
-                    byt = in_Renamed.ReadByte();
+                    byt = inStream.ReadByte();
 
                     if (byt < 0)
                     {
@@ -67,7 +67,7 @@ namespace OpenFAST.Template.Type.Codec
             return new BitVectorValue(new BitVector(buffer.ToArray()));
         }
 
-        public ScalarValue FromString(string value_Renamed)
+        public ScalarValue FromString(string value)
         {
             return null;
         }

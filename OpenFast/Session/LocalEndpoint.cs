@@ -19,54 +19,53 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System.Collections;
+using System.Collections.Generic;
 
 namespace OpenFAST.Session
 {
-    public class LocalEndpoint : Endpoint
+    public class LocalEndpoint : IEndpoint
     {
-        private readonly IList connections;
-        private readonly LocalEndpoint server;
-        private ConnectionListener listener;
+        private readonly List<LocalConnection> _connections;
+        private readonly LocalEndpoint _server;
+        private ConnectionListener _listener;
 
         public LocalEndpoint()
         {
-            connections = new ArrayList(3);
+            _connections = new List<LocalConnection>(3);
         }
 
         public LocalEndpoint(LocalEndpoint server)
         {
-            this.server = server;
+            _server = server;
         }
 
         #region Endpoint Members
 
         public virtual ConnectionListener ConnectionListener
         {
-            set { listener = value; }
+            set { _listener = value; }
         }
 
         public virtual void Accept()
         {
-            if (!(connections.Count == 0))
+            if (_connections.Count != 0)
             {
                 lock (this)
                 {
-                    object tempObject = connections[0];
-                    connections.RemoveAt(0);
-                    var connection = (Connection) tempObject;
-                    listener.OnConnect(connection);
+                    var c = _connections[0];
+                    _connections.RemoveAt(0);
+                    _listener.OnConnect(c);
                 }
             }
         }
 
-        public virtual Connection Connect()
+        public virtual IConnection Connect()
         {
             var localConnection = new LocalConnection();
             var remoteConnection = new LocalConnection(localConnection);
-            lock (server)
+            lock (_server)
             {
-                server.connections.Add(remoteConnection);
+                _server._connections.Add(remoteConnection);
             }
             return localConnection;
         }

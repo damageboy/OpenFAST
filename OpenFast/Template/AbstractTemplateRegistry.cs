@@ -19,21 +19,21 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using System.Collections;
+using System.Collections.Generic;
 
 namespace OpenFAST.Template
 {
-    public abstract class AbstractTemplateRegistry : TemplateRegistry
+    public abstract class AbstractTemplateRegistry : ITemplateRegistry
     {
-        private readonly ArrayList listeners = new ArrayList();
+        private readonly List<ITemplateRegisteredListener> _listeners = new List<ITemplateRegisteredListener>();
 
         #region TemplateRegistry Members
 
         public abstract MessageTemplate[] Templates { get; }
 
-        public virtual MessageTemplate get_Renamed(string name)
+        public virtual MessageTemplate this[string name]
         {
-            return get_Renamed(new QName(name, ""));
+            get { return this[new QName(name, "")]; }
         }
 
         public virtual int GetId(string name)
@@ -61,40 +61,41 @@ namespace OpenFAST.Template
             Remove(new QName(name, ""));
         }
 
-        public virtual void AddTemplateRegisteredListener(TemplateRegisteredListener templateRegisteredListener)
+        public virtual void AddTemplateRegisteredListener(ITemplateRegisteredListener templateRegisteredListener)
         {
-            listeners.Add(templateRegisteredListener);
+            _listeners.Add(templateRegisteredListener);
         }
 
-        public virtual void RemoveTemplateRegisteredListener(TemplateRegisteredListener templateRegisteredListener)
+        public virtual void RemoveTemplateRegisteredListener(ITemplateRegisteredListener templateRegisteredListener)
         {
-            listeners.Remove(templateRegisteredListener);
+            _listeners.Remove(templateRegisteredListener);
         }
 
         public abstract void Define(MessageTemplate param1);
-        public abstract MessageTemplate get_Renamed(int param1);
+        public abstract MessageTemplate this[int key] { get; }
         public abstract int GetId(QName param1);
         public abstract void Remove(QName param1);
-        public abstract MessageTemplate get_Renamed(QName param1);
+        public abstract MessageTemplate this[QName key] { get; }
         public abstract bool IsRegistered(int param1);
-        public abstract IEnumerator NameIterator();
         public abstract void Register(int param1, MessageTemplate param2);
         public abstract void Remove(MessageTemplate param1);
         public abstract bool IsDefined(QName param1);
-        public abstract IEnumerator Iterator();
         public abstract bool IsRegistered(MessageTemplate param1);
         public abstract bool IsRegistered(QName param1);
-        public abstract void RegisterAll(TemplateRegistry param1);
+        public abstract void RegisterAll(ITemplateRegistry param1);
         public abstract void Remove(int param1);
         public abstract int GetId(MessageTemplate param1);
         public abstract void Register(int param1, QName param2);
 
+
+        public abstract ICollection<QName> Names();
+
         #endregion
 
-        protected internal virtual void NotifyTemplateRegistered(MessageTemplate template, int id)
+        protected void NotifyTemplateRegistered(MessageTemplate template, int id)
         {
-            for (int i = 0; i < listeners.Count; i++)
-                ((TemplateRegisteredListener) listeners[i]).TemplateRegistered(template, id);
+            foreach (var l in _listeners)
+                l.TemplateRegistered(template, id);
         }
     }
 }

@@ -69,12 +69,12 @@ namespace UnitTest
 
             var employees = new SequenceValue(template.GetSequence(
                 "Employees"));
-            employees.Add(new FieldValue[]
+            employees.Add(new IFieldValue[]
                               {
                                   new StringValue("John"), new StringValue("Doe"),
                                   new IntegerValue(45)
                               });
-            employees.Add(new FieldValue[]
+            employees.Add(new IFieldValue[]
                               {
                                   new StringValue("Jane"), new StringValue("Doe"),
                                   new IntegerValue(48)
@@ -82,7 +82,7 @@ namespace UnitTest
             aaaInsurance.SetFieldValue(3, employees);
             aaaInsurance.SetFieldValue(4,
                                        new GroupValue(template.GetGroup("Tax Information"),
-                                                      new FieldValue[] {new StringValue("99-99999999")}));
+                                                      new IFieldValue[] {new StringValue("99-99999999")}));
 
             var outStream = new MemoryStream();
             var output = new MessageOutputStream(outStream);
@@ -93,12 +93,12 @@ namespace UnitTest
             abcBuilding.SetFieldValue(1, new StringValue("ABC Building"));
             abcBuilding.SetFieldValue(2, new IntegerValue(6));
             employees = new SequenceValue(template.GetSequence("Employees"));
-            employees.Add(new FieldValue[]
+            employees.Add(new IFieldValue[]
                               {
                                   new StringValue("Bob"), new StringValue("Builder"),
                                   new IntegerValue(3)
                               });
-            employees.Add(new FieldValue[]
+            employees.Add(new IFieldValue[]
                               {
                                   new StringValue("Joe"), new StringValue("Rock"),
                                   new IntegerValue(59)
@@ -106,7 +106,7 @@ namespace UnitTest
             abcBuilding.SetFieldValue(3, employees);
             abcBuilding.SetFieldValue(4,
                                       new GroupValue(template.GetGroup("Tax Information"),
-                                                     new FieldValue[] {new StringValue("99-99999999")}));
+                                                     new IFieldValue[] {new StringValue("99-99999999")}));
             output.WriteMessage(abcBuilding);
 
             var input = new MessageInputStream(new MemoryStream(
@@ -125,7 +125,7 @@ namespace UnitTest
         {
             var outStream = new MemoryStream();
             var output = new MessageOutputStream(outStream);
-            output.RegisterTemplate(ObjectMother.ALLOC_INSTRCTN_TEMPLATE_ID,
+            output.RegisterTemplate(ObjectMother.AllocInstrctnTemplateId,
                                     ObjectMother.AllocationInstruction());
 
             var allocations = new SequenceValue(ObjectMother.AllocationInstruction()
@@ -159,7 +159,7 @@ namespace UnitTest
             byte[] bytes = outStream.ToArray();
             var input = new MessageInputStream(new MemoryStream(
                                                    bytes));
-            input.RegisterTemplate(ObjectMother.ALLOC_INSTRCTN_TEMPLATE_ID,
+            input.RegisterTemplate(ObjectMother.AllocInstrctnTemplateId,
                                    ObjectMother.AllocationInstruction());
 
             Message message = input.ReadMessage();

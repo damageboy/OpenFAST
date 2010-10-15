@@ -26,61 +26,60 @@ using OpenFAST.Template;
 
 namespace OpenFAST.Debug
 {
-    public sealed class BasicDecodeTrace : Trace
+    public sealed class BasicDecodeTrace : ITrace
     {
-        private string indent = "";
+        private string _indent = "";
 
-        private StreamWriter out_Renamed = new StreamWriter(Console.OpenStandardOutput(),
-                                                            Encoding.Default);
+        private StreamWriter _writer = new StreamWriter(Console.OpenStandardOutput(), Encoding.Default);
 
         public StreamWriter Writer
         {
-            set { out_Renamed = value; }
+            set { _writer = value; }
         }
 
         #region Trace Members
 
         public void GroupStart(Group group)
         {
-            print(group);
-            moveDown();
+            Print(group);
+            MoveDown();
         }
 
         public void GroupEnd()
         {
-            moveUp();
+            MoveUp();
         }
 
-        public void Field(Field field, FieldValue value_Renamed, FieldValue decodedValue, byte[] encoding, int pmapIndex)
+        public void Field(Field field, IFieldValue value, IFieldValue decodedValue, byte[] encoding, int pmapIndex)
         {
             var scalarDecode = new StringBuilder();
             scalarDecode.Append(field.Name).Append(": ");
             scalarDecode.Append(ByteUtil.ConvertByteArrayToBitString(encoding));
-            scalarDecode.Append(" -> ").Append(value_Renamed).Append('(').Append(decodedValue).Append(')');
-            print(scalarDecode);
+            scalarDecode.Append(" -> ").Append(value).Append('(').Append(decodedValue).Append(')');
+            Print(scalarDecode);
         }
 
         public void Pmap(byte[] bytes)
         {
-            print("PMAP: " + ByteUtil.ConvertByteArrayToBitString(bytes));
+            Print("PMAP: " + ByteUtil.ConvertByteArrayToBitString(bytes));
         }
 
         #endregion
 
-        private void moveDown()
+        private void MoveDown()
         {
-            indent += "  ";
+            _indent += "  ";
         }
 
-        private void moveUp()
+        private void MoveUp()
         {
-            indent = indent.Substring(0, (indent.Length - 2) - (0));
+            _indent = _indent.Substring(0, (_indent.Length - 2) - (0));
         }
 
-        private void print(Object object_Renamed)
+        private void Print(object obj)
         {
-            out_Renamed.Write(indent);
-            out_Renamed.WriteLine(object_Renamed);
+            _writer.Write(_indent);
+            _writer.WriteLine(obj);
         }
     }
 }

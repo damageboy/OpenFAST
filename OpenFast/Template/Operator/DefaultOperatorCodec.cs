@@ -27,18 +27,18 @@ namespace OpenFAST.Template.Operator
     [Serializable]
     internal sealed class DefaultOperatorCodec : OperatorCodec
     {
-        internal DefaultOperatorCodec(Operator operator_Renamed, FASTType[] types) : base(operator_Renamed, types)
+        internal DefaultOperatorCodec(Operator op, FASTType[] types) : base(op, types)
         {
         }
 
-        public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar field)
+        public override ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar field)
         {
-            if (value_Renamed == null)
+            if (value == null)
             {
                 return field.DefaultValue.Undefined ? null : ScalarValue.NULL;
             }
 
-            return value_Renamed.Equals(field.DefaultValue) ? null : value_Renamed;
+            return value.Equals(field.DefaultValue) ? null : value;
         }
 
         public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue previousValue, Scalar field)

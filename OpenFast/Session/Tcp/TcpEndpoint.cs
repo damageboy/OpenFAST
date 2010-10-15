@@ -26,38 +26,38 @@ using System.Net.Sockets;
 
 namespace OpenFAST.Session.Tcp
 {
-    public sealed class TcpEndpoint : Endpoint
+    public sealed class TcpEndpoint : IEndpoint
     {
-        private readonly string host;
-        private readonly int port;
-        private bool closed = true;
-        private ConnectionListener connectionListener = ConnectionListener.NULL;
-        private TcpListener serverSocket;
+        private readonly string _host;
+        private readonly int _port;
+        private bool _closed = true;
+        private ConnectionListener _connectionListener = ConnectionListener.NULL;
+        private TcpListener _serverSocket;
 
         public TcpEndpoint(int port)
         {
-            this.port = port;
+            _port = port;
         }
 
         public TcpEndpoint(string host, int port)
             : this(port)
         {
-            this.host = host;
+            _host = host;
         }
 
         #region Endpoint Members
 
         public ConnectionListener ConnectionListener
         {
-            set { connectionListener = value; }
+            set { _connectionListener = value; }
         }
 
-        public Connection Connect()
+        public IConnection Connect()
         {
             try
             {
-                var socket = new TcpClient(host, port);
-                Connection connection = new TcpConnection(socket);
+                var socket = new TcpClient(_host, _port);
+                IConnection connection = new TcpConnection(socket);
                 return connection;
             }
             catch (IOException e)
@@ -72,45 +72,43 @@ namespace OpenFAST.Session.Tcp
 
         public void Accept()
         {
-            closed = false;
+            _closed = false;
             try
             {
-                if (serverSocket == null)
+                if (_serverSocket == null)
                 {
                     //commented by shariq
-                    //temp_tcpListener = new System.Net.Sockets.TcpListener(System.Net.Dns.GetHostByName(System.Net.Dns.GetHostName()).AddressList[0], port);
+                    //tmp = new System.Net.Sockets.TcpListener(System.Net.Dns.GetHostByName(System.Net.Dns.GetHostName()).AddressList[0], port);
                     //listen on all adapters
-                    var temp_tcpListener = new TcpListener(IPAddress.Parse("0.0.0.0"),
-                                                           port);
-
-                    temp_tcpListener.Start();
-                    serverSocket = temp_tcpListener;
+                    var tmp = new TcpListener(IPAddress.Parse("0.0.0.0"), _port);
+                    tmp.Start();
+                    _serverSocket = tmp;
                 }
                 while (true)
                 {
-                    TcpClient socket = serverSocket.AcceptTcpClient();
-                    connectionListener.OnConnect(new TcpConnection(socket));
+                    TcpClient socket = _serverSocket.AcceptTcpClient();
+                    _connectionListener.OnConnect(new TcpConnection(socket));
                 }
             }
             catch (IOException e)
             {
-                if (!closed)
+                if (!_closed)
                     throw new FastConnectionException(e);
             }
         }
 
         public void Close()
         {
-            closed = true;
-            if (serverSocket != null)
+            _closed = true;
+            if (_serverSocket != null)
                 try
                 {
-                    serverSocket.Stop();
+                    _serverSocket.Stop();
                 }
                 catch (IOException)
                 {
                 }
-            serverSocket = null;
+            _serverSocket = null;
         }
 
         #endregion

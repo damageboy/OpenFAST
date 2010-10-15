@@ -26,21 +26,21 @@ namespace OpenFAST.Error
     [Serializable]
     public class FastException : SystemException
     {
-        private readonly ErrorCode code;
+        private readonly ErrorCode _code;
 
         public FastException(string message, ErrorCode code) : base(message)
         {
-            this.code = code;
+            _code = code;
         }
 
         public FastException(string message, ErrorCode code, Exception cause) : base(message, cause)
         {
-            this.code = code;
+            _code = code;
         }
 
         public virtual ErrorCode Code
         {
-            get { return code; }
+            get { return _code; }
         }
     }
 }

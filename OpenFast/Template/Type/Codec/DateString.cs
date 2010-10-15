@@ -36,12 +36,12 @@ namespace OpenFAST.Template.Type.Codec
             formatter = new DateTimeFormatInfo();
         }
 
-        public override ScalarValue Decode(Stream in_Renamed)
+        public override ScalarValue Decode(Stream inStream)
         {
             try
             {
-                DateTime tempAux = DateTime.Parse(ASCII.Decode(in_Renamed).ToString(), formatter);
-                return new DateValue(ref tempAux);
+                DateTime tempAux = DateTime.Parse(ASCII.Decode(inStream).ToString(), formatter);
+                return new DateValue(tempAux);
             }
             catch (FormatException e)
             {
@@ -50,11 +50,11 @@ namespace OpenFAST.Template.Type.Codec
             }
         }
 
-        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        public override byte[] EncodeValue(ScalarValue value)
         {
             return
                 ASCII.Encode(
-                    new StringValue(SupportClass.FormatDateTime(formatter, ((DateValue) value_Renamed).value_Renamed)));
+                    new StringValue(SupportClass.FormatDateTime(formatter, ((DateValue) value).Value)));
         }
 
         public override bool Equals(Object obj)

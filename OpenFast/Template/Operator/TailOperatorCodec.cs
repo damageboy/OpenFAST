@@ -29,13 +29,13 @@ namespace OpenFAST.Template.Operator
     [Serializable]
     internal sealed class TailOperatorCodec : OperatorCodec
     {
-        internal TailOperatorCodec(Operator operator_Renamed, FASTType[] types) : base(operator_Renamed, types)
+        internal TailOperatorCodec(Operator op, FASTType[] types) : base(op, types)
         {
         }
 
-        public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar field)
+        public override ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar field)
         {
-            if (value_Renamed == null)
+            if (value == null)
             {
                 if (priorValue == null)
                     return null;
@@ -46,7 +46,7 @@ namespace OpenFAST.Template.Operator
 
             if (priorValue == null)
             {
-                return value_Renamed;
+                return value;
             }
 
             if (priorValue.Undefined)
@@ -56,11 +56,11 @@ namespace OpenFAST.Template.Operator
 
             int index = 0;
 
-            byte[] val = value_Renamed.Bytes;
+            byte[] val = value.Bytes;
             byte[] prior = priorValue.Bytes;
 
             if (val.Length > prior.Length)
-                return value_Renamed;
+                return value;
             if (val.Length < prior.Length)
             {
                 Global.HandleError(FastConstants.D3_CANT_ENCODE_VALUE,
@@ -78,7 +78,7 @@ namespace OpenFAST.Template.Operator
 
         public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue previousValue, Scalar field)
         {
-            StringValue base_Renamed;
+            StringValue baseValue;
 
             if ((previousValue == null) && !field.Optional)
             {
@@ -87,11 +87,11 @@ namespace OpenFAST.Template.Operator
             }
             if ((previousValue == null) || previousValue.Undefined)
             {
-                base_Renamed = (StringValue) field.BaseValue;
+                baseValue = (StringValue) field.BaseValue;
             }
             else
             {
-                base_Renamed = (StringValue) previousValue;
+                baseValue = (StringValue) previousValue;
             }
 
             if (newValue == null || newValue.Null)
@@ -103,24 +103,24 @@ namespace OpenFAST.Template.Operator
                 throw new ArgumentException("");
             }
 
-            string delta = ((StringValue) newValue).value_Renamed;
-            int length = Math.Max(base_Renamed.value_Renamed.Length - delta.Length, 0);
-            string root = base_Renamed.value_Renamed.Substring(0, (length) - (0));
+            string delta = ((StringValue) newValue).Value;
+            int length = Math.Max(baseValue.Value.Length - delta.Length, 0);
+            string root = baseValue.Value.Substring(0, (length) - (0));
 
             return new StringValue(root + delta);
         }
 
         public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)
         {
-            ScalarValue value_Renamed = previousValue;
-            if (value_Renamed != null && value_Renamed.Undefined)
-                value_Renamed = (field.DefaultValue.Undefined) ? null : field.DefaultValue;
-            if (value_Renamed == null && !field.Optional)
+            ScalarValue value = previousValue;
+            if (value != null && value.Undefined)
+                value = (field.DefaultValue.Undefined) ? null : field.DefaultValue;
+            if (value == null && !field.Optional)
             {
                 Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT,
                                    "The field " + field + " was not present.");
             }
-            return value_Renamed;
+            return value;
         }
 
         public override bool Equals(object obj) //POINTP

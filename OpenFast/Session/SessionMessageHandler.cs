@@ -21,7 +21,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST.Session
 {
-    public interface SessionMessageHandler
+    public interface ISessionMessageHandler
     {
         void HandleMessage(Session session, Message message);
     }

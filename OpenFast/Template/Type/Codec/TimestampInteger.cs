@@ -28,16 +28,16 @@ namespace OpenFAST.Template.Type.Codec
     [Serializable]
     public sealed class TimestampInteger : TypeCodec
     {
-        public override ScalarValue Decode(Stream in_Renamed)
+        public override ScalarValue Decode(Stream inStream)
         {
-            int intValue = ((IntegerValue) UINT.Decode(in_Renamed)).value_Renamed;
+            int intValue = ((IntegerValue) UINT.Decode(inStream)).Value;
             DateTime tempAux = Util.ToTimestamp(intValue);
-            return new DateValue(ref tempAux);
+            return new DateValue(tempAux);
         }
 
-        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        public override byte[] EncodeValue(ScalarValue value)
         {
-            DateTime date = ((DateValue) value_Renamed).value_Renamed;
+            DateTime date = ((DateValue) value).Value;
             int intValue = Util.TimestampToInt(ref date);
             return UINT.Encode(new IntegerValue(intValue));
         }

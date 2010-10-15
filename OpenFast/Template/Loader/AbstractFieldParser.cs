@@ -24,7 +24,7 @@ using System.Xml;
 
 namespace OpenFAST.Template.Loader
 {
-    public abstract class AbstractFieldParser : FieldParser
+    public abstract class AbstractFieldParser : IFieldParser
     {
         private readonly string[] parseableNodeNames;
 
@@ -64,7 +64,7 @@ namespace OpenFAST.Template.Loader
             {
                 var attribute = (XmlAttribute) attributes.Item(i);
                 if (attribute.NamespaceURI == null || attribute.NamespaceURI.Equals("") ||
-                    attribute.NamespaceURI.Equals(XMLMessageTemplateLoader.TEMPLATE_DEFINITION_NS))
+                    attribute.NamespaceURI.Equals(XMLMessageTemplateLoader.TemplateDefinitionNs))
                     continue;
                 field.AddAttribute(new QName(attribute.LocalName, attribute.NamespaceURI), attribute.Value);
             }
