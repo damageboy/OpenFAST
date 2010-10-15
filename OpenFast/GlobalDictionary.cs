@@ -30,12 +30,8 @@ namespace OpenFAST
 		
 		public ScalarValue Lookup(Group template, QName key, QName applicationType)
 		{
-			if (!table.ContainsKey(key))
-			{
-				return ScalarValue.UNDEFINED;
-			}
-			
-			return  table[key];
+		    ScalarValue value;
+		    return table.TryGetValue(key, out value) ? value : ScalarValue.UNDEFINED;
 		}
 		
 		public void  Store(Group group, QName applicationType, QName key, ScalarValue value_Renamed)
@@ -51,14 +47,12 @@ namespace OpenFAST
 		public override string ToString()
 		{
 			var builder = new StringBuilder();
-			System.Collections.IEnumerator keyIterator = new SupportClass.HashSetSupport(table.Keys).GetEnumerator();
-			while (keyIterator.MoveNext())
-			{
-				var key = (QName) keyIterator.Current;
-				builder.Append("Dictionary: Global");
-				builder.Append(key).Append("=").Append(table[key]).Append("\n");
-			}
-			return builder.ToString();
+            foreach (var key in table.Keys)
+            {
+                builder.Append("Dictionary: Global");
+                builder.Append(key).Append("=").Append(table[key]).Append("\n");
+            }
+		    return builder.ToString();
 		}
 	}
 }

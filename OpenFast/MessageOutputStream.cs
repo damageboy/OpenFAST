@@ -70,32 +70,31 @@ namespace OpenFAST
 		{
 			try
 			{
-				if (context.TraceEnabled)
-					context.StartTrace();
-				
-				if (!(handlers.Count == 0))
-				{
-					for (var i = 0; i < handlers.Count; i++)
-					{
-						handlers[i].HandleMessage(message, context, encoder);
-					}
-				}
-				if (templateHandlers.ContainsKey(message.Template))
-				{
-					templateHandlers[message.Template].HandleMessage(message, context, encoder);
-				}
-				
-				var data = encoder.Encode(message);
-				
-				if ((data == null) || (data.Length == 0))
-				{
-					return ;
-				}
+			    if (context.TraceEnabled)
+			        context.StartTrace();
+			    
+                foreach (MessageHandler t in handlers)
+			    {
+			        t.HandleMessage(message, context, encoder);
+			    }
+
+			    MessageHandler handler;
+			    if (templateHandlers.TryGetValue(message.Template, out handler))
+			    {
+			        handler.HandleMessage(message, context, encoder);
+			    }
+
+			    var data = encoder.Encode(message);
+
+			    if ((data == null) || (data.Length == 0))
+			    {
+			        return;
+			    }
 
 			    var temp_byteArray = data;
-				out_Renamed.Write(temp_byteArray, 0, temp_byteArray.Length);
-				if (flush)
-					out_Renamed.Flush();
+			    out_Renamed.Write(temp_byteArray, 0, temp_byteArray.Length);
+			    if (flush)
+			        out_Renamed.Flush();
 			}
 			catch (System.IO.IOException e)
 			{

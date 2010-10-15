@@ -19,6 +19,7 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System.Collections.Generic;
 using Field = OpenFAST.Template.Field;
 using Group = OpenFAST.Template.Group;
 using MessageTemplate = OpenFAST.Template.MessageTemplate;
@@ -45,9 +46,9 @@ namespace OpenFAST.Session.Template.Exchange
 		
 		public static GroupValue CreateOperator(Scalar scalar)
 		{
-			if (!OPERATOR_TEMPLATE_MAP.Contains(scalar.Operator))
+            MessageTemplate operatorTemplate;
+		    if (!OPERATOR_TEMPLATE_MAP.TryGetValue(scalar.Operator, out operatorTemplate))
 				return null;
-			var operatorTemplate = (MessageTemplate) OPERATOR_TEMPLATE_MAP[scalar.Operator];
 			GroupValue operatorMessage = new Message(operatorTemplate);
 			if (!scalar.Dictionary.Equals(Dictionary_Fields.GLOBAL))
 				operatorMessage.SetString("Dictionary", scalar.Dictionary);
@@ -61,14 +62,18 @@ namespace OpenFAST.Session.Template.Exchange
 			}
 			return operatorMessage;
 		}
-		
-		public static Operator GetOperator(Group group)
-		{
-			return (Operator) TEMPLATE_OPERATOR_MAP[group];
-		}
-		
-		private static readonly System.Collections.IDictionary OPERATOR_TEMPLATE_MAP = new System.Collections.Hashtable();
-		private static readonly System.Collections.IDictionary TEMPLATE_OPERATOR_MAP = new System.Collections.Hashtable();
+
+        public static Operator GetOperator(Group group)
+        {
+            var msgTemplate = group as MessageTemplate;
+            Operator value;
+            if (msgTemplate != null && TEMPLATE_OPERATOR_MAP.TryGetValue(msgTemplate, out value))
+                return value;
+            return null;
+        }
+
+	    private static readonly Dictionary<Operator,MessageTemplate> OPERATOR_TEMPLATE_MAP = new Dictionary<Operator, MessageTemplate>();
+        private static readonly Dictionary<MessageTemplate, Operator> TEMPLATE_OPERATOR_MAP = new Dictionary<MessageTemplate, Operator>();
 		public abstract GroupValue Convert(Field param1, ConversionContext param2);
 		public abstract Field Convert(GroupValue param1, OpenFAST.Template.TemplateRegistry param2, ConversionContext param3);
 		public abstract bool ShouldConvert(Field param1);

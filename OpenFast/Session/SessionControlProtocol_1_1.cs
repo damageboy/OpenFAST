@@ -20,6 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
+using System.Collections.Generic;
 using Coder = OpenFAST.Codec.Coder;
 using ErrorCode = OpenFAST.Error.ErrorCode;
 using AbstractFieldInstructionConverter = OpenFAST.Session.Template.Exchange.AbstractFieldInstructionConverter;
@@ -160,7 +161,8 @@ namespace OpenFAST.Session
 		}
 		public const string NAMESPACE = "http://www.fixprotocol.org/ns/fast/scp/1.1";
 		private static readonly QName RESET_PROPERTY = new QName("reset", NAMESPACE);
-		private static readonly System.Collections.IDictionary messageHandlers = new System.Collections.Hashtable();
+	    private static readonly Dictionary<MessageTemplate, SessionMessageHandler> messageHandlers =
+	        new Dictionary<MessageTemplate, SessionMessageHandler>();
 		private readonly ConversionContext initialContext = CreateInitialContext();
 		
 		public SessionControlProtocol_1_1()
@@ -246,15 +248,16 @@ namespace OpenFAST.Session
 		}
 		public override void  HandleMessage(Session session, Message message)
 		{
-			if (!messageHandlers.Contains(message.Template))
-				return ;
-			((SessionMessageHandler) messageHandlers[message.Template]).HandleMessage(session, message);
+		    SessionMessageHandler value;
+            if (!messageHandlers.TryGetValue(message.Template, out value))
+                return;
+		    value.HandleMessage(session, message);
 		}
 		public override bool IsProtocolMessage(Message message)
 		{
 			if (message == null)
 				return false;
-			return messageHandlers.Contains(message.Template);
+			return messageHandlers.ContainsKey(message.Template);
 		}
 		public override bool SupportsTemplateExchange()
 		{

@@ -108,13 +108,14 @@ namespace OpenFAST
 				currentApplicationType = group.TypeReference;
 			return GetDictionary(dictionary).Lookup(group, key, currentApplicationType);
 		}
-		private Dictionary GetDictionary(string dictionary)
-		{
-			if (!dictionaries.ContainsKey(dictionary))
-				dictionaries[dictionary] = new GlobalDictionary();
-			return dictionaries[dictionary];
-		}
-		public void  Store(string dictionary, Group group, QName key, ScalarValue valueToEncode)
+        private Dictionary GetDictionary(string dictionary)
+        {
+            Dictionary value;
+            if (!dictionaries.TryGetValue(dictionary, out value))
+                dictionaries[dictionary] = value = new GlobalDictionary();
+            return value;
+        }
+	    public void  Store(string dictionary, Group group, QName key, ScalarValue valueToEncode)
 		{
 			if (group.HasTypeReference())
 				currentApplicationType = group.TypeReference;

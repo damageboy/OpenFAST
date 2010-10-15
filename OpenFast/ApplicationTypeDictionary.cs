@@ -19,6 +19,7 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System.Collections.Generic;
 using Group = OpenFAST.Template.Group;
 using System.Text;
 
@@ -26,45 +27,45 @@ namespace OpenFAST
 {
 	public sealed class ApplicationTypeDictionary : Dictionary
 	{
-        private System.Collections.Generic.Dictionary<QName, System.Collections.Generic.Dictionary<QName, ScalarValue>> dictionary = new System.Collections.Generic.Dictionary<QName, System.Collections.Generic.Dictionary<QName, ScalarValue>>();
+        private Dictionary<QName, Dictionary<QName, ScalarValue>> dictionary = new Dictionary<QName, Dictionary<QName, ScalarValue>>();
 		
 		public ScalarValue Lookup(Group template, QName key, QName applicationType)
 		{
-			if (dictionary.ContainsKey(template.TypeReference))
+		    Dictionary<QName, ScalarValue> value;
+		    if (dictionary.TryGetValue(template.TypeReference, out value))
 			{
-				var applicationTypeMap = (System.Collections.IDictionary) dictionary[template.TypeReference];
-				if (applicationTypeMap.Contains(key))
-					return (ScalarValue) applicationTypeMap[key];
+			    ScalarValue value2;
+			    if (value.TryGetValue(key, out value2))
+					return value2;
 			}
 			return ScalarValue.UNDEFINED;
 		}
 		
 		public void  Reset()
 		{
-            dictionary = new System.Collections.Generic.Dictionary<QName, System.Collections.Generic.Dictionary<QName, ScalarValue>>();
+            dictionary = new Dictionary<QName, Dictionary<QName, ScalarValue>>();
 		}
-		
-		public void  Store(Group group, QName applicationType, QName key, ScalarValue value_Renamed)
-		{
-			if (!dictionary.ContainsKey(group.TypeReference))
-			{
-                dictionary[group.TypeReference] = new System.Collections.Generic.Dictionary<QName, ScalarValue>();
-			}
-			dictionary[group.TypeReference][key]=value_Renamed;
-		}
-		
-		public override string ToString()
+
+        public void Store(Group group, QName applicationType, QName key, ScalarValue value_Renamed)
+        {
+            Dictionary<QName, ScalarValue> value;
+            
+            if (!dictionary.TryGetValue(group.TypeReference, out value))
+                dictionary[group.TypeReference] = value = new Dictionary<QName, ScalarValue>();
+
+            value[key] = value_Renamed;
+        }
+
+	    public override string ToString()
 		{
 			var builder = new StringBuilder();
-            foreach (QName type in dictionary.Keys)
+            foreach (var val in dictionary)
             {
-                builder.Append("Dictionary: Type=" + type);
-                System.Collections.IDictionary templateMap = dictionary[type];
-                System.Collections.IEnumerator keyIterator = new SupportClass.HashSetSupport(templateMap.Keys).GetEnumerator();
-                while (keyIterator.MoveNext())
+                builder.Append("Dictionary: Type=").Append(val.Key);
+
+                foreach (var val2 in val.Value)
                 {
-                    System.Object key = keyIterator.Current;
-                    builder.Append(key).Append("=").Append(templateMap[key]).Append("\n");
+                    builder.Append(val2.Key).Append("=").Append(val2.Value).Append("\n");
                 }
             }
 			return builder.ToString();

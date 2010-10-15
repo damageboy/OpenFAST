@@ -71,41 +71,40 @@ namespace OpenFAST
 
 		public Message ReadMessage()
 		{
-			if (context.TraceEnabled)
-				context.StartTrace();
-			
-			var keepReading = blockReader.ReadBlock(in_Renamed);
-			
-			if (!keepReading)
-				return null;
-			
-			var message = decoder.ReadMessage();
-			
-			if (message == null)
-			{
-				return null;
-			}
-			
-			blockReader.MessageRead(in_Renamed, message);
-			
-			if (!(handlers.Count == 0))
-			{
-				for (var i = 0; i < handlers.Count; i++)
-				{
-					handlers[i].HandleMessage(message, context, decoder);
-				}
-			}
-            if (templateHandlers.ContainsKey(message.Template))
-			{
-                templateHandlers[message.Template].HandleMessage(message, context, decoder);
-				
-				return ReadMessage();
-			}
-			
-			return message;
+		    if (context.TraceEnabled)
+		        context.StartTrace();
+
+		    var keepReading = blockReader.ReadBlock(in_Renamed);
+
+		    if (!keepReading)
+		        return null;
+
+		    var message = decoder.ReadMessage();
+
+		    if (message == null)
+		    {
+		        return null;
+		    }
+
+		    blockReader.MessageRead(in_Renamed, message);
+		    
+            foreach (MessageHandler t in handlers)
+		    {
+		        t.HandleMessage(message, context, decoder);
+		    }
+
+		    MessageHandler handler;
+		    if (templateHandlers.TryGetValue(message.Template, out handler))
+		    {
+		        handler.HandleMessage(message, context, decoder);
+
+		        return ReadMessage();
+		    }
+
+		    return message;
 		}
-		
-		public void  RegisterTemplate(int templateId, MessageTemplate template)
+
+	    public void  RegisterTemplate(int templateId, MessageTemplate template)
 		{
 			context.RegisterTemplate(templateId, template);
 		}
