@@ -23,84 +23,84 @@ using System;
 
 namespace OpenFAST.Template
 {
-	[Serializable]
-	public class LongValue:NumericValue
-	{
-	    public long value_Renamed;
-		
-		public LongValue(long value_Renamed)
-		{
-			this.value_Renamed = value_Renamed;
-		}
-		
-		public  override bool Equals(Object obj)
-		{
-			if ((obj == null) || !(obj is NumericValue))
-			{
-				return false;
-			}
+    [Serializable]
+    public class LongValue : NumericValue
+    {
+        public long value_Renamed;
 
-            return Equals((ScalarValue)obj);
-		}
-		
-		private bool Equals(ScalarValue otherValue)
-		{
-			return value_Renamed == otherValue.ToLong();
-		}
-		
-		public override int GetHashCode()
-		{
-			return (int) value_Renamed;
-		}
-		
-		public override bool EqualsValue(string defaultValue)
-		{
-			return Int32.Parse(defaultValue) == value_Renamed;
-		}
-		
-		public override NumericValue Increment()
-		{
-			return new LongValue(value_Renamed + 1);
-		}
-		
-		public override NumericValue Decrement()
-		{
-			return new LongValue(value_Renamed - 1);
-		}
-		
-		public override string ToString()
-		{
-			return Convert.ToString(value_Renamed);
-		}
-		
-		public override NumericValue Subtract(NumericValue subend)
-		{
-			return new LongValue(value_Renamed - subend.ToLong());
-		}
-		
-		public override NumericValue Add(NumericValue addend)
-		{
-			return new LongValue(value_Renamed + addend.ToLong());
-		}
-		
-		public virtual string Serialize()
-		{
-			return Convert.ToString(value_Renamed);
-		}
-		
-		public override bool Equals(int valueRenamed)
-		{
-			return valueRenamed == value_Renamed;
-		}
-		
-		public override long ToLong()
-		{
-			return value_Renamed;
-		}
-		
-		public override int ToInt()
-		{
-			return (int) value_Renamed;
-		}
-	}
+        public LongValue(long value_Renamed)
+        {
+            this.value_Renamed = value_Renamed;
+        }
+
+        public override bool Equals(Object obj)
+        {
+            if ((obj == null) || !(obj is NumericValue))
+            {
+                return false;
+            }
+
+            return Equals((ScalarValue) obj);
+        }
+
+        private bool Equals(ScalarValue otherValue)
+        {
+            return value_Renamed == otherValue.ToLong();
+        }
+
+        public override int GetHashCode()
+        {
+            return (int) value_Renamed;
+        }
+
+        public override bool EqualsValue(string defaultValue)
+        {
+            return Int32.Parse(defaultValue) == value_Renamed;
+        }
+
+        public override NumericValue Increment()
+        {
+            return new LongValue(value_Renamed + 1);
+        }
+
+        public override NumericValue Decrement()
+        {
+            return new LongValue(value_Renamed - 1);
+        }
+
+        public override string ToString()
+        {
+            return Convert.ToString(value_Renamed);
+        }
+
+        public override NumericValue Subtract(NumericValue subend)
+        {
+            return new LongValue(value_Renamed - subend.ToLong());
+        }
+
+        public override NumericValue Add(NumericValue addend)
+        {
+            return new LongValue(value_Renamed + addend.ToLong());
+        }
+
+        public virtual string Serialize()
+        {
+            return Convert.ToString(value_Renamed);
+        }
+
+        public override bool Equals(int valueRenamed)
+        {
+            return valueRenamed == value_Renamed;
+        }
+
+        public override long ToLong()
+        {
+            return value_Renamed;
+        }
+
+        public override int ToInt()
+        {
+            return (int) value_Renamed;
+        }
+    }
 }

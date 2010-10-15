@@ -20,69 +20,67 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
+using System.IO;
+using System.Text;
+using OpenFAST.Error;
 
 namespace OpenFAST.Template.Type.Codec
 {
-	
-	[Serializable]
-	public sealed class NullableByteVector:NotStopBitEncodedTypeCodec
-	{
+    [Serializable]
+    public sealed class NullableByteVector : NotStopBitEncodedTypeCodec
+    {
+        public static ScalarValue DefaultValue
+        {
+            get { return new ByteVectorValue(new byte[] {}); }
+        }
 
-		public static ScalarValue DefaultValue
-		{
-			get
-			{
-				return new ByteVectorValue(new byte[]{});
-			}
-			
-		}
+        public override ScalarValue Decode(Stream in_Renamed)
+        {
+            ScalarValue decode = NULLABLE_UNSIGNED_INTEGER.Decode(in_Renamed);
+            if (decode == null)
+                return null;
+            int length = decode.ToInt();
+            var encoding = new byte[length];
 
-	    public override ScalarValue Decode(System.IO.Stream in_Renamed)
-		{
-			ScalarValue decode = NULLABLE_UNSIGNED_INTEGER.Decode(in_Renamed);
-			if (decode == null)
-				return null;
-			int length = decode.ToInt();
-			var encoding = new byte[length];
-			
-			for (int i = 0; i < length; i++)
-				try
-				{
-					encoding[i] = (byte) in_Renamed.ReadByte();
-				}
-				catch (System.IO.IOException e)
-				{
-					Global.HandleError(Error.FastConstants.IO_ERROR, "An error occurred while decoding a nullable byte vector.", e);
-				}
-			return new ByteVectorValue(encoding);
-		}
-		
-		public override byte[] EncodeValue(ScalarValue value_Renamed)
-		{
-			if (value_Renamed.Null)
-				return NULLABLE_UNSIGNED_INTEGER.EncodeValue(ScalarValue.NULL);
-			var byteVectorValue = (ByteVectorValue) value_Renamed;
-			int lengthSize = IntegerCodec.GetUnsignedIntegerSize(byteVectorValue.value_Renamed.Length);
-			var encoding = new byte[byteVectorValue.value_Renamed.Length + lengthSize];
-			byte[] length = NULLABLE_UNSIGNED_INTEGER.Encode(new IntegerValue(byteVectorValue.value_Renamed.Length));
-			Array.Copy(length, 0, encoding, 0, lengthSize);
-			Array.Copy(byteVectorValue.value_Renamed, 0, encoding, lengthSize, byteVectorValue.value_Renamed.Length);
-			return encoding;
-		}
-		
-		public static ScalarValue FromString(string value_Renamed)
-		{
-			return new ByteVectorValue(System.Text.Encoding.UTF8.GetBytes(value_Renamed));
-		}
-		
-		public  override bool Equals(object obj)
-		{
-			return obj != null && obj.GetType() == GetType();
-		}
+            for (int i = 0; i < length; i++)
+                try
+                {
+                    encoding[i] = (byte) in_Renamed.ReadByte();
+                }
+                catch (IOException e)
+                {
+                    Global.HandleError(FastConstants.IO_ERROR,
+                                       "An error occurred while decoding a nullable byte vector.", e);
+                }
+            return new ByteVectorValue(encoding);
+        }
 
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-	}
+        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        {
+            if (value_Renamed.Null)
+                return NULLABLE_UNSIGNED_INTEGER.EncodeValue(ScalarValue.NULL);
+            var byteVectorValue = (ByteVectorValue) value_Renamed;
+            int lengthSize = IntegerCodec.GetUnsignedIntegerSize(byteVectorValue.value_Renamed.Length);
+            var encoding = new byte[byteVectorValue.value_Renamed.Length + lengthSize];
+            byte[] length = NULLABLE_UNSIGNED_INTEGER.Encode(new IntegerValue(byteVectorValue.value_Renamed.Length));
+            Array.Copy(length, 0, encoding, 0, lengthSize);
+            Array.Copy(byteVectorValue.value_Renamed, 0, encoding, lengthSize, byteVectorValue.value_Renamed.Length);
+            return encoding;
+        }
+
+        public static ScalarValue FromString(string value_Renamed)
+        {
+            return new ByteVectorValue(Encoding.UTF8.GetBytes(value_Renamed));
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj != null && obj.GetType() == GetType();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }

@@ -19,43 +19,42 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using ErrorCode = OpenFAST.Error.ErrorCode;
-using ErrorHandler = OpenFAST.Error.ErrorHandler;
+using System;
+using OpenFAST.Error;
 
 namespace OpenFAST
 {
-	
-	public static class Global
-	{
-		public static ErrorHandler ErrorHandler
-		{
-			set
-			{
-				if (value == null)
-				{
-					throw new System.NullReferenceException();
-				}
-				
-				errorHandler = value;
-			}
-			
-		}
-		private static ErrorHandler errorHandler = Error.ErrorHandler_Fields.DEFAULT;
-		private static int currentImplicitId = (int) ((System.DateTime.Now.Ticks - 621355968000000000) / 10000 % 10000);
-		
-		public static void  HandleError(ErrorCode error, string message)
-		{
-			errorHandler.Error(error, message);
-		}
-		
-		public static void  HandleError(ErrorCode error, string message, System.Exception source)
-		{
-			errorHandler.Error(error, message, source);
-		}
-		
-		public static QName CreateImplicitName(QName name)
-		{
-			return new QName(name + "@" + currentImplicitId++, name.Namespace);
-		}
-	}
+    public static class Global
+    {
+        private static ErrorHandler errorHandler = ErrorHandler_Fields.DEFAULT;
+        private static int currentImplicitId = (int) ((DateTime.Now.Ticks - 621355968000000000)/10000%10000);
+
+        public static ErrorHandler ErrorHandler
+        {
+            set
+            {
+                if (value == null)
+                {
+                    throw new NullReferenceException();
+                }
+
+                errorHandler = value;
+            }
+        }
+
+        public static void HandleError(ErrorCode error, string message)
+        {
+            errorHandler.Error(error, message);
+        }
+
+        public static void HandleError(ErrorCode error, string message, Exception source)
+        {
+            errorHandler.Error(error, message, source);
+        }
+
+        public static QName CreateImplicitName(QName name)
+        {
+            return new QName(name + "@" + currentImplicitId++, name.Namespace);
+        }
+    }
 }

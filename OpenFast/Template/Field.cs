@@ -20,133 +20,115 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace OpenFAST.Template
 {
-	
-	[Serializable]
-	public abstract class Field
-	{
+    [Serializable]
+    public abstract class Field
+    {
+        private Dictionary<QName, string> attributes;
+        protected internal string id;
+        protected internal QName key;
+        protected internal QName name;
+        protected internal bool optional;
 
-		virtual public string Name
-		{
-			get
-			{
-				return name.Name;
-			}
-			
-		}
-		virtual public QName QName
-		{
-			get
-			{
-				return name;
-			}
-			
-		}
+        protected Field(QName name, bool optional)
+        {
+            this.name = name;
+            key = name;
+            this.optional = optional;
+        }
 
-		virtual public bool Optional
-		{
-			get
-			{
-				return optional;
-			}
-			
-		}
-		
-		virtual public QName Key
-		{
-			get
-			{
-				return key;
-			}
-			
-			set
-			{
-				key = value;
-			}
-			
-		}
-		
-		virtual public string Id
-		{
-			get
-			{
+
+        protected Field(QName name, QName key, bool optional)
+        {
+            this.name = name;
+            this.key = key;
+            this.optional = optional;
+        }
+
+
+        protected Field(string name, string key, bool optional, string id)
+        {
+            this.name = new QName(name);
+            this.key = new QName(key);
+            this.optional = optional;
+            this.id = id;
+        }
+
+        public virtual string Name
+        {
+            get { return name.Name; }
+        }
+
+        public virtual QName QName
+        {
+            get { return name; }
+        }
+
+        public virtual bool Optional
+        {
+            get { return optional; }
+        }
+
+        public virtual QName Key
+        {
+            get { return key; }
+
+            set { key = value; }
+        }
+
+        public virtual string Id
+        {
+            get
+            {
                 if (id == null)
                     return "";
-				return id;
-			}
-			
-			set
-			{
-				id = value;
-			}
-			
-		}
-		public abstract System.Type ValueType{get;}
-		public abstract string TypeName{get;}
-		protected internal QName name;
-		protected internal QName key;
-		protected internal bool optional;
-		protected internal string id;
-		private System.Collections.Generic.Dictionary<QName,string> attributes;
+                return id;
+            }
 
-	    protected Field(QName name, bool optional)
-		{
-			this.name = name;
-			key = name;
-			this.optional = optional;
-		}
+            set { id = value; }
+        }
 
+        public abstract System.Type ValueType { get; }
+        public abstract string TypeName { get; }
 
-	    protected Field(QName name, QName key, bool optional)
-		{
-			this.name = name;
-			this.key = key;
-			this.optional = optional;
-		}
+        public virtual bool HasAttribute(QName attributeName)
+        {
+            return attributes != null && attributes.ContainsKey(attributeName);
+        }
 
+        public virtual void AddAttribute(QName qname, string value_Renamed)
+        {
+            if (attributes == null)
+            {
+                attributes = new Dictionary<QName, string>();
+            }
+            attributes[qname] = value_Renamed;
+        }
 
-	    protected Field(string name, string key, bool optional, string id)
-		{
-			this.name = new QName(name);
-			this.key = new QName(key);
-			this.optional = optional;
-			this.id = id;
-		}
-		
-		public virtual bool HasAttribute(QName attributeName)
-		{
-			return attributes != null && attributes.ContainsKey(attributeName);
-		}
-		
-		public virtual void  AddAttribute(QName qname, string value_Renamed)
-		{
-			if (attributes == null)
-			{
-				attributes = new System.Collections.Generic.Dictionary<QName,string>();
-			}
-			attributes[qname] = value_Renamed;
-		}
-		
-		public virtual string GetAttribute(QName qname)
-		{
-			return attributes[qname];
-		}
-		
-		protected internal virtual bool IsPresent(BitVectorReader presenceMapReader)
-		{
-			return (!UsesPresenceMapBit()) || presenceMapReader.Read();
-		}
-		
-		public abstract byte[] Encode(FieldValue value_Renamed, Group encodeTemplate, Context context, BitVectorBuilder presenceMapBuilder);
-		
-		public abstract FieldValue Decode(System.IO.Stream in_Renamed, Group decodeTemplate, Context context, BitVectorReader presenceMapReader);
-		
-		public abstract bool UsesPresenceMapBit();
-		
-		public abstract bool IsPresenceMapBitSet(byte[] encoding, FieldValue fieldValue);
-		
-		public abstract FieldValue CreateValue(string value_Renamed);
-	}
+        public virtual string GetAttribute(QName qname)
+        {
+            return attributes[qname];
+        }
+
+        protected internal virtual bool IsPresent(BitVectorReader presenceMapReader)
+        {
+            return (!UsesPresenceMapBit()) || presenceMapReader.Read();
+        }
+
+        public abstract byte[] Encode(FieldValue value_Renamed, Group encodeTemplate, Context context,
+                                      BitVectorBuilder presenceMapBuilder);
+
+        public abstract FieldValue Decode(Stream in_Renamed, Group decodeTemplate, Context context,
+                                          BitVectorReader presenceMapReader);
+
+        public abstract bool UsesPresenceMapBit();
+
+        public abstract bool IsPresenceMapBitSet(byte[] encoding, FieldValue fieldValue);
+
+        public abstract FieldValue CreateValue(string value_Renamed);
+    }
 }

@@ -20,25 +20,26 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
+using OpenFAST.Template.Type.Codec;
 
 namespace OpenFAST.Template.Type
 {
-	[Serializable]
-	public sealed class UnsignedIntegerType:IntegerType
-	{
-	    public UnsignedIntegerType(int numberBits, long maxValue):base("uInt" + numberBits, 0, maxValue, TypeCodec.UINT, TypeCodec.NULLABLE_UNSIGNED_INTEGER)
-		{
-		}
+    [Serializable]
+    public sealed class UnsignedIntegerType : IntegerType
+    {
+        public UnsignedIntegerType(int numberBits, long maxValue)
+            : base("uInt" + numberBits, 0, maxValue, TypeCodec.UINT, TypeCodec.NULLABLE_UNSIGNED_INTEGER)
+        {
+        }
 
         public override TypeCodec GetCodec(Operator.Operator operator_Renamed, bool optional)
-		{
+        {
             if (operator_Renamed.Equals(Operator.Operator.DELTA))
-				if (optional)
-					return TypeCodec.NULLABLE_INTEGER;
-				else
-					return TypeCodec.INTEGER;
-			return base.GetCodec(operator_Renamed, optional);
-		}
-	}
+                if (optional)
+                    return TypeCodec.NULLABLE_INTEGER;
+                else
+                    return TypeCodec.INTEGER;
+            return base.GetCodec(operator_Renamed, optional);
+        }
+    }
 }

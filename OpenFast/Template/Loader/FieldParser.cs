@@ -19,11 +19,13 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System.Xml;
+
 namespace OpenFAST.Template.Loader
 {
-	public interface FieldParser
-	{
-		Field Parse(System.Xml.XmlElement fieldNode, ParsingContext context);
-		bool CanParse(System.Xml.XmlElement element, ParsingContext context);
-	}
+    public interface FieldParser
+    {
+        Field Parse(XmlElement fieldNode, ParsingContext context);
+        bool CanParse(XmlElement element, ParsingContext context);
+    }
 }

@@ -20,90 +20,95 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
+using System.Globalization;
+using OpenFAST.Template.Type.Codec;
 
 namespace OpenFAST.Template.Type
 {
-	
-	[Serializable]
-	public sealed class DateType:FASTType
-	{
-		override public ScalarValue DefaultValue
-		{
-			get
-			{
-				var tempAux = new DateTime(0);
-				return new DateValue(ref tempAux);
-			}
-			
-		}
+    [Serializable]
+    public sealed class DateType : FASTType
+    {
+        private readonly TypeCodec dateCodec;
+        private readonly DateTimeFormatInfo dateFormatter;
 
-	    private readonly TypeCodec dateCodec;
-		private readonly System.Globalization.DateTimeFormatInfo dateFormatter;
+        public DateType(DateTimeFormatInfo dateFormat, TypeCodec dateCodec) : base("date")
+        {
+            dateFormatter = dateFormat;
+            this.dateCodec = dateCodec;
+        }
 
-		public DateType(System.Globalization.DateTimeFormatInfo dateFormat, TypeCodec dateCodec):base("date")
-		{
-			dateFormatter = dateFormat;
-			this.dateCodec = dateCodec;
-		}
-		public override bool IsValueOf(ScalarValue previousValue)
-		{
-			return previousValue is DateValue;
-		}
+        public override ScalarValue DefaultValue
+        {
+            get
+            {
+                var tempAux = new DateTime(0);
+                return new DateValue(ref tempAux);
+            }
+        }
+
+        public override bool IsValueOf(ScalarValue previousValue)
+        {
+            return previousValue is DateValue;
+        }
+
         public override TypeCodec GetCodec(Operator.Operator operator_Renamed, bool optional)
-		{
-			return dateCodec;
-		}
-		public override ScalarValue GetValue(string value_Renamed)
-		{
-			if (value_Renamed == null)
-				return ScalarValue.UNDEFINED;
-			try
-			{
-				var tempAux = DateTime.Parse(value_Renamed, dateFormatter);
-				return new DateValue(ref tempAux);
-			}
-			catch (FormatException e)
-			{
-				throw new RuntimeException(e);
-			}
-		}
-		public override string Serialize(ScalarValue value_Renamed)
-		{
-			return SupportClass.FormatDateTime(dateFormatter, ((DateValue) value_Renamed).value_Renamed);
-		}
-		public override int GetHashCode()
-		{
-			const int prime = 31;
-			int result = 1;
-			result = prime * result + ((dateCodec == null)?0:dateCodec.GetHashCode());
-			result = prime * result + ((dateFormatter == null)?0:dateFormatter.GetHashCode());
-			return result;
-		}
-		public  override bool Equals(Object obj)
-		{
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (GetType() != obj.GetType())
-				return false;
-			var other = (DateType) obj;
-			if (dateCodec == null)
-			{
-				if (other.dateCodec != null)
-					return false;
-			}
-			else if (!dateCodec.Equals(other.dateCodec))
-				return false;
-			if (dateFormatter == null)
-			{
-				if (other.dateFormatter != null)
-					return false;
-			}
-			else if (!dateFormatter.Equals(other.dateFormatter))
-				return false;
-			return true;
-		}
-	}
+        {
+            return dateCodec;
+        }
+
+        public override ScalarValue GetValue(string value_Renamed)
+        {
+            if (value_Renamed == null)
+                return ScalarValue.UNDEFINED;
+            try
+            {
+                DateTime tempAux = DateTime.Parse(value_Renamed, dateFormatter);
+                return new DateValue(ref tempAux);
+            }
+            catch (FormatException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public override string Serialize(ScalarValue value_Renamed)
+        {
+            return SupportClass.FormatDateTime(dateFormatter, ((DateValue) value_Renamed).value_Renamed);
+        }
+
+        public override int GetHashCode()
+        {
+            const int prime = 31;
+            int result = 1;
+            result = prime*result + ((dateCodec == null) ? 0 : dateCodec.GetHashCode());
+            result = prime*result + ((dateFormatter == null) ? 0 : dateFormatter.GetHashCode());
+            return result;
+        }
+
+        public override bool Equals(Object obj)
+        {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (GetType() != obj.GetType())
+                return false;
+            var other = (DateType) obj;
+            if (dateCodec == null)
+            {
+                if (other.dateCodec != null)
+                    return false;
+            }
+            else if (!dateCodec.Equals(other.dateCodec))
+                return false;
+            if (dateFormatter == null)
+            {
+                if (other.dateFormatter != null)
+                    return false;
+            }
+            else if (!dateFormatter.Equals(other.dateFormatter))
+                return false;
+            return true;
+        }
+    }
 }

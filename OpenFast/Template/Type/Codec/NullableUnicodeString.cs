@@ -20,58 +20,54 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
+using System.IO;
+using System.Text;
 
 namespace OpenFAST.Template.Type.Codec
 {
-	[Serializable]
-	public sealed class NullableUnicodeString:NotStopBitEncodedTypeCodec
-	{
-		public static ScalarValue DefaultValue
-		{
-			get
-			{
-				return new StringValue("");
-			}
-			
-		}
+    [Serializable]
+    public sealed class NullableUnicodeString : NotStopBitEncodedTypeCodec
+    {
+        internal NullableUnicodeString()
+        {
+        }
 
-	    internal NullableUnicodeString()
-		{
-		}
-		
-		public override byte[] EncodeValue(ScalarValue value_Renamed)
-		{
-			if (value_Renamed.Null)
-				return NULLABLE_BYTE_VECTOR_TYPE.EncodeValue(ScalarValue.NULL);
+        public static ScalarValue DefaultValue
+        {
+            get { return new StringValue(""); }
+        }
 
-            byte[] utf8encoding = System.Text.Encoding.UTF8.GetBytes(((StringValue) value_Renamed).value_Renamed);
-			return NULLABLE_BYTE_VECTOR_TYPE.Encode(new ByteVectorValue(utf8encoding));
+        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        {
+            if (value_Renamed.Null)
+                return NULLABLE_BYTE_VECTOR_TYPE.EncodeValue(ScalarValue.NULL);
 
-		}
-		
-		public override ScalarValue Decode(System.IO.Stream in_Renamed)
-		{
-			ScalarValue decodedValue = NULLABLE_BYTE_VECTOR_TYPE.Decode(in_Renamed);
-			if (decodedValue == null)
-				return null;
-			var value_Renamed = (ByteVectorValue) decodedValue;
-			return new StringValue(System.Text.Encoding.UTF8.GetString(value_Renamed.value_Renamed));
+            byte[] utf8encoding = Encoding.UTF8.GetBytes(((StringValue) value_Renamed).value_Renamed);
+            return NULLABLE_BYTE_VECTOR_TYPE.Encode(new ByteVectorValue(utf8encoding));
+        }
 
-		}
+        public override ScalarValue Decode(Stream in_Renamed)
+        {
+            ScalarValue decodedValue = NULLABLE_BYTE_VECTOR_TYPE.Decode(in_Renamed);
+            if (decodedValue == null)
+                return null;
+            var value_Renamed = (ByteVectorValue) decodedValue;
+            return new StringValue(Encoding.UTF8.GetString(value_Renamed.value_Renamed));
+        }
 
-		public static ScalarValue FromString(string value_Renamed)
-		{
-			return new StringValue(value_Renamed);
-		}
-		
-		public  override bool Equals(Object obj)
-		{
-			return obj != null && obj.GetType() == GetType();
-		}
+        public static ScalarValue FromString(string value_Renamed)
+        {
+            return new StringValue(value_Renamed);
+        }
 
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-	}
+        public override bool Equals(Object obj)
+        {
+            return obj != null && obj.GetType() == GetType();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }

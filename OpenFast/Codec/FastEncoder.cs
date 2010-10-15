@@ -19,35 +19,38 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using MessageTemplate = OpenFAST.Template.MessageTemplate;
+using OpenFAST.Template;
 
 namespace OpenFAST.Codec
 {
-	public sealed class FastEncoder : Coder
-	{
-		private readonly Context context;
-	
-		public FastEncoder(Context context)
-		{
-			this.context = context;
-		}
-		
-		public byte[] Encode(Message message)
-		{
-			var template = message.Template;
-			context.NewMessage(template);
-			return template.Encode(message, context);
-		}
-		
-		public void  Reset()
-		{
-			context.Reset();
-		}
-		
-		public void  RegisterTemplate(int templateId, MessageTemplate template)
-		{
-			context.RegisterTemplate(templateId, template);
-		}
-		
-	}
+    public sealed class FastEncoder : Coder
+    {
+        private readonly Context context;
+
+        public FastEncoder(Context context)
+        {
+            this.context = context;
+        }
+
+        #region Coder Members
+
+        public void Reset()
+        {
+            context.Reset();
+        }
+
+        #endregion
+
+        public byte[] Encode(Message message)
+        {
+            MessageTemplate template = message.Template;
+            context.NewMessage(template);
+            return template.Encode(message, context);
+        }
+
+        public void RegisterTemplate(int templateId, MessageTemplate template)
+        {
+            context.RegisterTemplate(templateId, template);
+        }
+    }
 }

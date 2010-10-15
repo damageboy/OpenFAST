@@ -20,16 +20,18 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using FASTType = OpenFAST.Template.Type.FASTType;
+using OpenFAST.Template.Type;
 
 namespace OpenFAST.Template.Operator
 {
     [Serializable]
-    sealed class IncrementIntegerOperatorCodec:OperatorCodec
+    internal sealed class IncrementIntegerOperatorCodec : OperatorCodec
     {
-        internal IncrementIntegerOperatorCodec(Operator operator_Renamed, FASTType[] types):base(operator_Renamed, types)
+        internal IncrementIntegerOperatorCodec(Operator operator_Renamed, FASTType[] types)
+            : base(operator_Renamed, types)
         {
         }
+
         public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar field)
         {
             if (priorValue == null)
@@ -62,10 +64,12 @@ namespace OpenFAST.Template.Operator
             }
             return null;
         }
+
         public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue previousValue, Scalar field)
         {
             return newValue;
         }
+
         public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)
         {
             if (previousValue == null)
@@ -78,15 +82,17 @@ namespace OpenFAST.Template.Operator
                     {
                         return null;
                     }
-                    throw new SystemException("Field with operator increment must send a value if no previous value existed.");
+                    throw new SystemException(
+                        "Field with operator increment must send a value if no previous value existed.");
                 }
                 return field.DefaultValue;
             }
             return ((NumericValue) previousValue).Increment();
         }
-        public  override bool Equals(object obj)
+
+        public override bool Equals(object obj)
         {
-            return obj != null && obj.GetType() == GetType();//POINTP
+            return obj != null && obj.GetType() == GetType(); //POINTP
         }
 
         public override int GetHashCode()

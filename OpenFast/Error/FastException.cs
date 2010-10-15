@@ -23,27 +23,24 @@ using System;
 
 namespace OpenFAST.Error
 {
-	[Serializable]
-	public class FastException:SystemException
-	{
-		virtual public ErrorCode Code
-		{
-			get
-			{
-				return code;
-			}
-			
-		}
+    [Serializable]
+    public class FastException : SystemException
+    {
+        private readonly ErrorCode code;
 
-	    private readonly ErrorCode code;
-		
-		public FastException(string message, ErrorCode code):base(message)
-		{
-			this.code = code;
-		}
-		public FastException(string message, ErrorCode code, Exception cause):base(message, cause)
-		{
-			this.code = code;
-		}
-	}
+        public FastException(string message, ErrorCode code) : base(message)
+        {
+            this.code = code;
+        }
+
+        public FastException(string message, ErrorCode code, Exception cause) : base(message, cause)
+        {
+            this.code = code;
+        }
+
+        public virtual ErrorCode Code
+        {
+            get { return code; }
+        }
+    }
 }

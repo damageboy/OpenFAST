@@ -17,42 +17,48 @@ Group, LLC.  Portions created by Shariq Muhammad
 are Copyright (C) Shariq Muhammad. All Rights Reserved.
 
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
-
+                Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
-using Group = OpenFAST.Template.Group;
+using System.Collections.Generic;
 using System.Text;
+using OpenFAST.Template;
 
 namespace OpenFAST
 {
-	public sealed class GlobalDictionary : Dictionary
-	{
-        internal System.Collections.Generic.Dictionary<QName, ScalarValue> table = new System.Collections.Generic.Dictionary<QName, ScalarValue>();
-		
-		public ScalarValue Lookup(Group template, QName key, QName applicationType)
-		{
-		    ScalarValue value;
-		    return table.TryGetValue(key, out value) ? value : ScalarValue.UNDEFINED;
-		}
-		
-		public void  Store(Group group, QName applicationType, QName key, ScalarValue value_Renamed)
-		{
-			table[key] = value_Renamed;
-		}
-		
-		public void  Reset()
-		{
-			table.Clear();
-		}
-		
-		public override string ToString()
-		{
-			var builder = new StringBuilder();
-            foreach (var key in table.Keys)
+    public sealed class GlobalDictionary : Dictionary
+    {
+        internal Dictionary<QName, ScalarValue> table =
+            new Dictionary<QName, ScalarValue>();
+
+        #region Dictionary Members
+
+        public ScalarValue Lookup(Group template, QName key, QName applicationType)
+        {
+            ScalarValue value;
+            return table.TryGetValue(key, out value) ? value : ScalarValue.UNDEFINED;
+        }
+
+        public void Store(Group group, QName applicationType, QName key, ScalarValue value_Renamed)
+        {
+            table[key] = value_Renamed;
+        }
+
+        public void Reset()
+        {
+            table.Clear();
+        }
+
+        #endregion
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
+            foreach (QName key in table.Keys)
             {
                 builder.Append("Dictionary: Global");
                 builder.Append(key).Append("=").Append(table[key]).Append("\n");
             }
-		    return builder.ToString();
-		}
-	}
+            return builder.ToString();
+        }
+    }
 }

@@ -19,20 +19,20 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using Group = OpenFAST.Template.Group;
+using OpenFAST.Template;
 
 namespace OpenFAST
 {
-	
-	
-	public struct Dictionary_Fields{
-		public readonly static string TEMPLATE = "template";
-		public readonly static string GLOBAL = "global";
-	}
-	public interface Dictionary
-	{
+    public struct Dictionary_Fields
+    {
+        public static readonly string TEMPLATE = "template";
+        public static readonly string GLOBAL = "global";
+    }
+
+    public interface Dictionary
+    {
         ScalarValue Lookup(Group template, QName key, QName currentApplicationType);
         void Store(Group group, QName applicationType, QName key, ScalarValue valueToEncode);
         void Reset();
-	}
+    }
 }

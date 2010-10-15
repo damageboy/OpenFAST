@@ -20,38 +20,38 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using FASTType = OpenFAST.Template.Type.FASTType;
+using OpenFAST.Template.Type;
 
 namespace OpenFAST.Template.Operator
 {
     [Serializable]
-    sealed class NoneOperatorCodec:AlwaysPresentOperatorCodec
+    internal sealed class NoneOperatorCodec : AlwaysPresentOperatorCodec
     {
-        internal NoneOperatorCodec(Operator operator_Renamed, FASTType[] types):base(operator_Renamed, types)
+        internal NoneOperatorCodec(Operator operator_Renamed, FASTType[] types) : base(operator_Renamed, types)
         {
         }
-		
+
         public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar field)
         {
             if (value_Renamed == null)
             {
                 return ScalarValue.NULL;
             }
-			
+
             return value_Renamed;
         }
-		
+
         public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue previousValue, Scalar field)
         {
             return newValue;
         }
-		
+
         public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)
         {
             throw new SystemException("This method should never be called.");
         }
-		
-        public  override bool Equals(Object obj)
+
+        public override bool Equals(Object obj)
         {
             return obj != null && obj.GetType() == GetType();
         }

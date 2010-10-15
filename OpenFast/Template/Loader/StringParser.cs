@@ -19,25 +19,26 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System.Xml;
+
 namespace OpenFAST.Template.Loader
 {
-	public class StringParser:VariableLengthScalarParser
-	{
-		
-		public StringParser():base("string")
-		{
-		}
-		
-		public override bool CanParse(System.Xml.XmlElement element, ParsingContext context)
-		{
-			return element.Name.Equals("string");
-		}
-		
-		protected internal override string GetTypeName(System.Xml.XmlElement fieldNode)
-		{
-			if (fieldNode.HasAttribute("charset"))
-				return fieldNode.GetAttribute("charset");
-			return "ascii";
-		}
-	}
+    public class StringParser : VariableLengthScalarParser
+    {
+        public StringParser() : base("string")
+        {
+        }
+
+        public override bool CanParse(XmlElement element, ParsingContext context)
+        {
+            return element.Name.Equals("string");
+        }
+
+        protected internal override string GetTypeName(XmlElement fieldNode)
+        {
+            if (fieldNode.HasAttribute("charset"))
+                return fieldNode.GetAttribute("charset");
+            return "ascii";
+        }
+    }
 }

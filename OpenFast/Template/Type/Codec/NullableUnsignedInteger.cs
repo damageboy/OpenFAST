@@ -20,55 +20,52 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
+using System.IO;
 
 namespace OpenFAST.Template.Type.Codec
 {
-	[Serializable]
-	public sealed class NullableUnsignedInteger:IntegerCodec
-	{
-		override public bool Nullable
-		{
-			get
-			{
-				return true;
-			}
-			
-		}
+    [Serializable]
+    public sealed class NullableUnsignedInteger : IntegerCodec
+    {
+        internal NullableUnsignedInteger()
+        {
+        }
 
-	    internal NullableUnsignedInteger()
-		{
-		}
-		
-		public override byte[] EncodeValue(ScalarValue v)
-		{
-			if (v.Null)
-			{
-				return NULL_VALUE_ENCODING;
-			}
-			
-			return UINT.EncodeValue(((NumericValue) v).Increment());
-		}
-		
-		public override ScalarValue Decode(System.IO.Stream in_Renamed)
-		{
-			var value_Renamed = (NumericValue) UINT.Decode(in_Renamed);
-			
-			if (value_Renamed.Equals(0))
-			{
-				return null;
-			}
-			
-			return value_Renamed.Decrement();
-		}
-		
-		public  override bool Equals(Object obj)
-		{
-			return obj != null && obj.GetType() == GetType();
-		}
+        public override bool Nullable
+        {
+            get { return true; }
+        }
 
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-	}
+        public override byte[] EncodeValue(ScalarValue v)
+        {
+            if (v.Null)
+            {
+                return NULL_VALUE_ENCODING;
+            }
+
+            return UINT.EncodeValue(((NumericValue) v).Increment());
+        }
+
+        public override ScalarValue Decode(Stream in_Renamed)
+        {
+            var value_Renamed = (NumericValue) UINT.Decode(in_Renamed);
+
+            if (value_Renamed.Equals(0))
+            {
+                return null;
+            }
+
+            return value_Renamed.Decrement();
+        }
+
+        public override bool Equals(Object obj)
+        {
+            return obj != null && obj.GetType() == GetType();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }

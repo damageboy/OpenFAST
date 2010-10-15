@@ -19,20 +19,14 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System.IO;
+
 namespace OpenFAST.Session
 {
-	public interface Connection
-	{
-        System.IO.StreamReader InputStream
-		{
-			get;
-			
-		}
-		System.IO.StreamWriter OutputStream
-		{
-			get;
-			
-		}
-		void  Close();
-	}
+    public interface Connection
+    {
+        StreamReader InputStream { get; }
+        StreamWriter OutputStream { get; }
+        void Close();
+    }
 }

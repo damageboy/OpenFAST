@@ -19,34 +19,37 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System;
+using System.Collections;
+
 namespace OpenFAST.util
 {
-	public sealed class ArrayIterator : System.Collections.IEnumerator
-	{
-		public System.Object Current
-		{
-			get
-			{
-				return array[position++];
-			}
-			
-		}
-		private int position;
+    public sealed class ArrayIterator : IEnumerator
+    {
+        private readonly Object[] array;
+        private int position;
 
-		private readonly System.Object[] array;
-		
-		public ArrayIterator(System.Object[] array)
-		{
-			this.array = array;
-		}
-		
-		public bool MoveNext()
-		{
-			return position < array.Length;
-		}
+        public ArrayIterator(Object[] array)
+        {
+            this.array = array;
+        }
 
-		public void  Reset()
-		{
-		}
-	}
+        #region IEnumerator Members
+
+        public Object Current
+        {
+            get { return array[position++]; }
+        }
+
+        public bool MoveNext()
+        {
+            return position < array.Length;
+        }
+
+        public void Reset()
+        {
+        }
+
+        #endregion
+    }
 }

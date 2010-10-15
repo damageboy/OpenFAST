@@ -21,21 +21,29 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST.Session
 {
-	public struct SessionHandler_Fields{
-		public readonly static SessionHandler NULL;
-		static SessionHandler_Fields()
-		{
-			NULL = new NULLSessionHandler();
-		}
-	}
-	public class NULLSessionHandler : SessionHandler
-	{
-		public virtual void  NewSession(Session session)
-		{
-		}
-	}
-	public interface SessionHandler
-	{
-		void  NewSession(Session session);
-	}
+    public struct SessionHandler_Fields
+    {
+        public static readonly SessionHandler NULL;
+
+        static SessionHandler_Fields()
+        {
+            NULL = new NULLSessionHandler();
+        }
+    }
+
+    public class NULLSessionHandler : SessionHandler
+    {
+        #region SessionHandler Members
+
+        public virtual void NewSession(Session session)
+        {
+        }
+
+        #endregion
+    }
+
+    public interface SessionHandler
+    {
+        void NewSession(Session session);
+    }
 }

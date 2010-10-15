@@ -19,30 +19,39 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System.IO;
+
 namespace OpenFAST
 {
-	
-	public struct MessageBlockReader_Fields{
-		public readonly static MessageBlockReader NULL;
-		static MessageBlockReader_Fields()
-		{
-			NULL = new NullMessageBlockReader();
-		}
-	}
-	public sealed class NullMessageBlockReader : MessageBlockReader
-	{
-		public bool ReadBlock(System.IO.Stream in_Renamed)
-		{
-			return true;
-		}
-		
-		public void  MessageRead(System.IO.Stream in_Renamed, Message message)
-		{
-		}
-	}
-	public interface MessageBlockReader
-	{
-		bool ReadBlock(System.IO.Stream in_Renamed);
-		void  MessageRead(System.IO.Stream in_Renamed, Message message);
-	}
+    public struct MessageBlockReader_Fields
+    {
+        public static readonly MessageBlockReader NULL;
+
+        static MessageBlockReader_Fields()
+        {
+            NULL = new NullMessageBlockReader();
+        }
+    }
+
+    public sealed class NullMessageBlockReader : MessageBlockReader
+    {
+        #region MessageBlockReader Members
+
+        public bool ReadBlock(Stream in_Renamed)
+        {
+            return true;
+        }
+
+        public void MessageRead(Stream in_Renamed, Message message)
+        {
+        }
+
+        #endregion
+    }
+
+    public interface MessageBlockReader
+    {
+        bool ReadBlock(Stream in_Renamed);
+        void MessageRead(Stream in_Renamed, Message message);
+    }
 }

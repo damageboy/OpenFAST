@@ -20,70 +20,62 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
+using System.IO;
 
 namespace OpenFAST.Template.Type.Codec
 {
-	[Serializable]
-	public sealed class NullableStringDelta:TypeCodec
-	{
+    [Serializable]
+    public sealed class NullableStringDelta : TypeCodec
+    {
+        public static ScalarValue DefaultValue
+        {
+            get { return new StringValue(""); }
+        }
 
-		public static ScalarValue DefaultValue
-		{
-			get
-			{
-				return new StringValue("");
-			}
-			
-		}
+        public override bool Nullable
+        {
+            get { return true; }
+        }
 
-		override public bool Nullable
-		{
-			get
-			{
-				return true;
-			}
-			
-		}
+        public override ScalarValue Decode(Stream in_Renamed)
+        {
+            ScalarValue subtractionLength = NULLABLE_INTEGER.Decode(in_Renamed);
+            if (subtractionLength == null)
+                return null;
 
-	    public override ScalarValue Decode(System.IO.Stream in_Renamed)
-		{
-			ScalarValue subtractionLength = NULLABLE_INTEGER.Decode(in_Renamed);
-			if (subtractionLength == null)
-				return null;
-			
-			ScalarValue difference = ASCII.Decode(in_Renamed);
-			
-			return new TwinValue(subtractionLength, difference);
-		}
-		
-		public override byte[] EncodeValue(ScalarValue value_Renamed)
-		{
-			if (value_Renamed.Null)
-				return NULL_VALUE_ENCODING;
-			
-			var diff = (TwinValue) value_Renamed;
-			byte[] subtractionLength = NULLABLE_INTEGER.Encode(diff.first);
-			byte[] difference = ASCII.Encode(diff.second);
-			var encoded = new byte[subtractionLength.Length + difference.Length];
-			Array.Copy(subtractionLength, 0, encoded, 0, subtractionLength.Length);
-			Array.Copy(difference, 0, encoded, subtractionLength.Length, difference.Length);
-			
-			return encoded;
-		}
-		
-		public static ScalarValue FromString(string value_Renamed)
-		{
-			return new StringValue(value_Renamed);
-		}
-		
-		public  override bool Equals(Object obj)
-		{
-			return obj != null && obj.GetType() == GetType();
-		}
+            ScalarValue difference = ASCII.Decode(in_Renamed);
 
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-	}
+            return new TwinValue(subtractionLength, difference);
+        }
+
+        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        {
+            if (value_Renamed.Null)
+                return NULL_VALUE_ENCODING;
+
+            var diff = (TwinValue) value_Renamed;
+            byte[] subtractionLength = NULLABLE_INTEGER.Encode(diff.first);
+            byte[] difference = ASCII.Encode(diff.second);
+            var encoded = new byte[subtractionLength.Length + difference.Length];
+            Array.Copy(subtractionLength, 0, encoded, 0, subtractionLength.Length);
+            Array.Copy(difference, 0, encoded, subtractionLength.Length, difference.Length);
+
+            return encoded;
+        }
+
+        public static ScalarValue FromString(string value_Renamed)
+        {
+            return new StringValue(value_Renamed);
+        }
+
+        public override bool Equals(Object obj)
+        {
+            return obj != null && obj.GetType() == GetType();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }

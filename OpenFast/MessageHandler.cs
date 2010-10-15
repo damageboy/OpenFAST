@@ -19,12 +19,12 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using Coder = OpenFAST.Codec.Coder;
+using OpenFAST.Codec;
 
 namespace OpenFAST
 {
-	public interface MessageHandler
-	{
-		void  HandleMessage(Message readMessage, Context context, Coder coder);
-	}
+    public interface MessageHandler
+    {
+        void HandleMessage(Message readMessage, Context context, Coder coder);
+    }
 }

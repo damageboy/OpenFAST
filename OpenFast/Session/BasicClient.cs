@@ -19,49 +19,48 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System;
+
 namespace OpenFAST.Session
 {
-	public sealed class BasicClient : Client
-	{
-		public string Name
-		{
-			get
-			{
-				return name;
-			}
-			
-		}
-		public string VendorId
-		{
-			get
-			{
-				return vendorId;
-			}
-			
-		}
-		
-		private readonly string name;
+    public sealed class BasicClient : Client
+    {
+        private readonly string name;
 
         private readonly string vendorId;
-		
-		public BasicClient(string clientName, string vendorId)
-		{
-			name = clientName;
-			this.vendorId = vendorId;
-		}
-		
-		public  override bool Equals(System.Object obj)
-		{
-			if (obj == this)
-				return true;
-			if (obj == null || !(obj is BasicClient))
-				return false;
-			return ((BasicClient) obj).name.Equals(name);
-		}
-		
-		public override int GetHashCode()
-		{
-			return name.GetHashCode();
-		}
-	}
+
+        public BasicClient(string clientName, string vendorId)
+        {
+            name = clientName;
+            this.vendorId = vendorId;
+        }
+
+        #region Client Members
+
+        public string Name
+        {
+            get { return name; }
+        }
+
+        public string VendorId
+        {
+            get { return vendorId; }
+        }
+
+        #endregion
+
+        public override bool Equals(Object obj)
+        {
+            if (obj == this)
+                return true;
+            if (obj == null || !(obj is BasicClient))
+                return false;
+            return ((BasicClient) obj).name.Equals(name);
+        }
+
+        public override int GetHashCode()
+        {
+            return name.GetHashCode();
+        }
+    }
 }

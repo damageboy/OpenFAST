@@ -20,38 +20,35 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
+using System.IO;
+using System.Text;
 
 namespace OpenFAST.Template.Type.Codec
 {
-	[Serializable]
-	sealed class UnicodeString:NotStopBitEncodedTypeCodec
-	{
+    [Serializable]
+    internal sealed class UnicodeString : NotStopBitEncodedTypeCodec
+    {
+        public static ScalarValue DefaultValue
+        {
+            get { return new StringValue(""); }
+        }
 
-		public static ScalarValue DefaultValue
-		{
-			get
-			{
-				return new StringValue("");
-			}
-			
-		}
+        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        {
+            byte[] utf8encoding = Encoding.UTF8.GetBytes(((StringValue) value_Renamed).value_Renamed);
+            return BYTE_VECTOR.Encode(new ByteVectorValue(utf8encoding));
+        }
 
-	    public override byte[] EncodeValue(ScalarValue value_Renamed)
-		{
-			var utf8encoding = System.Text.Encoding.UTF8.GetBytes(((StringValue) value_Renamed).value_Renamed);
-			return BYTE_VECTOR.Encode(new ByteVectorValue(utf8encoding));
-		}
-		
 
-		public override ScalarValue Decode(System.IO.Stream in_Renamed)
-		{
-			var value_Renamed = (ByteVectorValue) BYTE_VECTOR.Decode(in_Renamed);
-			return new StringValue(System.Text.Encoding.UTF8.GetString(value_Renamed.value_Renamed));
-		}
+        public override ScalarValue Decode(Stream in_Renamed)
+        {
+            var value_Renamed = (ByteVectorValue) BYTE_VECTOR.Decode(in_Renamed);
+            return new StringValue(Encoding.UTF8.GetString(value_Renamed.value_Renamed));
+        }
 
-		public static ScalarValue FromString(string value_Renamed)
-		{
-			return new StringValue(value_Renamed);
-		}
-	}
+        public static ScalarValue FromString(string value_Renamed)
+        {
+            return new StringValue(value_Renamed);
+        }
+    }
 }

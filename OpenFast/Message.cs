@@ -20,84 +20,82 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using MessageTemplate = OpenFAST.Template.MessageTemplate;
+using OpenFAST.Template;
 
 namespace OpenFAST
 {
-	
-	[Serializable]
-	public class Message:GroupValue
-	{
-		override public int FieldCount
-		{
-			get
-			{
-				return values.Length;
-			}
-			
-		}
-		virtual public MessageTemplate Template
-		{
-			get
-			{
-				return template;
-			}
-			
-		}
+    [Serializable]
+    public class Message : GroupValue
+    {
+        private readonly MessageTemplate template;
 
-	    private readonly MessageTemplate template;
-		
-		public Message(MessageTemplate template, FieldValue[] fieldValues):base(template, fieldValues)
-		{
-			this.template = template;
-		}
-		public Message(MessageTemplate template):this(template, InitializeFieldValues(template.FieldCount))
-		{
-		}
-		private static FieldValue[] InitializeFieldValues(int fieldCount)
-		{
-			var fields = new FieldValue[fieldCount];
-			return fields;
-		}
-		public  override bool Equals(object obj)
-		{
-			if ((obj == null) || !(obj is Message))
-			{
-				return false;
-			}
-			return equals((Message) obj);
-		}
-		public virtual bool equals(Message message)
-		{
-			if (FieldCount != message.FieldCount)
-				return false;
-			for (int i = 1; i < message.FieldCount; i++)
-				if (message.GetValue(i) == null)
-				{
-				    if (GetValue(i) == null)
-					{
-						continue;
-					}
-				    return false;
-				}
-				else if (!message.GetValue(i).Equals(GetValue(i)))
-				{
-					return false;
-				}
-			return true;
-		}
-		public override int GetHashCode()
-		{
-			return base.GetHashCode() + template.GetHashCode();
-		}
-		public override FieldValue Copy()
-		{
-			var copies = new FieldValue[values.Length];
-			for (int i = 0; i < copies.Length; i++)
-			{
-				copies[i] = values[i].Copy();
-			}
-			return new Message(template, values);
-		}
-	}
+        public Message(MessageTemplate template, FieldValue[] fieldValues) : base(template, fieldValues)
+        {
+            this.template = template;
+        }
+
+        public Message(MessageTemplate template) : this(template, InitializeFieldValues(template.FieldCount))
+        {
+        }
+
+        public override int FieldCount
+        {
+            get { return values.Length; }
+        }
+
+        public virtual MessageTemplate Template
+        {
+            get { return template; }
+        }
+
+        private static FieldValue[] InitializeFieldValues(int fieldCount)
+        {
+            var fields = new FieldValue[fieldCount];
+            return fields;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if ((obj == null) || !(obj is Message))
+            {
+                return false;
+            }
+            return equals((Message) obj);
+        }
+
+        public virtual bool equals(Message message)
+        {
+            if (FieldCount != message.FieldCount)
+                return false;
+            for (int i = 1; i < message.FieldCount; i++)
+                if (message.GetValue(i) == null)
+                {
+                    if (GetValue(i) == null)
+                    {
+                        continue;
+                    }
+                    return false;
+                }
+                else if (!message.GetValue(i).Equals(GetValue(i)))
+                {
+                    return false;
+                }
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() + template.GetHashCode();
+        }
+
+        public override FieldValue Copy()
+        {
+            var copies = new FieldValue[values.Length];
+            for (int i = 0; i < copies.Length; i++)
+            {
+                copies[i] = values[i].Copy();
+            }
+            return new Message(template, values);
+        }
+    }
 }

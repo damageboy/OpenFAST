@@ -21,14 +21,9 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST.Template
 {
-
-	public interface FieldSet
-	{
-		int FieldCount
-		{
-			get;
-			
-		}
-		Field GetField(int index);
-	}
+    public interface FieldSet
+    {
+        int FieldCount { get; }
+        Field GetField(int index);
+    }
 }

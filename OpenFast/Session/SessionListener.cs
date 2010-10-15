@@ -21,21 +21,29 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST.Session
 {
-	public struct SessionListener_Fields{
-		public readonly static SessionListener NULL;
-		static SessionListener_Fields()
-		{
-			NULL = new NULLSessionListener();
-		}
-	}
-	public class NULLSessionListener : SessionListener
-	{
-		public virtual void  OnClose()
-		{
-		}
-	}
-	public interface SessionListener
-	{
-		void  OnClose();
-	}
+    public struct SessionListener_Fields
+    {
+        public static readonly SessionListener NULL;
+
+        static SessionListener_Fields()
+        {
+            NULL = new NULLSessionListener();
+        }
+    }
+
+    public class NULLSessionListener : SessionListener
+    {
+        #region SessionListener Members
+
+        public virtual void OnClose()
+        {
+        }
+
+        #endregion
+    }
+
+    public interface SessionListener
+    {
+        void OnClose();
+    }
 }

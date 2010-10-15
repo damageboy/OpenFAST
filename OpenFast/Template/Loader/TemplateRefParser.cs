@@ -19,27 +19,37 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System.Xml;
+using OpenFAST.Error;
+
 namespace OpenFAST.Template.Loader
 {
-	public class TemplateRefParser : FieldParser
-	{
-		public virtual Field Parse(System.Xml.XmlElement element, ParsingContext context)
-		{
-		    if (element.HasAttribute("name"))
-			{
-			    QName templateName = element.HasAttribute("templateNs") ? new QName(element.GetAttribute("name"), element.GetAttribute("templateNs")) : new QName(element.GetAttribute("name"), "");
-				
-				if (context.TemplateRegistry.IsDefined(templateName))
-					return new StaticTemplateReference(context.TemplateRegistry.get_Renamed(templateName));
-			    context.ErrorHandler.Error(Error.FastConstants.D8_TEMPLATE_NOT_EXIST, "The template \"" + templateName + "\" was not found.");
-			    return null;
-			}
-		    return DynamicTemplateReference.INSTANCE;
-		}
+    public class TemplateRefParser : FieldParser
+    {
+        #region FieldParser Members
 
-	    public virtual bool CanParse(System.Xml.XmlElement element, ParsingContext context)
-		{
-			return "templateRef".Equals(element.Name);
-		}
-	}
+        public virtual Field Parse(XmlElement element, ParsingContext context)
+        {
+            if (element.HasAttribute("name"))
+            {
+                QName templateName = element.HasAttribute("templateNs")
+                                         ? new QName(element.GetAttribute("name"), element.GetAttribute("templateNs"))
+                                         : new QName(element.GetAttribute("name"), "");
+
+                if (context.TemplateRegistry.IsDefined(templateName))
+                    return new StaticTemplateReference(context.TemplateRegistry.get_Renamed(templateName));
+                context.ErrorHandler.Error(FastConstants.D8_TEMPLATE_NOT_EXIST,
+                                           "The template \"" + templateName + "\" was not found.");
+                return null;
+            }
+            return DynamicTemplateReference.INSTANCE;
+        }
+
+        public virtual bool CanParse(XmlElement element, ParsingContext context)
+        {
+            return "templateRef".Equals(element.Name);
+        }
+
+        #endregion
+    }
 }

@@ -23,9 +23,8 @@ namespace OpenFAST
 {
     public sealed class DatagramPacket : SupportClass.PacketSupport
     {
-        public DatagramPacket(byte[] array, int length):base(array,length)
+        public DatagramPacket(byte[] array, int length) : base(array, length)
         {
-            
         }
     }
 }

@@ -17,48 +17,53 @@ Group, LLC.  Portions created by Shariq Muhammad
 are Copyright (C) Shariq Muhammad. All Rights Reserved.
 
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
-
+                Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System.Collections.Generic;
-using Group = OpenFAST.Template.Group;
 using System.Text;
+using OpenFAST.Template;
 
 namespace OpenFAST
 {
-	public sealed class ApplicationTypeDictionary : Dictionary
-	{
-        private Dictionary<QName, Dictionary<QName, ScalarValue>> dictionary = new Dictionary<QName, Dictionary<QName, ScalarValue>>();
-		
-		public ScalarValue Lookup(Group template, QName key, QName applicationType)
-		{
-		    Dictionary<QName, ScalarValue> value;
-		    if (dictionary.TryGetValue(template.TypeReference, out value))
-			{
-			    ScalarValue value2;
-			    if (value.TryGetValue(key, out value2))
-					return value2;
-			}
-			return ScalarValue.UNDEFINED;
-		}
-		
-		public void  Reset()
-		{
+    public sealed class ApplicationTypeDictionary : Dictionary
+    {
+        private Dictionary<QName, Dictionary<QName, ScalarValue>> dictionary =
+            new Dictionary<QName, Dictionary<QName, ScalarValue>>();
+
+        #region Dictionary Members
+
+        public ScalarValue Lookup(Group template, QName key, QName applicationType)
+        {
+            Dictionary<QName, ScalarValue> value;
+            if (dictionary.TryGetValue(template.TypeReference, out value))
+            {
+                ScalarValue value2;
+                if (value.TryGetValue(key, out value2))
+                    return value2;
+            }
+            return ScalarValue.UNDEFINED;
+        }
+
+        public void Reset()
+        {
             dictionary = new Dictionary<QName, Dictionary<QName, ScalarValue>>();
-		}
+        }
 
         public void Store(Group group, QName applicationType, QName key, ScalarValue value_Renamed)
         {
             Dictionary<QName, ScalarValue> value;
-            
+
             if (!dictionary.TryGetValue(group.TypeReference, out value))
                 dictionary[group.TypeReference] = value = new Dictionary<QName, ScalarValue>();
 
             value[key] = value_Renamed;
         }
 
-	    public override string ToString()
-		{
-			var builder = new StringBuilder();
+        #endregion
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
             foreach (var val in dictionary)
             {
                 builder.Append("Dictionary: Type=").Append(val.Key);
@@ -68,7 +73,7 @@ namespace OpenFAST
                     builder.Append(val2.Key).Append("=").Append(val2.Value).Append("\n");
                 }
             }
-			return builder.ToString();
-		}
-	}
+            return builder.ToString();
+        }
+    }
 }

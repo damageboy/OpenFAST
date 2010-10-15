@@ -19,17 +19,15 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using MessageTemplate = OpenFAST.Template.MessageTemplate;
-using TemplateRegistry = OpenFAST.Template.TemplateRegistry;
+using OpenFAST.Template;
 
 namespace OpenFAST
 {
-	
-	public interface MessageStream
-	{
-		void  AddMessageHandler(MessageTemplate template, MessageHandler handler);
-		void  AddMessageHandler(MessageHandler handler);
-		void  Close();
-		TemplateRegistry GetTemplateRegistry();
-	}
+    public interface MessageStream
+    {
+        void AddMessageHandler(MessageTemplate template, MessageHandler handler);
+        void AddMessageHandler(MessageHandler handler);
+        void Close();
+        TemplateRegistry GetTemplateRegistry();
+    }
 }

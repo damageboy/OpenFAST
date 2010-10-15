@@ -19,54 +19,63 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using Group = OpenFAST.Template.Group;
+using System.Collections;
+using System.Collections.Generic;
 using System.Text;
+using OpenFAST.Template;
 
 namespace OpenFAST
 {
-	public sealed class TemplateDictionary : Dictionary
-	{
-        internal System.Collections.Generic.Dictionary<Group, System.Collections.Generic.Dictionary<QName, ScalarValue>> table = new System.Collections.Generic.Dictionary<Group, System.Collections.Generic.Dictionary<QName, ScalarValue>>();
-		
-		public ScalarValue Lookup(Group template, QName key, QName applicationType)
-		{
-		    if (table.ContainsKey(template))
-		    {
-		        return (table[template]).ContainsKey(key) ? table[template][key] : ScalarValue.UNDEFINED;
-		    }
-		    return ScalarValue.UNDEFINED;
-		}
-		
-		public void  Reset()
-		{
-			table.Clear();
-		}
-		
-		public void  Store(Group group, QName applicationType, QName key, ScalarValue valueToEncode)
-		{
-			if (!table.ContainsKey(group))
-			{
-				table[group] = new System.Collections.Generic.Dictionary<QName,ScalarValue>();
-			}
-			
-			table[group][key] = valueToEncode;
-		}
-		
-		public override string ToString()
-		{
-			var builder = new StringBuilder();
-            foreach (var template in table.Keys)
+    public sealed class TemplateDictionary : Dictionary
+    {
+        internal Dictionary<Group, Dictionary<QName, ScalarValue>>
+            table =
+                new Dictionary<Group, Dictionary<QName, ScalarValue>>();
+
+        #region Dictionary Members
+
+        public ScalarValue Lookup(Group template, QName key, QName applicationType)
+        {
+            if (table.ContainsKey(template))
+            {
+                return (table[template]).ContainsKey(key) ? table[template][key] : ScalarValue.UNDEFINED;
+            }
+            return ScalarValue.UNDEFINED;
+        }
+
+        public void Reset()
+        {
+            table.Clear();
+        }
+
+        public void Store(Group group, QName applicationType, QName key, ScalarValue valueToEncode)
+        {
+            if (!table.ContainsKey(group))
+            {
+                table[group] = new Dictionary<QName, ScalarValue>();
+            }
+
+            table[group][key] = valueToEncode;
+        }
+
+        #endregion
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
+            foreach (Group template in table.Keys)
             {
                 builder.Append("Dictionary: Template=" + template);
-                System.Collections.IDictionary templateMap = table[template];
-                System.Collections.IEnumerator keyIterator = new SupportClass.HashSetSupport(templateMap.Keys).GetEnumerator();
+                IDictionary templateMap = table[template];
+                IEnumerator keyIterator =
+                    new SupportClass.HashSetSupport(templateMap.Keys).GetEnumerator();
                 while (keyIterator.MoveNext())
                 {
-                    var key = keyIterator.Current;
+                    object key = keyIterator.Current;
                     builder.Append(key).Append("=").Append(templateMap[key]).Append("\n");
                 }
             }
-			return builder.ToString();
-		}
-	}
+            return builder.ToString();
+        }
+    }
 }

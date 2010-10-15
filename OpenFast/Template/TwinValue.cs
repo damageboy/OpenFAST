@@ -23,42 +23,41 @@ using System;
 
 namespace OpenFAST.Template
 {
-	
-	[Serializable]
-	public class TwinValue:ScalarValue
-	{
-	    public ScalarValue first;
-		public ScalarValue second;
-		
-		public TwinValue(ScalarValue first, ScalarValue second)
-		{
-			this.first = first;
-			this.second = second;
-		}
-		
-		public  override bool Equals(Object obj)
-		{
-			if ((obj == null) || !(obj is TwinValue))
-			{
-				return false;
-			}
-			
-			return Equals((TwinValue) obj);
-		}
+    [Serializable]
+    public class TwinValue : ScalarValue
+    {
+        public ScalarValue first;
+        public ScalarValue second;
 
-		private bool Equals(TwinValue other)
-		{
-			return (first.Equals(other.first) && second.Equals(other.second));
-		}
-		
-		public override int GetHashCode()
-		{
-			return first.GetHashCode() * 37 + second.GetHashCode();
-		}
-		
-		public override string ToString()
-		{
-			return first + ", " + second;
-		}
-	}
+        public TwinValue(ScalarValue first, ScalarValue second)
+        {
+            this.first = first;
+            this.second = second;
+        }
+
+        public override bool Equals(Object obj)
+        {
+            if ((obj == null) || !(obj is TwinValue))
+            {
+                return false;
+            }
+
+            return Equals((TwinValue) obj);
+        }
+
+        private bool Equals(TwinValue other)
+        {
+            return (first.Equals(other.first) && second.Equals(other.second));
+        }
+
+        public override int GetHashCode()
+        {
+            return first.GetHashCode()*37 + second.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return first + ", " + second;
+        }
+    }
 }

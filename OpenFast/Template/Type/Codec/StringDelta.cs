@@ -20,59 +20,56 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
+using System.IO;
 
 namespace OpenFAST.Template.Type.Codec
 {
-	[Serializable]
-	public sealed class StringDelta:TypeCodec
-	{
-		public static ScalarValue DefaultValue
-		{
-			get
-			{
-				return new StringValue("");
-			}
-			
-		}
+    [Serializable]
+    public sealed class StringDelta : TypeCodec
+    {
+        public static ScalarValue DefaultValue
+        {
+            get { return new StringValue(""); }
+        }
 
-	    public override ScalarValue Decode(System.IO.Stream in_Renamed)
-		{
-			ScalarValue subtractionLength = INTEGER.Decode(in_Renamed);
-			ScalarValue difference = ASCII.Decode(in_Renamed);
-			
-			return new TwinValue(subtractionLength, difference);
-		}
-		
-		public override byte[] EncodeValue(ScalarValue value_Renamed)
-		{
-			if ((value_Renamed == null) || (value_Renamed == ScalarValue.NULL))
-			{
-				throw new SystemException("Cannot have null values for non-nullable string delta");
-			}
-			
-			var diff = (TwinValue) value_Renamed;
-			byte[] subtractionLength = INTEGER.Encode(diff.first);
-			byte[] difference = ASCII.Encode(diff.second);
-			var encoded = new byte[subtractionLength.Length + difference.Length];
-			Array.Copy(subtractionLength, 0, encoded, 0, subtractionLength.Length);
-			Array.Copy(difference, 0, encoded, subtractionLength.Length, difference.Length);
-			
-			return encoded;
-		}
-		
-		public static ScalarValue FromString(string value_Renamed)
-		{
-			return new StringValue(value_Renamed);
-		}
-		
-		public  override bool Equals(Object obj)
-		{
-			return obj != null && obj.GetType() == GetType();
-		}
+        public override ScalarValue Decode(Stream in_Renamed)
+        {
+            ScalarValue subtractionLength = INTEGER.Decode(in_Renamed);
+            ScalarValue difference = ASCII.Decode(in_Renamed);
 
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-	}
+            return new TwinValue(subtractionLength, difference);
+        }
+
+        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        {
+            if ((value_Renamed == null) || (value_Renamed == ScalarValue.NULL))
+            {
+                throw new SystemException("Cannot have null values for non-nullable string delta");
+            }
+
+            var diff = (TwinValue) value_Renamed;
+            byte[] subtractionLength = INTEGER.Encode(diff.first);
+            byte[] difference = ASCII.Encode(diff.second);
+            var encoded = new byte[subtractionLength.Length + difference.Length];
+            Array.Copy(subtractionLength, 0, encoded, 0, subtractionLength.Length);
+            Array.Copy(difference, 0, encoded, subtractionLength.Length, difference.Length);
+
+            return encoded;
+        }
+
+        public static ScalarValue FromString(string value_Renamed)
+        {
+            return new StringValue(value_Renamed);
+        }
+
+        public override bool Equals(Object obj)
+        {
+            return obj != null && obj.GetType() == GetType();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }

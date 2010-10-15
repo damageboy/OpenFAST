@@ -19,48 +19,51 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
+
 namespace OpenFAST.Session.Multicast
 {
-	public sealed class MulticastConnection : Connection
-	{
-        System.IO.StreamReader in_stream;
+    public sealed class MulticastConnection : Connection
+    {
+        private readonly IPAddress group;
+        private readonly StreamReader in_stream;
 
-        public System.IO.StreamReader InputStream
-		{
-			get
-			{
-                return in_stream;
-			}
-			
-		}
-		public System.IO.StreamWriter OutputStream
-		{
-			get
-			{
-				throw new System.NotSupportedException("Multicast sending not currently supported.");
-			}
-			
-		}
-		private System.Net.Sockets.UdpClient socket;
-		private System.Net.IPAddress group;
-		
-		public MulticastConnection(System.Net.Sockets.UdpClient socket, System.Net.IPAddress group)
-		{
-			this.socket = socket;
-			this.group = group;
-            in_stream = new System.IO.StreamReader(new MulticastInputStream(socket));
-		}
-		
-		public void  Close()
-		{
-			try
-			{
-				socket.DropMulticastGroup((System.Net.IPAddress) group);
-				socket.Close();
-			}
-			catch (System.IO.IOException)
-			{
-			}
-		}
-	}
+        private readonly UdpClient socket;
+
+        public MulticastConnection(UdpClient socket, IPAddress group)
+        {
+            this.socket = socket;
+            this.group = group;
+            in_stream = new StreamReader(new MulticastInputStream(socket));
+        }
+
+        #region Connection Members
+
+        public StreamReader InputStream
+        {
+            get { return in_stream; }
+        }
+
+        public StreamWriter OutputStream
+        {
+            get { throw new NotSupportedException("Multicast sending not currently supported."); }
+        }
+
+        public void Close()
+        {
+            try
+            {
+                socket.DropMulticastGroup(group);
+                socket.Close();
+            }
+            catch (IOException)
+            {
+            }
+        }
+
+        #endregion
+    }
 }

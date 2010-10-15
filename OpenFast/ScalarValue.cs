@@ -23,122 +23,117 @@ using System;
 
 namespace OpenFAST
 {
-	[Serializable]
-	public class ScalarValue : FieldValue
-	{
-		[Serializable]
-		public sealed class UndefinedScalarValue:ScalarValue
-		{
-			override public bool Undefined
-			{
-				get
-				{
-					return true;
-				}
-				
-			}
+    [Serializable]
+    public class ScalarValue : FieldValue
+    {
+        public static readonly ScalarValue UNDEFINED;
 
-		    public override string ToString()
-			{
-				return "UNDEFINED";
-			}
-		}
-		[Serializable]
-		public sealed class NullScalarValue:ScalarValue
-		{
-			override public bool Null
-			{
-				get
-				{
-					return true;
-				}
-				
-			}
+        public static readonly ScalarValue NULL;
 
-		    public override string ToString()
-			{
-				return "NULL";
-			}
-		}
+        static ScalarValue()
+        {
+            UNDEFINED = new UndefinedScalarValue();
+            NULL = new NullScalarValue();
+        }
 
-		virtual public bool Undefined
-		{
-			get
-			{
-				return false;
-			}
-			
-		}
-		virtual public bool Null
-		{
-			get
-			{
-				return false;
-			}
-			
-		}
-		virtual public byte[] Bytes
-		{
-			get
-			{
-				throw new NotSupportedException();
-			}
-			
-		}
+        public virtual bool Undefined
+        {
+            get { return false; }
+        }
 
-	    public static readonly ScalarValue UNDEFINED;
-		
-		public static readonly ScalarValue NULL;
-		
-		public virtual bool EqualsValue(string defaultValue)
-		{
-			return false;
-		}
-		
-		public virtual FieldValue Copy()
-		{
-			return this; // immutable objects don't need actual copies.
-		}
-		
-		public virtual byte ToByte()
-		{
-			throw new NotSupportedException();
-		}
-		
-		public virtual short ToShort()
-		{
-			throw new NotSupportedException();
-		}
-		
-		public virtual int ToInt()
-		{
-			throw new NotSupportedException();
-		}
-		
-		public virtual long ToLong()
-		{
-			throw new NotSupportedException();
-		}
-		
-		public override string ToString()
-		{
-			throw new NotSupportedException();
-		}
-		
-		public virtual double ToDouble()
-		{
-			throw new NotSupportedException();
-		}
+        public virtual bool Null
+        {
+            get { return false; }
+        }
+
+        public virtual byte[] Bytes
+        {
+            get { throw new NotSupportedException(); }
+        }
+
+        #region FieldValue Members
+
+        public virtual FieldValue Copy()
+        {
+            return this; // immutable objects don't need actual copies.
+        }
+
+        #endregion
+
+        public virtual bool EqualsValue(string defaultValue)
+        {
+            return false;
+        }
+
+        public virtual byte ToByte()
+        {
+            throw new NotSupportedException();
+        }
+
+        public virtual short ToShort()
+        {
+            throw new NotSupportedException();
+        }
+
+        public virtual int ToInt()
+        {
+            throw new NotSupportedException();
+        }
+
+        public virtual long ToLong()
+        {
+            throw new NotSupportedException();
+        }
+
+        public override string ToString()
+        {
+            throw new NotSupportedException();
+        }
+
+        public virtual double ToDouble()
+        {
+            throw new NotSupportedException();
+        }
 
         public virtual Decimal ToBigDecimal()
-		{
-			throw new NotSupportedException();
-		}
-		
-        static ScalarValue()
-		{
-			UNDEFINED = new UndefinedScalarValue();
-			NULL = new NullScalarValue();
-		}
-	}
+        {
+            throw new NotSupportedException();
+        }
+
+        #region Nested type: NullScalarValue
+
+        [Serializable]
+        public sealed class NullScalarValue : ScalarValue
+        {
+            public override bool Null
+            {
+                get { return true; }
+            }
+
+            public override string ToString()
+            {
+                return "NULL";
+            }
+        }
+
+        #endregion
+
+        #region Nested type: UndefinedScalarValue
+
+        [Serializable]
+        public sealed class UndefinedScalarValue : ScalarValue
+        {
+            public override bool Undefined
+            {
+                get { return true; }
+            }
+
+            public override string ToString()
+            {
+                return "UNDEFINED";
+            }
+        }
+
+        #endregion
+    }
 }

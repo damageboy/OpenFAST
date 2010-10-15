@@ -19,55 +19,50 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System;
+
 namespace OpenFAST
 {
-	public sealed class BitVectorBuilder
-	{
-		public BitVector BitVector
-		{
-			get
-			{
-				return vector;
-			}
-			
-		}
-		public System.Object OnValueSkipOnNull
-		{
-			set
-			{
-				if (value == null)
-					Skip();
-				else
-					set_Renamed();
-			}
-			
-		}
-		public int Index
-		{
-			get
-			{
-				return index;
-			}
-			
-		}
-
+    public sealed class BitVectorBuilder
+    {
         private readonly BitVector vector;
-		private int index;
-		
-		public BitVectorBuilder(int size)
-		{
-			vector = new BitVector(size);
-		}
+        private int index;
+
+        public BitVectorBuilder(int size)
+        {
+            vector = new BitVector(size);
+        }
+
+        public BitVector BitVector
+        {
+            get { return vector; }
+        }
+
+        public Object OnValueSkipOnNull
+        {
+            set
+            {
+                if (value == null)
+                    Skip();
+                else
+                    set_Renamed();
+            }
+        }
+
+        public int Index
+        {
+            get { return index; }
+        }
 
         public void set_Renamed()
         {
             vector.set_Renamed(index);
             index++;
         }
-		
-		public void  Skip()
-		{
-			index++;
-		}
-	}
+
+        public void Skip()
+        {
+            index++;
+        }
+    }
 }

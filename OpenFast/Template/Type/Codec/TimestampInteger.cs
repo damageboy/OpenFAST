@@ -20,33 +20,36 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using Util = OpenFAST.util.Util;
+using System.IO;
+using OpenFAST.util;
 
 namespace OpenFAST.Template.Type.Codec
 {
-	[Serializable]
-	public sealed class TimestampInteger:TypeCodec
-	{
-	    public override ScalarValue Decode(System.IO.Stream in_Renamed)
-		{
-			int intValue = ((IntegerValue) UINT.Decode(in_Renamed)).value_Renamed;
-			System.DateTime tempAux = Util.ToTimestamp(intValue);
-			return new DateValue(ref tempAux);
-		}
-		public override byte[] EncodeValue(ScalarValue value_Renamed)
-		{
-			System.DateTime date = ((DateValue) value_Renamed).value_Renamed;
-			int intValue = Util.TimestampToInt(ref date);
-			return UINT.Encode(new IntegerValue(intValue));
-		}
-		public  override bool Equals(Object obj)
-		{
-			return obj != null && obj.GetType() == GetType();
-		}
+    [Serializable]
+    public sealed class TimestampInteger : TypeCodec
+    {
+        public override ScalarValue Decode(Stream in_Renamed)
+        {
+            int intValue = ((IntegerValue) UINT.Decode(in_Renamed)).value_Renamed;
+            DateTime tempAux = Util.ToTimestamp(intValue);
+            return new DateValue(ref tempAux);
+        }
 
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-	}
+        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        {
+            DateTime date = ((DateValue) value_Renamed).value_Renamed;
+            int intValue = Util.TimestampToInt(ref date);
+            return UINT.Encode(new IntegerValue(intValue));
+        }
+
+        public override bool Equals(Object obj)
+        {
+            return obj != null && obj.GetType() == GetType();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }

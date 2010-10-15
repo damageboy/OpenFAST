@@ -20,25 +20,27 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using FASTType = OpenFAST.Template.Type.FASTType;
+using OpenFAST.Error;
+using OpenFAST.Template.Type;
 
 namespace OpenFAST.Template.Operator
 {
     [Serializable]
-    sealed class DeltaIntegerOperatorCodec:AlwaysPresentOperatorCodec
+    internal sealed class DeltaIntegerOperatorCodec : AlwaysPresentOperatorCodec
     {
-        internal DeltaIntegerOperatorCodec(Operator operator_Renamed, FASTType[] types):base(operator_Renamed, types)
+        internal DeltaIntegerOperatorCodec(Operator operator_Renamed, FASTType[] types) : base(operator_Renamed, types)
         {
         }
-		
+
         public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar field)
         {
             if (priorValue == null)
             {
-                Global.HandleError(Error.FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "The field " + field + " must have a priorValue defined.");
+                Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT,
+                                   "The field " + field + " must have a priorValue defined.");
                 return null;
             }
-			
+
             if (value_Renamed == null)
             {
                 if (field.Optional)
@@ -52,31 +54,32 @@ namespace OpenFAST.Template.Operator
             {
                 priorValue = field.BaseValue;
             }
-			
+
             return ((NumericValue) value_Renamed).Subtract((NumericValue) priorValue);
         }
-		
+
         public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue previousValue, Scalar field)
         {
             if (previousValue == null)
             {
-                Global.HandleError(Error.FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "The field " + field + " must have a priorValue defined.");
+                Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT,
+                                   "The field " + field + " must have a priorValue defined.");
                 return null;
             }
-			
+
             if ((newValue == null) || newValue.Null)
             {
                 return null;
             }
-			
+
             if (previousValue.Undefined)
             {
                 previousValue = field.DefaultValue.Undefined ? field.BaseValue : field.DefaultValue;
             }
-			
+
             return ((NumericValue) newValue).Add((NumericValue) previousValue);
         }
-		
+
         public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)
         {
             if (previousValue.Undefined)
@@ -87,20 +90,20 @@ namespace OpenFAST.Template.Operator
                     {
                         return ScalarValue.UNDEFINED;
                     }
-                    Global.HandleError(Error.FastConstants.D5_NO_DEFAULT_VALUE, "");
+                    Global.HandleError(FastConstants.D5_NO_DEFAULT_VALUE, "");
                 }
                 else
                 {
                     return field.DefaultValue;
                 }
             }
-			
+
             return previousValue;
         }
-		
-        public  override bool Equals(object obj)
+
+        public override bool Equals(object obj)
         {
-            return obj != null && obj.GetType() == GetType();//POINTP
+            return obj != null && obj.GetType() == GetType(); //POINTP
         }
 
         public override int GetHashCode()

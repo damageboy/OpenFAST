@@ -17,7 +17,7 @@ Group, LLC.  Portions created by Shariq Muhammad
 are Copyright (C) Shariq Muhammad. All Rights Reserved.
 
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
-
+                Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System;
 
@@ -30,22 +30,10 @@ namespace OpenFAST
     [Serializable]
     public sealed class QName : IEquatable<QName>
     {
-        public string Namespace
-        {
-            get { return namespace_Renamed; }
-        }
-
-        //must be less then or equal to 31 bytes
-        public string Name
-        {
-            get { return name; }
-        }
-
         public static readonly QName NULL = new QName("", "");
 
-        private readonly string namespace_Renamed;
-
         private readonly string name;
+        private readonly string namespace_Renamed;
 
         public QName(string name) : this(name, "")
         {
@@ -59,12 +47,27 @@ namespace OpenFAST
             this.namespace_Renamed = namespace_Renamed ?? "";
         }
 
+        public string Namespace
+        {
+            get { return namespace_Renamed; }
+        }
+
+        //must be less then or equal to 31 bytes
+        public string Name
+        {
+            get { return name; }
+        }
+
+        #region IEquatable<QName> Members
+
         public bool Equals(QName other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return Equals(other.namespace_Renamed, namespace_Renamed) && Equals(other.name, name);
         }
+
+        #endregion
 
         public override bool Equals(object obj)
         {

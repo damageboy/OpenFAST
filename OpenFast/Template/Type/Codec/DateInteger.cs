@@ -20,36 +20,39 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using Util = OpenFAST.util.Util;
+using System.IO;
+using OpenFAST.util;
 
 namespace OpenFAST.Template.Type.Codec
 {
-	
-	[Serializable]
-	public sealed class DateInteger:TypeCodec
-	{
-	    public override ScalarValue Decode(System.IO.Stream in_Renamed)
-		{
-			long longValue = UINT.Decode(in_Renamed).ToLong();
-			var year = (int) (longValue / 10000);
-			var month = (int) ((longValue - (year * 10000)) / 100);
-			var day = (int) (longValue % 100);
-			System.DateTime tempAux = Util.Date(year, month, day);
-			return new DateValue(ref tempAux);
-		}
-		public override byte[] EncodeValue(ScalarValue value_Renamed)
-		{
-			System.DateTime date = ((DateValue) value_Renamed).value_Renamed;
-			int intValue = Util.DateToInt(ref date);
-			return UINT.Encode(new IntegerValue(intValue));
-		}
-		public  override bool Equals(Object obj)
-		{
-			return obj != null && obj.GetType() == GetType();
-		}
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-	}
+    [Serializable]
+    public sealed class DateInteger : TypeCodec
+    {
+        public override ScalarValue Decode(Stream in_Renamed)
+        {
+            long longValue = UINT.Decode(in_Renamed).ToLong();
+            var year = (int) (longValue/10000);
+            var month = (int) ((longValue - (year*10000))/100);
+            var day = (int) (longValue%100);
+            DateTime tempAux = Util.Date(year, month, day);
+            return new DateValue(ref tempAux);
+        }
+
+        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        {
+            DateTime date = ((DateValue) value_Renamed).value_Renamed;
+            int intValue = Util.DateToInt(ref date);
+            return UINT.Encode(new IntegerValue(intValue));
+        }
+
+        public override bool Equals(Object obj)
+        {
+            return obj != null && obj.GetType() == GetType();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }

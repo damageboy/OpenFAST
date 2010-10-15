@@ -20,45 +20,51 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
+using System.Globalization;
+using System.IO;
+using OpenFAST.Error;
 
 namespace OpenFAST.Template.Type.Codec
 {
-	[Serializable]
-	public sealed class DateString:TypeCodec
-	{
-	    private readonly System.Globalization.DateTimeFormatInfo formatter;
+    [Serializable]
+    public sealed class DateString : TypeCodec
+    {
+        private readonly DateTimeFormatInfo formatter;
 
-	    public DateString(string format)
-	    {
-	        formatter = new System.Globalization.DateTimeFormatInfo();
-	    }
+        public DateString(string format)
+        {
+            formatter = new DateTimeFormatInfo();
+        }
 
-	    public override ScalarValue Decode(System.IO.Stream in_Renamed)
-		{
-			try
-			{
-				System.DateTime tempAux = DateTime.Parse(ASCII.Decode(in_Renamed).ToString(), formatter);
-				return new DateValue(ref tempAux);
-			}
-			catch (FormatException e)
-			{
-				Global.HandleError(Error.FastConstants.PARSE_ERROR, "", e);
-				return null;
-			}
-		}
-		
-		public override byte[] EncodeValue(ScalarValue value_Renamed)
-		{
-			return ASCII.Encode(new StringValue(SupportClass.FormatDateTime(formatter, ((DateValue) value_Renamed).value_Renamed)));
-		}
-		
-		public  override bool Equals(Object obj)
-		{
-			return obj != null && obj.GetType() == GetType();
-		}
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-	}
+        public override ScalarValue Decode(Stream in_Renamed)
+        {
+            try
+            {
+                DateTime tempAux = DateTime.Parse(ASCII.Decode(in_Renamed).ToString(), formatter);
+                return new DateValue(ref tempAux);
+            }
+            catch (FormatException e)
+            {
+                Global.HandleError(FastConstants.PARSE_ERROR, "", e);
+                return null;
+            }
+        }
+
+        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        {
+            return
+                ASCII.Encode(
+                    new StringValue(SupportClass.FormatDateTime(formatter, ((DateValue) value_Renamed).value_Renamed)));
+        }
+
+        public override bool Equals(Object obj)
+        {
+            return obj != null && obj.GetType() == GetType();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }

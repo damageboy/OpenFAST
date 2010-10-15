@@ -20,38 +20,38 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
+using OpenFAST.Template.Type.Codec;
 
 namespace OpenFAST.Template.Type
 {
-	[Serializable]
-	public abstract class SimpleType:FASTType
-	{
-		private readonly TypeCodec codec;
-		private readonly TypeCodec nullableCodec;
+    [Serializable]
+    public abstract class SimpleType : FASTType
+    {
+        private readonly TypeCodec codec;
+        private readonly TypeCodec nullableCodec;
 
-	    protected SimpleType(string typeName, TypeCodec codec, TypeCodec nullableCodec):base(typeName)
-		{
-			this.codec = codec;
-			this.nullableCodec = nullableCodec;
-		}
+        protected SimpleType(string typeName, TypeCodec codec, TypeCodec nullableCodec) : base(typeName)
+        {
+            this.codec = codec;
+            this.nullableCodec = nullableCodec;
+        }
 
 
         public override TypeCodec GetCodec(Operator.Operator operator_Renamed, bool optional)
-		{
-			if (optional)
-				return nullableCodec;
-			return codec;
-		}
-		
+        {
+            if (optional)
+                return nullableCodec;
+            return codec;
+        }
 
-		public override ScalarValue GetValue(string value_Renamed)
-		{
-			if (value_Renamed == null)
-				return null;
-			return GetVal(value_Renamed);
-		}
-		
-		public abstract ScalarValue GetVal(string value_Renamed);
-	}
+
+        public override ScalarValue GetValue(string value_Renamed)
+        {
+            if (value_Renamed == null)
+                return null;
+            return GetVal(value_Renamed);
+        }
+
+        public abstract ScalarValue GetVal(string value_Renamed);
+    }
 }

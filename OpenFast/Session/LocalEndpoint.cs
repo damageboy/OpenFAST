@@ -19,60 +19,62 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System.Collections;
+
 namespace OpenFAST.Session
 {
-	public class LocalEndpoint : Endpoint
-	{
-		virtual public ConnectionListener ConnectionListener
-		{
-			set
-			{
-				listener = value;
-			}
-			
-		}
-		
-		private readonly LocalEndpoint server;
-		private ConnectionListener listener;
-		private readonly System.Collections.IList connections;
-		
-		public LocalEndpoint()
-		{
-			connections = new System.Collections.ArrayList(3);
-		}
-		
-		public LocalEndpoint(LocalEndpoint server)
-		{
-			this.server = server;
-		}
-		
-		public virtual void  Accept()
-		{
-			if (!(connections.Count == 0))
-			{
-				lock (this)
-				{
-				    object tempObject = connections[0];
-					connections.RemoveAt(0);
-					var connection = (Connection) tempObject;
-					listener.OnConnect(connection);
-				}
-			}
-		}
-		
-		public virtual Connection Connect()
-		{
-			var localConnection = new LocalConnection();
-			var remoteConnection = new LocalConnection(localConnection);
-			lock (server)
-			{
-				server.connections.Add(remoteConnection);
-			}
-			return localConnection;
-		}
-		
-		public virtual void  Close()
-		{
-		}
-	}
+    public class LocalEndpoint : Endpoint
+    {
+        private readonly IList connections;
+        private readonly LocalEndpoint server;
+        private ConnectionListener listener;
+
+        public LocalEndpoint()
+        {
+            connections = new ArrayList(3);
+        }
+
+        public LocalEndpoint(LocalEndpoint server)
+        {
+            this.server = server;
+        }
+
+        #region Endpoint Members
+
+        public virtual ConnectionListener ConnectionListener
+        {
+            set { listener = value; }
+        }
+
+        public virtual void Accept()
+        {
+            if (!(connections.Count == 0))
+            {
+                lock (this)
+                {
+                    object tempObject = connections[0];
+                    connections.RemoveAt(0);
+                    var connection = (Connection) tempObject;
+                    listener.OnConnect(connection);
+                }
+            }
+        }
+
+        public virtual Connection Connect()
+        {
+            var localConnection = new LocalConnection();
+            var remoteConnection = new LocalConnection(localConnection);
+            lock (server)
+            {
+                server.connections.Add(remoteConnection);
+            }
+            return localConnection;
+        }
+
+        public virtual void Close()
+        {
+        }
+
+        #endregion
+    }
 }

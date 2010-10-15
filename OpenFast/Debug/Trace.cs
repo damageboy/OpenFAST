@@ -19,17 +19,15 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using Field = OpenFAST.Template.Field;
-using Group = OpenFAST.Template.Group;
+using OpenFAST.Template;
 
 namespace OpenFAST.Debug
 {
-	
-	public interface Trace
-	{
-		void  GroupStart(Group group);
-		void  GroupEnd();
-		void  Field(Field field, FieldValue value_Renamed, FieldValue encoded, byte[] encoding, int pmapIndex);
-		void  Pmap(byte[] pmap);
-	}
+    public interface Trace
+    {
+        void GroupStart(Group group);
+        void GroupEnd();
+        void Field(Field field, FieldValue value_Renamed, FieldValue encoded, byte[] encoding, int pmapIndex);
+        void Pmap(byte[] pmap);
+    }
 }

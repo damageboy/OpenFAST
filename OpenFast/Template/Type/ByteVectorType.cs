@@ -20,34 +20,31 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
+using System.Text;
+using OpenFAST.Template.Type.Codec;
 
 namespace OpenFAST.Template.Type
 {
-	[Serializable]
-	sealed class ByteVectorType:SimpleType
-	{
-		override public ScalarValue DefaultValue
-		{
-			get
-			{
-				return new ByteVectorValue(new byte[]{});
-			}
-			
-		}
+    [Serializable]
+    internal sealed class ByteVectorType : SimpleType
+    {
+        internal ByteVectorType() : base("byteVector", TypeCodec.BYTE_VECTOR, TypeCodec.NULLABLE_BYTE_VECTOR_TYPE)
+        {
+        }
 
-	    internal ByteVectorType():base("byteVector", TypeCodec.BYTE_VECTOR, TypeCodec.NULLABLE_BYTE_VECTOR_TYPE)
-		{
-		}
-		
-		public override ScalarValue GetVal(string value_Renamed)
-		{
-            return new ByteVectorValue(System.Text.Encoding.UTF8.GetBytes(value_Renamed));
-		}
-		
-		public override bool IsValueOf(ScalarValue previousValue)
-		{
-			return previousValue is ByteVectorValue;
-		}
-	}
+        public override ScalarValue DefaultValue
+        {
+            get { return new ByteVectorValue(new byte[] {}); }
+        }
+
+        public override ScalarValue GetVal(string value_Renamed)
+        {
+            return new ByteVectorValue(Encoding.UTF8.GetBytes(value_Renamed));
+        }
+
+        public override bool IsValueOf(ScalarValue previousValue)
+        {
+            return previousValue is ByteVectorValue;
+        }
+    }
 }

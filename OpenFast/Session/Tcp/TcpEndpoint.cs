@@ -19,52 +19,57 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
+
 namespace OpenFAST.Session.Tcp
 {
     public sealed class TcpEndpoint : Endpoint
     {
-        public ConnectionListener ConnectionListener
-        {
-            set
-            {
-                connectionListener = value;
-            }
-
-        }
-
-        private readonly int port;
         private readonly string host;
-        private ConnectionListener connectionListener = ConnectionListener.NULL;
-        private System.Net.Sockets.TcpListener serverSocket;
+        private readonly int port;
         private bool closed = true;
+        private ConnectionListener connectionListener = ConnectionListener.NULL;
+        private TcpListener serverSocket;
 
         public TcpEndpoint(int port)
         {
             this.port = port;
         }
+
         public TcpEndpoint(string host, int port)
             : this(port)
         {
             this.host = host;
         }
+
+        #region Endpoint Members
+
+        public ConnectionListener ConnectionListener
+        {
+            set { connectionListener = value; }
+        }
+
         public Connection Connect()
         {
             try
             {
-                var socket = new System.Net.Sockets.TcpClient(host, port);
+                var socket = new TcpClient(host, port);
                 Connection connection = new TcpConnection(socket);
                 return connection;
             }
-            catch (System.IO.IOException e)
+            catch (IOException e)
             {
                 throw new FastConnectionException(e);
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 throw new FastConnectionException(e);
             }
-
         }
+
         public void Accept()
         {
             closed = false;
@@ -75,23 +80,25 @@ namespace OpenFAST.Session.Tcp
                     //commented by shariq
                     //temp_tcpListener = new System.Net.Sockets.TcpListener(System.Net.Dns.GetHostByName(System.Net.Dns.GetHostName()).AddressList[0], port);
                     //listen on all adapters
-                    var temp_tcpListener = new System.Net.Sockets.TcpListener(System.Net.IPAddress.Parse("0.0.0.0"), port);
+                    var temp_tcpListener = new TcpListener(IPAddress.Parse("0.0.0.0"),
+                                                           port);
 
                     temp_tcpListener.Start();
                     serverSocket = temp_tcpListener;
                 }
                 while (true)
                 {
-                    var socket = serverSocket.AcceptTcpClient();
+                    TcpClient socket = serverSocket.AcceptTcpClient();
                     connectionListener.OnConnect(new TcpConnection(socket));
                 }
             }
-            catch (System.IO.IOException e)
+            catch (IOException e)
             {
                 if (!closed)
                     throw new FastConnectionException(e);
             }
         }
+
         public void Close()
         {
             closed = true;
@@ -100,10 +107,12 @@ namespace OpenFAST.Session.Tcp
                 {
                     serverSocket.Stop();
                 }
-                catch (System.IO.IOException)
+                catch (IOException)
                 {
                 }
             serverSocket = null;
         }
+
+        #endregion
     }
 }

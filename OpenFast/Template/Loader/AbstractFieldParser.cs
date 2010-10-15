@@ -19,71 +19,79 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System;
+using System.Xml;
+
 namespace OpenFAST.Template.Loader
 {
-	public abstract class AbstractFieldParser : FieldParser
-	{
-		private readonly string[] parseableNodeNames;
-		
-		protected internal AbstractFieldParser(string nodeName):this(new[]{nodeName})
-		{
-		}
-		
-		protected internal AbstractFieldParser(string[] nodeNames)
-		{
-			parseableNodeNames = nodeNames;
-		}
-		
-		public virtual bool CanParse(System.Xml.XmlElement element, ParsingContext context)
-		{
-			for (int i = 0; i < parseableNodeNames.Length; i++)
-				if (parseableNodeNames[i].Equals(element.Name))
-					return true;
-			return false;
-		}
-		
-		public Field Parse(System.Xml.XmlElement fieldNode, ParsingContext parent)
-		{
-			bool optional = "optional".Equals(fieldNode.GetAttribute("presence"));
-			return Parse(fieldNode, optional, new ParsingContext(fieldNode, parent));
-		}
-		
-		public abstract Field Parse(System.Xml.XmlElement fieldNode, bool optional, ParsingContext context);
-		
-		protected internal static void  ParseExternalAttributes(System.Xml.XmlElement element, Field field)
-		{
-			System.Xml.XmlNamedNodeMap attributes = element.Attributes;
-			for (int i = 0; i < attributes.Count; i++)
-			{
-				var attribute = (System.Xml.XmlAttribute) attributes.Item(i);
-				if (attribute.NamespaceURI == null || attribute.NamespaceURI.Equals("") || attribute.NamespaceURI.Equals(XMLMessageTemplateLoader.TEMPLATE_DEFINITION_NS))
-					continue;
-				field.AddAttribute(new QName(attribute.LocalName, attribute.NamespaceURI), attribute.Value);
-			}
-		}
-		
+    public abstract class AbstractFieldParser : FieldParser
+    {
+        private readonly string[] parseableNodeNames;
 
-		protected internal static System.Xml.XmlElement GetElement(System.Xml.XmlElement fieldNode, int elementIndex)
-		{
-			System.Xml.XmlNodeList children = fieldNode.ChildNodes;
-			int elemIndex = 0;
-			for (int i = 0; i < children.Count; i++)
-			{
-				System.Xml.XmlNode item = children.Item(i);
-				if (IsElement(item))
-				{
-					elemIndex++;
-					if (elemIndex == elementIndex)
-						return ((System.Xml.XmlElement) item);
-				}
-			}
-			
-			return null;
-		}
+        protected internal AbstractFieldParser(string nodeName) : this(new[] {nodeName})
+        {
+        }
 
-		protected internal static bool IsElement(System.Xml.XmlNode item)
-		{
-			return System.Convert.ToInt16(item.NodeType) == (short) System.Xml.XmlNodeType.Element;
-		}
-	}
+        protected internal AbstractFieldParser(string[] nodeNames)
+        {
+            parseableNodeNames = nodeNames;
+        }
+
+        #region FieldParser Members
+
+        public virtual bool CanParse(XmlElement element, ParsingContext context)
+        {
+            for (int i = 0; i < parseableNodeNames.Length; i++)
+                if (parseableNodeNames[i].Equals(element.Name))
+                    return true;
+            return false;
+        }
+
+        public Field Parse(XmlElement fieldNode, ParsingContext parent)
+        {
+            bool optional = "optional".Equals(fieldNode.GetAttribute("presence"));
+            return Parse(fieldNode, optional, new ParsingContext(fieldNode, parent));
+        }
+
+        #endregion
+
+        public abstract Field Parse(XmlElement fieldNode, bool optional, ParsingContext context);
+
+        protected internal static void ParseExternalAttributes(XmlElement element, Field field)
+        {
+            XmlNamedNodeMap attributes = element.Attributes;
+            for (int i = 0; i < attributes.Count; i++)
+            {
+                var attribute = (XmlAttribute) attributes.Item(i);
+                if (attribute.NamespaceURI == null || attribute.NamespaceURI.Equals("") ||
+                    attribute.NamespaceURI.Equals(XMLMessageTemplateLoader.TEMPLATE_DEFINITION_NS))
+                    continue;
+                field.AddAttribute(new QName(attribute.LocalName, attribute.NamespaceURI), attribute.Value);
+            }
+        }
+
+
+        protected internal static XmlElement GetElement(XmlElement fieldNode, int elementIndex)
+        {
+            XmlNodeList children = fieldNode.ChildNodes;
+            int elemIndex = 0;
+            for (int i = 0; i < children.Count; i++)
+            {
+                XmlNode item = children.Item(i);
+                if (IsElement(item))
+                {
+                    elemIndex++;
+                    if (elemIndex == elementIndex)
+                        return ((XmlElement) item);
+                }
+            }
+
+            return null;
+        }
+
+        protected internal static bool IsElement(XmlNode item)
+        {
+            return Convert.ToInt16(item.NodeType) == (short) XmlNodeType.Element;
+        }
+    }
 }

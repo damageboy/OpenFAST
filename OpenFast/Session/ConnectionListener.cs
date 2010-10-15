@@ -21,19 +21,21 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST.Session
 {
-	public class NullConnectionListener : ConnectionListener
-	{
-	}
+    public class NullConnectionListener : ConnectionListener
+    {
+    }
 
     public abstract class ConnectionListener
-	{
+    {
+        public static readonly ConnectionListener NULL;
+
         static ConnectionListener()
-		{
+        {
             NULL = new NullConnectionListener();
         }
-        public readonly static ConnectionListener NULL;
+
         public virtual void OnConnect(Connection connection)
         {
         }
-	}
+    }
 }

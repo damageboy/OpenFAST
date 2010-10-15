@@ -19,17 +19,13 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System.IO;
+
 namespace OpenFAST.Template.Loader
 {
-	public interface MessageTemplateLoader
-	{
-		TemplateRegistry TemplateRegistry
-		{
-			get;
-			
-			set;
-			
-		}
-		MessageTemplate[] Load(System.IO.Stream source);
-	}
+    public interface MessageTemplateLoader
+    {
+        TemplateRegistry TemplateRegistry { get; set; }
+        MessageTemplate[] Load(Stream source);
+    }
 }

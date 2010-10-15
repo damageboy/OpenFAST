@@ -23,15 +23,15 @@ using System;
 
 namespace OpenFAST.Session
 {
-	[Serializable]
-	public class FastConnectionException:Exception
-	{
-	    public FastConnectionException(Exception t):base(t.ToString())
-		{
-		}
-		
-		public FastConnectionException(string message):base(message)
-		{
-		}
-	}
+    [Serializable]
+    public class FastConnectionException : Exception
+    {
+        public FastConnectionException(Exception t) : base(t.ToString())
+        {
+        }
+
+        public FastConnectionException(string message) : base(message)
+        {
+        }
+    }
 }

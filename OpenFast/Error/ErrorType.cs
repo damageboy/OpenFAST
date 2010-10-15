@@ -21,21 +21,18 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST.Error
 {
-	public sealed class ErrorType
-	{
-		public string Name
-		{
-			get
-			{
-				return name;
-			}
-			
-		}
-		private readonly string name;
-		
-		public ErrorType(string name)
-		{
-			this.name = name;
-		}
-	}
+    public sealed class ErrorType
+    {
+        private readonly string name;
+
+        public ErrorType(string name)
+        {
+            this.name = name;
+        }
+
+        public string Name
+        {
+            get { return name; }
+        }
+    }
 }

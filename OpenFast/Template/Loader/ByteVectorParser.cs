@@ -19,17 +19,19 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System.Xml;
+
 namespace OpenFAST.Template.Loader
 {
-	public class ByteVectorParser:VariableLengthScalarParser
-	{
-		public ByteVectorParser():base("byteVector")
-		{
-		}
-		
-		public override bool CanParse(System.Xml.XmlElement element, ParsingContext context)
-		{
-			return "byteVector".Equals(element.Name);
-		}
-	}
+    public class ByteVectorParser : VariableLengthScalarParser
+    {
+        public ByteVectorParser() : base("byteVector")
+        {
+        }
+
+        public override bool CanParse(XmlElement element, ParsingContext context)
+        {
+            return "byteVector".Equals(element.Name);
+        }
+    }
 }

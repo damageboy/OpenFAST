@@ -20,17 +20,19 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using FASTType = OpenFAST.Template.Type.FASTType;
+using System.Text;
+using OpenFAST.Error;
+using OpenFAST.Template.Type;
 
 namespace OpenFAST.Template.Operator
 {
     [Serializable]
-    sealed class TailOperatorCodec:OperatorCodec
+    internal sealed class TailOperatorCodec : OperatorCodec
     {
-        internal TailOperatorCodec(Operator operator_Renamed, FASTType[] types):base(operator_Renamed, types)
+        internal TailOperatorCodec(Operator operator_Renamed, FASTType[] types) : base(operator_Renamed, types)
         {
         }
-		
+
         public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar field)
         {
             if (value_Renamed == null)
@@ -41,44 +43,46 @@ namespace OpenFAST.Template.Operator
                     return null;
                 return ScalarValue.NULL;
             }
-			
+
             if (priorValue == null)
             {
                 return value_Renamed;
             }
-			
+
             if (priorValue.Undefined)
             {
                 priorValue = field.BaseValue;
             }
-			
-            var index = 0;
-			
-            var val = value_Renamed.Bytes;
-            var prior = priorValue.Bytes;
-			
+
+            int index = 0;
+
+            byte[] val = value_Renamed.Bytes;
+            byte[] prior = priorValue.Bytes;
+
             if (val.Length > prior.Length)
                 return value_Renamed;
             if (val.Length < prior.Length)
             {
-                Global.HandleError(Error.FastConstants.D3_CANT_ENCODE_VALUE, "The value " + val + " cannot be encoded by a tail operator with previous value " + priorValue);
+                Global.HandleError(FastConstants.D3_CANT_ENCODE_VALUE,
+                                   "The value " + val + " cannot be encoded by a tail operator with previous value " +
+                                   priorValue);
             }
-			
+
             while (index < val.Length && val[index] == prior[index])
                 index++;
             if (val.Length == index)
                 return null;
-            
-            return (ScalarValue) field.CreateValue(System.Text.Encoding.UTF8.GetString(val, index, val.Length - index));
+
+            return (ScalarValue) field.CreateValue(Encoding.UTF8.GetString(val, index, val.Length - index));
         }
-		
+
         public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue previousValue, Scalar field)
         {
             StringValue base_Renamed;
-			
+
             if ((previousValue == null) && !field.Optional)
             {
-                Global.HandleError(Error.FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "");
+                Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "");
                 return null;
             }
             if ((previousValue == null) || previousValue.Undefined)
@@ -99,26 +103,27 @@ namespace OpenFAST.Template.Operator
                 throw new ArgumentException("");
             }
 
-            var delta = ((StringValue) newValue).value_Renamed;
-            var length = Math.Max(base_Renamed.value_Renamed.Length - delta.Length, 0);
-            var root = base_Renamed.value_Renamed.Substring(0, (length) - (0));
-			
+            string delta = ((StringValue) newValue).value_Renamed;
+            int length = Math.Max(base_Renamed.value_Renamed.Length - delta.Length, 0);
+            string root = base_Renamed.value_Renamed.Substring(0, (length) - (0));
+
             return new StringValue(root + delta);
         }
-		
+
         public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)
         {
-            var value_Renamed = previousValue;
+            ScalarValue value_Renamed = previousValue;
             if (value_Renamed != null && value_Renamed.Undefined)
-                value_Renamed = (field.DefaultValue.Undefined)?null:field.DefaultValue;
+                value_Renamed = (field.DefaultValue.Undefined) ? null : field.DefaultValue;
             if (value_Renamed == null && !field.Optional)
             {
-                Global.HandleError(Error.FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "The field " + field + " was not present.");
+                Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT,
+                                   "The field " + field + " was not present.");
             }
             return value_Renamed;
         }
 
-        public override bool Equals(object obj)//POINTP
+        public override bool Equals(object obj) //POINTP
         {
             return obj != null && obj.GetType() == GetType();
         }

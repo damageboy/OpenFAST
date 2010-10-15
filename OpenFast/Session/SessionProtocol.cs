@@ -19,33 +19,28 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using ErrorCode = OpenFAST.Error.ErrorCode;
-using MessageTemplate = OpenFAST.Template.MessageTemplate;
+using OpenFAST.Error;
 using OpenFAST.Template;
 
 namespace OpenFAST.Session
 {
-	public interface SessionProtocol
-	{
-		Message ResetMessage
-		{
-			get;
-			
-		}
-		Message CloseMessage
-		{
-			get;
-			
-		}
-		void  ConfigureSession(Session session);
-        Session Connect(string senderName, Connection connection, TemplateRegistry inboundRegistry, TemplateRegistry outboundRegistry, MessageListener messageListener, SessionListener sessionListener);
-		Session OnNewConnection(string serverName, Connection connection);
-		void  OnError(Session session, ErrorCode code, string message);
-		bool IsProtocolMessage(Message message);
-		void  HandleMessage(Session session, Message message);
+    public interface SessionProtocol
+    {
+        Message ResetMessage { get; }
+        Message CloseMessage { get; }
+        void ConfigureSession(Session session);
 
-		bool SupportsTemplateExchange();
-		Message CreateTemplateDefinitionMessage(MessageTemplate messageTemplate);
-		Message CreateTemplateDeclarationMessage(MessageTemplate messageTemplate, int templateId);
-	}
+        Session Connect(string senderName, Connection connection, TemplateRegistry inboundRegistry,
+                        TemplateRegistry outboundRegistry, MessageListener messageListener,
+                        SessionListener sessionListener);
+
+        Session OnNewConnection(string serverName, Connection connection);
+        void OnError(Session session, ErrorCode code, string message);
+        bool IsProtocolMessage(Message message);
+        void HandleMessage(Session session, Message message);
+
+        bool SupportsTemplateExchange();
+        Message CreateTemplateDefinitionMessage(MessageTemplate messageTemplate);
+        Message CreateTemplateDeclarationMessage(MessageTemplate messageTemplate, int templateId);
+    }
 }

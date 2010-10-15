@@ -19,40 +19,44 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using Field = OpenFAST.Template.Field;
-using Group = OpenFAST.Template.Group;
+using System;
+using System.Collections.Generic;
+using OpenFAST.Template;
 
 namespace OpenFAST.Session.Template.Exchange
 {
-	public class ConversionContext
-	{
-        private readonly System.Collections.Generic.Dictionary<Group, FieldInstructionConverter> converterTemplateMap = new System.Collections.Generic.Dictionary<Group, FieldInstructionConverter>();
-        private readonly System.Collections.Generic.List<FieldInstructionConverter> converters = new System.Collections.Generic.List<FieldInstructionConverter>();
-		
-		public virtual void  AddFieldInstructionConverter(FieldInstructionConverter converter)
-		{
-			Group[] templateExchangeTemplates = converter.TemplateExchangeTemplates;
-			for (int i = 0; i < templateExchangeTemplates.Length; i++)
-			{
-				converterTemplateMap[templateExchangeTemplates[i]] = converter;
-			}
-			converters.Add(converter);
-		}
-		
-		public virtual FieldInstructionConverter GetConverter(Group group)
-		{
-			return converterTemplateMap[group];
-		}
-		
-		public virtual FieldInstructionConverter GetConverter(Field field)
-		{
-			for (int i = converters.Count - 1; i >= 0; i--)
-			{
-				var converter = converters[i];
-				if (converter.ShouldConvert(field))
-					return converter;
-			}
-			throw new System.SystemException("No valid converter found for the field: " + field);
-		}
-	}
+    public class ConversionContext
+    {
+        private readonly Dictionary<Group, FieldInstructionConverter> converterTemplateMap =
+            new Dictionary<Group, FieldInstructionConverter>();
+
+        private readonly List<FieldInstructionConverter> converters =
+            new List<FieldInstructionConverter>();
+
+        public virtual void AddFieldInstructionConverter(FieldInstructionConverter converter)
+        {
+            Group[] templateExchangeTemplates = converter.TemplateExchangeTemplates;
+            for (int i = 0; i < templateExchangeTemplates.Length; i++)
+            {
+                converterTemplateMap[templateExchangeTemplates[i]] = converter;
+            }
+            converters.Add(converter);
+        }
+
+        public virtual FieldInstructionConverter GetConverter(Group group)
+        {
+            return converterTemplateMap[group];
+        }
+
+        public virtual FieldInstructionConverter GetConverter(Field field)
+        {
+            for (int i = converters.Count - 1; i >= 0; i--)
+            {
+                FieldInstructionConverter converter = converters[i];
+                if (converter.ShouldConvert(field))
+                    return converter;
+            }
+            throw new SystemException("No valid converter found for the field: " + field);
+        }
+    }
 }

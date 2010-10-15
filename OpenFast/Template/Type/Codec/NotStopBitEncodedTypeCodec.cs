@@ -23,23 +23,22 @@ using System;
 
 namespace OpenFAST.Template.Type.Codec
 {
-	
-	[Serializable]
-	public abstract class NotStopBitEncodedTypeCodec:TypeCodec
-	{
-		
-		public override byte[] Encode(ScalarValue value_Renamed)
-		{
-			return EncodeValue(value_Renamed);
-		}
-		
-		public  override bool Equals(Object obj)
-		{
-			return obj != null && obj.GetType() == GetType();
-		}
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-	}
+    [Serializable]
+    public abstract class NotStopBitEncodedTypeCodec : TypeCodec
+    {
+        public override byte[] Encode(ScalarValue value_Renamed)
+        {
+            return EncodeValue(value_Renamed);
+        }
+
+        public override bool Equals(Object obj)
+        {
+            return obj != null && obj.GetType() == GetType();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }

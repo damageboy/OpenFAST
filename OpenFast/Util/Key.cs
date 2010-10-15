@@ -19,62 +19,62 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System;
+
 namespace OpenFAST.util
 {
-	
-	
-	public sealed class Key
-	{
-		private readonly System.Object[] keys;
-		
-		public Key(System.Object key1, System.Object key2):this(new[]{key1, key2})
-		{
-		}
-		
-		public Key(System.Object key1, System.Object key2, System.Object key3):this(new[]{key1, key2, key3})
-		{
-		}
-		
-		public Key(System.Object[] keys)
-		{
-			this.keys = keys;
-			CheckNull();
-		}
-		
-		private void  CheckNull()
-		{
-			for (int i = 0; i < keys.Length; i++)
-				if (keys[i] == null)
-					throw new System.NullReferenceException();
-		}
-		
-		public  override bool Equals(System.Object obj)
-		{
-			if (this == obj)
-				return true;
-			if ((obj == null) || !(obj is Key))
-				return false;
-			
-			var other = ((Key) obj);
-			if (other.keys.Length != keys.Length)
-				return false;
-			for (int i = 0; i < keys.Length; i++)
-				if (!other.keys[i].Equals(keys[i]))
-					return false;
-			return true;
-		}
-		
-		public override int GetHashCode()
-		{
-			int hashCode = 0;
-			for (int i = 0; i < keys.Length; i++)
-				hashCode += keys[i].GetHashCode() * (37 ^ i);
-			return hashCode;
-		}
-		
-		public override string ToString()
-		{
+    public sealed class Key
+    {
+        private readonly Object[] keys;
+
+        public Key(Object key1, Object key2) : this(new[] {key1, key2})
+        {
+        }
+
+        public Key(Object key1, Object key2, Object key3) : this(new[] {key1, key2, key3})
+        {
+        }
+
+        public Key(Object[] keys)
+        {
+            this.keys = keys;
+            CheckNull();
+        }
+
+        private void CheckNull()
+        {
+            for (int i = 0; i < keys.Length; i++)
+                if (keys[i] == null)
+                    throw new NullReferenceException();
+        }
+
+        public override bool Equals(Object obj)
+        {
+            if (this == obj)
+                return true;
+            if ((obj == null) || !(obj is Key))
+                return false;
+
+            var other = ((Key) obj);
+            if (other.keys.Length != keys.Length)
+                return false;
+            for (int i = 0; i < keys.Length; i++)
+                if (!other.keys[i].Equals(keys[i]))
+                    return false;
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = 0;
+            for (int i = 0; i < keys.Length; i++)
+                hashCode += keys[i].GetHashCode()*(37 ^ i);
+            return hashCode;
+        }
+
+        public override string ToString()
+        {
             return "";
-		}
-	}
+        }
+    }
 }

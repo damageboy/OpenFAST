@@ -20,41 +20,36 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
+using System.IO;
+using System.Text;
+using OpenFAST.Error;
 
 namespace OpenFAST.Template.Type.Codec
 {
-	[Serializable]
-	sealed class NullableAsciiString:TypeCodec
-	{
-		public static ScalarValue DefaultValue
-		{
-			get
-			{
-				return new StringValue("");
-			}
-			
-		}
+    [Serializable]
+    internal sealed class NullableAsciiString : TypeCodec
+    {
+        private static readonly byte[] NULLABLE_EMPTY_STRING = new byte[] {0x00, 0x00};
+        private static readonly byte[] ZERO_ENCODING = new byte[] {0x00, 0x00, 0x00};
 
-		override public bool Nullable
-		{
-			get
-			{
-				return true;
-			}
-			
-		}
+        public static ScalarValue DefaultValue
+        {
+            get { return new StringValue(""); }
+        }
 
-	    private static readonly byte[] NULLABLE_EMPTY_STRING = new byte[]{0x00,0x00};
-		private static readonly byte[] ZERO_ENCODING = new byte[]{0x00, 0x00, 0x00};
+        public override bool Nullable
+        {
+            get { return true; }
+        }
 
-	    public override byte[] EncodeValue(ScalarValue value_Renamed)
-		{
-			if (value_Renamed.Null)
-			{
-				return NULL_VALUE_ENCODING;
-			}
-			
-			string string_Renamed = ((StringValue) value_Renamed).value_Renamed;
+        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        {
+            if (value_Renamed.Null)
+            {
+                return NULL_VALUE_ENCODING;
+            }
+
+            string string_Renamed = ((StringValue) value_Renamed).value_Renamed;
 
             if (string_Renamed != null)
             {
@@ -65,67 +60,66 @@ namespace OpenFAST.Template.Type.Codec
 
                 if (string_Renamed.StartsWith("\u0000"))
                     return ZERO_ENCODING;
-                return System.Text.Encoding.UTF8.GetBytes(string_Renamed);
+                return Encoding.UTF8.GetBytes(string_Renamed);
             }
-	        return ZERO_ENCODING;
-		}
-		
-		public override ScalarValue Decode(System.IO.Stream in_Renamed)
-		{
-			var buffer = new System.IO.MemoryStream();
-			int byt;
-			
-			try
-			{
-				do 
-				{
-					byt = in_Renamed.ReadByte();
-					buffer.WriteByte((byte) byt);
-				}
-				while ((byt & STOP_BIT) == 0);
-			}
-			catch (System.IO.IOException e)
-			{
-				throw new RuntimeException(e);
-			}
-			
-			byte[] bytes = buffer.ToArray();
-			bytes[bytes.Length - 1] &= (0x7f);
-			
-			if (bytes[0] == 0)
-			{
-				if (!ByteUtil.IsEmpty(bytes))
-					Global.HandleError(Error.FastConstants.R9_STRING_OVERLONG, null);
-				if ((bytes.Length == 1))
-				{
-					return null;
-				}
-			    if (bytes.Length == 2 && bytes[1] == 0)
-			    {
-			        return new StringValue("");
-			    }
-			    if (bytes.Length == 3 && bytes[2] == 0)
-			    {
-			        return new StringValue("\u0000");
-			    }
-			}
-			
-			return new StringValue(System.Text.Encoding.UTF8.GetString(bytes));
-		}
-		
-		public static ScalarValue FromString(string value_Renamed)
-		{
-			return new StringValue(value_Renamed);
-		}
-		
-		public  override bool Equals(Object obj)
-		{
-			return obj != null && obj.GetType() == GetType();
-		}
+            return ZERO_ENCODING;
+        }
 
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-	}
+        public override ScalarValue Decode(Stream in_Renamed)
+        {
+            var buffer = new MemoryStream();
+            int byt;
+
+            try
+            {
+                do
+                {
+                    byt = in_Renamed.ReadByte();
+                    buffer.WriteByte((byte) byt);
+                } while ((byt & STOP_BIT) == 0);
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+
+            byte[] bytes = buffer.ToArray();
+            bytes[bytes.Length - 1] &= (0x7f);
+
+            if (bytes[0] == 0)
+            {
+                if (!ByteUtil.IsEmpty(bytes))
+                    Global.HandleError(FastConstants.R9_STRING_OVERLONG, null);
+                if ((bytes.Length == 1))
+                {
+                    return null;
+                }
+                if (bytes.Length == 2 && bytes[1] == 0)
+                {
+                    return new StringValue("");
+                }
+                if (bytes.Length == 3 && bytes[2] == 0)
+                {
+                    return new StringValue("\u0000");
+                }
+            }
+
+            return new StringValue(Encoding.UTF8.GetString(bytes));
+        }
+
+        public static ScalarValue FromString(string value_Renamed)
+        {
+            return new StringValue(value_Renamed);
+        }
+
+        public override bool Equals(Object obj)
+        {
+            return obj != null && obj.GetType() == GetType();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }

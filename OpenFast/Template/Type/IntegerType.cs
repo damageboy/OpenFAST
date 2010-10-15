@@ -1,4 +1,3 @@
-
 /*
 
 The contents of this file are subject to the Mozilla Public License
@@ -21,64 +20,64 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
-using Util = OpenFAST.util.Util;
+using OpenFAST.Error;
+using OpenFAST.Template.Type.Codec;
+using OpenFAST.util;
 
 namespace OpenFAST.Template.Type
 {
-	[Serializable]
-	public abstract class IntegerType:SimpleType
-	{
-		override public ScalarValue DefaultValue
-		{
-			get
-			{
-				return new IntegerValue(0);
-			}
-			
-		}
-		
-		protected internal long minValue;
-		protected internal long maxValue;
+    [Serializable]
+    public abstract class IntegerType : SimpleType
+    {
+        protected internal long maxValue;
+        protected internal long minValue;
 
-	    protected IntegerType(string typeName, long minValue, long maxValue, TypeCodec codec, TypeCodec nullableCodec):base(typeName, codec, nullableCodec)
-		{
-			this.minValue = minValue;
-			this.maxValue = maxValue;
-		}
+        protected IntegerType(string typeName, long minValue, long maxValue, TypeCodec codec, TypeCodec nullableCodec)
+            : base(typeName, codec, nullableCodec)
+        {
+            this.minValue = minValue;
+            this.maxValue = maxValue;
+        }
+
+        public override ScalarValue DefaultValue
+        {
+            get { return new IntegerValue(0); }
+        }
 
         public override ScalarValue GetVal(string value_Renamed)
-		{
-			long longValue;
-			try
-			{
-				longValue = Int64.Parse(value_Renamed);
-			}
-			catch (FormatException)
-			{
-				Global.HandleError(Error.FastConstants.S3_INITIAL_VALUE_INCOMP, "The value \"" + value_Renamed + "\" is not compatable with type " + this);
-				return null;
-			}
-			if (Util.IsBiggerThanInt(longValue))
-			{
-				return new LongValue(longValue);
-			}
-			return new IntegerValue((int) longValue);
-		}
+        {
+            long longValue;
+            try
+            {
+                longValue = Int64.Parse(value_Renamed);
+            }
+            catch (FormatException)
+            {
+                Global.HandleError(FastConstants.S3_INITIAL_VALUE_INCOMP,
+                                   "The value \"" + value_Renamed + "\" is not compatable with type " + this);
+                return null;
+            }
+            if (Util.IsBiggerThanInt(longValue))
+            {
+                return new LongValue(longValue);
+            }
+            return new IntegerValue((int) longValue);
+        }
 
-		public override bool IsValueOf(ScalarValue previousValue)
-		{
-			return previousValue is IntegerValue || previousValue is LongValue;
-		}
+        public override bool IsValueOf(ScalarValue previousValue)
+        {
+            return previousValue is IntegerValue || previousValue is LongValue;
+        }
 
-		public override void  ValidateValue(ScalarValue value_Renamed)
-		{
-			if (value_Renamed == null || value_Renamed.Undefined)
-				return ;
-			if (value_Renamed.ToLong() > maxValue || value_Renamed.ToLong() < minValue)
-			{
-				Global.HandleError(Error.FastConstants.D2_INT_OUT_OF_RANGE, "The value " + value_Renamed + " is out of range for type " + this);
-			}
-		}
-	}
+        public override void ValidateValue(ScalarValue value_Renamed)
+        {
+            if (value_Renamed == null || value_Renamed.Undefined)
+                return;
+            if (value_Renamed.ToLong() > maxValue || value_Renamed.ToLong() < minValue)
+            {
+                Global.HandleError(FastConstants.D2_INT_OUT_OF_RANGE,
+                                   "The value " + value_Renamed + " is out of range for type " + this);
+            }
+        }
+    }
 }

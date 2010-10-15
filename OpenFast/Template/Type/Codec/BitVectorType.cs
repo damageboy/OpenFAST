@@ -20,70 +20,66 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
+using System.IO;
 
 namespace OpenFAST.Template.Type.Codec
 {
-	[Serializable]
-	public sealed class BitVectorType:TypeCodec
-	{
-		public static ScalarValue DefaultValue
-		{
-			get
-			{
-				return new BitVectorValue(new BitVector(0));
-			}
-			
-		}
+    [Serializable]
+    public sealed class BitVectorType : TypeCodec
+    {
+        internal BitVectorType()
+        {
+        }
 
-	    internal BitVectorType()
-		{
-		}
-		
-		public override byte[] EncodeValue(ScalarValue value_Renamed)
-		{
-			return ((BitVectorValue) value_Renamed).value_Renamed.Bytes;
-		}
-		
-		public override ScalarValue Decode(System.IO.Stream in_Renamed)
-		{
-			var buffer = new System.IO.MemoryStream();
-			int byt;
-			do 
-			{
-				try
-				{
-					byt = in_Renamed.ReadByte();
-					
-					if (byt < 0)
-					{
-						return null;
-					}
-				}
-				catch (System.IO.IOException e)
-				{
-					throw new RuntimeException(e);
-				}
-				
-				buffer.WriteByte((Byte) byt);
-			}
-			while ((byt & STOP_BIT) == 0);
-			
-			return new BitVectorValue(new BitVector(buffer.ToArray()));
-		}
-		
-		public ScalarValue FromString(string value_Renamed)
-		{
-			return null;
-		}
-		
-		public  override bool Equals(Object obj)
-		{
-			return obj != null && obj.GetType() == GetType();
-		}
+        public static ScalarValue DefaultValue
+        {
+            get { return new BitVectorValue(new BitVector(0)); }
+        }
 
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-	}
+        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        {
+            return ((BitVectorValue) value_Renamed).value_Renamed.Bytes;
+        }
+
+        public override ScalarValue Decode(Stream in_Renamed)
+        {
+            var buffer = new MemoryStream();
+            int byt;
+            do
+            {
+                try
+                {
+                    byt = in_Renamed.ReadByte();
+
+                    if (byt < 0)
+                    {
+                        return null;
+                    }
+                }
+                catch (IOException e)
+                {
+                    throw new RuntimeException(e);
+                }
+
+                buffer.WriteByte((Byte) byt);
+            } while ((byt & STOP_BIT) == 0);
+
+            return new BitVectorValue(new BitVector(buffer.ToArray()));
+        }
+
+        public ScalarValue FromString(string value_Renamed)
+        {
+            return null;
+        }
+
+        public override bool Equals(Object obj)
+        {
+            return obj != null && obj.GetType() == GetType();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }

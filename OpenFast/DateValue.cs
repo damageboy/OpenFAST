@@ -23,44 +23,43 @@ using System;
 
 namespace OpenFAST
 {
-	
-	[Serializable]
-	public sealed class DateValue:ScalarValue
-	{
-	    public DateTime value_Renamed;
-		
-		public DateValue(ref DateTime date)
-		{
-			value_Renamed = date;
-		}
-		
-		public override long ToLong()
-		{
-			return value_Renamed.Ticks;
-		}
-		
-		public override string ToString()
-		{
-			return value_Renamed.ToString("r");
-		}
-		
-		public  override bool Equals(Object other)
-		{
-			if (other == this)
-				return true;
-			if (other == null || !(other is DateValue))
-				return false;
-			return Equals((DateValue) other);
-		}
-		
-		private bool Equals(DateValue other)
-		{
-			return other.value_Renamed.Equals(value_Renamed);
-		}
-		
-		public override int GetHashCode()
-		{
-			return value_Renamed.GetHashCode();
-		}
-	}
+    [Serializable]
+    public sealed class DateValue : ScalarValue
+    {
+        public DateTime value_Renamed;
+
+        public DateValue(ref DateTime date)
+        {
+            value_Renamed = date;
+        }
+
+        public override long ToLong()
+        {
+            return value_Renamed.Ticks;
+        }
+
+        public override string ToString()
+        {
+            return value_Renamed.ToString("r");
+        }
+
+        public override bool Equals(Object other)
+        {
+            if (other == this)
+                return true;
+            if (other == null || !(other is DateValue))
+                return false;
+            return Equals((DateValue) other);
+        }
+
+        private bool Equals(DateValue other)
+        {
+            return other.value_Renamed.Equals(value_Renamed);
+        }
+
+        public override int GetHashCode()
+        {
+            return value_Renamed.GetHashCode();
+        }
+    }
 }

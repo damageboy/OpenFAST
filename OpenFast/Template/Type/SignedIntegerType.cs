@@ -20,15 +20,16 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
+using OpenFAST.Template.Type.Codec;
 
 namespace OpenFAST.Template.Type
 {
-	[Serializable]
-	public sealed class SignedIntegerType:IntegerType
-	{
-	    public SignedIntegerType(int numberBits, long min, long max):base("int" + numberBits, min, max, TypeCodec.INTEGER, TypeCodec.NULLABLE_INTEGER)
-		{
-		}
-	}
+    [Serializable]
+    public sealed class SignedIntegerType : IntegerType
+    {
+        public SignedIntegerType(int numberBits, long min, long max)
+            : base("int" + numberBits, min, max, TypeCodec.INTEGER, TypeCodec.NULLABLE_INTEGER)
+        {
+        }
+    }
 }

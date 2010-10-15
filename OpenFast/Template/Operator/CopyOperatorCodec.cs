@@ -20,41 +20,43 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using FASTType = OpenFAST.Template.Type.FASTType;
+using OpenFAST.Error;
+using OpenFAST.Template.Type;
 
 namespace OpenFAST.Template.Operator
 {
     [Serializable]
-    public sealed class CopyOperatorCodec:OptionallyPresentOperatorCodec
+    public sealed class CopyOperatorCodec : OptionallyPresentOperatorCodec
     {
-        internal CopyOperatorCodec():base(Operator.COPY, FASTType.ALL_TYPES())
+        internal CopyOperatorCodec() : base(Operator.COPY, FASTType.ALL_TYPES())
         {
         }
-		
-        protected internal override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, ScalarValue defaultValue)
+
+        protected internal override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue,
+                                                                 ScalarValue defaultValue)
         {
             if ((priorValue == ScalarValue.UNDEFINED) && value_Renamed.Equals(defaultValue))
             {
                 return null;
             }
-			
-            return (value_Renamed.Equals(priorValue))?null:value_Renamed;
+
+            return (value_Renamed.Equals(priorValue)) ? null : value_Renamed;
         }
-		
+
         protected internal override ScalarValue GetInitialValue(Scalar field)
         {
             if (!field.DefaultValue.Undefined)
             {
                 return field.DefaultValue;
             }
-			
+
             if (field.Optional)
             {
                 return null;
             }
-			
-            Global.HandleError(Error.FastConstants.D5_NO_DEFAULT_VALUE, "No default value for " + field);
-			
+
+            Global.HandleError(FastConstants.D5_NO_DEFAULT_VALUE, "No default value for " + field);
+
             return null;
         }
 
@@ -62,15 +64,15 @@ namespace OpenFAST.Template.Operator
         {
             return priorValue;
         }
-		
+
         public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue priorValue, Scalar field)
         {
             return newValue;
         }
-		
-        public  override bool Equals(object obj)
+
+        public override bool Equals(object obj)
         {
-            return obj != null && obj.GetType() == GetType();//POINTP
+            return obj != null && obj.GetType() == GetType(); //POINTP
         }
 
         public override int GetHashCode()

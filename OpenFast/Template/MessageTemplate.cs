@@ -20,125 +20,131 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using FastException = OpenFAST.Error.FastException;
-using FASTType = OpenFAST.Template.Type.FASTType;
+using System.IO;
+using OpenFAST.Error;
+using OpenFAST.Template.Type;
 
 namespace OpenFAST.Template
 {
-	
-	[Serializable]
-	public sealed class MessageTemplate:Group, FieldSet
-	{
+    [Serializable]
+    public sealed class MessageTemplate : Group, FieldSet
+    {
+        public MessageTemplate(QName name, Field[] fields) : base(name, AddTemplateIdField(fields), false)
+        {
+        }
 
-		public new static System.Type ValueType
-		{
-			get
-			{
-				return typeof(Message);
-			}
-			
-		}
+        public MessageTemplate(string name, Field[] fields) : this(new QName(name), fields)
+        {
+        }
 
-		public Field[] TemplateFields
-		{
-			get
-			{
-				var f = new Field[fields.Length - 1];
-				Array.Copy(fields, 1, f, 0, fields.Length - 1);
-				return f;
-			}
-			
-		}
+        public new static System.Type ValueType
+        {
+            get { return typeof (Message); }
+        }
 
-	    public MessageTemplate(QName name, Field[] fields):base(name, AddTemplateIdField(fields), false)
-		{
-		}
-		public override bool UsesPresenceMap()
-		{
-			return true;
-		}
-		public MessageTemplate(string name, Field[] fields):this(new QName(name), fields)
-		{
-		}
+        public Field[] TemplateFields
+        {
+            get
+            {
+                var f = new Field[fields.Length - 1];
+                Array.Copy(fields, 1, f, 0, fields.Length - 1);
+                return f;
+            }
+        }
 
-		private static Field[] AddTemplateIdField(Field[] fields)
-		{
-			var newFields = new Field[fields.Length + 1];
+        #region FieldSet Members
+
+        public override Field GetField(int index)
+        {
+            return fields[index];
+        }
+
+        #endregion
+
+        public override bool UsesPresenceMap()
+        {
+            return true;
+        }
+
+        private static Field[] AddTemplateIdField(Field[] fields)
+        {
+            var newFields = new Field[fields.Length + 1];
             newFields[0] = new Scalar("templateId", FASTType.U32, Operator.Operator.COPY, ScalarValue.UNDEFINED, false);
-			Array.Copy(fields, 0, newFields, 1, fields.Length);
-			return newFields;
-		}
+            Array.Copy(fields, 0, newFields, 1, fields.Length);
+            return newFields;
+        }
 
-		public override Field GetField(int index)
-		{
-			return fields[index];
-		}
+        public byte[] Encode(Message message, Context context)
+        {
+            if (!context.TemplateRegistry.IsRegistered(message.Template))
+            {
+                throw new FastException(
+                    "Cannot encode message: The template " + message.Template + " has not been registered.",
+                    FastConstants.D9_TEMPLATE_NOT_REGISTERED);
+            }
+            message.SetInteger(0, context.GetTemplateId(message.Template));
+            return Encode(message, this, context);
+        }
 
-		public byte[] Encode(Message message, Context context)
-		{
-			if (!context.TemplateRegistry.IsRegistered(message.Template))
-			{
-				throw new FastException("Cannot encode message: The template " + message.Template + " has not been registered.", Error.FastConstants.D9_TEMPLATE_NOT_REGISTERED);
-			}
-			message.SetInteger(0, context.GetTemplateId(message.Template));
-			return Encode(message, this, context);
-		}
+        public Message Decode(Stream in_Renamed, int templateId, BitVectorReader presenceMapReader,
+                              Context context)
+        {
+            try
+            {
+                if (context.TraceEnabled)
+                    context.DecodeTrace.GroupStart(this);
+                FieldValue[] fieldValues = DecodeFieldValues(in_Renamed, this, presenceMapReader, context);
+                fieldValues[0] = new IntegerValue(templateId);
+                var message = new Message(this, fieldValues);
+                if (context.TraceEnabled)
+                    context.DecodeTrace.GroupEnd();
+                return message;
+            }
+            catch (FastException e)
+            {
+                throw new FastException("An error occurred while decoding " + this, e.Code, e);
+            }
+        }
 
-		public Message Decode(System.IO.Stream in_Renamed, int templateId, BitVectorReader presenceMapReader, Context context)
-		{
-			try
-			{
-				if (context.TraceEnabled)
-					context.DecodeTrace.GroupStart(this);
-				FieldValue[] fieldValues = DecodeFieldValues(in_Renamed, this, presenceMapReader, context);
-				fieldValues[0] = new IntegerValue(templateId);
-				var message = new Message(this, fieldValues);
-				if (context.TraceEnabled)
-					context.DecodeTrace.GroupEnd();
-				return message;
-			}
-			catch (FastException e)
-			{
-				throw new FastException("An error occurred while decoding " + this, e.Code, e);
-			}
-		}
-		public override string ToString()
-		{
-			return name.Name;
-		}
+        public override string ToString()
+        {
+            return name.Name;
+        }
 
-		public override FieldValue CreateValue(string value_Renamed)
-		{
-			return new Message(this);
-		}
-		public  override bool Equals(Object obj)
-		{
-			if (obj == this)
-				return true;
-			if (obj == null || !(obj is MessageTemplate))
-				return false;
-			return Equals((MessageTemplate) obj);
-		}
+        public override FieldValue CreateValue(string value_Renamed)
+        {
+            return new Message(this);
+        }
 
-		public bool Equals(MessageTemplate other)
-		{
-			if (!name.Equals(other.name))
-				return false;
-			if (fields.Length != other.fields.Length)
-				return false;
-			for (int i = 0; i < fields.Length; i++)
-			{
-				if (!fields[i].Equals(other.fields[i]))
-					return false;
-			}
-			return true;
-		}
-		public override int GetHashCode()
-		{
-			int hashCode = (name != null)?name.GetHashCode():0;
-			for (int i = 0; i < fields.Length; i++)
-				hashCode += fields[i].GetHashCode();
-			return hashCode;
-		}
-	}
+        public override bool Equals(Object obj)
+        {
+            if (obj == this)
+                return true;
+            if (obj == null || !(obj is MessageTemplate))
+                return false;
+            return Equals((MessageTemplate) obj);
+        }
+
+        public bool Equals(MessageTemplate other)
+        {
+            if (!name.Equals(other.name))
+                return false;
+            if (fields.Length != other.fields.Length)
+                return false;
+            for (int i = 0; i < fields.Length; i++)
+            {
+                if (!fields[i].Equals(other.fields[i]))
+                    return false;
+            }
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = (name != null) ? name.GetHashCode() : 0;
+            for (int i = 0; i < fields.Length; i++)
+                hashCode += fields[i].GetHashCode();
+            return hashCode;
+        }
+    }
 }

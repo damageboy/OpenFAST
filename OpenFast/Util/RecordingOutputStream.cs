@@ -19,109 +19,90 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System;
+using System.IO;
+
 namespace OpenFAST.util
 {
-	public sealed class RecordingOutputStream:System.IO.Stream
-	{
-		private readonly byte[] buffer = new byte[1024];
-		private int index;
-		private readonly System.IO.Stream out_Renamed;
-		
-		public RecordingOutputStream(System.IO.Stream outputStream)
-		{
-			out_Renamed = outputStream;
-		}
-		
-		public  void  WriteByte(int b)
-		{
-			buffer[index++] = (byte) b;
-			out_Renamed.WriteByte((System.Byte) b);
-		}
+    public sealed class RecordingOutputStream : Stream
+    {
+        private readonly byte[] buffer = new byte[1024];
+        private readonly Stream out_Renamed;
+        private int index;
 
-		public override  void  WriteByte(byte b)
-		{
-			WriteByte(b);
-		}
-		
-		public override string ToString()
-		{
-			return ByteUtil.ConvertByteArrayToBitString(buffer, index);
-		}
-		
-		public void  Clear()
-		{
-			index = 0;
-		}
+        public RecordingOutputStream(Stream outputStream)
+        {
+            out_Renamed = outputStream;
+        }
 
-		public override void  Flush()
-		{
-		}
+        public override Boolean CanRead
+        {
+            get { return false; }
+        }
 
-		public override System.Int64 Seek(System.Int64 offset, System.IO.SeekOrigin origin)
-		{
-			return 0;
-		}
+        public override Boolean CanSeek
+        {
+            get { return false; }
+        }
 
-		public override void  SetLength(System.Int64 value)
-		{
-		}
+        public override Boolean CanWrite
+        {
+            get { return false; }
+        }
 
-		public override System.Int32 Read(System.Byte[] readBuffer, System.Int32 offset, System.Int32 count)
-		{
-			return 0;
-		}
+        public override Int64 Length
+        {
+            get { return 0; }
+        }
 
-		public override void  Write(System.Byte[] writeBuffer, System.Int32 offset, System.Int32 count)
-		{
-		}
+        public override Int64 Position
+        {
+            get { return 0; }
 
-		public override System.Boolean CanRead
-		{
-			get
-			{
-				return false;
-			}
-			
-		}
+            set { }
+        }
 
-		public override System.Boolean CanSeek
-		{
-			get
-			{
-				return false;
-			}
-			
-		}
+        public void WriteByte(int b)
+        {
+            buffer[index++] = (byte) b;
+            out_Renamed.WriteByte((Byte) b);
+        }
 
-		public override System.Boolean CanWrite
-		{
-			get
-			{
-				return false;
-			}
-			
-		}
+        public override void WriteByte(byte b)
+        {
+            WriteByte(b);
+        }
 
-		public override System.Int64 Length
-		{
-			get
-			{
-				return 0;
-			}
-			
-		}
+        public override string ToString()
+        {
+            return ByteUtil.ConvertByteArrayToBitString(buffer, index);
+        }
 
-		public override System.Int64 Position
-		{
-			get
-			{
-				return 0;
-			}
-			
-			set
-			{
-			}
-			
-		}
-	}
+        public void Clear()
+        {
+            index = 0;
+        }
+
+        public override void Flush()
+        {
+        }
+
+        public override Int64 Seek(Int64 offset, SeekOrigin origin)
+        {
+            return 0;
+        }
+
+        public override void SetLength(Int64 value)
+        {
+        }
+
+        public override Int32 Read(Byte[] readBuffer, Int32 offset, Int32 count)
+        {
+            return 0;
+        }
+
+        public override void Write(Byte[] writeBuffer, Int32 offset, Int32 count)
+        {
+        }
+    }
 }

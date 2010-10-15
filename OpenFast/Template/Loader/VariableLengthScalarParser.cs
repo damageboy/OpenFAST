@@ -19,33 +19,35 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System.Xml;
+using OpenFAST.Error;
+
 namespace OpenFAST.Template.Loader
 {
-	public class VariableLengthScalarParser:ScalarParser
-	{
-		
-		public VariableLengthScalarParser(string nodeName):base(nodeName)
-		{
-		}
-		
-		public override Field Parse(System.Xml.XmlElement fieldNode, bool optional, ParsingContext context)
-		{
-			var scalar = (Scalar) base.Parse(fieldNode, optional, context);
-			System.Xml.XmlElement element = GetElement(fieldNode, 1);
-			if (element != null && element.Name.Equals("length"))
-			{
-				string length = element.GetAttribute("name");
-				scalar.AddAttribute(Error.FastConstants.LENGTH_FIELD, length);
-			}
-			return scalar;
-		}
-		
-		protected internal override System.Xml.XmlElement GetOperatorElement(System.Xml.XmlElement fieldNode)
-		{
-			System.Xml.XmlElement operatorElement = base.GetOperatorElement(fieldNode);
-			if (operatorElement != null && operatorElement.Name.Equals("length"))
-				return GetElement(fieldNode, 2);
-			return operatorElement;
-		}
-	}
+    public class VariableLengthScalarParser : ScalarParser
+    {
+        public VariableLengthScalarParser(string nodeName) : base(nodeName)
+        {
+        }
+
+        public override Field Parse(XmlElement fieldNode, bool optional, ParsingContext context)
+        {
+            var scalar = (Scalar) base.Parse(fieldNode, optional, context);
+            XmlElement element = GetElement(fieldNode, 1);
+            if (element != null && element.Name.Equals("length"))
+            {
+                string length = element.GetAttribute("name");
+                scalar.AddAttribute(FastConstants.LENGTH_FIELD, length);
+            }
+            return scalar;
+        }
+
+        protected internal override XmlElement GetOperatorElement(XmlElement fieldNode)
+        {
+            XmlElement operatorElement = base.GetOperatorElement(fieldNode);
+            if (operatorElement != null && operatorElement.Name.Equals("length"))
+                return GetElement(fieldNode, 2);
+            return operatorElement;
+        }
+    }
 }

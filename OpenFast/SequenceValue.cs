@@ -20,139 +20,131 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using Sequence = OpenFAST.Template.Sequence;
-using System.Text;
+using System.Collections;
 using System.Collections.Generic;
+using System.Text;
+using OpenFAST.Template;
 
 namespace OpenFAST
 {
-	[Serializable]
-	public sealed class SequenceValue : FieldValue
-	{
-		public int Length
-		{
-			get
-			{
-				return elements.Count;
-			}
-			
-		}
-		public Sequence Sequence
-		{
-			get
-			{
-				return sequence;
-			}
-			
-		}
-		public GroupValue[] Values
-		{
-			get
-			{
-				return elements.ToArray();
-			}
-			
-		}
+    [Serializable]
+    public sealed class SequenceValue : FieldValue
+    {
+        private readonly List<GroupValue> elements = new List<GroupValue>();
+        private readonly Sequence sequence;
 
-	    private readonly List<GroupValue> elements = new List<GroupValue>();
-		private readonly Sequence sequence;
-		
-		public SequenceValue(Sequence sequence)
-		{
-			if (sequence == null)
-			{
-				throw new NullReferenceException();
-			}
-			
-			this.sequence = sequence;
-		}
-		
-		public System.Collections.IEnumerator Iterator()
-		{
-			return elements.GetEnumerator();
-		}
-		
-		public void  Add(GroupValue value_Renamed)
-		{
-			elements.Add(value_Renamed);
-		}
-		
-		public void  Add(FieldValue[] values)
-		{
-			elements.Add(new GroupValue(sequence.Group, values));
-		}
-		
-		public  override bool Equals(object other)
-		{
-			if (other == this)
-			{
-				return true;
-			}
-			
-			if ((other == null) || !(other is SequenceValue))
-			{
-				return false;
-			}
-			
-			return equals((SequenceValue) other);
-		}
-		
-		private bool equals(SequenceValue other)
-		{
-			if (Length != other.Length)
-			{
-				return false;
-			}
-			
-			for (int i = 0; i < Length; i++)
-			{
-				if (!elements[i].Equals(other.elements[i]))
-				{
-					return false;
-				}
-			}
-			
-			return true;
-		}
-		
-		public override int GetHashCode()
-		{
-			return elements.GetHashCode() * 37 + sequence.GetHashCode();
-		}
-		
-		public override string ToString()
-		{
-			var builder = new StringBuilder();
-			System.Collections.IEnumerator iter = elements.GetEnumerator();
-			builder.Append("[ ");
-			
-			while (iter.MoveNext())
-			{
-				var value_Renamed = (GroupValue) iter.Current;
-				builder.Append('[').Append(value_Renamed).Append("] ");
-			}
-			
-			builder.Append("]");
-			
-			return builder.ToString();
-		}
-		
-		public GroupValue this[int index]
-		{
-            get
+        public SequenceValue(Sequence sequence)
+        {
+            if (sequence == null)
             {
-                return elements[index];
+                throw new NullReferenceException();
             }
-		}
-		
-		public FieldValue Copy()
-		{
-			var value_Renamed = new SequenceValue(sequence);
-			for (int i = 0; i < elements.Count; i++)
-			{
-				value_Renamed.Add((GroupValue) elements[i].Copy());
-			}
-			return value_Renamed;
-		}
-	}
+
+            this.sequence = sequence;
+        }
+
+        public int Length
+        {
+            get { return elements.Count; }
+        }
+
+        public Sequence Sequence
+        {
+            get { return sequence; }
+        }
+
+        public GroupValue[] Values
+        {
+            get { return elements.ToArray(); }
+        }
+
+        public GroupValue this[int index]
+        {
+            get { return elements[index]; }
+        }
+
+        #region FieldValue Members
+
+        public FieldValue Copy()
+        {
+            var value_Renamed = new SequenceValue(sequence);
+            for (int i = 0; i < elements.Count; i++)
+            {
+                value_Renamed.Add((GroupValue) elements[i].Copy());
+            }
+            return value_Renamed;
+        }
+
+        #endregion
+
+        public IEnumerator Iterator()
+        {
+            return elements.GetEnumerator();
+        }
+
+        public void Add(GroupValue value_Renamed)
+        {
+            elements.Add(value_Renamed);
+        }
+
+        public void Add(FieldValue[] values)
+        {
+            elements.Add(new GroupValue(sequence.Group, values));
+        }
+
+        public override bool Equals(object other)
+        {
+            if (other == this)
+            {
+                return true;
+            }
+
+            if ((other == null) || !(other is SequenceValue))
+            {
+                return false;
+            }
+
+            return equals((SequenceValue) other);
+        }
+
+        private bool equals(SequenceValue other)
+        {
+            if (Length != other.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < Length; i++)
+            {
+                if (!elements[i].Equals(other.elements[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return elements.GetHashCode()*37 + sequence.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
+            IEnumerator iter = elements.GetEnumerator();
+            builder.Append("[ ");
+
+            while (iter.MoveNext())
+            {
+                var value_Renamed = (GroupValue) iter.Current;
+                builder.Append('[').Append(value_Renamed).Append("] ");
+            }
+
+            builder.Append("]");
+
+            return builder.ToString();
+        }
+    }
 }

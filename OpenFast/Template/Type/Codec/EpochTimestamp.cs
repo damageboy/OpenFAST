@@ -20,30 +20,32 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
+using System.IO;
 
 namespace OpenFAST.Template.Type.Codec
 {
-	[Serializable]
-	public sealed class EpochTimestamp:TypeCodec
-	{
-	    public override ScalarValue Decode(System.IO.Stream in_Renamed)
-		{
-			var tempAux = new DateTime(INTEGER.Decode(in_Renamed).ToLong());
-			return new DateValue(ref tempAux);
-		}
-		
-		public override byte[] EncodeValue(ScalarValue value_Renamed)
-		{
-			return INTEGER.EncodeValue(new LongValue(value_Renamed.ToLong()));
-		}
-		
-		public  override bool Equals(Object obj)
-		{
-			return obj != null && obj.GetType() == GetType();
-		}
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-	}
+    [Serializable]
+    public sealed class EpochTimestamp : TypeCodec
+    {
+        public override ScalarValue Decode(Stream in_Renamed)
+        {
+            var tempAux = new DateTime(INTEGER.Decode(in_Renamed).ToLong());
+            return new DateValue(ref tempAux);
+        }
+
+        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        {
+            return INTEGER.EncodeValue(new LongValue(value_Renamed.ToLong()));
+        }
+
+        public override bool Equals(Object obj)
+        {
+            return obj != null && obj.GetType() == GetType();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }

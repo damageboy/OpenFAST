@@ -19,49 +19,51 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System;
+using System.IO;
+using System.Net.Sockets;
+
 namespace OpenFAST.Session.Tcp
 {
-	sealed class TcpConnection : Connection
-	{
-	    readonly System.IO.StreamReader in_stream ;
-	    readonly System.IO.StreamWriter out_stream ;
-        public System.IO.StreamReader InputStream
-		{
-			get
-			{
-                return in_stream;
-			}
-			
-		}
-		public System.IO.StreamWriter OutputStream
-		{
-			get
-			{
-                return out_stream;
-			}
-			
-		}
+    internal sealed class TcpConnection : Connection
+    {
+        private readonly StreamReader in_stream;
+        private readonly StreamWriter out_stream;
 
-        private readonly System.Net.Sockets.TcpClient socket;
-		
-		public TcpConnection(System.Net.Sockets.TcpClient socket)
-		{
-			if (socket == null)
-				throw new System.NullReferenceException();
-			this.socket = socket;
-            in_stream = new System.IO.StreamReader(socket.GetStream());
-            out_stream = new System.IO.StreamWriter(socket.GetStream());
+        private readonly TcpClient socket;
 
-		}
-		public void  Close()
-		{
-			try
-			{
-				socket.Close();
-			}
-			catch (System.IO.IOException)
-			{
-			}
-		}
-	}
+        public TcpConnection(TcpClient socket)
+        {
+            if (socket == null)
+                throw new NullReferenceException();
+            this.socket = socket;
+            in_stream = new StreamReader(socket.GetStream());
+            out_stream = new StreamWriter(socket.GetStream());
+        }
+
+        #region Connection Members
+
+        public StreamReader InputStream
+        {
+            get { return in_stream; }
+        }
+
+        public StreamWriter OutputStream
+        {
+            get { return out_stream; }
+        }
+
+        public void Close()
+        {
+            try
+            {
+                socket.Close();
+            }
+            catch (IOException)
+            {
+            }
+        }
+
+        #endregion
+    }
 }

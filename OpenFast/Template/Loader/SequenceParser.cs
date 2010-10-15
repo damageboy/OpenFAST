@@ -19,77 +19,86 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using FASTType = OpenFAST.Template.Type.FASTType;
+using System.Xml;
+using OpenFAST.Template.Type;
 
 namespace OpenFAST.Template.Loader
 {
-	
-	public class SequenceParser:AbstractFieldParser
-	{
-		public class SequenceLengthParser:ScalarParser
-		{
-			private void  InitBlock(SequenceParser internalInstance)
-			{
-				enclosingInstance = internalInstance;
-			}
-			private SequenceParser enclosingInstance;
-			public SequenceParser Enclosing_Instance
-			{
-				get
-				{
-					return enclosingInstance;
-				}
-				
-			}
-			internal SequenceLengthParser(SequenceParser enclosingInstance, string Param1):base(Param1)
-			{
-				InitBlock(enclosingInstance);
-			}
-			protected internal override FASTType GetType(System.Xml.XmlElement fieldNode, ParsingContext context)
-			{
-				return FASTType.U32;
-			}
-			
-			protected internal override QName GetName(System.Xml.XmlElement fieldNode, ParsingContext context)
-			{
-				if (context.GetName() == null)
-					return Global.CreateImplicitName(context.Parent.GetName());
-				return context.GetName();
-			}
-		}
-		private void  InitBlock()
-		{
-			sequenceLengthParser = new SequenceLengthParser(this, "length");
-		}
-		
-		private ScalarParser sequenceLengthParser;
-		
-		public SequenceParser():base("sequence")
-		{
-			InitBlock();
-		}
-		
-		public override Field Parse(System.Xml.XmlElement sequenceElement, bool optional, ParsingContext context)
-		{
-			var sequence = new Sequence(context.GetName(), ParseSequenceLengthField(context.GetName(), sequenceElement, optional, context), GroupParser.ParseFields(sequenceElement, context), optional);
-			GroupParser.ParseMore(sequenceElement, sequence.Group, context);
-			return sequence;
-		}
+    public class SequenceParser : AbstractFieldParser
+    {
+        private ScalarParser sequenceLengthParser;
 
-		private Scalar ParseSequenceLengthField(QName name, System.Xml.XmlElement sequence, bool optional, ParsingContext parent)
-		{
-			System.Xml.XmlNodeList lengthElements = sequence.GetElementsByTagName("length");
-			
-			if (lengthElements.Count == 0)
-			{
-                var implicitLength = new Scalar(Global.CreateImplicitName(name), FASTType.U32, Operator.Operator.NONE, ScalarValue.UNDEFINED, optional)
-				                         {Dictionary = parent.Dictionary};
-			    return implicitLength;
-			}
-			
-			var length = (System.Xml.XmlElement) lengthElements.Item(0);
-			var context = new ParsingContext(length, parent);
-			return (Scalar) sequenceLengthParser.Parse(length, optional, context);
-		}
-	}
+        public SequenceParser() : base("sequence")
+        {
+            InitBlock();
+        }
+
+        private void InitBlock()
+        {
+            sequenceLengthParser = new SequenceLengthParser(this, "length");
+        }
+
+        public override Field Parse(XmlElement sequenceElement, bool optional, ParsingContext context)
+        {
+            var sequence = new Sequence(context.GetName(),
+                                        ParseSequenceLengthField(context.GetName(), sequenceElement, optional, context),
+                                        GroupParser.ParseFields(sequenceElement, context), optional);
+            GroupParser.ParseMore(sequenceElement, sequence.Group, context);
+            return sequence;
+        }
+
+        private Scalar ParseSequenceLengthField(QName name, XmlElement sequence, bool optional,
+                                                ParsingContext parent)
+        {
+            XmlNodeList lengthElements = sequence.GetElementsByTagName("length");
+
+            if (lengthElements.Count == 0)
+            {
+                var implicitLength = new Scalar(Global.CreateImplicitName(name), FASTType.U32, Operator.Operator.NONE,
+                                                ScalarValue.UNDEFINED, optional)
+                                         {Dictionary = parent.Dictionary};
+                return implicitLength;
+            }
+
+            var length = (XmlElement) lengthElements.Item(0);
+            var context = new ParsingContext(length, parent);
+            return (Scalar) sequenceLengthParser.Parse(length, optional, context);
+        }
+
+        #region Nested type: SequenceLengthParser
+
+        public class SequenceLengthParser : ScalarParser
+        {
+            private SequenceParser enclosingInstance;
+
+            internal SequenceLengthParser(SequenceParser enclosingInstance, string Param1) : base(Param1)
+            {
+                InitBlock(enclosingInstance);
+            }
+
+            public SequenceParser Enclosing_Instance
+            {
+                get { return enclosingInstance; }
+            }
+
+            private void InitBlock(SequenceParser internalInstance)
+            {
+                enclosingInstance = internalInstance;
+            }
+
+            protected internal override FASTType GetType(XmlElement fieldNode, ParsingContext context)
+            {
+                return FASTType.U32;
+            }
+
+            protected internal override QName GetName(XmlElement fieldNode, ParsingContext context)
+            {
+                if (context.GetName() == null)
+                    return Global.CreateImplicitName(context.Parent.GetName());
+                return context.GetName();
+            }
+        }
+
+        #endregion
+    }
 }

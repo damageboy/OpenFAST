@@ -19,88 +19,90 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using RecordingInputStream = OpenFAST.util.RecordingInputStream;
-using RecordingOutputStream = OpenFAST.util.RecordingOutputStream;
+using System.IO;
+using OpenFAST.util;
 
 namespace OpenFAST.Session
 {
-	public class RecordingEndpoint : Endpoint
-	{
-		virtual public ConnectionListener ConnectionListener
-		{
-			set
-			{
-				underlyingEndpoint.ConnectionListener = value;
-			}
-			
-		}
-		
-		private readonly Endpoint underlyingEndpoint;
-		
-		public RecordingEndpoint(Endpoint endpoint)
-		{
-			underlyingEndpoint = endpoint;
-		}
-		
-		public virtual void  Accept()
-		{
-			underlyingEndpoint.Accept();
-		}
-		
-		public virtual Connection Connect()
-		{
-			Connection connection = underlyingEndpoint.Connect();
-			Connection connectionWrapper = new RecordingConnection(connection);
-			return connectionWrapper;
-		}
+    public class RecordingEndpoint : Endpoint
+    {
+        private readonly Endpoint underlyingEndpoint;
 
-		private sealed class RecordingConnection : Connection
-		{
-		    readonly System.IO.StreamReader in_stream;
-		    readonly System.IO.StreamWriter out_stream;
-            public System.IO.StreamReader InputStream
-			{
-				get
-				{
-                    return in_stream;
-				}
-				
-			}
-			public System.IO.StreamWriter OutputStream
-			{
-				get
-				{
-                    return out_stream;
-				}
-				
-			}
+        public RecordingEndpoint(Endpoint endpoint)
+        {
+            underlyingEndpoint = endpoint;
+        }
 
-			private readonly RecordingInputStream recordingInputStream;
-			private readonly RecordingOutputStream recordingOutputStream;
-			
-			internal RecordingConnection(Connection connection)
-			{
-				try
-				{
-					recordingInputStream = new RecordingInputStream(connection.InputStream.BaseStream);
-					recordingOutputStream = new RecordingOutputStream(connection.OutputStream.BaseStream);
-                    in_stream = new System.IO.StreamReader(recordingInputStream);
-                    out_stream = new System.IO.StreamWriter(recordingOutputStream);
-				}
-				catch (System.IO.IOException e)
-				{
-					throw new RuntimeException(e);
-				}
-			}
-			
-			public void  Close()
-			{
-			}
-		}
-		
-		public virtual void  Close()
-		{
-			underlyingEndpoint.Close();
-		}
-	}
+        #region Endpoint Members
+
+        public virtual ConnectionListener ConnectionListener
+        {
+            set { underlyingEndpoint.ConnectionListener = value; }
+        }
+
+        public virtual void Accept()
+        {
+            underlyingEndpoint.Accept();
+        }
+
+        public virtual Connection Connect()
+        {
+            Connection connection = underlyingEndpoint.Connect();
+            Connection connectionWrapper = new RecordingConnection(connection);
+            return connectionWrapper;
+        }
+
+        public virtual void Close()
+        {
+            underlyingEndpoint.Close();
+        }
+
+        #endregion
+
+        #region Nested type: RecordingConnection
+
+        private sealed class RecordingConnection : Connection
+        {
+            private readonly StreamReader in_stream;
+            private readonly StreamWriter out_stream;
+
+            private readonly RecordingInputStream recordingInputStream;
+            private readonly RecordingOutputStream recordingOutputStream;
+
+            internal RecordingConnection(Connection connection)
+            {
+                try
+                {
+                    recordingInputStream = new RecordingInputStream(connection.InputStream.BaseStream);
+                    recordingOutputStream = new RecordingOutputStream(connection.OutputStream.BaseStream);
+                    in_stream = new StreamReader(recordingInputStream);
+                    out_stream = new StreamWriter(recordingOutputStream);
+                }
+                catch (IOException e)
+                {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            #region Connection Members
+
+            public StreamReader InputStream
+            {
+                get { return in_stream; }
+            }
+
+            public StreamWriter OutputStream
+            {
+                get { return out_stream; }
+            }
+
+            public void Close()
+            {
+            }
+
+            #endregion
+        }
+
+        #endregion
+    }
 }

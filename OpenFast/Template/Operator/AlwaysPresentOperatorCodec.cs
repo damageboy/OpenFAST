@@ -20,28 +20,30 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using FASTType = OpenFAST.Template.Type.FASTType;
+using OpenFAST.Template.Type;
 
 namespace OpenFAST.Template.Operator
 {
     [Serializable]
-    public abstract class AlwaysPresentOperatorCodec:OperatorCodec
+    public abstract class AlwaysPresentOperatorCodec : OperatorCodec
     {
-        protected internal AlwaysPresentOperatorCodec(Operator operator_Renamed, FASTType[] types):base(operator_Renamed, types)
+        protected internal AlwaysPresentOperatorCodec(Operator operator_Renamed, FASTType[] types)
+            : base(operator_Renamed, types)
         {
         }
-		
+
         public override bool UsesPresenceMapBit(bool optional)
         {
             return false;
         }
-		
-        public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar scalar, BitVectorBuilder presenceMapBuilder)
+
+        public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar scalar,
+                                                     BitVectorBuilder presenceMapBuilder)
         {
             return GetValueToEncode(value_Renamed, priorValue, scalar);
         }
-		
-        public  override bool Equals(Object obj)
+
+        public override bool Equals(Object obj)
         {
             return obj != null && obj.GetType() == GetType();
         }

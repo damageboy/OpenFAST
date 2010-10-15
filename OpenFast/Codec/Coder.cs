@@ -21,8 +21,8 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST.Codec
 {
-	public interface Coder
-	{
-		void  Reset();
-	}
+    public interface Coder
+    {
+        void Reset();
+    }
 }

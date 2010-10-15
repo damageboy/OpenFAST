@@ -19,94 +19,88 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using Field = OpenFAST.Template.Field;
-using Group = OpenFAST.Template.Group;
-using Scalar = OpenFAST.Template.Scalar;
-using Sequence = OpenFAST.Template.Sequence;
-using TemplateRegistry = OpenFAST.Template.TemplateRegistry;
-using Operator = OpenFAST.Template.Operator.Operator;
+using OpenFAST.Template;
+using OpenFAST.Template.Operator;
 using Type = OpenFAST.Template.Type.FASTType;
 
 namespace OpenFAST.Session.Template.Exchange
 {
-	public class SequenceConverter:AbstractFieldInstructionConverter
-	{
-		override public Group[] TemplateExchangeTemplates
-		{
-			get
-			{
-				return new Group[]{SessionControlProtocol_1_1.SEQUENCE_INSTR};
-			}
-			
-		}
-		
-		public override Field Convert(GroupValue fieldDef, TemplateRegistry templateRegistry, ConversionContext context)
-		{
-			string name = fieldDef.GetString("Name");
-			string ns = fieldDef.GetString("Ns");
-			var qname = new QName(name, ns);
-			var fields = GroupConverter.ParseFieldInstructions(fieldDef, templateRegistry, context);
-			bool optional = fieldDef.GetBool("Optional");
-			Scalar length = null;
-			if (fieldDef.IsDefined("Length"))
-			{
-				var lengthDef = fieldDef.GetGroup("Length");
-				QName lengthName;
-				string id = null;
-				if (lengthDef.IsDefined("Name"))
-				{
-					var nameDef = lengthDef.GetGroup("Name");
-					lengthName = new QName(nameDef.GetString("Name"), nameDef.GetString("Ns"));
-					if (nameDef.IsDefined("AuxId"))
-						id = nameDef.GetString("AuxId");
-				}
-				else
-					lengthName = Global.CreateImplicitName(qname);
-				var operator_Renamed = Operator.NONE;
-				if (lengthDef.IsDefined("Operator"))
-					operator_Renamed = GetOperator(lengthDef.GetGroup("Operator").GetGroup(0).GetGroup());
-				var initialValue = ScalarValue.UNDEFINED;
-				if (lengthDef.IsDefined("InitialValue"))
-					initialValue = (ScalarValue) lengthDef.GetValue("InitialValue");
-				length = new Scalar(lengthName, Type.U32, operator_Renamed, initialValue, optional) {Id = id};
-			}
-			
-			return new Sequence(qname, length, fields, optional);
-		}
-		
-		public override GroupValue Convert(Field field, ConversionContext context)
-		{
-			var sequence = (Sequence) field;
-			var seqDef = GroupConverter.Convert(sequence.Group, new Message(SessionControlProtocol_1_1.SEQUENCE_INSTR), context);
-			seqDef.SetBool("Optional", sequence.Optional);
-			if (!sequence.ImplicitLength)
-			{
-				var lengthGroup = SessionControlProtocol_1_1.SEQUENCE_INSTR.GetGroup("Length");
-				var lengthDef = new GroupValue(lengthGroup);
-				var length = sequence.Length;
-				var nameDef = new GroupValue(lengthGroup.GetGroup("Name"));
-				SetNameAndId(length, nameDef);
-				lengthDef.SetFieldValue("Name", nameDef);
-				seqDef.SetFieldValue("Length", lengthDef);
-				
-				if (!length.Operator.Equals(Operator.NONE))
-				{
-					var operatorDef = new GroupValue(lengthGroup.GetGroup("Operator"));
-					operatorDef.SetFieldValue(0, CreateOperator(length));
-					lengthDef.SetFieldValue("Operator", operatorDef);
-				}
-				
-				if (!length.DefaultValue.Undefined)
-				{
-					lengthDef.SetFieldValue("InitialValue", length.DefaultValue);
-				}
-			}
-			return seqDef;
-		}
-		
-		public override bool ShouldConvert(Field field)
-		{
-			return field.GetType().Equals(typeof(Sequence));
-		}
-	}
+    public class SequenceConverter : AbstractFieldInstructionConverter
+    {
+        public override Group[] TemplateExchangeTemplates
+        {
+            get { return new Group[] {SessionControlProtocol_1_1.SEQUENCE_INSTR}; }
+        }
+
+        public override Field Convert(GroupValue fieldDef, TemplateRegistry templateRegistry, ConversionContext context)
+        {
+            string name = fieldDef.GetString("Name");
+            string ns = fieldDef.GetString("Ns");
+            var qname = new QName(name, ns);
+            Field[] fields = GroupConverter.ParseFieldInstructions(fieldDef, templateRegistry, context);
+            bool optional = fieldDef.GetBool("Optional");
+            Scalar length = null;
+            if (fieldDef.IsDefined("Length"))
+            {
+                GroupValue lengthDef = fieldDef.GetGroup("Length");
+                QName lengthName;
+                string id = null;
+                if (lengthDef.IsDefined("Name"))
+                {
+                    GroupValue nameDef = lengthDef.GetGroup("Name");
+                    lengthName = new QName(nameDef.GetString("Name"), nameDef.GetString("Ns"));
+                    if (nameDef.IsDefined("AuxId"))
+                        id = nameDef.GetString("AuxId");
+                }
+                else
+                    lengthName = Global.CreateImplicitName(qname);
+                Operator operator_Renamed = Operator.NONE;
+                if (lengthDef.IsDefined("Operator"))
+                    operator_Renamed = GetOperator(lengthDef.GetGroup("Operator").GetGroup(0).GetGroup());
+                ScalarValue initialValue = ScalarValue.UNDEFINED;
+                if (lengthDef.IsDefined("InitialValue"))
+                    initialValue = (ScalarValue) lengthDef.GetValue("InitialValue");
+                length = new Scalar(lengthName, Type.U32, operator_Renamed, initialValue, optional) {Id = id};
+            }
+
+            return new Sequence(qname, length, fields, optional);
+        }
+
+        public override GroupValue Convert(Field field, ConversionContext context)
+        {
+            var sequence = (Sequence) field;
+            Message seqDef = GroupConverter.Convert(sequence.Group,
+                                                    new Message(SessionControlProtocol_1_1.SEQUENCE_INSTR),
+                                                    context);
+            seqDef.SetBool("Optional", sequence.Optional);
+            if (!sequence.ImplicitLength)
+            {
+                Group lengthGroup = SessionControlProtocol_1_1.SEQUENCE_INSTR.GetGroup("Length");
+                var lengthDef = new GroupValue(lengthGroup);
+                Scalar length = sequence.Length;
+                var nameDef = new GroupValue(lengthGroup.GetGroup("Name"));
+                SetNameAndId(length, nameDef);
+                lengthDef.SetFieldValue("Name", nameDef);
+                seqDef.SetFieldValue("Length", lengthDef);
+
+                if (!length.Operator.Equals(Operator.NONE))
+                {
+                    var operatorDef = new GroupValue(lengthGroup.GetGroup("Operator"));
+                    operatorDef.SetFieldValue(0, CreateOperator(length));
+                    lengthDef.SetFieldValue("Operator", operatorDef);
+                }
+
+                if (!length.DefaultValue.Undefined)
+                {
+                    lengthDef.SetFieldValue("InitialValue", length.DefaultValue);
+                }
+            }
+            return seqDef;
+        }
+
+        public override bool ShouldConvert(Field field)
+        {
+            return field.GetType().Equals(typeof (Sequence));
+        }
+    }
 }

@@ -19,21 +19,15 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using Field = OpenFAST.Template.Field;
-using Group = OpenFAST.Template.Group;
-using TemplateRegistry = OpenFAST.Template.TemplateRegistry;
+using OpenFAST.Template;
 
 namespace OpenFAST.Session.Template.Exchange
 {
-	public interface FieldInstructionConverter
-	{
-		Group[] TemplateExchangeTemplates
-		{
-			get;
-			
-		}
-		bool ShouldConvert(Field field);
-		Field Convert(GroupValue fieldDef, TemplateRegistry templateRegistry, ConversionContext context);
-		GroupValue Convert(Field field, ConversionContext context);
-	}
+    public interface FieldInstructionConverter
+    {
+        Group[] TemplateExchangeTemplates { get; }
+        bool ShouldConvert(Field field);
+        Field Convert(GroupValue fieldDef, TemplateRegistry templateRegistry, ConversionContext context);
+        GroupValue Convert(Field field, ConversionContext context);
+    }
 }

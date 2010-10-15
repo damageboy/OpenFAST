@@ -20,42 +20,40 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
+using OpenFAST.Error;
+using OpenFAST.Template.Type.Codec;
 
 namespace OpenFAST.Template.Type
 {
-	[Serializable]
-	sealed class DecimalType:SimpleType
-	{
-		override public ScalarValue DefaultValue
-		{
-			get
-			{
-				return new DecimalValue(0.0);
-			}
-			
-		}
+    [Serializable]
+    internal sealed class DecimalType : SimpleType
+    {
+        internal DecimalType() : base("decimal", TypeCodec.SF_SCALED_NUMBER, TypeCodec.NULLABLE_SF_SCALED_NUMBER)
+        {
+        }
 
-	    internal DecimalType():base("decimal", TypeCodec.SF_SCALED_NUMBER, TypeCodec.NULLABLE_SF_SCALED_NUMBER)
-		{
-		}
+        public override ScalarValue DefaultValue
+        {
+            get { return new DecimalValue(0.0); }
+        }
 
-	    public override ScalarValue GetVal(string value_Renamed)
-		{
-			try
-			{
-				return new DecimalValue(Double.Parse(value_Renamed));
-			}
-			catch (FormatException)
-			{
-				Global.HandleError(Error.FastConstants.S3_INITIAL_VALUE_INCOMP, "The value \"" + value_Renamed + "\" is not compatible with type " + this);
-				return null;
-			}
-		}
-		
-		public override bool IsValueOf(ScalarValue previousValue)
-		{
-			return previousValue is DecimalValue;
-		}
-	}
+        public override ScalarValue GetVal(string value_Renamed)
+        {
+            try
+            {
+                return new DecimalValue(Double.Parse(value_Renamed));
+            }
+            catch (FormatException)
+            {
+                Global.HandleError(FastConstants.S3_INITIAL_VALUE_INCOMP,
+                                   "The value \"" + value_Renamed + "\" is not compatible with type " + this);
+                return null;
+            }
+        }
+
+        public override bool IsValueOf(ScalarValue previousValue)
+        {
+            return previousValue is DecimalValue;
+        }
+    }
 }

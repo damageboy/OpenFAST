@@ -20,43 +20,43 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using Util = OpenFAST.util.Util;
+using System.IO;
+using OpenFAST.util;
 
 namespace OpenFAST.Template.Type.Codec
 {
-	
-	[Serializable]
-	public sealed class TimeInteger:TypeCodec
-	{
-	    public override ScalarValue Decode(System.IO.Stream in_Renamed)
-		{
-			int intValue = ((IntegerValue) UINT.Decode(in_Renamed)).value_Renamed;
-			int hour = intValue / 10000000;
-			intValue -= hour * 10000000;
-			int minute = intValue / 100000;
-			intValue -= minute * 100000;
-			int second = intValue / 1000;
-			intValue -= second * 1000;
-			int millisecond = intValue % 1000;
-			var tempAux = new DateTime(hour * 3600000 + minute * 60000 + second * 1000 + millisecond);
-			return new DateValue(ref tempAux);
-		}
-		
-		public override byte[] EncodeValue(ScalarValue value_Renamed)
-		{
-			System.DateTime date = ((DateValue) value_Renamed).value_Renamed;
-			int intValue = Util.TimeToInt(ref date);
-			return UINT.Encode(new IntegerValue(intValue));
-		}
-		
-		public  override bool Equals(Object obj)
-		{
-			return obj != null && obj.GetType() == GetType();
-		}
+    [Serializable]
+    public sealed class TimeInteger : TypeCodec
+    {
+        public override ScalarValue Decode(Stream in_Renamed)
+        {
+            int intValue = ((IntegerValue) UINT.Decode(in_Renamed)).value_Renamed;
+            int hour = intValue/10000000;
+            intValue -= hour*10000000;
+            int minute = intValue/100000;
+            intValue -= minute*100000;
+            int second = intValue/1000;
+            intValue -= second*1000;
+            int millisecond = intValue%1000;
+            var tempAux = new DateTime(hour*3600000 + minute*60000 + second*1000 + millisecond);
+            return new DateValue(ref tempAux);
+        }
 
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-	}
+        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        {
+            DateTime date = ((DateValue) value_Renamed).value_Renamed;
+            int intValue = Util.TimeToInt(ref date);
+            return UINT.Encode(new IntegerValue(intValue));
+        }
+
+        public override bool Equals(Object obj)
+        {
+            return obj != null && obj.GetType() == GetType();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }

@@ -19,44 +19,38 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using Field = OpenFAST.Template.Field;
-using Group = OpenFAST.Template.Group;
-using StaticTemplateReference = OpenFAST.Template.StaticTemplateReference;
-using TemplateRegistry = OpenFAST.Template.TemplateRegistry;
+using System;
+using OpenFAST.Template;
 
 namespace OpenFAST.Session.Template.Exchange
 {
-	public class StaticTemplateReferenceConverter:AbstractFieldInstructionConverter
-	{
-		override public Group[] TemplateExchangeTemplates
-		{
-			get
-			{
-				return new Group[]{SessionControlProtocol_1_1.STAT_TEMP_REF_INSTR};
-			}
-			
-		}
-		
-		public override Field Convert(GroupValue fieldDef, TemplateRegistry templateRegistry, ConversionContext context)
-		{
-			var name = new QName(fieldDef.GetString("Name"), fieldDef.GetString("Ns"));
-			if (!templateRegistry.IsDefined(name))
-			{
-				throw new System.SystemException("Referenced template " + name + " not defined.");
-			}
-			return new StaticTemplateReference(templateRegistry.get_Renamed(name));
-		}
-		
-		public override GroupValue Convert(Field field, ConversionContext context)
-		{
-			var strDef = new Message(SessionControlProtocol_1_1.STAT_TEMP_REF_INSTR);
-			SetNameAndId(field, strDef);
-			return strDef;
-		}
-		
-		public override bool ShouldConvert(Field field)
-		{
-			return field.GetType().Equals(typeof(StaticTemplateReference));
-		}
-	}
+    public class StaticTemplateReferenceConverter : AbstractFieldInstructionConverter
+    {
+        public override Group[] TemplateExchangeTemplates
+        {
+            get { return new Group[] {SessionControlProtocol_1_1.STAT_TEMP_REF_INSTR}; }
+        }
+
+        public override Field Convert(GroupValue fieldDef, TemplateRegistry templateRegistry, ConversionContext context)
+        {
+            var name = new QName(fieldDef.GetString("Name"), fieldDef.GetString("Ns"));
+            if (!templateRegistry.IsDefined(name))
+            {
+                throw new SystemException("Referenced template " + name + " not defined.");
+            }
+            return new StaticTemplateReference(templateRegistry.get_Renamed(name));
+        }
+
+        public override GroupValue Convert(Field field, ConversionContext context)
+        {
+            var strDef = new Message(SessionControlProtocol_1_1.STAT_TEMP_REF_INSTR);
+            SetNameAndId(field, strDef);
+            return strDef;
+        }
+
+        public override bool ShouldConvert(Field field)
+        {
+            return field.GetType().Equals(typeof (StaticTemplateReference));
+        }
+    }
 }

@@ -19,38 +19,37 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using ErrorCode = OpenFAST.Error.ErrorCode;
-using ErrorType = OpenFAST.Error.ErrorType;
-using FastAlertSeverity = OpenFAST.Error.FastAlertSeverity;
+using OpenFAST.Error;
 
 namespace OpenFAST.Session
 {
-	public struct SessionConstants
+    public struct SessionConstants
     {
-		public readonly static ErrorType SESSION;
+        public static readonly ErrorType SESSION;
 
-		// Session Control Protocol (SCP) Errors
-		public readonly static ErrorCode TEMPLATE_NOT_SUPPORTED;
-		public readonly static ErrorCode TEMPLATE_UNKNOWN;
-		public readonly static ErrorCode UNAUTHORIZED;
-		public readonly static ErrorCode PROTCOL_ERROR;
-		public readonly static ErrorCode CLOSE;
-		public readonly static ErrorCode UNDEFINED;
-		public readonly static SessionProtocol SCP_1_0;
-		public readonly static SessionProtocol SCP_1_1;
-		public readonly static string VENDOR_ID = "http://OpenFAST.org/OpenFAST/1.1";
+        // Session Control Protocol (SCP) Errors
+        public static readonly ErrorCode TEMPLATE_NOT_SUPPORTED;
+        public static readonly ErrorCode TEMPLATE_UNKNOWN;
+        public static readonly ErrorCode UNAUTHORIZED;
+        public static readonly ErrorCode PROTCOL_ERROR;
+        public static readonly ErrorCode CLOSE;
+        public static readonly ErrorCode UNDEFINED;
+        public static readonly SessionProtocol SCP_1_0;
+        public static readonly SessionProtocol SCP_1_1;
+        public static readonly string VENDOR_ID = "http://OpenFAST.org/OpenFAST/1.1";
 
-		static SessionConstants()
-		{
-			SESSION = new ErrorType("Session");
-			TEMPLATE_NOT_SUPPORTED = new ErrorCode(SESSION, 11, "TNOTSUPP", "Template not supported", FastAlertSeverity.ERROR);
-			TEMPLATE_UNKNOWN = new ErrorCode(SESSION, 12, "TUNKNOWN", "Template unknown", FastAlertSeverity.ERROR);
-			UNAUTHORIZED = new ErrorCode(SESSION, 13, "EAUTH", "Unauthorized", FastAlertSeverity.FATAL);
-			PROTCOL_ERROR = new ErrorCode(SESSION, 14, "EPROTO", "Protocol Error", FastAlertSeverity.ERROR);
-			CLOSE = new ErrorCode(SESSION, 15, "CLOSE", "Session Closed", FastAlertSeverity.INFO);
-			UNDEFINED = new ErrorCode(SESSION, - 1, "UNDEFINED", "Undefined Alert Code", FastAlertSeverity.ERROR);
-			SCP_1_0 = new SessionControlProtocol_1_0();
-			SCP_1_1 = new SessionControlProtocol_1_1();
-		}
-	}
+        static SessionConstants()
+        {
+            SESSION = new ErrorType("Session");
+            TEMPLATE_NOT_SUPPORTED = new ErrorCode(SESSION, 11, "TNOTSUPP", "Template not supported",
+                                                   FastAlertSeverity.ERROR);
+            TEMPLATE_UNKNOWN = new ErrorCode(SESSION, 12, "TUNKNOWN", "Template unknown", FastAlertSeverity.ERROR);
+            UNAUTHORIZED = new ErrorCode(SESSION, 13, "EAUTH", "Unauthorized", FastAlertSeverity.FATAL);
+            PROTCOL_ERROR = new ErrorCode(SESSION, 14, "EPROTO", "Protocol Error", FastAlertSeverity.ERROR);
+            CLOSE = new ErrorCode(SESSION, 15, "CLOSE", "Session Closed", FastAlertSeverity.INFO);
+            UNDEFINED = new ErrorCode(SESSION, - 1, "UNDEFINED", "Undefined Alert Code", FastAlertSeverity.ERROR);
+            SCP_1_0 = new SessionControlProtocol_1_0();
+            SCP_1_1 = new SessionControlProtocol_1_1();
+        }
+    }
 }

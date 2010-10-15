@@ -19,87 +19,95 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System;
+
 namespace OpenFAST
 {
-	public class BitVectorReader
-	{
-		public sealed class NullBitVectorReader:BitVectorReader
-		{
-			internal NullBitVectorReader(BitVector Param1):base(Param1)
-			{
-			}
-			public override bool Read()
-			{
-				throw new System.SystemException();
-			}
-			
-			public override bool HasMoreBitsSet()
-			{
-				return false;
-			}
-		}
-		public sealed class InfiniteBitVectorReader:BitVectorReader
-		{
-			internal InfiniteBitVectorReader(BitVector Param1):base(Param1)
-			{
-			}
-			public override bool Read()
-			{
-				return true;
-			}
-		}
-		virtual public BitVector BitVector
-		{
-			get
-			{
-				return vector;
-			}
-			
-		}
-		virtual public int Index
-		{
-			get
-			{
-				return index;
-			}
-			
-		}
-		
-		public static readonly BitVectorReader NULL;
-		
-		public static readonly BitVectorReader INFINITE_TRUE;
-		
-		private readonly BitVector vector;
-		private int index;
-		
-		public BitVectorReader(BitVector vector)
-		{
-			this.vector = vector;
-		}
+    public class BitVectorReader
+    {
+        public static readonly BitVectorReader NULL;
+
+        public static readonly BitVectorReader INFINITE_TRUE;
+
+        private readonly BitVector vector;
+        private int index;
+
+        static BitVectorReader()
+        {
+            NULL = new NullBitVectorReader(null);
+            INFINITE_TRUE = new InfiniteBitVectorReader(null);
+        }
+
+        public BitVectorReader(BitVector vector)
+        {
+            this.vector = vector;
+        }
+
+        public virtual BitVector BitVector
+        {
+            get { return vector; }
+        }
+
+        public virtual int Index
+        {
+            get { return index; }
+        }
 
         public virtual bool Read()
         {
             return vector.IsSet(index++);
         }
-		
-		public virtual bool HasMoreBitsSet()
-		{
-			return vector.IndexOfLastSet() > index;
-		}
-		
-		public override string ToString()
-		{
-			return vector.ToString();
-		}
-		
-		public virtual bool Peek()
-		{
-			return vector.IsSet(index);
-		}
-		static BitVectorReader()
-		{
-			NULL = new NullBitVectorReader(null);
-			INFINITE_TRUE = new InfiniteBitVectorReader(null);
-		}
-	}
+
+        public virtual bool HasMoreBitsSet()
+        {
+            return vector.IndexOfLastSet() > index;
+        }
+
+        public override string ToString()
+        {
+            return vector.ToString();
+        }
+
+        public virtual bool Peek()
+        {
+            return vector.IsSet(index);
+        }
+
+        #region Nested type: InfiniteBitVectorReader
+
+        public sealed class InfiniteBitVectorReader : BitVectorReader
+        {
+            internal InfiniteBitVectorReader(BitVector Param1) : base(Param1)
+            {
+            }
+
+            public override bool Read()
+            {
+                return true;
+            }
+        }
+
+        #endregion
+
+        #region Nested type: NullBitVectorReader
+
+        public sealed class NullBitVectorReader : BitVectorReader
+        {
+            internal NullBitVectorReader(BitVector Param1) : base(Param1)
+            {
+            }
+
+            public override bool Read()
+            {
+                throw new SystemException();
+            }
+
+            public override bool HasMoreBitsSet()
+            {
+                return false;
+            }
+        }
+
+        #endregion
+    }
 }

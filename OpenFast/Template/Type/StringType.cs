@@ -20,41 +20,38 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using TypeCodec = OpenFAST.Template.Type.Codec.TypeCodec;
+using OpenFAST.Template.Type.Codec;
 
 namespace OpenFAST.Template.Type
 {
-	[Serializable]
-	public sealed class StringType:SimpleType
-	{
-		override public ScalarValue DefaultValue
-		{
-			get
-			{
-				return new StringValue("");
-			}
-			
-		}
+    [Serializable]
+    public sealed class StringType : SimpleType
+    {
+        public StringType(string typeName, TypeCodec codec, TypeCodec nullableCodec)
+            : base(typeName, codec, nullableCodec)
+        {
+        }
 
-	    public StringType(string typeName, TypeCodec codec, TypeCodec nullableCodec):base(typeName, codec, nullableCodec)
-		{
-		}
-		
-		public override ScalarValue GetVal(string value_Renamed)
-		{
-			return new StringValue(value_Renamed);
-		}
+        public override ScalarValue DefaultValue
+        {
+            get { return new StringValue(""); }
+        }
+
+        public override ScalarValue GetVal(string value_Renamed)
+        {
+            return new StringValue(value_Renamed);
+        }
 
         public override TypeCodec GetCodec(Operator.Operator operator_Renamed, bool optional)
-		{
+        {
             if (operator_Renamed == Operator.Operator.DELTA)
-				return (optional)?TypeCodec.NULLABLE_STRING_DELTA:TypeCodec.STRING_DELTA;
-			return base.GetCodec(operator_Renamed, optional);
-		}
-		
-		public override bool IsValueOf(ScalarValue previousValue)
-		{
-			return previousValue is StringValue;
-		}
-	}
+                return (optional) ? TypeCodec.NULLABLE_STRING_DELTA : TypeCodec.STRING_DELTA;
+            return base.GetCodec(operator_Renamed, optional);
+        }
+
+        public override bool IsValueOf(ScalarValue previousValue)
+        {
+            return previousValue is StringValue;
+        }
+    }
 }

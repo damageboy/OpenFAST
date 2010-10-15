@@ -19,117 +19,124 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using ErrorHandler = OpenFAST.Error.ErrorHandler;
+using System;
+using System.Threading;
+using OpenFAST.Error;
 
 namespace OpenFAST.Session
 {
-	public sealed class FastServer : ConnectionListener
-	{
-		private class FastServerThread : IThreadRunnable
-		{
-			public FastServerThread(FastServer enclosingInstance)
-			{
-				InitBlock(enclosingInstance);
-			}
-			private void  InitBlock(FastServer internalInstance)
-			{
-				enclosingInstance = internalInstance;
-			}
-			private FastServer enclosingInstance;
-			public FastServer Enclosing_Instance
-			{
-				get
-				{
-					return enclosingInstance;
-				}
-				
-			}
-			public virtual void  Run()
-			{
-				while (Enclosing_Instance.listening)
-				{
-					try
-					{
-						Enclosing_Instance.endpoint.Accept();
-					}
-					catch (FastConnectionException e)
-					{
-						Enclosing_Instance.errorHandler.Error(null, null, e);
-					}
-					try
-					{
-						System.Threading.Thread.Sleep(new System.TimeSpan((System.Int64) 10000 * 20));
-					}
-					catch (System.Threading.ThreadInterruptedException)
-					{
-					}
-				}
-			}
-		}
-		public ErrorHandler ErrorHandler
-		{
-			// ************* OPTIONAL DEPENDENCY SETTERS **************
-			set
-			{
-				if (value == null)
-				{
-					throw new System.NullReferenceException();
-				}
-				
-				errorHandler = value;
-			}
-			
-		}
-		public SessionHandler SessionHandler
-		{
-			set
-			{
-				sessionHandler = value;
-			}
-			
-		}
-		private ErrorHandler errorHandler = Error.ErrorHandler_Fields.DEFAULT;
-		private SessionHandler sessionHandler = SessionHandler_Fields.NULL;
-		private bool listening;
-		
-		private readonly SessionProtocol sessionProtocol;
-		private readonly Endpoint endpoint;
-		private readonly string serverName;
-		private SupportClass.ThreadClass serverThread;
-		
-		public FastServer(string serverName, SessionProtocol sessionProtocol, Endpoint endpoint)
-		{
-			if (endpoint == null || sessionProtocol == null)
-			{
-				throw new System.NullReferenceException();
-			}
-			this.endpoint = endpoint;
-			this.sessionProtocol = sessionProtocol;
-			this.serverName = serverName;
-			endpoint.ConnectionListener = this;
-		}
-		
-		public void  Listen()
-		{
-			listening = true;
-			if (serverThread == null)
-			{
-				IThreadRunnable runnable = new FastServerThread(this);
-				serverThread = new SupportClass.ThreadClass(new System.Threading.ThreadStart(runnable.Run), "FastServer");
-			}
-			serverThread.Start();
-		}
-		
-		public void  Close()
-		{
-			listening = false;
-			endpoint.Close();
-		}
-		
-		public override void  OnConnect(Connection connection)
-		{
-			Session session = sessionProtocol.OnNewConnection(serverName, connection);
-			sessionHandler.NewSession(session);
-		}
-	}
+    public sealed class FastServer : ConnectionListener
+    {
+        private readonly Endpoint endpoint;
+        private readonly string serverName;
+        private readonly SessionProtocol sessionProtocol;
+        private ErrorHandler errorHandler = ErrorHandler_Fields.DEFAULT;
+        private bool listening;
+        private SupportClass.ThreadClass serverThread;
+        private SessionHandler sessionHandler = SessionHandler_Fields.NULL;
+
+        public FastServer(string serverName, SessionProtocol sessionProtocol, Endpoint endpoint)
+        {
+            if (endpoint == null || sessionProtocol == null)
+            {
+                throw new NullReferenceException();
+            }
+            this.endpoint = endpoint;
+            this.sessionProtocol = sessionProtocol;
+            this.serverName = serverName;
+            endpoint.ConnectionListener = this;
+        }
+
+        public ErrorHandler ErrorHandler
+        {
+            // ************* OPTIONAL DEPENDENCY SETTERS **************
+            set
+            {
+                if (value == null)
+                {
+                    throw new NullReferenceException();
+                }
+
+                errorHandler = value;
+            }
+        }
+
+        public SessionHandler SessionHandler
+        {
+            set { sessionHandler = value; }
+        }
+
+        public void Listen()
+        {
+            listening = true;
+            if (serverThread == null)
+            {
+                IThreadRunnable runnable = new FastServerThread(this);
+                serverThread = new SupportClass.ThreadClass(new ThreadStart(runnable.Run), "FastServer");
+            }
+            serverThread.Start();
+        }
+
+        public void Close()
+        {
+            listening = false;
+            endpoint.Close();
+        }
+
+        public override void OnConnect(Connection connection)
+        {
+            Session session = sessionProtocol.OnNewConnection(serverName, connection);
+            sessionHandler.NewSession(session);
+        }
+
+        #region Nested type: FastServerThread
+
+        private class FastServerThread : IThreadRunnable
+        {
+            private FastServer enclosingInstance;
+
+            public FastServerThread(FastServer enclosingInstance)
+            {
+                InitBlock(enclosingInstance);
+            }
+
+            public FastServer Enclosing_Instance
+            {
+                get { return enclosingInstance; }
+            }
+
+            #region IThreadRunnable Members
+
+            public virtual void Run()
+            {
+                while (Enclosing_Instance.listening)
+                {
+                    try
+                    {
+                        Enclosing_Instance.endpoint.Accept();
+                    }
+                    catch (FastConnectionException e)
+                    {
+                        Enclosing_Instance.errorHandler.Error(null, null, e);
+                    }
+                    try
+                    {
+                        Thread.Sleep(new TimeSpan((Int64) 10000*20));
+                    }
+                    catch (ThreadInterruptedException)
+                    {
+                    }
+                }
+            }
+
+            #endregion
+
+            private void InitBlock(FastServer internalInstance)
+            {
+                enclosingInstance = internalInstance;
+            }
+        }
+
+        #endregion
+    }
 }

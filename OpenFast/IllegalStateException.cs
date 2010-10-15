@@ -23,7 +23,7 @@ using System;
 
 namespace OpenFAST
 {
-    public class IllegalStateException:Exception
+    public class IllegalStateException : Exception
     {
         private readonly Exception e;
 

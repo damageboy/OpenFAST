@@ -23,31 +23,36 @@ using System;
 
 namespace OpenFAST.Template.Type
 {
-	[Serializable]
-	public sealed class DecimalConverter : ComposedValueConverter
-	{
-		
-		private static readonly FieldValue[] NULL_SET = new FieldValue[]{null, null};
-		
-		private static readonly FieldValue[] UNDEFINED_SET = new FieldValue[]{ScalarValue.UNDEFINED, ScalarValue.UNDEFINED};
-		
-		public FieldValue[] Split(FieldValue value_Renamed)
-		{
-			if (value_Renamed == null)
-				return NULL_SET;
-		    if (value_Renamed == ScalarValue.UNDEFINED)
-		        return UNDEFINED_SET;
-		    var decimal_Renamed = (DecimalValue) value_Renamed;
-			return new FieldValue[]{new IntegerValue(decimal_Renamed.exponent), new LongValue(decimal_Renamed.mantissa)};
-		}
-		
-		public FieldValue Compose(FieldValue[] values)
-		{
-			if (values[0] == null)
-				return null;
-			if (values[0] == ScalarValue.UNDEFINED)
-				return ScalarValue.UNDEFINED;
-			return new DecimalValue(((ScalarValue) values[1]).ToLong(), ((IntegerValue) values[0]).value_Renamed);
-		}
-	}
+    [Serializable]
+    public sealed class DecimalConverter : ComposedValueConverter
+    {
+        private static readonly FieldValue[] NULL_SET = new FieldValue[] {null, null};
+
+        private static readonly FieldValue[] UNDEFINED_SET = new FieldValue[]
+                                                                 {ScalarValue.UNDEFINED, ScalarValue.UNDEFINED};
+
+        #region ComposedValueConverter Members
+
+        public FieldValue[] Split(FieldValue value_Renamed)
+        {
+            if (value_Renamed == null)
+                return NULL_SET;
+            if (value_Renamed == ScalarValue.UNDEFINED)
+                return UNDEFINED_SET;
+            var decimal_Renamed = (DecimalValue) value_Renamed;
+            return new FieldValue[]
+                       {new IntegerValue(decimal_Renamed.exponent), new LongValue(decimal_Renamed.mantissa)};
+        }
+
+        public FieldValue Compose(FieldValue[] values)
+        {
+            if (values[0] == null)
+                return null;
+            if (values[0] == ScalarValue.UNDEFINED)
+                return ScalarValue.UNDEFINED;
+            return new DecimalValue(((ScalarValue) values[1]).ToLong(), ((IntegerValue) values[0]).value_Renamed);
+        }
+
+        #endregion
+    }
 }

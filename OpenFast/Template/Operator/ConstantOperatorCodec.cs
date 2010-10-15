@@ -20,31 +20,35 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using FASTType = OpenFAST.Template.Type.FASTType;
+using OpenFAST.Template.Type;
 
 namespace OpenFAST.Template.Operator
 {
     [Serializable]
-    sealed class ConstantOperatorCodec:OperatorCodec
+    internal sealed class ConstantOperatorCodec : OperatorCodec
     {
-        internal ConstantOperatorCodec(Operator operator_Renamed, FASTType[] types):base(operator_Renamed, types)
+        internal ConstantOperatorCodec(Operator operator_Renamed, FASTType[] types) : base(operator_Renamed, types)
         {
         }
 
-        public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar field, BitVectorBuilder presenceMapBuilder)
+        public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar field,
+                                                     BitVectorBuilder presenceMapBuilder)
         {
             if (field.Optional)
                 presenceMapBuilder.OnValueSkipOnNull = value_Renamed;
             return null; // Never encode constant value.
         }
+
         public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue previousValue, Scalar field)
         {
             return field.DefaultValue;
         }
+
         public override bool IsPresenceMapBitSet(byte[] encoding, FieldValue fieldValue)
         {
             return fieldValue != null;
         }
+
         public override bool ShouldDecodeType()
         {
             return false;
@@ -63,20 +67,24 @@ namespace OpenFAST.Template.Operator
         {
             return optional;
         }
+
         public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar field)
         {
             throw new NotSupportedException();
         }
+
         public override bool CanEncode(ScalarValue value_Renamed, Scalar field)
         {
             if (field.Optional && value_Renamed == null)
                 return true;
             return field.DefaultValue.Equals(value_Renamed);
         }
-        public  override bool Equals(Object obj)
+
+        public override bool Equals(Object obj)
         {
             return obj != null && obj.GetType() == GetType();
         }
+
         public override int GetHashCode()
         {
             return base.GetHashCode();

@@ -21,43 +21,43 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST.Session
 {
-	
-	public struct SessionFactory_Fields{
-		public readonly static SessionFactory NULL;
-		static SessionFactory_Fields()
-		{
-			NULL = new NULLSessionFactory();
-		}
-	}
-	public class NULLSessionFactory : SessionFactory
-	{
-		virtual public Session Session
-		{
-			get
-			{
-				return null;
-			}
-			
-		}
-		public virtual void  Close()
-		{
-		}
-		
-		public virtual Client GetClient(string serverName)
-		{
-			return null;
-		}
-	}
-	public interface SessionFactory
-	{
-		Session Session
-		{
-			get;
-			
-		}
-		
-		Client GetClient(string serverName);
-		
-		void  Close();
-	}
+    public struct SessionFactory_Fields
+    {
+        public static readonly SessionFactory NULL;
+
+        static SessionFactory_Fields()
+        {
+            NULL = new NULLSessionFactory();
+        }
+    }
+
+    public class NULLSessionFactory : SessionFactory
+    {
+        #region SessionFactory Members
+
+        public virtual Session Session
+        {
+            get { return null; }
+        }
+
+        public virtual void Close()
+        {
+        }
+
+        public virtual Client GetClient(string serverName)
+        {
+            return null;
+        }
+
+        #endregion
+    }
+
+    public interface SessionFactory
+    {
+        Session Session { get; }
+
+        Client GetClient(string serverName);
+
+        void Close();
+    }
 }

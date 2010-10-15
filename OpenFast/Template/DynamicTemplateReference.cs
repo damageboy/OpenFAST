@@ -20,76 +20,70 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using FastDecoder = OpenFAST.Codec.FastDecoder;
+using System.IO;
+using OpenFAST.Codec;
 
 namespace OpenFAST.Template
 {
-	[Serializable]
-	public sealed class DynamicTemplateReference:Field
-	{
+    [Serializable]
+    public sealed class DynamicTemplateReference : Field
+    {
+        public static readonly DynamicTemplateReference INSTANCE = new DynamicTemplateReference();
 
-		override public string TypeName
-		{
-			get
-			{
-				return null;
-			}
-			
-		}
+        private DynamicTemplateReference() : base(QName.NULL, false)
+        {
+        }
 
-		override public System.Type ValueType
-		{
-			get
-			{
-				return null;
-			}
-			
-		}
+        public override string TypeName
+        {
+            get { return null; }
+        }
 
-	    public static readonly DynamicTemplateReference INSTANCE = new DynamicTemplateReference();
-		
-		private DynamicTemplateReference():base(QName.NULL, false)
-		{
-		}
-		
-		public override FieldValue CreateValue(string value_Renamed)
-		{
-			return null;
-		}
-		
-		
-		public override FieldValue Decode(System.IO.Stream in_Renamed, Group decodeTemplate, Context context, BitVectorReader pmapReader)
-		{
-			return new FastDecoder(context, in_Renamed).ReadMessage();
-		}
-		
-		
-		public override byte[] Encode(FieldValue value_Renamed, Group encodeTemplate, Context context, BitVectorBuilder presenceMapBuilder)
-		{
-			var message = (Message) value_Renamed;
-			return message.Template.Encode(message, context);
-		}
-		
-		
-		public override bool IsPresenceMapBitSet(byte[] encoding, FieldValue fieldValue)
-		{
-			return false;
-		}
-		
-		
-		public override bool UsesPresenceMapBit()
-		{
-			return false;
-		}
-		
-		public  override bool Equals(Object obj)
-		{
-			return obj != null && obj.GetType().Equals(GetType());
-		}
+        public override System.Type ValueType
+        {
+            get { return null; }
+        }
 
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-	}
+        public override FieldValue CreateValue(string value_Renamed)
+        {
+            return null;
+        }
+
+
+        public override FieldValue Decode(Stream in_Renamed, Group decodeTemplate, Context context,
+                                          BitVectorReader pmapReader)
+        {
+            return new FastDecoder(context, in_Renamed).ReadMessage();
+        }
+
+
+        public override byte[] Encode(FieldValue value_Renamed, Group encodeTemplate, Context context,
+                                      BitVectorBuilder presenceMapBuilder)
+        {
+            var message = (Message) value_Renamed;
+            return message.Template.Encode(message, context);
+        }
+
+
+        public override bool IsPresenceMapBitSet(byte[] encoding, FieldValue fieldValue)
+        {
+            return false;
+        }
+
+
+        public override bool UsesPresenceMapBit()
+        {
+            return false;
+        }
+
+        public override bool Equals(Object obj)
+        {
+            return obj != null && obj.GetType().Equals(GetType());
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }

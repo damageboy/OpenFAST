@@ -17,137 +17,139 @@ Group, LLC.  Portions created by Shariq Muhammad
 are Copyright (C) Shariq Muhammad. All Rights Reserved.
 
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
-
+                Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
-using FastDecoder = OpenFAST.Codec.FastDecoder;
-using MessageTemplate = OpenFAST.Template.MessageTemplate;
-using TemplateRegistry = OpenFAST.Template.TemplateRegistry;
+using System.Collections.Generic;
+using System.IO;
+using OpenFAST.Codec;
+using OpenFAST.Template;
 
 namespace OpenFAST
 {
-	public sealed class MessageInputStream : MessageStream
-	{
-		public System.IO.Stream UnderlyingStream
-		{
-			get
-			{
-				return in_Renamed;
-			}
-			
-		}
-		public Context Context
-		{
-			get
-			{
-				return context;
-			}
-			
-		}
-		public MessageBlockReader BlockReader
-		{
-			set
-			{
-				blockReader = value;
-			}
-			
-		}
-		private readonly System.IO.Stream in_Renamed;
-		private readonly FastDecoder decoder;
-		private readonly Context context;
-        private readonly System.Collections.Generic.Dictionary<MessageTemplate, MessageHandler> templateHandlers = new System.Collections.Generic.Dictionary<MessageTemplate, MessageHandler>();
-        private readonly System.Collections.Generic.List<MessageHandler> handlers = new System.Collections.Generic.List<MessageHandler>();
-		private MessageBlockReader blockReader = MessageBlockReader_Fields.NULL;
-		
-		public MessageInputStream(System.IO.Stream inputStream):this(inputStream, new Context())
-		{
-		}
-		
-		public MessageInputStream(System.IO.Stream inputStream, Context context)
-		{
-			in_Renamed = inputStream;
-			this.context = context;
-			decoder = new FastDecoder(context, in_Renamed);
-		}
+    public sealed class MessageInputStream : MessageStream
+    {
+        private readonly Context context;
+        private readonly FastDecoder decoder;
 
-		public Message ReadMessage()
-		{
-		    if (context.TraceEnabled)
-		        context.StartTrace();
+        private readonly List<MessageHandler> handlers =
+            new List<MessageHandler>();
 
-		    var keepReading = blockReader.ReadBlock(in_Renamed);
+        private readonly Stream in_Renamed;
 
-		    if (!keepReading)
-		        return null;
+        private readonly Dictionary<MessageTemplate, MessageHandler> templateHandlers =
+            new Dictionary<MessageTemplate, MessageHandler>();
 
-		    var message = decoder.ReadMessage();
+        private MessageBlockReader blockReader = MessageBlockReader_Fields.NULL;
 
-		    if (message == null)
-		    {
-		        return null;
-		    }
+        public MessageInputStream(Stream inputStream) : this(inputStream, new Context())
+        {
+        }
 
-		    blockReader.MessageRead(in_Renamed, message);
-		    
+        public MessageInputStream(Stream inputStream, Context context)
+        {
+            in_Renamed = inputStream;
+            this.context = context;
+            decoder = new FastDecoder(context, in_Renamed);
+        }
+
+        public Stream UnderlyingStream
+        {
+            get { return in_Renamed; }
+        }
+
+        public Context Context
+        {
+            get { return context; }
+        }
+
+        public MessageBlockReader BlockReader
+        {
+            set { blockReader = value; }
+        }
+
+        #region MessageStream Members
+
+        public void Close()
+        {
+            try
+            {
+                in_Renamed.Close();
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public void AddMessageHandler(MessageTemplate template, MessageHandler handler)
+        {
+            templateHandlers[template] = handler;
+        }
+
+        public void AddMessageHandler(MessageHandler handler)
+        {
+            handlers.Add(handler);
+        }
+
+        public TemplateRegistry GetTemplateRegistry()
+        {
+            return context.TemplateRegistry;
+        }
+
+        #endregion
+
+        public Message ReadMessage()
+        {
+            if (context.TraceEnabled)
+                context.StartTrace();
+
+            bool keepReading = blockReader.ReadBlock(in_Renamed);
+
+            if (!keepReading)
+                return null;
+
+            Message message = decoder.ReadMessage();
+
+            if (message == null)
+            {
+                return null;
+            }
+
+            blockReader.MessageRead(in_Renamed, message);
+
             foreach (MessageHandler t in handlers)
-		    {
-		        t.HandleMessage(message, context, decoder);
-		    }
+            {
+                t.HandleMessage(message, context, decoder);
+            }
 
-		    MessageHandler handler;
-		    if (templateHandlers.TryGetValue(message.Template, out handler))
-		    {
-		        handler.HandleMessage(message, context, decoder);
+            MessageHandler handler;
+            if (templateHandlers.TryGetValue(message.Template, out handler))
+            {
+                handler.HandleMessage(message, context, decoder);
 
-		        return ReadMessage();
-		    }
+                return ReadMessage();
+            }
 
-		    return message;
-		}
+            return message;
+        }
 
-	    public void  RegisterTemplate(int templateId, MessageTemplate template)
-		{
-			context.RegisterTemplate(templateId, template);
-		}
-		
-		public void  Close()
-		{
-			try
-			{
-				in_Renamed.Close();
-			}
-			catch (System.IO.IOException e)
-			{
-				throw new RuntimeException(e);
-			}
-		}
-		
-		public void  AddMessageHandler(MessageTemplate template, MessageHandler handler)
-		{
-			templateHandlers[template] = handler;
-		}
-		
-		public void  AddMessageHandler(MessageHandler handler)
-		{
-			handlers.Add(handler);
-		}
-		
-		public void  SetTemplateRegistry(TemplateRegistry registry)
-		{
-			context.TemplateRegistry = registry;
-		}
-		
-		public TemplateRegistry GetTemplateRegistry()
-		{
-			return context.TemplateRegistry;
-		}
-		
+        public void RegisterTemplate(int templateId, MessageTemplate template)
+        {
+            context.RegisterTemplate(templateId, template);
+        }
+
+        public void SetTemplateRegistry(TemplateRegistry registry)
+        {
+            context.TemplateRegistry = registry;
+        }
+
         //public void  AddTemplateRegisteredListener(TemplateRegisteredListener templateRegisteredListener)
         //{
         //}
-		
-		public void  Reset()
-		{
-			decoder.Reset();
-		}
-	}
+
+        public void Reset()
+        {
+            decoder.Reset();
+        }
+    }
 }

@@ -23,7 +23,7 @@ using System;
 
 namespace OpenFAST
 {
-    public class RuntimeException:Exception
+    public class RuntimeException : Exception
     {
         private readonly Exception e;
 

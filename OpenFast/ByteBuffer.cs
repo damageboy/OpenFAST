@@ -35,7 +35,6 @@ namespace OpenFAST
 
         public void flip()
         {
-
             throw new Exception("The method or operation is not implemented.");
         }
 

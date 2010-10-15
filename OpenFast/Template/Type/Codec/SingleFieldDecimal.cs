@@ -20,80 +20,78 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
+using System.IO;
+using OpenFAST.Error;
 
 namespace OpenFAST.Template.Type.Codec
 {
-	[Serializable]
-	sealed class SingleFieldDecimal:TypeCodec
-	{
+    [Serializable]
+    internal sealed class SingleFieldDecimal : TypeCodec
+    {
+        public static ScalarValue DefaultValue
+        {
+            get { return new DecimalValue(0.0); }
+        }
 
-		public static ScalarValue DefaultValue
-		{
-			get
-			{
-				return new DecimalValue(0.0);
-			}
-			
-		}
+        public override byte[] EncodeValue(ScalarValue v)
+        {
+            if (v == ScalarValue.NULL)
+            {
+                return NULL_VALUE_ENCODING;
+            }
 
-	    public override byte[] EncodeValue(ScalarValue v)
-		{
-			if (v == ScalarValue.NULL)
-			{
-				return NULL_VALUE_ENCODING;
-			}
-			
-			var buffer = new System.IO.MemoryStream();
-			var value_Renamed = (DecimalValue) v;
-			
-			try
-			{
-				if (Math.Abs(value_Renamed.exponent) > 63)
-				{
-					Global.HandleError(Error.FastConstants.R1_LARGE_DECIMAL, "Encountered exponent of size " + value_Renamed.exponent);
-				}
+            var buffer = new MemoryStream();
+            var value_Renamed = (DecimalValue) v;
 
-			    byte[] temp_byteArray = INTEGER.Encode(new IntegerValue(value_Renamed.exponent));
-				buffer.Write(temp_byteArray, 0, temp_byteArray.Length);
-			    byte[] temp_byteArray2 = INTEGER.Encode(new LongValue(value_Renamed.mantissa));
-				buffer.Write(temp_byteArray2, 0, temp_byteArray2.Length);
-			}
-			catch (System.IO.IOException e)
-			{
-				throw new RuntimeException(e);
-			}
-			
-			return buffer.ToArray();
-		}
-		
-		public override ScalarValue Decode(System.IO.Stream in_Renamed)
-		{
-			int exponent = ((IntegerValue) INTEGER.Decode(in_Renamed)).value_Renamed;
-			
-			if (Math.Abs(exponent) > 63)
-			{
-				Global.HandleError(Error.FastConstants.R1_LARGE_DECIMAL, "Encountered exponent of size " + exponent);
-			}
-			
-			long mantissa = INTEGER.Decode(in_Renamed).ToLong();
-			var decimalValue = new DecimalValue(mantissa, exponent);
-			
-			return decimalValue;
-		}
-		
-		public static ScalarValue FromString(string value_Renamed)
-		{
-			return new DecimalValue(Double.Parse(value_Renamed));
-		}
-		
-		public  override bool Equals(Object obj)
-		{
-			return obj != null && obj.GetType() == GetType();
-		}
+            try
+            {
+                if (Math.Abs(value_Renamed.exponent) > 63)
+                {
+                    Global.HandleError(FastConstants.R1_LARGE_DECIMAL,
+                                       "Encountered exponent of size " + value_Renamed.exponent);
+                }
 
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-	}
+                byte[] temp_byteArray = INTEGER.Encode(new IntegerValue(value_Renamed.exponent));
+                buffer.Write(temp_byteArray, 0, temp_byteArray.Length);
+                byte[] temp_byteArray2 = INTEGER.Encode(new LongValue(value_Renamed.mantissa));
+                buffer.Write(temp_byteArray2, 0, temp_byteArray2.Length);
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+
+            return buffer.ToArray();
+        }
+
+        public override ScalarValue Decode(Stream in_Renamed)
+        {
+            int exponent = ((IntegerValue) INTEGER.Decode(in_Renamed)).value_Renamed;
+
+            if (Math.Abs(exponent) > 63)
+            {
+                Global.HandleError(FastConstants.R1_LARGE_DECIMAL, "Encountered exponent of size " + exponent);
+            }
+
+            long mantissa = INTEGER.Decode(in_Renamed).ToLong();
+            var decimalValue = new DecimalValue(mantissa, exponent);
+
+            return decimalValue;
+        }
+
+        public static ScalarValue FromString(string value_Renamed)
+        {
+            return new DecimalValue(Double.Parse(value_Renamed));
+        }
+
+        public override bool Equals(Object obj)
+        {
+            return obj != null && obj.GetType() == GetType();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }

@@ -17,51 +17,85 @@ Group, LLC.  Portions created by Shariq Muhammad
 are Copyright (C) Shariq Muhammad. All Rights Reserved.
 
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
-
+                Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System.Collections.Generic;
-using Field = OpenFAST.Template.Field;
-using Group = OpenFAST.Template.Group;
-using MessageTemplate = OpenFAST.Template.MessageTemplate;
-using Scalar = OpenFAST.Template.Scalar;
-using Operator = OpenFAST.Template.Operator.Operator;
+using OpenFAST.Template;
+using OpenFAST.Template.Operator;
 
 namespace OpenFAST.Session.Template.Exchange
 {
-	public abstract class AbstractFieldInstructionConverter : FieldInstructionConverter
-	{
-		public abstract Group[] TemplateExchangeTemplates{get;}
-		public static void  SetNameAndId(Field field, GroupValue fieldDef)
-		{
-			SetName(field, fieldDef);
-			if (field.Id != null)
-				fieldDef.SetString("AuxId", field.Id);
-		}
-		
-		public static void  SetName(Field field, GroupValue fieldDef)
-		{
-			fieldDef.SetString("Name", field.Name);
-			fieldDef.SetString("Ns", field.QName.Namespace);
-		}
-		
-		public static GroupValue CreateOperator(Scalar scalar)
-		{
+    public abstract class AbstractFieldInstructionConverter : FieldInstructionConverter
+    {
+        private static readonly Dictionary<Operator, MessageTemplate> OPERATOR_TEMPLATE_MAP =
+            new Dictionary<Operator, MessageTemplate>();
+
+        private static readonly Dictionary<MessageTemplate, Operator> TEMPLATE_OPERATOR_MAP =
+            new Dictionary<MessageTemplate, Operator>();
+
+        static AbstractFieldInstructionConverter()
+        {
+            {
+                OPERATOR_TEMPLATE_MAP[Operator.CONSTANT] = SessionControlProtocol_1_1.CONSTANT_OP;
+                OPERATOR_TEMPLATE_MAP[Operator.DEFAULT] = SessionControlProtocol_1_1.DEFAULT_OP;
+                OPERATOR_TEMPLATE_MAP[Operator.COPY] = SessionControlProtocol_1_1.COPY_OP;
+                OPERATOR_TEMPLATE_MAP[Operator.INCREMENT] = SessionControlProtocol_1_1.INCREMENT_OP;
+                OPERATOR_TEMPLATE_MAP[Operator.DELTA] = SessionControlProtocol_1_1.DELTA_OP;
+                OPERATOR_TEMPLATE_MAP[Operator.TAIL] = SessionControlProtocol_1_1.TAIL_OP;
+
+                TEMPLATE_OPERATOR_MAP[SessionControlProtocol_1_1.CONSTANT_OP] = Operator.CONSTANT;
+                TEMPLATE_OPERATOR_MAP[SessionControlProtocol_1_1.DEFAULT_OP] = Operator.DEFAULT;
+                TEMPLATE_OPERATOR_MAP[SessionControlProtocol_1_1.COPY_OP] = Operator.COPY;
+                TEMPLATE_OPERATOR_MAP[SessionControlProtocol_1_1.INCREMENT_OP] = Operator.INCREMENT;
+                TEMPLATE_OPERATOR_MAP[SessionControlProtocol_1_1.DELTA_OP] = Operator.DELTA;
+                TEMPLATE_OPERATOR_MAP[SessionControlProtocol_1_1.TAIL_OP] = Operator.TAIL;
+            }
+        }
+
+        #region FieldInstructionConverter Members
+
+        public abstract Group[] TemplateExchangeTemplates { get; }
+
+        public abstract GroupValue Convert(Field param1, ConversionContext param2);
+
+        public abstract Field Convert(GroupValue param1, TemplateRegistry param2,
+                                      ConversionContext param3);
+
+        public abstract bool ShouldConvert(Field param1);
+
+        #endregion
+
+        public static void SetNameAndId(Field field, GroupValue fieldDef)
+        {
+            SetName(field, fieldDef);
+            if (field.Id != null)
+                fieldDef.SetString("AuxId", field.Id);
+        }
+
+        public static void SetName(Field field, GroupValue fieldDef)
+        {
+            fieldDef.SetString("Name", field.Name);
+            fieldDef.SetString("Ns", field.QName.Namespace);
+        }
+
+        public static GroupValue CreateOperator(Scalar scalar)
+        {
             MessageTemplate operatorTemplate;
-		    if (!OPERATOR_TEMPLATE_MAP.TryGetValue(scalar.Operator, out operatorTemplate))
-				return null;
-			GroupValue operatorMessage = new Message(operatorTemplate);
-			if (!scalar.Dictionary.Equals(Dictionary_Fields.GLOBAL))
-				operatorMessage.SetString("Dictionary", scalar.Dictionary);
-			if (!scalar.Key.Equals(scalar.QName))
-			{
-				var key = operatorTemplate.GetGroup("Key");
-				var keyValue = new GroupValue(key);
-				keyValue.SetString("Name", scalar.Key.Name);
-				keyValue.SetString("Ns", scalar.Key.Namespace);
-				operatorMessage.SetFieldValue(key, keyValue);
-			}
-			return operatorMessage;
-		}
+            if (!OPERATOR_TEMPLATE_MAP.TryGetValue(scalar.Operator, out operatorTemplate))
+                return null;
+            GroupValue operatorMessage = new Message(operatorTemplate);
+            if (!scalar.Dictionary.Equals(Dictionary_Fields.GLOBAL))
+                operatorMessage.SetString("Dictionary", scalar.Dictionary);
+            if (!scalar.Key.Equals(scalar.QName))
+            {
+                Group key = operatorTemplate.GetGroup("Key");
+                var keyValue = new GroupValue(key);
+                keyValue.SetString("Name", scalar.Key.Name);
+                keyValue.SetString("Ns", scalar.Key.Namespace);
+                operatorMessage.SetFieldValue(key, keyValue);
+            }
+            return operatorMessage;
+        }
 
         public static Operator GetOperator(Group group)
         {
@@ -71,29 +105,5 @@ namespace OpenFAST.Session.Template.Exchange
                 return value;
             return null;
         }
-
-	    private static readonly Dictionary<Operator,MessageTemplate> OPERATOR_TEMPLATE_MAP = new Dictionary<Operator, MessageTemplate>();
-        private static readonly Dictionary<MessageTemplate, Operator> TEMPLATE_OPERATOR_MAP = new Dictionary<MessageTemplate, Operator>();
-		public abstract GroupValue Convert(Field param1, ConversionContext param2);
-		public abstract Field Convert(GroupValue param1, OpenFAST.Template.TemplateRegistry param2, ConversionContext param3);
-		public abstract bool ShouldConvert(Field param1);
-		static AbstractFieldInstructionConverter()
-		{
-			{
-				OPERATOR_TEMPLATE_MAP[Operator.CONSTANT] = SessionControlProtocol_1_1.CONSTANT_OP;
-				OPERATOR_TEMPLATE_MAP[Operator.DEFAULT] = SessionControlProtocol_1_1.DEFAULT_OP;
-				OPERATOR_TEMPLATE_MAP[Operator.COPY] = SessionControlProtocol_1_1.COPY_OP;
-				OPERATOR_TEMPLATE_MAP[Operator.INCREMENT] = SessionControlProtocol_1_1.INCREMENT_OP;
-				OPERATOR_TEMPLATE_MAP[Operator.DELTA] = SessionControlProtocol_1_1.DELTA_OP;
-				OPERATOR_TEMPLATE_MAP[Operator.TAIL] = SessionControlProtocol_1_1.TAIL_OP;
-				
-				TEMPLATE_OPERATOR_MAP[SessionControlProtocol_1_1.CONSTANT_OP] = Operator.CONSTANT;
-				TEMPLATE_OPERATOR_MAP[SessionControlProtocol_1_1.DEFAULT_OP] = Operator.DEFAULT;
-				TEMPLATE_OPERATOR_MAP[SessionControlProtocol_1_1.COPY_OP] = Operator.COPY;
-				TEMPLATE_OPERATOR_MAP[SessionControlProtocol_1_1.INCREMENT_OP] = Operator.INCREMENT;
-				TEMPLATE_OPERATOR_MAP[SessionControlProtocol_1_1.DELTA_OP] = Operator.DELTA;
-				TEMPLATE_OPERATOR_MAP[SessionControlProtocol_1_1.TAIL_OP] = Operator.TAIL;
-			}
-		}
-	}
+    }
 }

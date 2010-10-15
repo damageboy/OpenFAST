@@ -20,70 +20,67 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
+using System.Text;
 
 namespace OpenFAST
 {
-	[Serializable]
-	public sealed class ByteVectorValue:ScalarValue
-	{
-		override public byte[] Bytes
-		{
-			get
-			{
-				return value_Renamed;
-			}
-			
-		}
+    [Serializable]
+    public sealed class ByteVectorValue : ScalarValue
+    {
+        public byte[] value_Renamed;
 
-	    public byte[] value_Renamed;
-		
-		public ByteVectorValue(byte[] value_Renamed)
-		{
-			this.value_Renamed = value_Renamed;
-		}
-		
-		public override string ToString()
-		{
-			var builder = new System.Text.StringBuilder(value_Renamed.Length * 2);
-			for (int i = 0; i < value_Renamed.Length; i++)
-			{
-				string hex = Convert.ToString(value_Renamed[i], 16);
-				if (hex.Length == 1)
-					builder.Append('0');
-				builder.Append(hex);
-			}
-			return builder.ToString();
-		}
-		
-		public  override bool Equals(Object obj)
-		{
-			if ((obj == null) || !(obj is ByteVectorValue))
-			{
-				return false;
-			}
-			
-			return Equals((ByteVectorValue) obj);
-		}
-		
-		public bool Equals(ByteVectorValue other)
-		{
-			if (value_Renamed.Length != other.value_Renamed.Length)
-			{
-				return false;
-			}
-			
-			for (int i = 0; i < value_Renamed.Length; i++)
-				if (value_Renamed[i] != other.value_Renamed[i])
-				{
-					return false;
-				}
-			
-			return true;
-		}
-		
-		public override int GetHashCode()
-		{
-			return value_Renamed.GetHashCode();
-		}
-	}
+        public ByteVectorValue(byte[] value_Renamed)
+        {
+            this.value_Renamed = value_Renamed;
+        }
+
+        public override byte[] Bytes
+        {
+            get { return value_Renamed; }
+        }
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder(value_Renamed.Length*2);
+            for (int i = 0; i < value_Renamed.Length; i++)
+            {
+                string hex = Convert.ToString(value_Renamed[i], 16);
+                if (hex.Length == 1)
+                    builder.Append('0');
+                builder.Append(hex);
+            }
+            return builder.ToString();
+        }
+
+        public override bool Equals(Object obj)
+        {
+            if ((obj == null) || !(obj is ByteVectorValue))
+            {
+                return false;
+            }
+
+            return Equals((ByteVectorValue) obj);
+        }
+
+        public bool Equals(ByteVectorValue other)
+        {
+            if (value_Renamed.Length != other.value_Renamed.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < value_Renamed.Length; i++)
+                if (value_Renamed[i] != other.value_Renamed[i])
+                {
+                    return false;
+                }
+
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return value_Renamed.GetHashCode();
+        }
+    }
 }

@@ -20,83 +20,75 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
+using System.IO;
 
 namespace OpenFAST.Template
 {
-	
-	[Serializable]
-	public class StaticTemplateReference:Field
-	{
-		override public string TypeName
-		{
-			get
-			{
-				return null;
-			}
-			
-		}
-		override public System.Type ValueType
-		{
-			get
-			{
-				return null;
-			}
-			
-		}
-		virtual public MessageTemplate Template
-		{
-			get
-			{
-				return template;
-			}
-			
-		}
+    [Serializable]
+    public class StaticTemplateReference : Field
+    {
+        private readonly MessageTemplate template;
 
-	    private readonly MessageTemplate template;
-		
-		public StaticTemplateReference(MessageTemplate template):base(template.QName, false)
-		{
-			this.template = template;
-		}
-		
-		public override FieldValue CreateValue(string value_Renamed)
-		{
-			return null;
-		}
-		
-		public override FieldValue Decode(System.IO.Stream in_Renamed, Group decodeTemplate, Context context, BitVectorReader pmapReader)
-		{
-			return null;
-		}
-		
-		public override byte[] Encode(FieldValue value_Renamed, Group encodeTemplate, Context context, BitVectorBuilder presenceMapBuilder)
-		{
-			return null;
-		}
-		
-		public override bool IsPresenceMapBitSet(byte[] encoding, FieldValue fieldValue)
-		{
-			return false;
-		}
-		
-		public override bool UsesPresenceMapBit()
-		{
-			return false;
-		}
-		
-		public  override bool Equals(Object obj)
-		{
-			if (obj == this)
-				return true;
-			if (obj == null || obj.GetType() != GetType())
-				return false;
-			var other = (StaticTemplateReference) obj;
-			return template.Equals(other.template);
-		}
+        public StaticTemplateReference(MessageTemplate template) : base(template.QName, false)
+        {
+            this.template = template;
+        }
 
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-	}
+        public override string TypeName
+        {
+            get { return null; }
+        }
+
+        public override System.Type ValueType
+        {
+            get { return null; }
+        }
+
+        public virtual MessageTemplate Template
+        {
+            get { return template; }
+        }
+
+        public override FieldValue CreateValue(string value_Renamed)
+        {
+            return null;
+        }
+
+        public override FieldValue Decode(Stream in_Renamed, Group decodeTemplate, Context context,
+                                          BitVectorReader pmapReader)
+        {
+            return null;
+        }
+
+        public override byte[] Encode(FieldValue value_Renamed, Group encodeTemplate, Context context,
+                                      BitVectorBuilder presenceMapBuilder)
+        {
+            return null;
+        }
+
+        public override bool IsPresenceMapBitSet(byte[] encoding, FieldValue fieldValue)
+        {
+            return false;
+        }
+
+        public override bool UsesPresenceMapBit()
+        {
+            return false;
+        }
+
+        public override bool Equals(Object obj)
+        {
+            if (obj == this)
+                return true;
+            if (obj == null || obj.GetType() != GetType())
+                return false;
+            var other = (StaticTemplateReference) obj;
+            return template.Equals(other.template);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }

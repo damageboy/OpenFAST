@@ -21,10 +21,9 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST.Template
 {
-	
-	public interface ComposedValueConverter
-	{
-		FieldValue[] Split(FieldValue value_Renamed);
-		FieldValue Compose(FieldValue[] values);
-	}
+    public interface ComposedValueConverter
+    {
+        FieldValue[] Split(FieldValue value_Renamed);
+        FieldValue Compose(FieldValue[] values);
+    }
 }

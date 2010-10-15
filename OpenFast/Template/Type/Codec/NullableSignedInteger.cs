@@ -20,66 +20,64 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
+using System.IO;
 
 namespace OpenFAST.Template.Type.Codec
 {
-	[Serializable]
-	public sealed class NullableSignedInteger:IntegerCodec
-	{
-		override public bool Nullable
-		{
-			get
-			{
-				return true;
-			}
-			
-		}
+    [Serializable]
+    public sealed class NullableSignedInteger : IntegerCodec
+    {
+        internal NullableSignedInteger()
+        {
+        }
 
-	    internal NullableSignedInteger()
-		{
-		}
-		
-		public override byte[] EncodeValue(ScalarValue value_Renamed)
-		{
-			if (value_Renamed.Null)
-			{
-				return NULL_VALUE_ENCODING;
-			}
-			
-			var intValue = (NumericValue) value_Renamed;
-			
-			if (intValue.ToLong() >= 0)
-			{
-				return INTEGER.EncodeValue(intValue.Increment());
-			}
-		    return INTEGER.EncodeValue(intValue);
-		}
-		
-		public override ScalarValue Decode(System.IO.Stream in_Renamed)
-		{
-			var numericValue = ((NumericValue) INTEGER.Decode(in_Renamed));
-			long value_Renamed = numericValue.ToLong();
-			
-			if (value_Renamed == 0)
-			{
-				return null;
-			}
-			
-			if (value_Renamed > 0)
-			{
-				return numericValue.Decrement();
-			}
-			
-			return numericValue;
-		}
-		
-		public  override bool Equals(Object obj)
-		{
-			return obj != null && obj.GetType() == GetType();
-		}
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-	}
+        public override bool Nullable
+        {
+            get { return true; }
+        }
+
+        public override byte[] EncodeValue(ScalarValue value_Renamed)
+        {
+            if (value_Renamed.Null)
+            {
+                return NULL_VALUE_ENCODING;
+            }
+
+            var intValue = (NumericValue) value_Renamed;
+
+            if (intValue.ToLong() >= 0)
+            {
+                return INTEGER.EncodeValue(intValue.Increment());
+            }
+            return INTEGER.EncodeValue(intValue);
+        }
+
+        public override ScalarValue Decode(Stream in_Renamed)
+        {
+            var numericValue = ((NumericValue) INTEGER.Decode(in_Renamed));
+            long value_Renamed = numericValue.ToLong();
+
+            if (value_Renamed == 0)
+            {
+                return null;
+            }
+
+            if (value_Renamed > 0)
+            {
+                return numericValue.Decrement();
+            }
+
+            return numericValue;
+        }
+
+        public override bool Equals(Object obj)
+        {
+            return obj != null && obj.GetType() == GetType();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
 }

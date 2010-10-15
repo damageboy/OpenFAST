@@ -20,17 +20,17 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using FASTType = OpenFAST.Template.Type.FASTType;
+using OpenFAST.Template.Type;
 
 namespace OpenFAST.Template.Operator
 {
     [Serializable]
-    sealed class DefaultOperatorCodec:OperatorCodec
+    internal sealed class DefaultOperatorCodec : OperatorCodec
     {
-        internal DefaultOperatorCodec(Operator operator_Renamed, FASTType[] types):base(operator_Renamed, types)
+        internal DefaultOperatorCodec(Operator operator_Renamed, FASTType[] types) : base(operator_Renamed, types)
         {
         }
-		
+
         public override ScalarValue GetValueToEncode(ScalarValue value_Renamed, ScalarValue priorValue, Scalar field)
         {
             if (value_Renamed == null)
@@ -38,22 +38,22 @@ namespace OpenFAST.Template.Operator
                 return field.DefaultValue.Undefined ? null : ScalarValue.NULL;
             }
 
-            return value_Renamed.Equals(field.DefaultValue)?null:value_Renamed;
+            return value_Renamed.Equals(field.DefaultValue) ? null : value_Renamed;
         }
-		
+
         public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue previousValue, Scalar field)
         {
             return newValue;
         }
-		
+
         public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)
         {
             return field.DefaultValue.Undefined ? null : field.DefaultValue;
         }
 
-        public  override bool Equals(object obj)
+        public override bool Equals(object obj)
         {
-            return obj != null && obj.GetType() == GetType();//POINTP
+            return obj != null && obj.GetType() == GetType(); //POINTP
         }
 
         public override int GetHashCode()

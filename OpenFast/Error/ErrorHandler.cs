@@ -19,42 +19,57 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System;
+
 namespace OpenFAST.Error
 {
-	
-	public struct ErrorHandler_Fields{
-		public readonly static ErrorHandler DEFAULT;
-		public readonly static ErrorHandler NULL;
-		static ErrorHandler_Fields()
-		{
-			DEFAULT = new DefaultErrorHandler();
-			NULL = new NullErrorHandler();
-		}
-	}
-	public class DefaultErrorHandler : ErrorHandler
-	{
-		public virtual void  Error(ErrorCode code, string message)
-		{
-			code.ThrowException(message);
-		}
-		
-		public virtual void  Error(ErrorCode code, string message, System.Exception t)
-		{
-			throw new FastException(message, code, t);
-		}
-	}
-	public class NullErrorHandler : ErrorHandler
-	{
-		public virtual void  Error(ErrorCode code, string message)
-		{
-		}
-		public virtual void  Error(ErrorCode code, string message, System.Exception t)
-		{
-		}
-	}
-	public interface ErrorHandler
-	{
-		void  Error(ErrorCode code, string message);
-		void  Error(ErrorCode code, string message, System.Exception t);
-	}
+    public struct ErrorHandler_Fields
+    {
+        public static readonly ErrorHandler DEFAULT;
+        public static readonly ErrorHandler NULL;
+
+        static ErrorHandler_Fields()
+        {
+            DEFAULT = new DefaultErrorHandler();
+            NULL = new NullErrorHandler();
+        }
+    }
+
+    public class DefaultErrorHandler : ErrorHandler
+    {
+        #region ErrorHandler Members
+
+        public virtual void Error(ErrorCode code, string message)
+        {
+            code.ThrowException(message);
+        }
+
+        public virtual void Error(ErrorCode code, string message, Exception t)
+        {
+            throw new FastException(message, code, t);
+        }
+
+        #endregion
+    }
+
+    public class NullErrorHandler : ErrorHandler
+    {
+        #region ErrorHandler Members
+
+        public virtual void Error(ErrorCode code, string message)
+        {
+        }
+
+        public virtual void Error(ErrorCode code, string message, Exception t)
+        {
+        }
+
+        #endregion
+    }
+
+    public interface ErrorHandler
+    {
+        void Error(ErrorCode code, string message);
+        void Error(ErrorCode code, string message, Exception t);
+    }
 }

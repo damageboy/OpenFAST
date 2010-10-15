@@ -23,63 +23,60 @@ using System.IO;
 
 namespace OpenFAST.Session
 {
-	public class LocalConnection : Connection
-	{
-		virtual public StreamReader InputStream
-		{
-			get
-			{
-				return in_Renamed;
-			}
-			
-		}
-		virtual public StreamWriter OutputStream
-		{
-			get
-			{
-				return out_Renamed;
-			}
-			
-		}
-		
-		private readonly StreamReader in_Renamed;
-		private readonly StreamWriter out_Renamed;
-		
+    public class LocalConnection : Connection
+    {
+        private readonly StreamReader in_Renamed;
+        private readonly StreamWriter out_Renamed;
+
         public LocalConnection()
         {
             in_Renamed = new StreamReader(new MemoryStream());
             out_Renamed = new StreamWriter(new MemoryStream());
         }
-		
-		public LocalConnection(Connection localConnection)
-		{
-			try
-			{
-				in_Renamed = new StreamReader(localConnection.OutputStream.BaseStream);
-				out_Renamed = new StreamWriter(localConnection.InputStream.BaseStream);
-			}
-			catch (IOException e)
-			{
-				throw new RuntimeException(e);
-			}
-		}
-		
-		public virtual void  Close()
-		{
-			try
-			{
-				in_Renamed.Close();
-			}
-			catch (IOException)
-			{
-			}
-			try
-			{
-				out_Renamed.Close();
-			}
-			catch (IOException)
-			{
-			}
-		}
-	}
+
+        public LocalConnection(Connection localConnection)
+        {
+            try
+            {
+                in_Renamed = new StreamReader(localConnection.OutputStream.BaseStream);
+                out_Renamed = new StreamWriter(localConnection.InputStream.BaseStream);
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+
+        #region Connection Members
+
+        public virtual StreamReader InputStream
+        {
+            get { return in_Renamed; }
+        }
+
+        public virtual StreamWriter OutputStream
+        {
+            get { return out_Renamed; }
+        }
+
+        public virtual void Close()
+        {
+            try
+            {
+                in_Renamed.Close();
+            }
+            catch (IOException)
+            {
+            }
+            try
+            {
+                out_Renamed.Close();
+            }
+            catch (IOException)
+            {
+            }
+        }
+
+        #endregion
+    }
 }

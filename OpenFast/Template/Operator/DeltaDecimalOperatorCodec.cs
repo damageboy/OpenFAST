@@ -20,61 +20,65 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
-using FASTType = OpenFAST.Template.Type.FASTType;
+using OpenFAST.Error;
+using OpenFAST.Template.Type;
 
 namespace OpenFAST.Template.Operator
 {
     [Serializable]
-    public sealed class DeltaDecimalOperatorCodec:AlwaysPresentOperatorCodec
+    public sealed class DeltaDecimalOperatorCodec : AlwaysPresentOperatorCodec
     {
-        internal DeltaDecimalOperatorCodec():base(Operator.DELTA, new[]{FASTType.DECIMAL})
+        internal DeltaDecimalOperatorCodec() : base(Operator.DELTA, new[] {FASTType.DECIMAL})
         {
         }
-		
+
         public override ScalarValue GetValueToEncode(ScalarValue val, ScalarValue priorVal, Scalar field)
         {
             if (priorVal == null)
             {
-                Global.HandleError(Error.FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "The field " + field + " must have a priorValue defined.");
+                Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT,
+                                   "The field " + field + " must have a priorValue defined.");
                 return null;
             }
-			
+
             if (val == null)
             {
                 if (field.Optional)
                 {
                     return ScalarValue.NULL;
                 }
-                Global.HandleError(Error.FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "");
+                Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "");
                 return null;
             }
-			
+
             if (priorVal.Undefined && field.DefaultValue.Undefined)
             {
                 return val;
             }
-			
-            var priorValue = priorVal.Undefined?(DecimalValue) field.DefaultValue:(DecimalValue) priorVal;
+
+            DecimalValue priorValue = priorVal.Undefined ? (DecimalValue) field.DefaultValue : (DecimalValue) priorVal;
             var value_Renamed = (DecimalValue) val;
-			
-            return new DecimalValue(value_Renamed.mantissa - priorValue.mantissa, value_Renamed.exponent - priorValue.exponent);
+
+            return new DecimalValue(value_Renamed.mantissa - priorValue.mantissa,
+                                    value_Renamed.exponent - priorValue.exponent);
         }
-		
+
         public override ScalarValue DecodeValue(ScalarValue val, ScalarValue priorVal, Scalar field)
         {
             if (priorVal == null)
             {
-                Global.HandleError(Error.FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "The field " + field + " must have a priorValue defined.");
+                Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT,
+                                   "The field " + field + " must have a priorValue defined.");
                 return null;
             }
-			
+
             if (val == null)
             {
                 return null;
             }
-			
+
             DecimalValue priorValue;
-			
+
             if (priorVal.Undefined)
             {
                 if (field.DefaultValue.Undefined)
@@ -90,12 +94,13 @@ namespace OpenFAST.Template.Operator
             {
                 priorValue = (DecimalValue) priorVal;
             }
-			
+
             var value_Renamed = (DecimalValue) val;
-			
-            return new DecimalValue(value_Renamed.mantissa + priorValue.mantissa, value_Renamed.exponent + priorValue.exponent);
+
+            return new DecimalValue(value_Renamed.mantissa + priorValue.mantissa,
+                                    value_Renamed.exponent + priorValue.exponent);
         }
-		
+
         public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)
         {
             if (field.DefaultValue.Undefined)
@@ -106,14 +111,15 @@ namespace OpenFAST.Template.Operator
                 }
                 if (previousValue.Undefined)
                 {
-                    throw new SystemException("Mandatory fields without a previous value or default value must be present.");
+                    throw new SystemException(
+                        "Mandatory fields without a previous value or default value must be present.");
                 }
                 return previousValue;
             }
             return field.DefaultValue;
         }
 
-        public  override bool Equals(Object obj)
+        public override bool Equals(Object obj)
         {
             return obj != null && obj.GetType() == GetType();
         }

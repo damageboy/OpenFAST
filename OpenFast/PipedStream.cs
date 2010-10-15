@@ -26,12 +26,14 @@ namespace OpenFAST
 {
     public sealed class PipedStream : Stream
     {
-        long position;
-        readonly Stream baseStream;
+        private readonly Stream baseStream;
+        private long position;
+
         public PipedStream()
         {
             baseStream = new MemoryStream();
         }
+
         public PipedStream(Stream stream)
         {
             baseStream = stream;
@@ -53,11 +55,6 @@ namespace OpenFAST
             get { return true; }
         }
 
-        public override void Flush()
-        {
-
-        }
-
         public override long Length
         {
             get { return baseStream.Length; }
@@ -65,28 +62,25 @@ namespace OpenFAST
 
         public override long Position
         {
-            get
-            {
-                return position;
-            }
-            set
-            {
-                position = value;
-            }
+            get { return position; }
+            set { position = value; }
+        }
+
+        public override void Flush()
+        {
         }
 
         public override int Read(byte[] buffer, int offset, int count)
         {
             lock (baseStream)
             {
-                var oldPosition = baseStream.Position;
+                long oldPosition = baseStream.Position;
                 baseStream.Position = position;
-                var bytesRead = baseStream.Read(buffer, offset, count);
+                int bytesRead = baseStream.Read(buffer, offset, count);
                 position = position + bytesRead;
                 baseStream.Position = oldPosition;
                 return bytesRead;
             }
-
         }
 
         public override long Seek(long offset, SeekOrigin origin)
@@ -98,15 +92,17 @@ namespace OpenFAST
         {
             throw new Exception("The method or operation is not implemented.");
         }
+
         public void Write(byte[] buffer)
         {
             Write(buffer, 0, buffer.Length);
         }
+
         public override void Write(byte[] buffer, int offset, int count)
         {
             lock (baseStream)
             {
-                var oldPosition = baseStream.Position;
+                long oldPosition = baseStream.Position;
                 baseStream.Position = position;
                 baseStream.Write(buffer, offset, count);
                 position = position + count;

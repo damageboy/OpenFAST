@@ -19,54 +19,52 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
-using Field = OpenFAST.Template.Field;
-using Group = OpenFAST.Template.Group;
-using Scalar = OpenFAST.Template.Scalar;
-using TemplateRegistry = OpenFAST.Template.TemplateRegistry;
+using OpenFAST.Error;
+using OpenFAST.Template;
 using Type = OpenFAST.Template.Type.FASTType;
 
 namespace OpenFAST.Session.Template.Exchange
 {
-	public class VariableLengthInstructionConverter:ScalarConverter
-	{
-		override public Group[] TemplateExchangeTemplates
-		{
-			get
-			{
-				return new Group[]{SessionControlProtocol_1_1.BYTE_VECTOR_INSTR, SessionControlProtocol_1_1.UNICODE_INSTR};
-			}
-			
-		}
-		
-		public override Field Convert(GroupValue fieldDef, TemplateRegistry templateRegistry, ConversionContext context)
-		{
-			var scalar = (Scalar) base.Convert(fieldDef, templateRegistry, context);
-			if (fieldDef.IsDefined("Length"))
-			{
-				scalar.AddAttribute(Error.FastConstants.LENGTH_FIELD, fieldDef.GetGroup("Length").GetString("Name"));
-			}
-			return scalar;
-		}
-		
-		public override GroupValue Convert(Field field, ConversionContext context)
-		{
-			var scalar = (Scalar) field;
-			GroupValue fieldDef = base.Convert(field, context);
-			if (scalar.HasAttribute(Error.FastConstants.LENGTH_FIELD))
-			{
-				var lengthDef = new GroupValue(fieldDef.GetGroup().GetGroup("Length"));
-				lengthDef.SetString("Name", scalar.GetAttribute(Error.FastConstants.LENGTH_FIELD));
-				fieldDef.SetFieldValue("Length", lengthDef);
-			}
-			return fieldDef;
-		}
-		
-		public override bool ShouldConvert(Field field)
-		{
-			if (!field.GetType().Equals(typeof(Scalar)))
-				return false;
-			Type type = ((Scalar) field).Type;
-			return type.Equals(Type.BYTE_VECTOR) || type.Equals(Type.UNICODE);
-		}
-	}
+    public class VariableLengthInstructionConverter : ScalarConverter
+    {
+        public override Group[] TemplateExchangeTemplates
+        {
+            get
+            {
+                return new Group[]
+                           {SessionControlProtocol_1_1.BYTE_VECTOR_INSTR, SessionControlProtocol_1_1.UNICODE_INSTR};
+            }
+        }
+
+        public override Field Convert(GroupValue fieldDef, TemplateRegistry templateRegistry, ConversionContext context)
+        {
+            var scalar = (Scalar) base.Convert(fieldDef, templateRegistry, context);
+            if (fieldDef.IsDefined("Length"))
+            {
+                scalar.AddAttribute(FastConstants.LENGTH_FIELD, fieldDef.GetGroup("Length").GetString("Name"));
+            }
+            return scalar;
+        }
+
+        public override GroupValue Convert(Field field, ConversionContext context)
+        {
+            var scalar = (Scalar) field;
+            GroupValue fieldDef = base.Convert(field, context);
+            if (scalar.HasAttribute(FastConstants.LENGTH_FIELD))
+            {
+                var lengthDef = new GroupValue(fieldDef.GetGroup().GetGroup("Length"));
+                lengthDef.SetString("Name", scalar.GetAttribute(FastConstants.LENGTH_FIELD));
+                fieldDef.SetFieldValue("Length", lengthDef);
+            }
+            return fieldDef;
+        }
+
+        public override bool ShouldConvert(Field field)
+        {
+            if (!field.GetType().Equals(typeof (Scalar)))
+                return false;
+            Type type = ((Scalar) field).Type;
+            return type.Equals(Type.BYTE_VECTOR) || type.Equals(Type.UNICODE);
+        }
+    }
 }
