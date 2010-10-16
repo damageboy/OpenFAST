@@ -27,7 +27,8 @@ namespace OpenFAST.Template.Operator
     [Serializable]
     internal sealed class ConstantOperatorCodec : OperatorCodec
     {
-        internal ConstantOperatorCodec(Operator op, FASTType[] types) : base(op, types)
+        internal ConstantOperatorCodec(Operator op, FASTType[] types)
+            : base(op, types)
         {
         }
 
@@ -49,9 +50,9 @@ namespace OpenFAST.Template.Operator
             return fieldValue != null;
         }
 
-        public override bool ShouldDecodeType()
+        public override bool ShouldDecodeType
         {
-            return false;
+            get { return false; }
         }
 
         public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)

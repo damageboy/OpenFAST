@@ -27,7 +27,8 @@ namespace OpenFAST.Template.Operator
     [Serializable]
     internal sealed class NoneOperatorCodec : AlwaysPresentOperatorCodec
     {
-        internal NoneOperatorCodec(Operator op, FASTType[] types) : base(op, types)
+        internal NoneOperatorCodec(Operator op, FASTType[] types)
+            : base(op, types)
         {
         }
 

@@ -26,19 +26,19 @@ namespace OpenFAST.Template.Loader
 {
     public class TemplateParser : GroupParser
     {
-        private readonly bool loadTemplateIdFromAuxId;
+        private readonly bool _loadTemplateIdFromAuxId;
 
         public TemplateParser(bool loadTemplateIdFromAuxId)
         {
-            this.loadTemplateIdFromAuxId = loadTemplateIdFromAuxId;
+            _loadTemplateIdFromAuxId = loadTemplateIdFromAuxId;
         }
 
         public override Field Parse(XmlElement templateElement, bool optional, ParsingContext context)
         {
-            var messageTemplate = new MessageTemplate(getTemplateName(templateElement, context),
+            var messageTemplate = new MessageTemplate(GetTemplateName(templateElement, context),
                                                       ParseFields(templateElement, context));
             ParseMore(templateElement, messageTemplate, context);
-            if (loadTemplateIdFromAuxId && templateElement.HasAttribute("id"))
+            if (_loadTemplateIdFromAuxId && templateElement.HasAttribute("id"))
             {
                 try
                 {
@@ -55,7 +55,7 @@ namespace OpenFAST.Template.Loader
             return messageTemplate;
         }
 
-        private static QName getTemplateName(XmlElement templateElement, ParsingContext context)
+        private static QName GetTemplateName(XmlElement templateElement, ParsingContext context)
         {
             return new QName(templateElement.GetAttribute("name"), context.TemplateNamespace);
         }

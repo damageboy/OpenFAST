@@ -27,135 +27,155 @@ namespace OpenFAST.Template
 {
     public sealed class BasicTemplateRegistry : AbstractTemplateRegistry
     {
-        private readonly Dictionary<int, MessageTemplate> _idMap = new Dictionary<int, MessageTemplate>();
-        private readonly Dictionary<QName, MessageTemplate> _nameMap = new Dictionary<QName, MessageTemplate>();
-        private readonly Dictionary<MessageTemplate, int> _templateMap = new Dictionary<MessageTemplate, int>();
+        private readonly Dictionary<int, MessageTemplate> _regIdMap = new Dictionary<int, MessageTemplate>();
+        private readonly Dictionary<MessageTemplate, int> _regTemplateMap = new Dictionary<MessageTemplate, int>();
 
-#warning todo: don't think its needed, unless the order of additions must be preserved
-        private readonly List<MessageTemplate> _templates = new List<MessageTemplate>();
+        private readonly Dictionary<QName, MessageTemplate> _defNameMap = new Dictionary<QName, MessageTemplate>();
+        private readonly HashSet<MessageTemplate> _defTemplates = new HashSet<MessageTemplate>();
 
         public override MessageTemplate[] Templates
         {
-            get { return Util.ToArray(_templateMap.Keys); }
+            get { return Util.ToArray(_regTemplateMap.Keys); }
         }
 
         public override void Register(int id, MessageTemplate template)
         {
             Define(template);
-            int tid = id;
-            _idMap[tid] = template;
-            _templateMap[template] = tid;
+            _regIdMap[id] = template;
+            _regTemplateMap[template] = id;
             NotifyTemplateRegistered(template, id);
         }
 
-        public override void Register(int id, QName name)
+        public override void Register(int id, QName templateName)
         {
-            if (!_nameMap.ContainsKey(name))
-                throw new ArgumentOutOfRangeException("name", name, "The template is not defined.");
-            int tid = id;
-            MessageTemplate template = _nameMap[name];
-            _templateMap[template] = tid;
-            _idMap[tid] = template;
+            MessageTemplate template;
+            if (!_defNameMap.TryGetValue(templateName, out template))
+                throw new ArgumentOutOfRangeException("templateName", templateName, "The template is not defined.");
+
+            _regTemplateMap[template] = id;
+            _regIdMap[id] = template;
             NotifyTemplateRegistered(template, id);
         }
 
         public override void Define(MessageTemplate template)
         {
-            if (!_templates.Contains(template))
+            if (!_defTemplates.Contains(template))
             {
-                _nameMap[template.QName] = template;
-                _templates.Add(template);
+                _defNameMap[template.QName] = template;
+                _defTemplates.Add(template);
             }
         }
 
-        public override int GetId(QName name)
+        public override int GetId(QName templateName)
         {
-            MessageTemplate template = _nameMap[name];
-            if (template == null || !_templateMap.ContainsKey(template))
-                return - 1;
-            return _templateMap[template];
+            int id;
+            TryGetId(templateName, out id);
+            return id;
         }
 
         public override MessageTemplate this[int templateId]
         {
-            get { return _idMap[templateId]; }
+            get { return _regIdMap[templateId]; }
         }
 
-        public override MessageTemplate this[QName name]
+        public override MessageTemplate this[QName templateName]
         {
-            get { return _nameMap[name]; }
+            get { return _defNameMap[templateName]; }
         }
 
         public override int GetId(MessageTemplate template)
         {
-            if (!IsRegistered(template))
-                return - 1;
-            return _templateMap[template];
+            int value;
+            if(_regTemplateMap.TryGetValue(template, out value))
+                return value;
+            return -1;
         }
 
-        public override bool IsRegistered(QName name)
+        public override bool IsDefined(QName templateName)
         {
-            return _nameMap.ContainsKey(name);
+            return _defNameMap.ContainsKey(templateName);
+        }
+
+        public override bool IsRegistered(QName templateName)
+        {
+            return _defNameMap.ContainsKey(templateName);
         }
 
         public override bool IsRegistered(int templateId)
         {
-            return _idMap.ContainsKey(templateId);
+            return _regIdMap.ContainsKey(templateId);
         }
 
         public override bool IsRegistered(MessageTemplate template)
         {
-            return _templateMap.ContainsKey(template);
+            return _regTemplateMap.ContainsKey(template);
         }
 
-        public override bool IsDefined(QName name)
+        public override bool TryGetValue(QName templateName, out MessageTemplate template)
         {
-            return _nameMap.ContainsKey(name);
+            return _defNameMap.TryGetValue(templateName, out template);
         }
 
-        public override void Remove(QName name)
+        public override bool TryGetId(QName templateName, out int id)
         {
-            object tempObject = _nameMap[name];
-            _nameMap.Remove(name);
+            MessageTemplate tmpl;
+            if (_defNameMap.TryGetValue(templateName, out tmpl) && _regTemplateMap.TryGetValue(tmpl, out id))
+                return true;
+            id = -1;
+            return false;
+        }
+
+        public override bool TryGetId(MessageTemplate template, out int id)
+        {
+            if (_regTemplateMap.TryGetValue(template, out id))
+                return true;
+            id = -1;
+            return false;
+        }
+
+        public override void Remove(QName templateName)
+        {
+            object tempObject = _defNameMap[templateName];
+            _defNameMap.Remove(templateName);
             var template = (MessageTemplate) tempObject;
-            int id = _templateMap[template];
-            _templateMap.Remove(template);
-            _idMap.Remove(id);
-            _templates.Remove(template);
+            int id = _regTemplateMap[template];
+            _regTemplateMap.Remove(template);
+            _regIdMap.Remove(id);
+            _defTemplates.Remove(template);
         }
 
         //[Obsolete("dont call this method")]
         public override void Remove(MessageTemplate template)
         {
-            int id = _templateMap[template];
-            _templateMap.Remove(template);
-            _nameMap.Remove(template.QName);
+            int id = _regTemplateMap[template];
+            _regTemplateMap.Remove(template);
+            _defNameMap.Remove(template.QName);
             //wrong approach, what if the hashcode is matched for the string.... because its an algo in QNameclass GetHashCode() dont use it.
-            _idMap.Remove(id);
+            _regIdMap.Remove(id);
         }
 
         public override void Remove(int id)
         {
-            MessageTemplate template = _idMap[id];
-            _idMap.Remove(id);
-            _templateMap.Remove(template);
-            _nameMap.Remove(template.QName);
+            MessageTemplate template = _regIdMap[id];
+            _regIdMap.Remove(id);
+            _regTemplateMap.Remove(template);
+            _defNameMap.Remove(template.QName);
         }
 
         public override void RegisterAll(ITemplateRegistry registry)
         {
-            if (registry == null) return;
+            if (registry == null)
+                return;
+
             MessageTemplate[] templatesp = registry.Templates;
-            if (templatesp == null) return;
-            for (int i = 0; i < templatesp.Length; i++)
-            {
-                Register(registry.GetId(templatesp[i]), templatesp[i]);
-            }
+            if (templatesp != null)
+                foreach (MessageTemplate t in templatesp)
+                    Register(registry.GetId(t), t);
         }
 
         public override ICollection<QName> Names()
         {
-            return _nameMap.Keys;
+            return _defNameMap.Keys;
         }
     }
 }

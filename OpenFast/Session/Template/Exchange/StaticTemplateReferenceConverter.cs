@@ -34,9 +34,11 @@ namespace OpenFAST.Session.Template.Exchange
         public override Field Convert(GroupValue fieldDef, ITemplateRegistry templateRegistry, ConversionContext context)
         {
             var name = new QName(fieldDef.GetString("Name"), fieldDef.GetString("Ns"));
-            if (!templateRegistry.IsDefined(name))
-                throw new SystemException("Referenced template " + name + " not defined.");
-            return new StaticTemplateReference(templateRegistry[name]);
+            MessageTemplate template;
+            if (templateRegistry.TryGetValue(name, out template))
+                return new StaticTemplateReference(template);
+
+            throw new ArgumentOutOfRangeException("fieldDef", name, "Referenced template name not defined.");
         }
 
         public override GroupValue Convert(Field field, ConversionContext context)

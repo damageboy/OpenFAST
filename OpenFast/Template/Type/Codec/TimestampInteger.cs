@@ -38,7 +38,7 @@ namespace OpenFAST.Template.Type.Codec
         public override byte[] EncodeValue(ScalarValue value)
         {
             DateTime date = ((DateValue) value).Value;
-            int intValue = Util.TimestampToInt(ref date);
+            int intValue = Util.TimestampToInt(date);
             return UINT.Encode(new IntegerValue(intValue));
         }
 

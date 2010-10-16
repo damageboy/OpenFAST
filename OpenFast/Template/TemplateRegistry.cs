@@ -25,11 +25,11 @@ namespace OpenFAST.Template
 {
     public struct TemplateRegistryFields
     {
-        public static readonly ITemplateRegistry NULL;
+        public static readonly ITemplateRegistry Null;
 
         static TemplateRegistryFields()
         {
-            NULL = new NullTemplateRegistry();
+            Null = new NullTemplateRegistry();
         }
     }
 
@@ -38,30 +38,38 @@ namespace OpenFAST.Template
         MessageTemplate[] Templates { get; }
         MessageTemplate this[int id] { get; }
         MessageTemplate this[string name] { get; }
-        MessageTemplate this[QName name] { get; }
+        MessageTemplate this[QName templateName] { get; }
 
         void RegisterAll(ITemplateRegistry registry);
         void Register(int id, MessageTemplate template);
         void Register(int id, string name);
-        void Register(int id, QName name);
+        void Register(int id, QName templateName);
 
         void Define(MessageTemplate template);
 
         void Remove(string name);
-        void Remove(QName name);
+        void Remove(QName templateName);
         void Remove(MessageTemplate template);
         void Remove(int id);
 
         int GetId(string name);
-        int GetId(QName name);
+        int GetId(QName templateName);
         int GetId(MessageTemplate template);
 
+        bool IsDefined(string templateName);
+        bool IsDefined(QName templateName);
+
         bool IsRegistered(string name);
-        bool IsRegistered(QName name);
+        bool IsRegistered(QName templateName);
         bool IsRegistered(int id);
         bool IsRegistered(MessageTemplate template);
-        bool IsDefined(string name);
-        bool IsDefined(QName name);
+        
+        bool TryGetValue(string name, out MessageTemplate template);
+        bool TryGetValue(QName templateName, out MessageTemplate template);
+
+        bool TryGetId(string name, out int id);
+        bool TryGetId(QName templateName, out int id);
+        bool TryGetId(MessageTemplate template, out int id);
 
         void AddTemplateRegisteredListener(ITemplateRegisteredListener templateRegisteredListener);
         void RemoveTemplateRegisteredListener(ITemplateRegisteredListener templateRegisteredListener);

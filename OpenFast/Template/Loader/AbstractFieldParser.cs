@@ -82,7 +82,7 @@ namespace OpenFAST.Template.Loader
                 {
                     elemIndex++;
                     if (elemIndex == elementIndex)
-                        return ((XmlElement) item);
+                        return (XmlElement) item;
                 }
             }
 

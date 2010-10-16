@@ -35,7 +35,8 @@ namespace OpenFAST
         private readonly string _name;
         private readonly string _namespace;
 
-        public QName(string name) : this(name, "")
+        public QName(string name)
+            : this(name, "")
         {
         }
 
@@ -57,23 +58,13 @@ namespace OpenFAST
             get { return _name; }
         }
 
-        #region IEquatable<QName> Members
+        #region Equals
 
         public bool Equals(QName other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return Equals(other._namespace, _namespace) && Equals(other._name, _name);
-        }
-
-        #endregion
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof (QName)) return false;
-            return Equals((QName) obj);
         }
 
         public override int GetHashCode() //efficient algo to quick search
@@ -83,6 +74,16 @@ namespace OpenFAST
                 return (_namespace.GetHashCode()*397) ^ _name.GetHashCode();
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != typeof (QName)) return false;
+            return Equals((QName) obj);
+        }
+
+        #endregion
 
         public override string ToString()
         {

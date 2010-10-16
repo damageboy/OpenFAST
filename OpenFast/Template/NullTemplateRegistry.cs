@@ -19,6 +19,7 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System;
 using System.Collections.Generic;
 
 namespace OpenFAST.Template
@@ -30,6 +31,30 @@ namespace OpenFAST.Template
         public MessageTemplate[] Templates
         {
             get { return null; }
+        }
+
+        public bool TryGetValue(QName templateName, out MessageTemplate template)
+        {
+            template = null;
+            return false;
+        }
+
+        public bool TryGetId(string name, out int id)
+        {
+            id = -1;
+            return false;
+        }
+
+        public bool TryGetId(QName templateName, out int id)
+        {
+            id = -1;
+            return false;
+        }
+
+        public bool TryGetId(MessageTemplate template, out int id)
+        {
+            id = -1;
+            return false;
         }
 
         public void AddTemplateRegisteredListener(ITemplateRegisteredListener templateRegisteredListener)
@@ -81,7 +106,7 @@ namespace OpenFAST.Template
         {
         }
 
-        public MessageTemplate this[QName name]
+        public MessageTemplate this[QName templateName]
         {
             get { return null; }
         }
@@ -106,7 +131,13 @@ namespace OpenFAST.Template
             return false;
         }
 
-        public void Register(int templateId, QName name)
+        public bool TryGetValue(string name, out MessageTemplate template)
+        {
+            template = null;
+            return false;
+        }
+
+        public void Register(int templateId, QName templateName)
         {
         }
 
@@ -118,17 +149,17 @@ namespace OpenFAST.Template
         {
         }
 
-        public int GetId(QName name)
+        public int GetId(QName templateName)
         {
             return 0;
         }
 
-        public bool IsRegistered(QName name)
+        public bool IsRegistered(QName templateName)
         {
             return false;
         }
 
-        public void Remove(QName name)
+        public void Remove(QName templateName)
         {
         }
 

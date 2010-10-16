@@ -699,7 +699,7 @@ namespace OpenFAST.Session
                                         ITemplateRegistry outboundRegistry, IMessageListener messageListener,
                                         ISessionListener sessionListener)
         {
-            var session = new Session(connection, this, TemplateRegistryFields.NULL, TemplateRegistryFields.NULL);
+            var session = new Session(connection, this, TemplateRegistryFields.Null, TemplateRegistryFields.Null);
             session.MessageOutputStream.WriteMessage(CreateHelloMessage(senderName));
             try
             {
@@ -722,7 +722,7 @@ namespace OpenFAST.Session
 
         public override Session OnNewConnection(string serverName, IConnection connection)
         {
-            var session = new Session(connection, this, TemplateRegistryFields.NULL, TemplateRegistryFields.NULL);
+            var session = new Session(connection, this, TemplateRegistryFields.Null, TemplateRegistryFields.Null);
             Message message = session.MessageInputStream.ReadMessage();
             string clientName = message.GetString(1);
             string vendorId = message.IsDefined(2) ? message.GetString(2) : "unknown";

@@ -89,7 +89,7 @@ namespace OpenFAST
         {
             if (fieldIndex >= bytes.Length*7)
                 return false;
-            return ((bytes[fieldIndex/7] & (1 << (6 - (fieldIndex%7)))) > 0);
+            return (bytes[fieldIndex/7] & (1 << (6 - (fieldIndex%7)))) > 0;
         }
 
         public override bool Equals(Object obj)

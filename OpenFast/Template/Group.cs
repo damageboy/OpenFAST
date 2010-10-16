@@ -25,11 +25,12 @@ using System.IO;
 using System.Linq;
 using OpenFAST.Error;
 using OpenFAST.Template.Type.Codec;
+using OpenFAST.util;
 
 namespace OpenFAST.Template
 {
     [Serializable]
-    public class Group : Field
+    public class Group : Field, IEquatable<Group>
     {
         private readonly Field[] _fieldDefinitions;
         private readonly Dictionary<string, Field> _fieldIdMap;
@@ -42,14 +43,19 @@ namespace OpenFAST.Template
         private string _childNamespace = "";
         private QName _typeReference;
 
-        public Group(string name, Field[] fields, bool optional) : this(new QName(name), fields, optional)
+        public Group(string name, Field[] fields, bool optional)
+            : this(new QName(name), fields, optional)
         {
         }
 
-        public Group(QName name, Field[] fields, bool optional) : base(name, optional)
+        public Group(QName name, Field[] fields, bool optional)
+            : base(name, optional)
         {
+            if (fields == null) throw new ArgumentNullException("fields");
+
             var expandedFields = new List<Field>();
             var references = new List<StaticTemplateReference>();
+
             foreach (Field t in fields)
             {
                 if (t is StaticTemplateReference)
@@ -61,17 +67,16 @@ namespace OpenFAST.Template
                     references.Add(currentTemplate);
                 }
                 else
-                {
                     expandedFields.Add(t);
-                }
             }
+
             _fields = expandedFields.ToArray();
             _fieldDefinitions = fields;
             _fieldIndexMap = ConstructFieldIndexMap(_fields);
-            _fieldNameMap = ConstructFieldNameMap(_fields);
-            _fieldIdMap = ConstructFieldIdMap(_fields);
+            _fieldNameMap = Util.ToSafeDictionary(_fields, f => f.QName);
+            _fieldIdMap = Util.ToSafeDictionary(_fields, f => f.Id);
             _introspectiveFieldMap = ConstructInstrospectiveFields(_fields);
-            _usesPresenceMapRenamedField = DeterminePresenceMapUsage(_fields);
+            _usesPresenceMapRenamedField = _fields.Any(t => t.UsesPresenceMapBit());
             _staticTemplateReferences = references.ToArray();
         }
 
@@ -99,7 +104,6 @@ namespace OpenFAST.Template
         {
             get { return _fields; }
         }
-
 
         public QName TypeReference
         {
@@ -141,15 +145,6 @@ namespace OpenFAST.Template
         }
 
 
-        private static bool DeterminePresenceMapUsage(Field[] fields)
-        {
-            for (int i = 0; i < fields.Length; i++)
-                if (fields[i].UsesPresenceMapBit())
-                    return true;
-            return false;
-        }
-
-
         public override byte[] Encode(IFieldValue value, Group encodeTemplate, Context context,
                                       BitVectorBuilder presenceMapBuilder)
         {
@@ -185,7 +180,7 @@ namespace OpenFAST.Template
                 for (int fieldIndex = 0; fieldIndex < _fields.Length; fieldIndex++)
                 {
                     IFieldValue fieldValue = groupValue.GetValue(fieldIndex);
-                    Field field = GetField(fieldIndex);
+                    Field field = _fields[fieldIndex];
                     if (!field.Optional && fieldValue == null)
                     {
                         Global.HandleError(FastConstants.GENERAL_ERROR, "Mandatory field " + field + " is null");
@@ -202,7 +197,7 @@ namespace OpenFAST.Template
                         context.GetEncodeTrace().Pmap(pmap);
                     buffer.Write(pmap, 0, pmap.Length);
                 }
-                foreach (byte[] t in fieldEncodings)
+                foreach (var t in fieldEncodings)
                 {
                     if (t != null)
                     {
@@ -247,7 +242,7 @@ namespace OpenFAST.Template
 
 
         protected virtual IFieldValue[] DecodeFieldValues(Stream inStream, Group template,
-                                                                   Context context)
+                                                          Context context)
         {
             if (!UsesPresenceMap())
             {
@@ -265,15 +260,16 @@ namespace OpenFAST.Template
         }
 
         public IFieldValue[] DecodeFieldValues(Stream inStream, Group template,
-                                                       BitVectorReader pmapReader, Context context)
+                                               BitVectorReader pmapReader, Context context)
         {
             var values = new IFieldValue[_fields.Length];
             int start = this is MessageTemplate ? 1 : 0;
+
             for (int fieldIndex = start; fieldIndex < _fields.Length; fieldIndex++)
             {
-                Field field = GetField(fieldIndex);
-                values[fieldIndex] = field.Decode(inStream, template, context, pmapReader);
+                values[fieldIndex] = _fields[fieldIndex].Decode(inStream, template, context, pmapReader);
             }
+
             if (pmapReader.HasMoreBitsSet())
             {
                 Global.HandleError(FastConstants.R8_PMAP_TOO_MANY_BITS,
@@ -282,7 +278,6 @@ namespace OpenFAST.Template
 
             return values;
         }
-
 
         public override bool IsPresenceMapBitSet(byte[] encoding, IFieldValue fieldValue)
         {
@@ -300,50 +295,39 @@ namespace OpenFAST.Template
             return _usesPresenceMapRenamedField;
         }
 
-
-        public virtual Field GetField(int index)
-        {
-            return _fields[index];
-        }
-
-
         public override IFieldValue CreateValue(string value)
         {
             return new GroupValue(this, new IFieldValue[_fields.Length]);
         }
 
-
         public Field GetField(string fieldName)
         {
-            return _fieldNameMap[new QName(fieldName, _childNamespace)];
+            return GetField(QnameWithChildNs(fieldName));
         }
 
-        public Field GetField(QName qname)
+        public Field GetField(QName fieldName)
         {
-            return _fieldNameMap[qname];
+            Field fld;
+            if (!_fieldNameMap.TryGetValue(fieldName, out fld))
+                throw new ArgumentOutOfRangeException("fieldName", fieldName,
+                                                      "Field does not exist in group " + this);
+            return fld;
         }
 
-
-        private static Dictionary<QName, Field> ConstructFieldNameMap(Field[] fields)
+        public bool TryGetField(QName fieldName, out Field field)
         {
-            var map = new Dictionary<QName, Field>();
-
-            foreach (Field t in fields)
-                map[t.QName] = t;
-
-            return map;
+            return _fieldNameMap.TryGetValue(fieldName, out field);
         }
 
-        private static Dictionary<string, Field> ConstructFieldIdMap(Field[] fields)
+        public bool TryGetField(string fieldName, out Field field)
         {
-            var map = new Dictionary<string, Field>();
-
-            foreach (Field t in fields)
-                map[t.Id] = t;
-
-            return map;
+            return _fieldNameMap.TryGetValue(QnameWithChildNs(fieldName), out field);
         }
 
+        private QName QnameWithChildNs(string fieldName)
+        {
+            return new QName(fieldName, _childNamespace);
+        }
 
         private static Dictionary<Field, int> ConstructFieldIndexMap(Field[] fields)
         {
@@ -355,12 +339,16 @@ namespace OpenFAST.Template
 
         public int GetFieldIndex(string fieldName)
         {
-            return (_fieldIndexMap[GetField(fieldName)]);
+            return _fieldIndexMap[GetField(fieldName)];
         }
 
         public virtual int GetFieldIndex(Field field)
         {
-            return (_fieldIndexMap[field]);
+            int index;
+            if (!_fieldIndexMap.TryGetValue(field, out index))
+                throw new ArgumentOutOfRangeException("field", field,
+                                                      "Field does not exist in group " + this);
+            return index;
         }
 
         public virtual Sequence GetSequence(string fieldName)
@@ -375,7 +363,7 @@ namespace OpenFAST.Template
 
         public virtual Scalar GetScalar(int index)
         {
-            return (Scalar) GetField(index);
+            return (Scalar) _fields[index];
         }
 
         public virtual Group GetGroup(string fieldName)
@@ -385,7 +373,7 @@ namespace OpenFAST.Template
 
         public virtual bool HasField(string fieldName)
         {
-            return _fieldNameMap.ContainsKey(new QName(fieldName, _childNamespace));
+            return _fieldNameMap.ContainsKey(QnameWithChildNs(fieldName));
         }
 
         public virtual bool HasField(QName fieldName)
@@ -403,52 +391,41 @@ namespace OpenFAST.Template
             return Name;
         }
 
+        #region Equals
+
+        public bool Equals(Group other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return base.Equals(other) && Util.ArrayEquals(other._fields, _fields);
+        }
+
         public override int GetHashCode()
         {
-            const int prime = 31;
-            int result = 1;
-            result = prime*result + ArrayHashCode(_fields);
-            result = prime*result + QName.GetHashCode();
-            result = prime*result + ((_typeReference == null) ? 0 : _typeReference.GetHashCode());
-            return result;
-        }
-
-        public override bool Equals(Object obj)
-        {
-            if (this == obj)
-                return true;
-            if (obj == null || GetType() != obj.GetType())
-                return false;
-
-            var other = (Group) obj;
-            if (other._fields.Length != _fields.Length)
-                return false;
-            if (!other.QName.Equals(QName))
-                return false;
-            for (int i = 0; i < _fields.Length; i++)
-                if (!_fields[i].Equals(other._fields[i]))
-                    return false;
-            return true;
-        }
-
-        private static int ArrayHashCode(Object[] array)
-        {
-            const int prime = 31;
-            if (array == null)
-                return 0;
-            int result = 1;
-            for (int index = 0; index < array.Length; index++)
+            unchecked
             {
-                result = prime*result + (array[index] == null ? 0 : array[index].GetHashCode());
+                int result = base.GetHashCode();
+                result = (result * 397) ^ Util.ArrayHashCode(_fields);
+                return result;
             }
-            return result;
         }
 
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return Equals(obj as Group);
+        }
+
+        #endregion
+
+#warning Never used? Not sure why IDs are even used by this class
         public virtual bool HasFieldWithId(string fid)
         {
             return _fieldIdMap.ContainsKey(fid);
         }
 
+#warning Never used? Not sure why IDs are even used by this class
         public virtual Field GetFieldById(string fid)
         {
             return _fieldIdMap[fid];
@@ -462,10 +439,8 @@ namespace OpenFAST.Template
         public virtual StaticTemplateReference GetStaticTemplateReference(QName qname)
         {
             for (int i = 0; i < _staticTemplateReferences.Length; i++)
-            {
                 if (_staticTemplateReferences[i].QName.Equals(qname))
                     return _staticTemplateReferences[i];
-            }
             return null;
         }
 

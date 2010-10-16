@@ -68,17 +68,18 @@ namespace OpenFAST
 
         public int GetTemplateId(MessageTemplate template)
         {
-            if (!_templateRegistry.IsRegistered(template))
-            {
-                _errorHandler.Error(FastConstants.D9_TEMPLATE_NOT_REGISTERED,
-                                   "The template " + template + " has not been registered.");
-                return 0;
-            }
-            return _templateRegistry.GetId(template);
+            int id;
+            if (_templateRegistry.TryGetId(template, out id))
+                return id;
+
+            _errorHandler.Error(FastConstants.D9_TEMPLATE_NOT_REGISTERED,
+                                "The template " + template + " has not been registered.");
+            return 0;
         }
 
         public MessageTemplate GetTemplate(int templateId)
         {
+#warning TODO: switch to Try*
             if (!_templateRegistry.IsRegistered(templateId))
             {
                 _errorHandler.Error(FastConstants.D9_TEMPLATE_NOT_REGISTERED,
@@ -95,24 +96,34 @@ namespace OpenFAST
 
         public ScalarValue Lookup(string dictionary, Group group, QName key)
         {
-            if (group.HasTypeReference())
-                _currentApplicationType = group.TypeReference;
-            return GetDictionary(dictionary).Lookup(group, key, _currentApplicationType);
+            return Lookup(GetDictionary(dictionary), group, key);
         }
 
-        private IDictionary GetDictionary(string dictionary)
+        public ScalarValue Lookup(IDictionary dictionary, Group group, QName key)
+        {
+            if (group.HasTypeReference())
+                _currentApplicationType = group.TypeReference;
+            return dictionary.Lookup(group, key, _currentApplicationType);
+        }
+
+        public void Store(string dictionary, Group group, QName key, ScalarValue valueToEncode)
+        {
+            Store(GetDictionary(dictionary), group, key, valueToEncode);
+        }
+
+        public void Store(IDictionary dictionary, Group group, QName key, ScalarValue valueToEncode)
+        {
+            if (group.HasTypeReference())
+                _currentApplicationType = group.TypeReference;
+            dictionary.Store(group, _currentApplicationType, key, valueToEncode);
+        }
+
+        internal IDictionary GetDictionary(string dictionary)
         {
             IDictionary value;
             if (!_dictionaries.TryGetValue(dictionary, out value))
                 _dictionaries[dictionary] = value = new GlobalDictionary();
             return value;
-        }
-
-        public void Store(string dictionary, Group group, QName key, ScalarValue valueToEncode)
-        {
-            if (group.HasTypeReference())
-                _currentApplicationType = group.TypeReference;
-            GetDictionary(dictionary).Store(group, _currentApplicationType, key, valueToEncode);
         }
 
         public void Reset()

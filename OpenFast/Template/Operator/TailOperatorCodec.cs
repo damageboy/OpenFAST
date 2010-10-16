@@ -29,7 +29,8 @@ namespace OpenFAST.Template.Operator
     [Serializable]
     internal sealed class TailOperatorCodec : OperatorCodec
     {
-        internal TailOperatorCodec(Operator op, FASTType[] types) : base(op, types)
+        internal TailOperatorCodec(Operator op, FASTType[] types)
+            : base(op, types)
         {
         }
 

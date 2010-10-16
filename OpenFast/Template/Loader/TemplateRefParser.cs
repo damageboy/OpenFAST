@@ -19,6 +19,7 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
+using System;
 using System.Xml;
 using OpenFAST.Error;
 
@@ -36,8 +37,10 @@ namespace OpenFAST.Template.Loader
                                          ? new QName(element.GetAttribute("name"), element.GetAttribute("templateNs"))
                                          : new QName(element.GetAttribute("name"), "");
 
-                if (context.TemplateRegistry.IsDefined(templateName))
-                    return new StaticTemplateReference(context.TemplateRegistry[templateName]);
+                MessageTemplate template;
+                if (context.TemplateRegistry.TryGetValue(templateName, out template))
+                    return new StaticTemplateReference(template);
+
                 context.ErrorHandler.Error(FastConstants.D8_TEMPLATE_NOT_EXIST,
                                            "The template \"" + templateName + "\" was not found.");
                 return null;

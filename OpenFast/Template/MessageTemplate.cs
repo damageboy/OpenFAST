@@ -27,7 +27,7 @@ using OpenFAST.Template.Type;
 namespace OpenFAST.Template
 {
     [Serializable]
-    public sealed class MessageTemplate : Group, IFieldSet
+    public sealed class MessageTemplate : Group, IFieldSet, IEquatable<MessageTemplate>
     {
         public MessageTemplate(QName name, Field[] fields) : base(name, AddTemplateIdField(fields), false)
         {
@@ -52,9 +52,9 @@ namespace OpenFAST.Template
             }
         }
 
-        #region FieldSet Members
+        #region IFieldSet Members
 
-        public override Field GetField(int index)
+        Field IFieldSet.GetField(int index)
         {
             return Fields[index];
         }
@@ -76,14 +76,16 @@ namespace OpenFAST.Template
 
         public byte[] Encode(Message message, Context context)
         {
-            if (!context.TemplateRegistry.IsRegistered(message.Template))
+            int id;
+            if (context.TemplateRegistry.TryGetId(message.Template, out id))
             {
-                throw new FastException(
-                    "Cannot encode message: The template " + message.Template + " has not been registered.",
-                    FastConstants.D9_TEMPLATE_NOT_REGISTERED);
+                message.SetInteger(0, id);
+                return Encode(message, this, context);
             }
-            message.SetInteger(0, context.GetTemplateId(message.Template));
-            return Encode(message, this, context);
+
+            throw new FastException(
+                "Cannot encode message: The template " + message.Template + " has not been registered.",
+                FastConstants.D9_TEMPLATE_NOT_REGISTERED);
         }
 
         public Message Decode(Stream inStream, int templateId, BitVectorReader presenceMapReader, Context context)
@@ -115,35 +117,25 @@ namespace OpenFAST.Template
             return new Message(this);
         }
 
-        public override bool Equals(Object obj)
-        {
-            if (obj == this)
-                return true;
-            if (obj == null || !(obj is MessageTemplate))
-                return false;
-            return Equals((MessageTemplate) obj);
-        }
+        #region Equals
 
         public bool Equals(MessageTemplate other)
         {
-            if (!QName.Equals(other.QName))
-                return false;
-            if (Fields.Length != other.Fields.Length)
-                return false;
-            for (int i = 0; i < Fields.Length; i++)
-            {
-                if (!Fields[i].Equals(other.Fields[i]))
-                    return false;
-            }
-            return true;
+            return base.Equals(other);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return Equals(obj as MessageTemplate);
         }
 
         public override int GetHashCode()
         {
-            int hashCode = (QName != null) ? QName.GetHashCode() : 0;
-            for (int i = 0; i < Fields.Length; i++)
-                hashCode += Fields[i].GetHashCode();
-            return hashCode;
+            return base.GetHashCode();
         }
+
+        #endregion
     }
 }

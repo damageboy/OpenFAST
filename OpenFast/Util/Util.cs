@@ -115,7 +115,7 @@ namespace OpenFAST.util
             return str.ToString();
         }
 
-        public static int MillisecondsSinceMidnight(ref DateTime date)
+        public static int MillisecondsSinceMidnight(DateTime date)
         {
             Calendar cal = new GregorianCalendar();
             SupportClass.CalendarManager.manager.SetDateTime(cal, date);
@@ -133,12 +133,6 @@ namespace OpenFAST.util
             return SupportClass.CalendarManager.manager.GetDateTime(cal);
         }
 
-        [Obsolete("Use non-ref method")]
-        public static int DateToInt(ref DateTime date)
-        {
-            return DateToInt(date);
-        }
-        
         public static int DateToInt(DateTime date)
         {
             Calendar cal = new GregorianCalendar();
@@ -146,12 +140,6 @@ namespace OpenFAST.util
             return SupportClass.CalendarManager.manager.Get(cal, SupportClass.CalendarManager.YEAR)*10000 +
                    (SupportClass.CalendarManager.manager.Get(cal, SupportClass.CalendarManager.MONTH) + 1)*100 +
                    SupportClass.CalendarManager.manager.Get(cal, SupportClass.CalendarManager.DATE);
-        }
-
-        [Obsolete("Use non-ref method")]
-        public static int TimeToInt(ref DateTime date)
-        {
-            return TimeToInt(date);
         }
 
         public static int TimeToInt(DateTime date)
@@ -164,7 +152,7 @@ namespace OpenFAST.util
                    SupportClass.CalendarManager.manager.Get(cal, SupportClass.CalendarManager.MILLISECOND);
         }
 
-        public static int TimestampToInt(ref DateTime date)
+        public static int TimestampToInt(DateTime date)
         {
             return DateToInt(date)*1000000000 + TimeToInt(date);
         }
@@ -227,6 +215,71 @@ namespace OpenFAST.util
             foreach (var kv in from)
                 dict[kv.Value] = kv.Key;
             return dict;
+        }
+
+        [Obsolete("This method allows multiple key values to override one another. Shouldn't we through an exception instead?")]
+        public static Dictionary<TKey, Field> ToSafeDictionary<TKey>(Field[] fields, Func<Field, TKey> keySelector)
+        {
+            var map = new Dictionary<TKey, Field>();
+
+            foreach (Field f in fields)
+                map[keySelector(f)] = f;
+
+            return map;
+        }
+
+        public static bool ArrayEquals<T>(T[] arr1, T[] arr2)
+            where T : class, IEquatable<T>
+        {
+            if ((arr1 == null) != (arr2 == null)) return false;
+            if (arr1 == arr2) return true;
+            if(arr1.Length != arr2.Length) return false;
+
+            for (int i = 0; i < arr1.Length; i++)
+            {
+                var v1 = arr1[i];
+                if (ReferenceEquals(v1, null))
+                {
+                    if (!ReferenceEquals(arr2[i], null))
+                        return false;
+                }
+                else
+                {
+                    if (!v1.Equals(arr2[i]))
+                        return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Similar to <see cref="ArrayEquals{T}"/>, except that the actual method being called is <see cref="object.Equals(object)"/>.
+        /// </summary>
+        public static bool ArrayEqualsSlow<T>(T[] arr1, T[] arr2)
+        {
+            if ((arr1 == null) != (arr2 == null)) return false;
+            if (arr1 == arr2) return true;
+            if (arr1.Length != arr2.Length) return false;
+
+            for (int i = 0; i < arr1.Length; i++)
+                if (!Equals(arr1[i], arr2[i]))
+                    return false;
+
+            return true;
+        }
+
+        public static int ArrayHashCode<T>(T[] array)
+            where T : class
+        {
+            if (array == null)
+                return 0;
+
+            int result = 1;
+            for (int i = 0; i < array.Length; i++)
+                result = (result*397) ^ (array[i] == null ? 0 : array[i].GetHashCode());
+
+            return result;
         }
     }
 }

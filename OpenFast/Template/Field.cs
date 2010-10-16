@@ -76,7 +76,6 @@ namespace OpenFAST.Template
         public QName Key
         {
             get { return _key; }
-
             set { _key = value; }
         }
 

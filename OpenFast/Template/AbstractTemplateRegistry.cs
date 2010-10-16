@@ -27,38 +27,50 @@ namespace OpenFAST.Template
     {
         private readonly List<ITemplateRegisteredListener> _listeners = new List<ITemplateRegisteredListener>();
 
-        #region TemplateRegistry Members
+        #region ITemplateRegistry Members
 
         public abstract MessageTemplate[] Templates { get; }
 
         public virtual MessageTemplate this[string name]
         {
-            get { return this[new QName(name, "")]; }
+            get { return this[new QName(name)]; }
         }
 
         public virtual int GetId(string name)
         {
-            return GetId(new QName(name, ""));
+            return GetId(new QName(name));
         }
 
         public virtual bool IsDefined(string name)
         {
-            return IsDefined(new QName(name, ""));
+            return IsDefined(new QName(name));
         }
+
+        public abstract bool IsDefined(QName templateName);
 
         public virtual bool IsRegistered(string name)
         {
-            return IsRegistered(new QName(name, ""));
+            return IsRegistered(new QName(name));
         }
 
         public virtual void Register(int templateId, string name)
         {
-            Register(templateId, new QName(name, ""));
+            Register(templateId, new QName(name));
         }
 
         public virtual void Remove(string name)
         {
-            Remove(new QName(name, ""));
+            Remove(new QName(name));
+        }
+
+        public bool TryGetValue(string name, out MessageTemplate template)
+        {
+            return TryGetValue(new QName(name), out template);
+        }
+
+        public bool TryGetId(string name, out int id)
+        {
+            return TryGetId(new QName(name), out id);
         }
 
         public virtual void AddTemplateRegisteredListener(ITemplateRegisteredListener templateRegisteredListener)
@@ -79,13 +91,15 @@ namespace OpenFAST.Template
         public abstract bool IsRegistered(int param1);
         public abstract void Register(int param1, MessageTemplate param2);
         public abstract void Remove(MessageTemplate param1);
-        public abstract bool IsDefined(QName param1);
         public abstract bool IsRegistered(MessageTemplate param1);
         public abstract bool IsRegistered(QName param1);
         public abstract void RegisterAll(ITemplateRegistry param1);
         public abstract void Remove(int param1);
         public abstract int GetId(MessageTemplate param1);
         public abstract void Register(int param1, QName param2);
+        public abstract bool TryGetValue(QName templateName, out MessageTemplate template);
+        public abstract bool TryGetId(QName templateName, out int id);
+        public abstract bool TryGetId(MessageTemplate template, out int id);
 
 
         public abstract ICollection<QName> Names();
@@ -94,7 +108,7 @@ namespace OpenFAST.Template
 
         protected void NotifyTemplateRegistered(MessageTemplate template, int id)
         {
-            foreach (var l in _listeners)
+            foreach (ITemplateRegisteredListener l in _listeners)
                 l.TemplateRegistered(template, id);
         }
     }

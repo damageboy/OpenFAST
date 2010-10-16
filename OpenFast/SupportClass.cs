@@ -622,135 +622,58 @@ namespace OpenFAST
 
         #endregion
 
-        #region Nested type: HashSetSupport
-
-        /// <summary>
-        /// SupportClass for the HashSet class.
-        /// </summary>
-        [Serializable]
-        public class HashSetSupport : ArrayList, ISetSupport
-        {
-            public HashSetSupport()
-            {
-            }
-
-            public HashSetSupport(ICollection c)
-            {
-                AddAll(c);
-            }
-
-            public HashSetSupport(int capacity)
-                : base(capacity)
-            {
-            }
-
-            #region SetSupport Members
-
-            /// <summary>
-            /// Adds a new element to the ArrayList if it is not already present.
-            /// </summary>		
-            /// <param name="obj">Element to insert to the ArrayList.</param>
-            /// <returns>Returns true if the new element was inserted, false otherwise.</returns>
-            public new virtual bool Add(Object obj)
-            {
-                bool inserted;
-
-                if ((inserted = Contains(obj)) == false)
-                {
-                    base.Add(obj);
-                }
-
-                return !inserted;
-            }
-
-            /// <summary>
-            /// Adds all the elements of the specified collection that are not present to the list.
-            /// </summary>
-            /// <param name="c">Collection where the new elements will be added</param>
-            /// <returns>Returns true if at least one element was added, false otherwise.</returns>
-            public bool AddAll(ICollection c)
-            {
-                IEnumerator e = new ArrayList(c).GetEnumerator();
-                bool added = false;
-
-                while (e.MoveNext())
-                {
-                    if (Add(e.Current))
-                        added = true;
-                }
-
-                return added;
-            }
-
-            #endregion
-
-            /// <summary>
-            /// Returns a copy of the HashSet instance.
-            /// </summary>		
-            /// <returns>Returns a shallow copy of the current HashSet.</returns>
-            public override Object Clone()
-            {
-                return MemberwiseClone();
-            }
-        }
-
-        #endregion
-
         #region Nested type: PacketSupport
 
         public class PacketSupport
         {
-            private IPAddress address;
-            private byte[] data;
-            private IPEndPoint ipEndPoint;
-            private int length;
+            private IPAddress _address;
+            private byte[] _data;
+            private IPEndPoint _ipEndPoint;
+            private int _length;
 
-            private int port = -1;
+            private int _port = -1;
 
             /// <summary>
             /// Constructor for the packet
             /// </summary>	
             /// <param name="data">The buffer to store the data</param>	
-            /// <param name="data">The length of the data sent</param>	
-            /// <param name="length"></param>
+            /// <param name="length">The length of the data sent</param>	
             /// <returns>A new packet to receive data of the specified length</returns>	
             public PacketSupport(byte[] data, int length)
             {
                 if (length > data.Length)
                     throw new ArgumentException("illegal length");
 
-                this.data = data;
-                this.length = length;
-                ipEndPoint = null;
+                _data = data;
+                _length = length;
+                _ipEndPoint = null;
             }
 
             /// <summary>
             /// Constructor for the packet
             /// </summary>	
             /// <param name="data">The data to be sent</param>	
-            /// <param name="data">The length of the data to be sent</param>	
-            /// <param name="data">The IP of the destination point</param>	
-            /// <param name="length"></param>
-            /// <param name="ipendpoint"></param>
+            /// <param name="length">The length of the data to be sent</param>	
+            /// <param name="ipendpoint">The IP of the destination point</param>	
             /// <returns>A new packet with the data, length and ipEndPoint set</returns>
             public PacketSupport(byte[] data, int length, IPEndPoint ipendpoint)
             {
                 if (length > data.Length)
                     throw new ArgumentException("illegal length");
 
-                this.data = data;
-                this.length = length;
-                ipEndPoint = ipendpoint;
+                _data = data;
+                _length = length;
+                _ipEndPoint = ipendpoint;
             }
 
             /// <summary>
             /// Gets and sets the address of the IP
             /// </summary>			
             /// <returns>The IP address</returns>
-            public IPEndPoint IPEndPoint
+            public IPEndPoint IpEndPoint
             {
-                get { return ipEndPoint; }
-                set { ipEndPoint = value; }
+                get { return _ipEndPoint; }
+                set { _ipEndPoint = value; }
             }
 
             /// <summary>
@@ -759,17 +682,17 @@ namespace OpenFAST
             /// <returns>The int value of the address</returns>
             public IPAddress Address
             {
-                get { return address; }
+                get { return _address; }
                 set
                 {
-                    address = value;
-                    if (ipEndPoint == null)
+                    _address = value;
+                    if (_ipEndPoint == null)
                     {
                         if (Port >= 0 && Port <= 0xFFFF)
-                            ipEndPoint = new IPEndPoint(value, Port);
+                            _ipEndPoint = new IPEndPoint(value, Port);
                     }
                     else
-                        ipEndPoint.Address = value;
+                        _ipEndPoint.Address = value;
                 }
             }
 
@@ -779,20 +702,20 @@ namespace OpenFAST
             /// <returns>The int value of the port</returns>
             public int Port
             {
-                get { return port; }
+                get { return _port; }
                 set
                 {
                     if (value < 0 || value > 0xFFFF)
                         throw new ArgumentException("Port out of range:" + value);
 
-                    port = value;
-                    if (ipEndPoint == null)
+                    _port = value;
+                    if (_ipEndPoint == null)
                     {
                         if (Address != null)
-                            ipEndPoint = new IPEndPoint(Address, value);
+                            _ipEndPoint = new IPEndPoint(Address, value);
                     }
                     else
-                        ipEndPoint.Port = value;
+                        _ipEndPoint.Port = value;
                 }
             }
 
@@ -802,13 +725,13 @@ namespace OpenFAST
             /// <returns>The int value of the length</returns>
             public int Length
             {
-                get { return length; }
+                get { return _length; }
                 set
                 {
-                    if (value > data.Length)
+                    if (value > _data.Length)
                         throw new ArgumentException("illegal length");
 
-                    length = value;
+                    _length = value;
                 }
             }
 
@@ -818,34 +741,10 @@ namespace OpenFAST
             /// <returns>The byte array that contains the data</returns>
             public byte[] Data
             {
-                get { return data; }
+                get { return _data; }
 
-                set { data = value; }
+                set { _data = value; }
             }
-        }
-
-        #endregion
-
-        #region Nested type: SetSupport
-
-        /// <summary>
-        /// Represents a collection ob objects that contains no duplicate elements.
-        /// </summary>	
-        public interface ISetSupport : IList
-        {
-            /// <summary>
-            /// Adds a new element to the Collection if it is not already present.
-            /// </summary>
-            /// <param name="obj">The object to add to the collection.</param>
-            /// <returns>Returns true if the object was added to the collection, otherwise false.</returns>
-            new bool Add(Object obj);
-
-            /// <summary>
-            /// Adds all the elements of the specified collection to the Set.
-            /// </summary>
-            /// <param name="c">Collection of objects to add.</param>
-            /// <returns>true</returns>
-            bool AddAll(ICollection c);
         }
 
         #endregion
@@ -872,19 +771,19 @@ namespace OpenFAST
         /// </summary>
         public class ThreadClass : IThreadRunnable
         {
-            private readonly object suspendResume = new object();
+            private readonly object _suspendResume = new object();
 
             /// <summary>
             /// The instance of System.Threading.Thread
             /// </summary>
-            private Thread threadField;
+            private Thread _threadField;
 
             /// <summary>
             /// Initializes a new instance of the ThreadClass class
             /// </summary>
             public ThreadClass()
             {
-                threadField = new Thread(Run);
+                _threadField = new Thread(Run);
             }
 
             /// <summary>
@@ -893,7 +792,7 @@ namespace OpenFAST
             /// <param name="Name">The name of the thread</param>
             public ThreadClass(string Name)
             {
-                threadField = new Thread(Run);
+                _threadField = new Thread(Run);
                 this.Name = Name;
             }
 
@@ -903,7 +802,7 @@ namespace OpenFAST
             /// <param name="Start">A ThreadStart delegate that references the methods to be invoked when this thread begins executing</param>
             public ThreadClass(ThreadStart Start)
             {
-                threadField = new Thread(Start);
+                _threadField = new Thread(Start);
             }
 
             /// <summary>
@@ -913,7 +812,7 @@ namespace OpenFAST
             /// <param name="Name">The name of the thread</param>
             public ThreadClass(ThreadStart Start, string Name)
             {
-                threadField = new Thread(Start);
+                _threadField = new Thread(Start);
                 this.Name = Name;
             }
 
@@ -922,8 +821,8 @@ namespace OpenFAST
             /// </summary>
             public Thread Instance
             {
-                get { return threadField; }
-                set { threadField = value; }
+                get { return _threadField; }
+                set { _threadField = value; }
             }
 
             /// <summary>
@@ -931,11 +830,11 @@ namespace OpenFAST
             /// </summary>
             public string Name
             {
-                get { return threadField.Name; }
+                get { return _threadField.Name; }
                 set
                 {
-                    if (threadField.Name == null)
-                        threadField.Name = value;
+                    if (_threadField.Name == null)
+                        _threadField.Name = value;
                 }
             }
 
@@ -944,8 +843,8 @@ namespace OpenFAST
             /// </summary>
             public ThreadPriority Priority
             {
-                get { return threadField.Priority; }
-                set { threadField.Priority = value; }
+                get { return _threadField.Priority; }
+                set { _threadField.Priority = value; }
             }
 
             /// <summary>
@@ -953,7 +852,7 @@ namespace OpenFAST
             /// </summary>
             public bool IsAlive
             {
-                get { return threadField.IsAlive; }
+                get { return _threadField.IsAlive; }
             }
 
             /// <summary>
@@ -961,8 +860,8 @@ namespace OpenFAST
             /// </summary>
             public bool IsBackground
             {
-                get { return threadField.IsBackground; }
-                set { threadField.IsBackground = value; }
+                get { return _threadField.IsBackground; }
+                set { _threadField.IsBackground = value; }
             }
 
             #region IThreadRunnable Members
@@ -981,7 +880,7 @@ namespace OpenFAST
             /// </summary>
             public virtual void Start()
             {
-                threadField.Start();
+                _threadField.Start();
             }
 
             /// <summary>
@@ -989,7 +888,7 @@ namespace OpenFAST
             /// </summary>
             public virtual void Interrupt()
             {
-                threadField.Interrupt();
+                _threadField.Interrupt();
             }
 
             /// <summary>
@@ -997,7 +896,7 @@ namespace OpenFAST
             /// </summary>
             public void Join()
             {
-                threadField.Join();
+                _threadField.Join();
             }
 
             /// <summary>
@@ -1008,7 +907,7 @@ namespace OpenFAST
             {
                 lock (this)
                 {
-                    threadField.Join(new TimeSpan(MiliSeconds*10000));
+                    _threadField.Join(new TimeSpan(MiliSeconds*10000));
                 }
             }
 
@@ -1021,7 +920,7 @@ namespace OpenFAST
             {
                 lock (this)
                 {
-                    threadField.Join(new TimeSpan(MiliSeconds*10000 + NanoSeconds*100));
+                    _threadField.Join(new TimeSpan(MiliSeconds*10000 + NanoSeconds*100));
                 }
             }
 
@@ -1030,9 +929,9 @@ namespace OpenFAST
             /// </summary>
             public void Resume()
             {
-                lock (suspendResume)
+                lock (_suspendResume)
                 {
-                    Monitor.Pulse(suspendResume);
+                    Monitor.Pulse(_suspendResume);
                 }
                 //threadField.Resume();
             }
@@ -1042,9 +941,9 @@ namespace OpenFAST
             /// </summary>
             public void Suspend()
             {
-                lock (suspendResume)
+                lock (_suspendResume)
                 {
-                    Monitor.Wait(suspendResume);
+                    Monitor.Wait(_suspendResume);
                 }
                 //threadField.Suspend();
             }
@@ -1056,7 +955,7 @@ namespace OpenFAST
             /// </summary>
             public void Abort()
             {
-                threadField.Abort();
+                _threadField.Abort();
             }
 
             /// <summary>
@@ -1070,7 +969,7 @@ namespace OpenFAST
             {
                 lock (this)
                 {
-                    threadField.Abort(stateInfo);
+                    _threadField.Abort(stateInfo);
                 }
             }
 
@@ -1104,9 +1003,7 @@ namespace OpenFAST
         /// </summary>
         public class UdpClientSupport : UdpClient
         {
-            public String host;
-            public IPEndPoint ipEndPoint;
-            public int port = -1;
+            private int _port = -1;
 
 
             /// <summary>
@@ -1116,7 +1013,7 @@ namespace OpenFAST
             public UdpClientSupport(int port)
                 : base(port)
             {
-                this.port = port;
+                _port = port;
             }
 
             /// <summary>
@@ -1130,12 +1027,12 @@ namespace OpenFAST
             /// Initializes a new instance of the UdpClientSupport class,
             /// and binds it to the specified local endpoint.
             /// </summary>
-            /// <param name="IP">An IPEndPoint that respresents the local endpoint to which you bind the UDP connection.</param>
-            public UdpClientSupport(IPEndPoint IP)
-                : base(IP)
+            /// <param name="ip">An IPEndPoint that respresents the local endpoint to which you bind the UDP connection.</param>
+            public UdpClientSupport(IPEndPoint ip)
+                : base(ip)
             {
-                ipEndPoint = IP;
-                port = ipEndPoint.Port;
+                IpEndPoint = ip;
+                _port = IpEndPoint.Port;
             }
 
             /// <summary>
@@ -1147,8 +1044,8 @@ namespace OpenFAST
             public UdpClientSupport(string host, int port)
                 : base(host, port)
             {
-                this.host = host;
-                this.port = port;
+                Host = host;
+                _port = port;
             }
 
 
@@ -1158,8 +1055,8 @@ namespace OpenFAST
             /// <returns>The IP address</returns>
             public IPEndPoint IPEndPoint
             {
-                get { return ipEndPoint; }
-                set { ipEndPoint = value; }
+                get { return IpEndPoint; }
+                set { IpEndPoint = value; }
             }
 
             /// <summary>
@@ -1168,15 +1065,19 @@ namespace OpenFAST
             /// <returns>The int value of the port</returns>
             public int Port
             {
-                get { return port; }
+                get { return _port; }
                 set
                 {
                     if (value < 0 || value > 0xFFFF)
                         throw new ArgumentException("Port out of range:" + value);
 
-                    port = value;
+                    _port = value;
                 }
             }
+
+            public string Host { get; set; }
+
+            public IPEndPoint IpEndPoint { get; set; }
 
             /// <summary>
             /// Returns a UDP datagram that was sent by a remote host.
@@ -1191,8 +1092,8 @@ namespace OpenFAST
                 PacketSupport tempPacket;
                 try
                 {
-                    byte[] data_in = tempClient.Receive(ref remoteIpEndPoint);
-                    tempPacket = new PacketSupport(data_in, data_in.Length) {IPEndPoint = remoteIpEndPoint};
+                    byte[] dataIn = tempClient.Receive(ref remoteIpEndPoint);
+                    tempPacket = new PacketSupport(dataIn, dataIn.Length) {IpEndPoint = remoteIpEndPoint};
                 }
                 catch (Exception e)
                 {
@@ -1208,7 +1109,7 @@ namespace OpenFAST
             /// <param name="packet">Packet containing the datagram data to send</param>
             public static void Send(UdpClient tempClient, PacketSupport packet)
             {
-                tempClient.Send(packet.Data, packet.Length, packet.IPEndPoint);
+                tempClient.Send(packet.Data, packet.Length, packet.IpEndPoint);
             }
 
 
@@ -1216,9 +1117,9 @@ namespace OpenFAST
             /// Gets the address of the IP
             /// </summary>			
             /// <returns>The IP address</returns>
-            public IPAddress getIPEndPointAddress()
+            public IPAddress GetIpEndPointAddress()
             {
-                return ipEndPoint != null ? ipEndPoint.Address : null;
+                return IpEndPoint != null ? IpEndPoint.Address : null;
             }
         }
 

@@ -52,7 +52,7 @@ namespace OpenFAST.Template.Type.Codec
         public override byte[] EncodeValue(ScalarValue value)
         {
             DateTime date = ((DateValue) value).Value;
-            int millisecondsSinceMidnight = Util.MillisecondsSinceMidnight(ref date);
+            int millisecondsSinceMidnight = Util.MillisecondsSinceMidnight(date);
             return INTEGER.EncodeValue(new IntegerValue(millisecondsSinceMidnight));
         }
 

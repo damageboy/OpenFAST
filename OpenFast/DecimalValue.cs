@@ -85,21 +85,6 @@ namespace OpenFAST
             return null;
         }
 
-        public override bool Equals(Object obj)
-        {
-            if ((obj == null) || !(obj is DecimalValue))
-            {
-                return false;
-            }
-
-            return equals((DecimalValue) obj);
-        }
-
-        public bool equals(DecimalValue other)
-        {
-            return other.Mantissa == Mantissa && other.Exponent == Exponent;
-        }
-
         public override NumericValue Subtract(NumericValue subtrahend)
         {
             return new DecimalValue(Decimal.Subtract(ToBigDecimal(), subtrahend.ToBigDecimal()));
@@ -166,9 +151,28 @@ namespace OpenFAST
             return ToBigDecimal().ToString();
         }
 
+        #region Equals
+
+        public override bool Equals(Object obj)
+        {
+            if ((obj == null) || !(obj is DecimalValue))
+            {
+                return false;
+            }
+
+            return equals((DecimalValue)obj);
+        }
+
+        public bool equals(DecimalValue other)
+        {
+            return other.Mantissa == Mantissa && other.Exponent == Exponent;
+        }
+
         public override int GetHashCode()
         {
             return Exponent*37 + (int) Mantissa;
         }
+
+        #endregion
     }
 }

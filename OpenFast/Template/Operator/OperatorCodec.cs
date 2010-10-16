@@ -127,9 +127,9 @@ namespace OpenFAST.Template.Operator
             return true;
         }
 
-        public virtual bool ShouldDecodeType()
+        public virtual bool ShouldDecodeType
         {
-            return true;
+            get { return true; }
         }
 
         public override bool Equals(object obj) //POINTP

@@ -39,11 +39,13 @@ namespace OpenFAST.Template
             _implicitLength = true;
         }
 
-        public Sequence(string name, Field[] fields, bool optional) : this(new QName(name), fields, optional)
+        public Sequence(string name, Field[] fields, bool optional)
+            : this(new QName(name), fields, optional)
         {
         }
 
-        public Sequence(QName name, Scalar length, Field[] fields, bool optional) : base(name, optional)
+        public Sequence(QName name, Scalar length, Field[] fields, bool optional)
+            : base(name, optional)
         {
             _group = new Group(name, fields, optional);
 
@@ -53,9 +55,7 @@ namespace OpenFAST.Template
                 _implicitLength = true;
             }
             else
-            {
                 _length = length;
-            }
         }
 
         public virtual Scalar Length
@@ -99,7 +99,7 @@ namespace OpenFAST.Template
 
         public virtual Field GetField(int index)
         {
-            return _group.GetField(index);
+            return _group.Fields[index];
         }
 
         #endregion

@@ -27,14 +27,16 @@ namespace OpenFAST
     [Serializable]
     public class Message : GroupValue
     {
-        private readonly MessageTemplate template;
+        private readonly MessageTemplate _template;
 
-        public Message(MessageTemplate template, IFieldValue[] fieldValues) : base(template, fieldValues)
+        public Message(MessageTemplate template, IFieldValue[] fieldValues)
+            : base(template, fieldValues)
         {
-            this.template = template;
+            _template = template;
         }
 
-        public Message(MessageTemplate template) : this(template, InitializeFieldValues(template.FieldCount))
+        public Message(MessageTemplate template)
+            : this(template, InitializeFieldValues(template.FieldCount))
         {
         }
 
@@ -43,9 +45,9 @@ namespace OpenFAST
             get { return Values.Length; }
         }
 
-        public virtual MessageTemplate Template
+        public MessageTemplate Template
         {
-            get { return template; }
+            get { return _template; }
         }
 
         private static IFieldValue[] InitializeFieldValues(int fieldCount)
@@ -53,6 +55,8 @@ namespace OpenFAST
             var fields = new IFieldValue[fieldCount];
             return fields;
         }
+
+        #region Equals
 
         public override bool Equals(object obj)
         {
@@ -63,7 +67,7 @@ namespace OpenFAST
             return equals((Message) obj);
         }
 
-        public virtual bool equals(Message message)
+        public bool equals(Message message)
         {
             if (FieldCount != message.FieldCount)
                 return false;
@@ -85,8 +89,10 @@ namespace OpenFAST
 
         public override int GetHashCode()
         {
-            return base.GetHashCode() + template.GetHashCode();
+            return base.GetHashCode() + _template.GetHashCode();
         }
+
+        #endregion
 
         public override IFieldValue Copy()
         {
@@ -95,7 +101,7 @@ namespace OpenFAST
             {
                 copies[i] = Values[i].Copy();
             }
-            return new Message(template, Values);
+            return new Message(_template, Values);
         }
     }
 }

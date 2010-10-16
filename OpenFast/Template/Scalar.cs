@@ -40,25 +40,25 @@ namespace OpenFAST.Template
         private ScalarValue _defaultValue;
         private string _dictionary;
 
-        public Scalar(string name, FASTType type, Operator.Operator @operator, ScalarValue defaultValue,
+        public Scalar(string name, FASTType type, Operator.Operator op, ScalarValue defaultValue,
                       bool optional)
-            : this(new QName(name), type, @operator, defaultValue, optional)
+            : this(new QName(name), type, op, defaultValue, optional)
         {
         }
 
-        public Scalar(QName name, FASTType type, Operator.Operator @operator, ScalarValue defaultValue,
+        public Scalar(QName name, FASTType type, Operator.Operator op, ScalarValue defaultValue,
                       bool optional)
             : base(name, optional)
         {
             InitBlock();
-            _operator = @operator;
-            _operatorCodec = @operator.GetCodec(type);
+            _operator = op;
+            _operatorCodec = op.GetCodec(type);
             _dictionary = DictionaryFields.GLOBAL;
             _defaultValue = defaultValue ?? ScalarValue.UNDEFINED;
             _type = type;
-            _typeCodec = type.GetCodec(@operator, optional);
+            _typeCodec = type.GetCodec(op, optional);
             _initialValue = ((defaultValue == null) || defaultValue.Undefined) ? _type.DefaultValue : defaultValue;
-            @operator.Validate(this);
+            op.Validate(this);
         }
 
         public Scalar(QName name, FASTType type, OperatorCodec operatorCodec, ScalarValue defaultValue, bool optional)
@@ -93,11 +93,9 @@ namespace OpenFAST.Template
         public string Dictionary
         {
             get { return _dictionary; }
-
             set
             {
-                if (value == null)
-                    throw new NullReferenceException();
+                if (value == null) throw new ArgumentNullException("value");
                 _dictionary = value;
             }
         }
@@ -135,7 +133,9 @@ namespace OpenFAST.Template
         public override byte[] Encode(IFieldValue fieldValue, Group encodeTemplate, Context context,
                                       BitVectorBuilder presenceMapBuilder)
         {
-            ScalarValue priorValue = context.Lookup(Dictionary, encodeTemplate, Key);
+            var dict = context.GetDictionary(Dictionary);
+
+            ScalarValue priorValue = context.Lookup(dict, encodeTemplate, Key);
             var value = (ScalarValue) fieldValue;
             if (!_operatorCodec.CanEncode(value, this))
             {
@@ -146,7 +146,7 @@ namespace OpenFAST.Template
                                                                         presenceMapBuilder);
             if (_operator.ShouldStoreValue(value))
             {
-                context.Store(Dictionary, encodeTemplate, Key, value);
+                context.Store(dict, encodeTemplate, Key, value);
             }
             if (valueToEncode == null)
             {
@@ -186,18 +186,21 @@ namespace OpenFAST.Template
             try
             {
                 ScalarValue previousValue = null;
+                IDictionary dict = null;
                 if (_operator.UsesDictionary)
                 {
-                    previousValue = context.Lookup(Dictionary, decodeTemplate, Key);
+                    dict = context.GetDictionary(Dictionary);
+                    previousValue = context.Lookup(dict, decodeTemplate, Key);
                     ValidateDictionaryTypeAgainstFieldType(previousValue, _type);
                 }
+
                 ScalarValue value;
                 int pmapIndex = presenceMapReader.Index;
                 if (IsPresent(presenceMapReader))
                 {
                     if (context.TraceEnabled)
                         inStream = new RecordingInputStream(inStream);
-                    if (!_operatorCodec.ShouldDecodeType())
+                    if (!_operatorCodec.ShouldDecodeType)
                     {
                         return _operatorCodec.DecodeValue(null, null, this);
                     }
@@ -211,10 +214,12 @@ namespace OpenFAST.Template
                 {
                     value = Decode(previousValue);
                 }
+
                 ValidateDecodedValueIsCorrectForType(value, _type);
-                if (!((Operator == Template.Operator.Operator.DELTA) && (value == null)))
+                if (Operator != Template.Operator.Operator.DELTA || value != null)
                 {
-                    context.Store(Dictionary, decodeTemplate, Key, value);
+                    context.Store(dict ?? context.GetDictionary(Dictionary), decodeTemplate, Key, value);
+                    return value;
                 }
                 return value;
             }

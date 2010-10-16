@@ -26,11 +26,10 @@ namespace OpenFAST
     public class BitVectorReader
     {
         public static readonly BitVectorReader NULL;
-
         public static readonly BitVectorReader INFINITE_TRUE;
 
-        private readonly BitVector vector;
-        private int index;
+        private readonly BitVector _vector;
+        private int _index;
 
         static BitVectorReader()
         {
@@ -40,44 +39,44 @@ namespace OpenFAST
 
         public BitVectorReader(BitVector vector)
         {
-            this.vector = vector;
+            _vector = vector;
         }
 
         public virtual BitVector BitVector
         {
-            get { return vector; }
+            get { return _vector; }
         }
 
         public virtual int Index
         {
-            get { return index; }
+            get { return _index; }
         }
 
         public virtual bool Read()
         {
-            return vector.IsSet(index++);
+            return _vector.IsSet(_index++);
         }
 
         public virtual bool HasMoreBitsSet()
         {
-            return vector.IndexOfLastSet() > index;
+            return _vector.IndexOfLastSet() > _index;
         }
 
         public override string ToString()
         {
-            return vector.ToString();
+            return _vector.ToString();
         }
 
         public virtual bool Peek()
         {
-            return vector.IsSet(index);
+            return _vector.IsSet(_index);
         }
 
         #region Nested type: InfiniteBitVectorReader
 
         public sealed class InfiniteBitVectorReader : BitVectorReader
         {
-            internal InfiniteBitVectorReader(BitVector Param1) : base(Param1)
+            internal InfiniteBitVectorReader(BitVector vector) : base(vector)
             {
             }
 
@@ -93,7 +92,7 @@ namespace OpenFAST
 
         public sealed class NullBitVectorReader : BitVectorReader
         {
-            internal NullBitVectorReader(BitVector Param1) : base(Param1)
+            internal NullBitVectorReader(BitVector vector) : base(vector)
             {
             }
 

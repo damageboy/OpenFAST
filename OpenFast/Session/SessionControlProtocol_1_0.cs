@@ -65,7 +65,7 @@ namespace OpenFAST.Session
 
         public override Session OnNewConnection(string serverName, IConnection connection)
         {
-            var session = new Session(connection, this, TemplateRegistryFields.NULL, TemplateRegistryFields.NULL);
+            var session = new Session(connection, this, TemplateRegistryFields.Null, TemplateRegistryFields.Null);
             Message message = session.MessageInputStream.ReadMessage();
             session.MessageOutputStream.WriteMessage(CreateHelloMessage(serverName));
             string clientName = message.GetString(1);
@@ -77,7 +77,7 @@ namespace OpenFAST.Session
                                         ITemplateRegistry outboundRegistry, IMessageListener messageListener,
                                         ISessionListener sessionListener)
         {
-            var session = new Session(connection, this, TemplateRegistryFields.NULL, TemplateRegistryFields.NULL);
+            var session = new Session(connection, this, TemplateRegistryFields.Null, TemplateRegistryFields.Null);
             session.MessageOutputStream.WriteMessage(CreateHelloMessage(senderName));
             Message message = session.MessageInputStream.ReadMessage();
             string serverName = message.GetString(1);

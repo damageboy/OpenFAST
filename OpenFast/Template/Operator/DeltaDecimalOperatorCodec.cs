@@ -28,7 +28,8 @@ namespace OpenFAST.Template.Operator
     [Serializable]
     public sealed class DeltaDecimalOperatorCodec : AlwaysPresentOperatorCodec
     {
-        internal DeltaDecimalOperatorCodec() : base(Operator.DELTA, new[] {FASTType.DECIMAL})
+        internal DeltaDecimalOperatorCodec()
+            : base(Operator.DELTA, new[] {FASTType.DECIMAL})
         {
         }
 
@@ -57,7 +58,7 @@ namespace OpenFAST.Template.Operator
             }
 
             DecimalValue priorValue = priorVal.Undefined ? (DecimalValue) field.DefaultValue : (DecimalValue) priorVal;
-            
+
             var v = (DecimalValue) val;
             return new DecimalValue(v.Mantissa - priorValue.Mantissa,
                                     v.Exponent - priorValue.Exponent);

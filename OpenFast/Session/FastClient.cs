@@ -30,9 +30,9 @@ namespace OpenFAST.Session
 
         private readonly ISessionListener sessionListener = SessionListenerFields.Null;
         private readonly ISessionProtocol sessionProtocol;
-        private ITemplateRegistry inboundRegistry = TemplateRegistryFields.NULL;
+        private ITemplateRegistry inboundRegistry = TemplateRegistryFields.Null;
         private IMessageListener messageListener = MessageListener_Fields.NULL;
-        private ITemplateRegistry outboundRegistry = TemplateRegistryFields.NULL;
+        private ITemplateRegistry outboundRegistry = TemplateRegistryFields.Null;
 
         public FastClient(string clientName, ISessionProtocol sessionProtocol, IEndpoint endpoint)
         {

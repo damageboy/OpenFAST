@@ -30,15 +30,15 @@ namespace OpenFAST.Session
 {
     public class Session : IErrorHandler
     {
-        private readonly IConnection connection;
-        private readonly ISessionProtocol protocol;
-        private IErrorHandler errorHandler = ErrorHandler_Fields.DEFAULT;
-        private MessageInputStream in_stream;
-        private bool listening;
-        private SupportClass.ThreadClass listeningThread;
-        private IMessageListener messageListener;
-        private MessageOutputStream out_stream;
-        private ISessionListener sessionListener = SessionListenerFields.Null;
+        private readonly IConnection _connection;
+        private readonly ISessionProtocol _protocol;
+        private IErrorHandler _errorHandler = ErrorHandler_Fields.DEFAULT;
+        private MessageInputStream _inStream;
+        private bool _listening;
+        private SupportClass.ThreadClass _listeningThread;
+        private IMessageListener _messageListener;
+        private MessageOutputStream _outStream;
+        private ISessionListener _sessionListener = SessionListenerFields.Null;
 
         public Session(IConnection connection, ISessionProtocol protocol, ITemplateRegistry inboundRegistry,
                        ITemplateRegistry outboundRegistry)
@@ -49,16 +49,16 @@ namespace OpenFAST.Session
             outContext.TemplateRegistry.RegisterAll(outboundRegistry);
             inContext.ErrorHandler = this;
 
-            this.connection = connection;
-            this.protocol = protocol;
+            _connection = connection;
+            _protocol = protocol;
             try
             {
-                in_stream = new MessageInputStream(connection.InputStream.BaseStream, inContext);
-                out_stream = new MessageOutputStream(connection.OutputStream.BaseStream, outContext);
+                _inStream = new MessageInputStream(connection.InputStream.BaseStream, inContext);
+                _outStream = new MessageOutputStream(connection.OutputStream.BaseStream, outContext);
             }
             catch (IOException e)
             {
-                errorHandler.Error(null, "Error occurred in connection.", e);
+                _errorHandler.Error(null, "Error occurred in connection.", e);
                 throw new IllegalStateException(e);
             }
 
@@ -69,29 +69,25 @@ namespace OpenFAST.Session
 
         public virtual IErrorHandler ErrorHandler
         {
-            get { return errorHandler; }
-
+            get { return _errorHandler; }
             set
             {
                 if (value == null)
-                {
-                    errorHandler = ErrorHandler_Fields.NULL;
-                }
-
-                errorHandler = value;
+                    _errorHandler = ErrorHandler_Fields.NULL;
+                _errorHandler = value;
             }
         }
 
         public virtual IConnection Connection
         {
-            get { return connection; }
+            get { return _connection; }
         }
 
         public virtual IMessageListener MessageHandler
         {
             set
             {
-                messageListener = value;
+                _messageListener = value;
                 Listening = true;
             }
         }
@@ -100,7 +96,7 @@ namespace OpenFAST.Session
         {
             set
             {
-                listening = value;
+                _listening = value;
                 if (value)
                     ListenForMessages();
             }
@@ -108,22 +104,22 @@ namespace OpenFAST.Session
 
         public virtual ISessionListener SessionListener
         {
-            set { sessionListener = value; }
+            set { _sessionListener = value; }
         }
 
         public MessageInputStream MessageInputStream
         {
-            get { return in_stream; }
-            set { in_stream = value; }
+            get { return _inStream; }
+            set { _inStream = value; }
         }
 
         public MessageOutputStream MessageOutputStream
         {
-            get { return out_stream; }
-            set { out_stream = value; }
+            get { return _outStream; }
+            set { _outStream = value; }
         }
 
-        #region ErrorHandler Members
+        #region IErrorHandler Members
 
         public virtual void Error(ErrorCode code, string message)
         {
@@ -132,91 +128,96 @@ namespace OpenFAST.Session
                 code = SessionConstants.TEMPLATE_NOT_SUPPORTED;
                 message = "Template Not Supported";
             }
-            protocol.OnError(this, code, message);
-            errorHandler.Error(code, message);
+            _protocol.OnError(this, code, message);
+            _errorHandler.Error(code, message);
         }
 
         public virtual void Error(ErrorCode code, string message, Exception t)
         {
-            protocol.OnError(this, code, message);
-            errorHandler.Error(code, message, t);
+            _protocol.OnError(this, code, message);
+            _errorHandler.Error(code, message, t);
         }
 
         #endregion
 
         public virtual void Close()
         {
-            listening = false;
-            out_stream.WriteMessage(protocol.CloseMessage);
-            in_stream.Close();
-            out_stream.Close();
+            _listening = false;
+            _outStream.WriteMessage(_protocol.CloseMessage);
+            _inStream.Close();
+            _outStream.Close();
         }
 
         // RESPONDER
         public virtual void Close(ErrorCode alertCode)
         {
-            listening = false;
-            in_stream.Close();
-            out_stream.Close();
-            sessionListener.OnClose();
+            _listening = false;
+            _inStream.Close();
+            _outStream.Close();
+            _sessionListener.OnClose();
         }
 
         public virtual void Reset()
         {
-            out_stream.Reset();
-            in_stream.Reset();
-            out_stream.WriteMessage(protocol.ResetMessage);
+            _outStream.Reset();
+            _inStream.Reset();
+            _outStream.WriteMessage(_protocol.ResetMessage);
         }
 
         private void ListenForMessages()
         {
-            if (listeningThread == null)
+            if (_listeningThread == null)
             {
                 IThreadRunnable messageReader = new SessionThread(this);
-                listeningThread = new SupportClass.ThreadClass(new ThreadStart(messageReader.Run),
-                                                               "FAST Session Message Reader");
+                _listeningThread = new SupportClass.ThreadClass(new ThreadStart(messageReader.Run),
+                                                                "FAST Session Message Reader");
             }
-            if (listeningThread.IsAlive)
+            if (_listeningThread.IsAlive)
                 return;
-            listeningThread.Start();
+            _listeningThread.Start();
         }
 
         public virtual void SendTemplates(ITemplateRegistry registry)
         {
-            if (!protocol.SupportsTemplateExchange())
+            if (!_protocol.SupportsTemplateExchange())
             {
-                throw new NotSupportedException("The procotol " + protocol +
+                throw new NotSupportedException("The procotol " + _protocol +
                                                 " does not support template exchange.");
             }
             MessageTemplate[] templates = registry.Templates;
             for (int i = 0; i < templates.Length; i++)
             {
                 MessageTemplate template = templates[i];
-                out_stream.WriteMessage(protocol.CreateTemplateDefinitionMessage(template));
-                out_stream.WriteMessage(protocol.CreateTemplateDeclarationMessage(template, registry.GetId(template)));
-                if (!out_stream.GetTemplateRegistry().IsRegistered(template))
-                    out_stream.RegisterTemplate(registry.GetId(template), template);
+                _outStream.WriteMessage(_protocol.CreateTemplateDefinitionMessage(template));
+                
+                var templateId = registry.GetId(template);
+                
+                _outStream.WriteMessage(_protocol.CreateTemplateDeclarationMessage(template, templateId));
+                // BUG? double check if IsRegister() done on the same object as RegisterTemplate
+                if (!_outStream.GetTemplateRegistry().IsRegistered(template))
+                    _outStream.RegisterTemplate(templateId, template);
             }
         }
 
         public virtual void AddDynamicTemplateDefinition(MessageTemplate template)
         {
-            in_stream.GetTemplateRegistry().Define(template);
-            out_stream.GetTemplateRegistry().Define(template);
+            _inStream.GetTemplateRegistry().Define(template);
+            _outStream.GetTemplateRegistry().Define(template);
         }
 
         public virtual void RegisterDynamicTemplate(QName templateName, int id)
         {
-            if (!in_stream.GetTemplateRegistry().IsDefined(templateName))
-            {
-                throw new SystemException("Template " + templateName + " has not been defined.");
-            }
-            in_stream.GetTemplateRegistry().Register(id, templateName);
-            if (!out_stream.GetTemplateRegistry().IsDefined(templateName))
-            {
-                throw new SystemException("Template " + templateName + " has not been defined.");
-            }
-            out_stream.GetTemplateRegistry().Register(id, templateName);
+#warning replace with Try* ?
+            if (!_inStream.GetTemplateRegistry().IsDefined(templateName))
+                throw new ArgumentOutOfRangeException("templateName", templateName,
+                                                      "Template is not defined in the input stream.");
+
+            _inStream.GetTemplateRegistry().Register(id, templateName);
+            if (!_outStream.GetTemplateRegistry().IsDefined(templateName))
+                throw new ArgumentOutOfRangeException("templateName", templateName,
+                                                      "Template is not defined in the output stream.");
+
+            _outStream.GetTemplateRegistry().Register(id, templateName);
         }
 
         #region Nested type: SessionThread
@@ -239,7 +240,7 @@ namespace OpenFAST.Session
 
             public virtual void Run()
             {
-                while (Enclosing_Instance.listening)
+                while (Enclosing_Instance._listening)
                 {
                     try
                     {
@@ -247,16 +248,16 @@ namespace OpenFAST.Session
 
                         if (message == null)
                         {
-                            Enclosing_Instance.listening = false;
+                            Enclosing_Instance._listening = false;
                             break;
                         }
-                        if (Enclosing_Instance.protocol.IsProtocolMessage(message))
+                        if (Enclosing_Instance._protocol.IsProtocolMessage(message))
                         {
-                            Enclosing_Instance.protocol.HandleMessage(Enclosing_Instance, message);
+                            Enclosing_Instance._protocol.HandleMessage(Enclosing_Instance, message);
                         }
-                        else if (Enclosing_Instance.messageListener != null)
+                        else if (Enclosing_Instance._messageListener != null)
                         {
-                            Enclosing_Instance.messageListener.OnMessage(enclosingInstance, message);
+                            Enclosing_Instance._messageListener.OnMessage(enclosingInstance, message);
                         }
                         else
                         {
@@ -270,17 +271,17 @@ namespace OpenFAST.Session
                         if (cause != null && cause.GetType().Equals(typeof (SocketException)) &&
                             cause.Message.Equals("Socket closed"))
                         {
-                            Enclosing_Instance.listening = false;
+                            Enclosing_Instance._listening = false;
                         }
                         else if (e is FastException)
                         {
                             var fastException = ((FastException) e);
-                            Enclosing_Instance.errorHandler.Error(fastException.Code, fastException.Message, e);
+                            Enclosing_Instance._errorHandler.Error(fastException.Code, fastException.Message, e);
                         }
                         else
                         {
-                            Enclosing_Instance.errorHandler.Error(FastConstants.GENERAL_ERROR, e.Message,
-                                                                  e);
+                            Enclosing_Instance._errorHandler.Error(FastConstants.GENERAL_ERROR, e.Message,
+                                                                   e);
                         }
                     }
                 }
