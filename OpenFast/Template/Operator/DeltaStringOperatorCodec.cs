@@ -60,7 +60,7 @@ namespace OpenFAST.Template.Operator
 
             var diffValue = (TwinValue) newValue;
             ScalarValue v = (previousValue.Undefined) ? field.BaseValue : previousValue;
-            if (diffValue.first.ToInt() > v.ToString().Length)
+            if (diffValue.First.ToInt() > v.ToString().Length)
             {
                 Global.HandleError(FastConstants.D7_SUBTRCTN_LEN_LONG,
                                    "The string diff <" + diffValue + "> cannot be applied to the base value \"" +

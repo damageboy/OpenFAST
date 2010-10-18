@@ -54,8 +54,8 @@ namespace OpenFAST.Template.Type.Codec
                 return NULL_VALUE_ENCODING;
 
             var diff = (TwinValue) value;
-            byte[] subtractionLength = NULLABLE_INTEGER.Encode(diff.first);
-            byte[] difference = ASCII.Encode(diff.second);
+            byte[] subtractionLength = NULLABLE_INTEGER.Encode(diff.First);
+            byte[] difference = ASCII.Encode(diff.Second);
             var encoded = new byte[subtractionLength.Length + difference.Length];
             Array.Copy(subtractionLength, 0, encoded, 0, subtractionLength.Length);
             Array.Copy(difference, 0, encoded, subtractionLength.Length, difference.Length);

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPServer", "TCPServer\TCPS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPClient", "TCPClient\TCPClient.csproj", "{02E1C7BC-F6ED-405C-9AC2-00217B09C332}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerfUnitTest", "PerfUnitTest\PerfUnitTest.csproj", "{DE3C32FE-D32D-4938-B4C0-8ECCAFB8173D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{02E1C7BC-F6ED-405C-9AC2-00217B09C332}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02E1C7BC-F6ED-405C-9AC2-00217B09C332}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02E1C7BC-F6ED-405C-9AC2-00217B09C332}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE3C32FE-D32D-4938-B4C0-8ECCAFB8173D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE3C32FE-D32D-4938-B4C0-8ECCAFB8173D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE3C32FE-D32D-4938-B4C0-8ECCAFB8173D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE3C32FE-D32D-4938-B4C0-8ECCAFB8173D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

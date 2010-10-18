@@ -38,7 +38,7 @@ namespace OpenFAST.Template.Operator
         public static readonly Operator INCREMENT = new Operator("increment");
         public static readonly Operator DELTA;
         public static readonly Operator TAIL = new Operator("tail");
-        
+
         private readonly string _name;
 
         static Operator()
@@ -96,9 +96,9 @@ namespace OpenFAST.Template.Operator
 
         public override bool Equals(object other) //POINTP
         {
-            if (ReferenceEquals(other ,this))
+            if (ReferenceEquals(other, this))
                 return true;
-            if (ReferenceEquals(other , null))//|| !(other is Operator))
+            if (ReferenceEquals(other, null) || !(other is Operator))
                 return false;
             return Equals((Operator) other);
         }

@@ -48,8 +48,8 @@ namespace OpenFAST.Template.Type.Codec
             }
 
             var diff = (TwinValue) value;
-            byte[] subtractionLength = INTEGER.Encode(diff.first);
-            byte[] difference = ASCII.Encode(diff.second);
+            byte[] subtractionLength = INTEGER.Encode(diff.First);
+            byte[] difference = ASCII.Encode(diff.Second);
             var encoded = new byte[subtractionLength.Length + difference.Length];
             Array.Copy(subtractionLength, 0, encoded, 0, subtractionLength.Length);
             Array.Copy(difference, 0, encoded, subtractionLength.Length, difference.Length);

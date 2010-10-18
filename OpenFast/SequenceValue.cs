@@ -60,7 +60,7 @@ namespace OpenFAST
             get { return _elements[index]; }
         }
 
-        #region FieldValue Members
+        #region IFieldValue Members
 
         public IFieldValue Copy()
         {
@@ -84,16 +84,16 @@ namespace OpenFAST
 
         public override bool Equals(object other)
         {
-            if (ReferenceEquals(other , this))
+            if (ReferenceEquals(other, this))
                 return true;
 
-            if (ReferenceEquals(other , null))//|| !(other is SequenceValue))
+            if (ReferenceEquals(other, null) || !(other is SequenceValue))
                 return false;
 
-            return equals((SequenceValue) other);
+            return Equals((SequenceValue) other);
         }
 
-        private bool equals(SequenceValue other)
+        private bool Equals(SequenceValue other)
         {
             if (Length != other.Length)
                 return false;
@@ -114,8 +114,8 @@ namespace OpenFAST
         {
             var builder = new StringBuilder();
             builder.Append("[ ");
-            
-            foreach (var v in _elements)
+
+            foreach (GroupValue v in _elements)
                 builder.Append('[').Append(v).Append("] ");
 
             builder.Append("]");

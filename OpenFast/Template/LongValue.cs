@@ -42,10 +42,8 @@ namespace OpenFAST.Template
         {
             if (ReferenceEquals(obj ,null))
                 return false;
-            if(!(obj is NumericValue))
-            {
+            if (!(obj is NumericValue))
                 return false;
-            }
 
             return Equals((ScalarValue) obj);
         }

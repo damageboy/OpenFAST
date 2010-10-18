@@ -24,40 +24,47 @@ using System;
 namespace OpenFAST.Template
 {
     [Serializable]
-    public class TwinValue : ScalarValue
+    public class TwinValue : ScalarValue, IEquatable<TwinValue>
     {
-        public ScalarValue first;
-        public ScalarValue second;
+        public ScalarValue First;
+        public ScalarValue Second;
 
         public TwinValue(ScalarValue first, ScalarValue second)
         {
-            this.first = first;
-            this.second = second;
-        }
-
-        public override bool Equals(Object obj)
-        {
-            if (ReferenceEquals(obj, null) )//|| !(obj is TwinValue))
-            {
-                return false;
-            }
-
-            return Equals((TwinValue) obj);
-        }
-
-        private bool Equals(TwinValue other)
-        {
-            return (first.Equals(other.first) && second.Equals(other.second));
-        }
-
-        public override int GetHashCode()
-        {
-            return first.GetHashCode()*37 + second.GetHashCode();
+            First = first;
+            Second = second;
         }
 
         public override string ToString()
         {
-            return first + ", " + second;
+            return First + ", " + Second;
         }
+
+        #region Equals
+
+        public bool Equals(TwinValue other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Equals(other.First, First) && Equals(other.Second, Second);
+        }
+
+        public override bool Equals(Object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != typeof (TwinValue)) return false;
+            return Equals((TwinValue) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (First.GetHashCode()*397) ^ Second.GetHashCode();
+            }
+        }
+
+        #endregion
     }
 }

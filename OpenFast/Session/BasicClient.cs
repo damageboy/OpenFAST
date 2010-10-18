@@ -25,42 +25,29 @@ namespace OpenFAST.Session
 {
     public sealed class BasicClient : IClient
     {
-        private readonly string name;
-
-        private readonly string vendorId;
+        private readonly string _name;
+        private readonly string _vendorId;
 
         public BasicClient(string clientName, string vendorId)
         {
-            name = clientName;
-            this.vendorId = vendorId;
+            if (clientName == null) throw new ArgumentNullException("clientName");
+            if (vendorId == null) throw new ArgumentNullException("vendorId");
+            _name = clientName;
+            _vendorId = vendorId;
         }
 
-        #region Client Members
+        #region IClient Members
 
         public string Name
         {
-            get { return name; }
+            get { return _name; }
         }
 
         public string VendorId
         {
-            get { return vendorId; }
+            get { return _vendorId; }
         }
 
         #endregion
-
-        public override bool Equals(Object obj)
-        {
-            if (ReferenceEquals(obj , this))
-                return true;
-            if (ReferenceEquals(obj , null))//|| !(obj is BasicClient))
-                return false;
-            return ((BasicClient) obj).name.Equals(name);
-        }
-
-        public override int GetHashCode()
-        {
-            return name.GetHashCode();
-        }
     }
 }

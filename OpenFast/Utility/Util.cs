@@ -81,9 +81,9 @@ namespace OpenFAST.Utility
 
         public static StringValue ApplyDifference(StringValue baseValue, TwinValue diffValue)
         {
-            int subtraction = ((IntegerValue)diffValue.first).Value;
+            int subtraction = ((IntegerValue)diffValue.First).Value;
             string baseVal = baseValue.Value;
-            string diff = ((StringValue)diffValue.second).Value;
+            string diff = ((StringValue)diffValue.Second).Value;
 
             if (subtraction < 0)
             {

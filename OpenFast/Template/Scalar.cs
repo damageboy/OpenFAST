@@ -133,7 +133,7 @@ namespace OpenFAST.Template
         public override byte[] Encode(IFieldValue fieldValue, Group encodeTemplate, Context context,
                                       BitVectorBuilder presenceMapBuilder)
         {
-            var dict = context.GetDictionary(Dictionary);
+            IDictionary dict = context.GetDictionary(Dictionary);
 
             ScalarValue priorValue = context.Lookup(dict, encodeTemplate, Key);
             var value = (ScalarValue) fieldValue;
@@ -265,9 +265,9 @@ namespace OpenFAST.Template
 
         public override bool Equals(Object other)
         {
-            if (ReferenceEquals(other,this))
+            if (ReferenceEquals(other, this))
                 return true;
-            if (ReferenceEquals(other , null))// || !(other is Scalar))
+            if (ReferenceEquals(other, null) || !(other is Scalar))
                 return false;
             return Equals((Scalar) other);
         }
