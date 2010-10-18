@@ -171,6 +171,7 @@ namespace UnitTest.Test
             var field = (ComposedScalar) fieldSet.GetField(fieldIndex);
             Assert.AreEqual(type, field.Type);
             Assert.AreEqual(name, field.Name);
+
             Scalar[] fields = field.Fields;
             Assert.AreEqual(exponentOp, fields[0].Operator);
             Assert.AreEqual(exponentValue, fields[0].DefaultValue);
@@ -211,13 +212,13 @@ namespace UnitTest.Test
 
         protected static void AssertSequence(MessageTemplate messageTemplate, int fieldIndex, int fieldCount)
         {
-            var sequence = (Sequence) messageTemplate.GetField(fieldIndex);
+            var sequence = (Sequence) messageTemplate.Fields[fieldIndex];
             AssertEquals(fieldCount, sequence.FieldCount);
         }
 
         protected static void AssertGroup(MessageTemplate messageTemplate, int fieldIndex, String name)
         {
-            var currentGroup = (Group) messageTemplate.GetField(fieldIndex);
+            var currentGroup = (Group) messageTemplate.Fields[fieldIndex];
             Assert.AreEqual(name, currentGroup.Name);
         }
 
@@ -243,20 +244,18 @@ namespace UnitTest.Test
             return doc;
         }
 
-        protected static void AssertScalarField(Scalar scalar, Type type, String name, String id, String namespace_ren,
-                                                String dictionary,
-                                                String key, Operator op, ScalarValue defaultVal, bool optional)
+        protected static void AssertScalarField(Scalar scalar, Type type, String name, String id, String ns,
+                                                String dictionary, String key, Operator op,
+                                                ScalarValue defaultVal, bool optional)
         {
-            AssertScalarField(scalar, type, name, id, namespace_ren, dictionary, key, namespace_ren, op, defaultVal,
-                              optional);
+            AssertScalarField(scalar, type, name, id, ns, dictionary, key, ns, op, defaultVal, optional);
         }
 
-        protected static void AssertScalarField(Scalar scalar, Type type, String name, String id, String namespace_ren,
-                                                String dictionary,
-                                                String key, String keyNamespace, Operator op, ScalarValue defaultVal,
-                                                bool optional)
+        protected static void AssertScalarField(Scalar scalar, Type type, String name, String id, String ns,
+                                                String dictionary, String key, String keyNamespace, Operator op,
+                                                ScalarValue defaultVal, bool optional)
         {
-            var qname = new QName(name, namespace_ren);
+            var qname = new QName(name, ns);
             Assert.AreEqual(type, scalar.Type);
             Assert.AreEqual(op, scalar.Operator);
             Assert.AreEqual(qname, scalar.QName);

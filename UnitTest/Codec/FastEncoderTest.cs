@@ -83,24 +83,18 @@ namespace UnitTest.Codec
         [Test]
         public void TestEncodeMessageWithOverlongPmap()
         {
-            var template = new MessageTemplate("",
-                                               new Field[]
-                                                   {
-                                                       new Scalar("1", FASTType.U32, Operator.COPY, new IntegerValue(1),
-                                                                  false),
-                                                       new Scalar("1", FASTType.U32, Operator.COPY, new IntegerValue(1),
-                                                                  false),
-                                                       new Scalar("1", FASTType.U32, Operator.COPY, new IntegerValue(1),
-                                                                  false),
-                                                       new Scalar("1", FASTType.U32, Operator.COPY, new IntegerValue(1),
-                                                                  false),
-                                                       new Scalar("1", FASTType.U32, Operator.COPY, new IntegerValue(1),
-                                                                  false),
-                                                       new Scalar("1", FASTType.U32, Operator.COPY, new IntegerValue(1),
-                                                                  false),
-                                                       new Scalar("1", FASTType.U32, Operator.COPY, new IntegerValue(1),
-                                                                  false)
-                                                   });
+            var template = new MessageTemplate(
+                "",
+                new Field[]
+                    {
+                        new Scalar("1", FASTType.U32, Operator.COPY, new IntegerValue(1), false),
+                        new Scalar("1", FASTType.U32, Operator.COPY, new IntegerValue(1), false),
+                        new Scalar("1", FASTType.U32, Operator.COPY, new IntegerValue(1), false),
+                        new Scalar("1", FASTType.U32, Operator.COPY, new IntegerValue(1), false),
+                        new Scalar("1", FASTType.U32, Operator.COPY, new IntegerValue(1), false),
+                        new Scalar("1", FASTType.U32, Operator.COPY, new IntegerValue(1), false),
+                        new Scalar("1", FASTType.U32, Operator.COPY, new IntegerValue(1), false)
+                    });
 
             var context = new Context();
             context.RegisterTemplate(113, template);

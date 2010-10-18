@@ -35,34 +35,29 @@ namespace UnitTest
         [Test]
         public void TestComplexMessage()
         {
-            var template = new MessageTemplate("Company",
-                                               new Field[]
-                                                   {
-                                                       new Scalar("Name", FASTType.STRING, Operator.NONE,
-                                                                  ScalarValue.UNDEFINED, false),
-                                                       new Scalar("Id", FASTType.U32, Operator.INCREMENT,
-                                                                  ScalarValue.UNDEFINED, false),
-                                                       new Sequence("Employees",
-                                                                    new Field[]
-                                                                        {
-                                                                            new Scalar("First Name", FASTType.STRING,
-                                                                                       Operator.COPY,
-                                                                                       ScalarValue.UNDEFINED, false),
-                                                                            new Scalar("Last Name", FASTType.STRING,
-                                                                                       Operator.COPY,
-                                                                                       ScalarValue.UNDEFINED, false),
-                                                                            new Scalar("Age", FASTType.U32,
-                                                                                       Operator.DELTA,
-                                                                                       ScalarValue.UNDEFINED, false)
-                                                                        }, false),
-                                                       new Group("Tax Information",
-                                                                 new Field[]
-                                                                     {
-                                                                         new Scalar("EIN", FASTType.STRING,
-                                                                                    Operator.NONE, ScalarValue.UNDEFINED,
-                                                                                    false)
-                                                                     }, false)
-                                                   });
+            var template = new MessageTemplate(
+                "Company",
+                new Field[]
+                    {
+                        new Scalar("Name", FASTType.STRING, Operator.NONE, ScalarValue.UNDEFINED, false),
+                        new Scalar("Id", FASTType.U32, Operator.INCREMENT, ScalarValue.UNDEFINED, false),
+                        new Sequence(
+                            "Employees",
+                            new Field[]
+                                {
+                                    new Scalar("First Name", FASTType.STRING, Operator.COPY, ScalarValue.UNDEFINED,
+                                               false),
+                                    new Scalar("Last Name", FASTType.STRING, Operator.COPY, ScalarValue.UNDEFINED, false)
+                                    , new Scalar("Age", FASTType.U32, Operator.DELTA, ScalarValue.UNDEFINED, false)
+                                }, false),
+                        new Group("Tax Information",
+                                  new Field[]
+                                      {
+                                          new Scalar("EIN", FASTType.STRING,
+                                                     Operator.NONE, ScalarValue.UNDEFINED,
+                                                     false)
+                                      }, false)
+                    });
             var aaaInsurance = new Message(template);
             aaaInsurance.SetFieldValue(1, new StringValue("AAA Insurance"));
             aaaInsurance.SetFieldValue(2, new IntegerValue(5));

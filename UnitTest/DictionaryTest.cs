@@ -40,7 +40,7 @@ namespace UnitTest
         {
             _output = new StreamWriter(new MemoryStream());
             _session = new Session(new MyConnection(_output.BaseStream), SessionConstants.SCP_1_0,
-                                  TemplateRegistryFields.NULL, TemplateRegistryFields.NULL);
+                                  TemplateRegistryFields.Null, TemplateRegistryFields.Null);
         }
 
         #endregion
