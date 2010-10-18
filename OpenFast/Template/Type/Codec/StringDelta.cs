@@ -42,10 +42,8 @@ namespace OpenFAST.Template.Type.Codec
 
         public override byte[] EncodeValue(ScalarValue value)
         {
-            if ((value == null) || (value == ScalarValue.NULL))
-            {
-                throw new SystemException("Cannot have null values for non-nullable string delta");
-            }
+            if (value == null || value == ScalarValue.Null)
+                throw new ArgumentNullException("value", "Cannot have null values for non-nullable string delta");
 
             var diff = (TwinValue) value;
             byte[] subtractionLength = INTEGER.Encode(diff.First);

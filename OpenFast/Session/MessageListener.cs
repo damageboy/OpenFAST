@@ -21,12 +21,12 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST.Session
 {
-    public struct MessageListener_Fields
+    public struct MessageListenerFields
     {
-        public static readonly IMessageListener NULL = new NULLMessageListener();
+        public static readonly IMessageListener Null = new NullMessageListener();
     }
 
-    public sealed class NULLMessageListener : IMessageListener
+    public sealed class NullMessageListener : IMessageListener
     {
         #region MessageListener Members
 

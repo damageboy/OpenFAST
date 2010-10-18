@@ -67,7 +67,7 @@ namespace OpenFAST.Template.Type
 
         public override void ValidateValue(ScalarValue value)
         {
-            if (value == null || value.Undefined)
+            if (value == null || value.IsUndefined)
                 return;
 
             if (value.ToLong() > MaxValue || value.ToLong() < MinValue)

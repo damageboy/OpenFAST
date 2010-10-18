@@ -39,8 +39,8 @@ namespace OpenFAST.Template.Type.Codec
 
         public override byte[] EncodeValue(ScalarValue value)
         {
-            if (value.Null)
-                return NULLABLE_BYTE_VECTOR_TYPE.EncodeValue(ScalarValue.NULL);
+            if (value.IsNull)
+                return NULLABLE_BYTE_VECTOR_TYPE.EncodeValue(ScalarValue.Null);
 
             byte[] utf8encoding = Encoding.UTF8.GetBytes(((StringValue) value).Value);
             return NULLABLE_BYTE_VECTOR_TYPE.Encode(new ByteVectorValue(utf8encoding));

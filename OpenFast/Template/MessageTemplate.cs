@@ -69,7 +69,7 @@ namespace OpenFAST.Template
         private static Field[] AddTemplateIdField(Field[] fields)
         {
             var newFields = new Field[fields.Length + 1];
-            newFields[0] = new Scalar("templateId", FASTType.U32, Operator.Operator.COPY, ScalarValue.UNDEFINED, false);
+            newFields[0] = new Scalar("templateId", FASTType.U32, Operator.Operator.COPY, ScalarValue.Undefined, false);
             Array.Copy(fields, 0, newFields, 1, fields.Length);
             return newFields;
         }

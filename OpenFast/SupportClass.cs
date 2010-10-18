@@ -1090,15 +1090,8 @@ namespace OpenFAST
                     new IPEndPoint(IPAddress.Any, 0);
 
                 PacketSupport tempPacket;
-                try
-                {
-                    byte[] dataIn = tempClient.Receive(ref remoteIpEndPoint);
-                    tempPacket = new PacketSupport(dataIn, dataIn.Length) {IpEndPoint = remoteIpEndPoint};
-                }
-                catch (Exception e)
-                {
-                    throw new Exception(e.Message);
-                }
+                byte[] dataIn = tempClient.Receive(ref remoteIpEndPoint);
+                tempPacket = new PacketSupport(dataIn, dataIn.Length) {IpEndPoint = remoteIpEndPoint};
                 packet = tempPacket;
             }
 

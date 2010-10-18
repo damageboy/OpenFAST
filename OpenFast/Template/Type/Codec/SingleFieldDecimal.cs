@@ -35,7 +35,7 @@ namespace OpenFAST.Template.Type.Codec
 
         public override byte[] EncodeValue(ScalarValue v)
         {
-            if (v == ScalarValue.NULL)
+            if (v == ScalarValue.Null)
             {
                 return NULL_VALUE_ENCODING;
             }

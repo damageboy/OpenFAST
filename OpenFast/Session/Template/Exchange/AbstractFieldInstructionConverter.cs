@@ -78,7 +78,7 @@ namespace OpenFAST.Session.Template.Exchange
             if (!OperatorTemplateMap.TryGetValue(scalar.Operator, out operatorTemplate))
                 return null;
             GroupValue operatorMessage = new Message(operatorTemplate);
-            if (!scalar.Dictionary.Equals(DictionaryFields.GLOBAL))
+            if (!scalar.Dictionary.Equals(DictionaryFields.Global))
                 operatorMessage.SetString("Dictionary", scalar.Dictionary);
             if (!scalar.Key.Equals(scalar.QName))
             {

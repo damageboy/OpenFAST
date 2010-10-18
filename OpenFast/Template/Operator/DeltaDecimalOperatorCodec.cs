@@ -44,20 +44,20 @@ namespace OpenFAST.Template.Operator
 
             if (val == null)
             {
-                if (field.Optional)
+                if (field.IsOptional)
                 {
-                    return ScalarValue.NULL;
+                    return ScalarValue.Null;
                 }
                 Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "");
                 return null;
             }
 
-            if (priorVal.Undefined && field.DefaultValue.Undefined)
+            if (priorVal.IsUndefined && field.DefaultValue.IsUndefined)
             {
                 return val;
             }
 
-            DecimalValue priorValue = priorVal.Undefined ? (DecimalValue) field.DefaultValue : (DecimalValue) priorVal;
+            DecimalValue priorValue = priorVal.IsUndefined ? (DecimalValue) field.DefaultValue : (DecimalValue) priorVal;
 
             var v = (DecimalValue) val;
             return new DecimalValue(v.Mantissa - priorValue.Mantissa,
@@ -74,46 +74,31 @@ namespace OpenFAST.Template.Operator
             }
 
             if (val == null)
-            {
                 return null;
-            }
 
-            DecimalValue priorValue;
-
-            if (priorVal.Undefined)
-            {
-                if (field.DefaultValue.Undefined)
-                {
-                    priorValue = (DecimalValue) field.BaseValue;
-                }
-                else
-                {
-                    priorValue = (DecimalValue) field.DefaultValue;
-                }
-            }
-            else
-            {
-                priorValue = (DecimalValue) priorVal;
-            }
-
+            var priorValue = (DecimalValue) (priorVal.IsUndefined
+                                                 ? (field.DefaultValue.IsUndefined
+                                                        ? field.BaseValue
+                                                        : field.DefaultValue)
+                                                 : priorVal);
             var v = (DecimalValue) val;
+
             return new DecimalValue(v.Mantissa + priorValue.Mantissa,
                                     v.Exponent + priorValue.Exponent);
         }
 
         public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)
         {
-            if (field.DefaultValue.Undefined)
+            if (field.DefaultValue.IsUndefined)
             {
-                if (field.Optional)
-                {
-                    return ScalarValue.NULL;
-                }
-                if (previousValue.Undefined)
-                {
-                    throw new SystemException(
-                        "Mandatory fields without a previous value or default value must be present.");
-                }
+                if (field.IsOptional)
+                    return ScalarValue.Null;
+
+                if (previousValue.IsUndefined)
+                    throw new ArgumentException(
+                        "Mandatory fields without a previous value or default value must be present.",
+                        "previousValue");
+
                 return previousValue;
             }
             return field.DefaultValue;

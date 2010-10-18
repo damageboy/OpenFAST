@@ -41,7 +41,7 @@ namespace OpenFAST
                 if (value.TryGetValue(key, out value2))
                     return value2;
             }
-            return ScalarValue.UNDEFINED;
+            return ScalarValue.Undefined;
         }
 
         public void Reset()

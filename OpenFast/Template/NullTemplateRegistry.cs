@@ -19,7 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
-using System;
 using System.Collections.Generic;
 
 namespace OpenFAST.Template
@@ -33,7 +32,7 @@ namespace OpenFAST.Template
             get { return null; }
         }
 
-        public bool TryGetValue(QName templateName, out MessageTemplate template)
+        public bool TryGetTemplate(QName templateName, out MessageTemplate template)
         {
             template = null;
             return false;
@@ -61,14 +60,14 @@ namespace OpenFAST.Template
         {
         }
 
-        public MessageTemplate this[int templateId]
+        public MessageTemplate GetTemplate(int templateId)
         {
-            get { return null; }
+            return null;
         }
 
-        public MessageTemplate this[string templateName]
+        public MessageTemplate GetTemplate(string templateName)
         {
-            get { return null; }
+            return null;
         }
 
         public bool IsRegistered(string templateName)
@@ -83,6 +82,12 @@ namespace OpenFAST.Template
 
         public bool IsRegistered(MessageTemplate template)
         {
+            return false;
+        }
+
+        public bool TryGetTemplate(int id, out MessageTemplate template)
+        {
+            template = null;
             return false;
         }
 
@@ -106,9 +111,9 @@ namespace OpenFAST.Template
         {
         }
 
-        public MessageTemplate this[QName templateName]
+        public MessageTemplate GetTemplate(QName templateName)
         {
-            get { return null; }
+            return null;
         }
 
         public int GetId(string name)
@@ -131,7 +136,7 @@ namespace OpenFAST.Template
             return false;
         }
 
-        public bool TryGetValue(string name, out MessageTemplate template)
+        public bool TryGetTemplate(string name, out MessageTemplate template)
         {
             template = null;
             return false;
@@ -139,6 +144,11 @@ namespace OpenFAST.Template
 
         public void Register(int templateId, QName templateName)
         {
+        }
+
+        public bool TryRegister(int id, QName templateName)
+        {
+            return true;
         }
 
         public void Register(int templateId, string name)
@@ -186,21 +196,6 @@ namespace OpenFAST.Template
 
         public void Add(MessageTemplate template)
         {
-        }
-
-        public MessageTemplate GetTemplate(string name)
-        {
-            return null;
-        }
-
-        public MessageTemplate GetTemplate(QName name)
-        {
-            return null;
-        }
-
-        public MessageTemplate GetTemplate(int id)
-        {
-            return null;
         }
 
         public bool HasTemplate(string name)

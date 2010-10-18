@@ -32,7 +32,7 @@ namespace OpenFAST.Template.Type.Codec
             get { return new StringValue(""); }
         }
 
-        public override bool Nullable
+        public override bool IsNullable
         {
             get { return true; }
         }
@@ -50,7 +50,7 @@ namespace OpenFAST.Template.Type.Codec
 
         public override byte[] EncodeValue(ScalarValue value)
         {
-            if (value.Null)
+            if (value.IsNull)
                 return NULL_VALUE_ENCODING;
 
             var diff = (TwinValue) value;

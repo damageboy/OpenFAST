@@ -36,7 +36,7 @@ namespace OpenFAST.Template.Operator
         {
             if (value == null)
             {
-                return ScalarValue.NULL;
+                return ScalarValue.Null;
             }
 
             return value;
@@ -49,7 +49,7 @@ namespace OpenFAST.Template.Operator
 
         public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)
         {
-            throw new SystemException("This method should never be called.");
+            throw new InvalidOperationException("This method should never be called.");
         }
 
         public override bool Equals(Object obj)

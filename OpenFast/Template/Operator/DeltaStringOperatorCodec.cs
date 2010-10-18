@@ -37,7 +37,7 @@ namespace OpenFAST.Template.Operator
         {
             if (value == null)
             {
-                return ScalarValue.NULL;
+                return ScalarValue.Null;
             }
 
             if (priorValue == null)
@@ -47,19 +47,19 @@ namespace OpenFAST.Template.Operator
                 return null;
             }
 
-            ScalarValue v = (priorValue.Undefined) ? field.BaseValue : priorValue;
+            ScalarValue v = (priorValue.IsUndefined) ? field.BaseValue : priorValue;
             return Util.GetDifference((StringValue) value, (StringValue) v);
         }
 
         public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue previousValue, Scalar field)
         {
-            if ((newValue == null) || newValue.Null)
+            if ((newValue == null) || newValue.IsNull)
             {
                 return null;
             }
 
             var diffValue = (TwinValue) newValue;
-            ScalarValue v = (previousValue.Undefined) ? field.BaseValue : previousValue;
+            ScalarValue v = (previousValue.IsUndefined) ? field.BaseValue : previousValue;
             if (diffValue.First.ToInt() > v.ToString().Length)
             {
                 Global.HandleError(FastConstants.D7_SUBTRCTN_LEN_LONG,
@@ -71,7 +71,7 @@ namespace OpenFAST.Template.Operator
 
         public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)
         {
-            throw new SystemException("As of FAST v1.1 Delta values must be present in stream");
+            throw new InvalidOperationException("As of FAST v1.1 Delta values must be present in stream");
         }
 
         public override bool Equals(Object obj)

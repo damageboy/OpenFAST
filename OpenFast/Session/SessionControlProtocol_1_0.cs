@@ -41,19 +41,19 @@ namespace OpenFAST.Session
                                                       new Field[]
                                                           {
                                                               new Scalar("Severity", Type.U32, Operator.NONE,
-                                                                         ScalarValue.UNDEFINED, false),
+                                                                         ScalarValue.Undefined, false),
                                                               new Scalar("Code", Type.U32, Operator.NONE,
-                                                                         ScalarValue.UNDEFINED, false),
+                                                                         ScalarValue.Undefined, false),
                                                               new Scalar("Value", Type.U32, Operator.NONE,
-                                                                         ScalarValue.UNDEFINED, true),
+                                                                         ScalarValue.Undefined, true),
                                                               new Scalar("Description", Type.ASCII, Operator.NONE,
-                                                                         ScalarValue.UNDEFINED, false)
+                                                                         ScalarValue.Undefined, false)
                                                           });
             FAST_HELLO_TEMPLATE = new MessageTemplate("",
                                                       new Field[]
                                                           {
                                                               new Scalar("SenderName", Type.ASCII, Operator.NONE,
-                                                                         ScalarValue.UNDEFINED, false)
+                                                                         ScalarValue.Undefined, false)
                                                           });
             RESET_HANDLER = new RESETMessageHandler();
         }

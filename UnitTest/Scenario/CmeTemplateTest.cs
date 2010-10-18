@@ -34,7 +34,7 @@ namespace UnitTest.Scenario
         public void TestDeltas()
         {
             var templateSource = new StreamReader("CME/templates.xml");
-            var templateLoader = new XMLMessageTemplateLoader {LoadTemplateIdFromAuxId = true};
+            var templateLoader = new XmlMessageTemplateLoader {LoadTemplateIdFromAuxId = true};
             templateLoader.Load(templateSource.BaseStream);
 
 

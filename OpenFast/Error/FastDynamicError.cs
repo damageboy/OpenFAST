@@ -24,11 +24,12 @@ using System;
 namespace OpenFAST.Error
 {
     [Serializable]
-    public class FastDynamicError : SystemException
+    public class FastDynamicError : Exception
     {
         private readonly ErrorCode _error;
 
-        public FastDynamicError(ErrorCode error) : base(error.ShortName + ": " + error.Description)
+        public FastDynamicError(ErrorCode error) 
+            : base(error.ShortName + ": " + error.Description)
         {
             _error = error;
         }

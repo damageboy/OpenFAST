@@ -25,8 +25,8 @@ namespace OpenFAST
 {
     public struct DictionaryFields
     {
-        public static readonly string TEMPLATE = "template";
-        public static readonly string GLOBAL = "global";
+        public static readonly string Template = "template";
+        public static readonly string Global = "global";
     }
 
     public interface IDictionary

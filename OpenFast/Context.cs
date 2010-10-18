@@ -33,7 +33,7 @@ namespace OpenFAST
 
         private QName _currentApplicationType;
         private ITrace _encodeTraceInternal;
-        private IErrorHandler _errorHandler = ErrorHandler_Fields.DEFAULT;
+        private IErrorHandler _errorHandler = ErrorHandlerFields.Default;
         private ITemplateRegistry _templateRegistry = new BasicTemplateRegistry();
 
         public Context()
@@ -79,14 +79,13 @@ namespace OpenFAST
 
         public MessageTemplate GetTemplate(int templateId)
         {
-#warning TODO: switch to Try*
-            if (!_templateRegistry.IsRegistered(templateId))
-            {
-                _errorHandler.Error(FastConstants.D9_TEMPLATE_NOT_REGISTERED,
-                                   "The template with id " + templateId + " has not been registered.");
-                return null;
-            }
-            return _templateRegistry[templateId];
+            MessageTemplate template;
+            if (_templateRegistry.TryGetTemplate(templateId, out template))
+                return template;
+
+            _errorHandler.Error(FastConstants.D9_TEMPLATE_NOT_REGISTERED,
+                                "The template with id " + templateId + " has not been registered.");
+            return null;
         }
 
         public void RegisterTemplate(int templateId, MessageTemplate template)
@@ -101,7 +100,7 @@ namespace OpenFAST
 
         public ScalarValue Lookup(IDictionary dictionary, Group group, QName key)
         {
-            if (group.HasTypeReference())
+            if (group.HasTypeReference)
                 _currentApplicationType = group.TypeReference;
             return dictionary.Lookup(group, key, _currentApplicationType);
         }
@@ -113,7 +112,7 @@ namespace OpenFAST
 
         public void Store(IDictionary dictionary, Group group, QName key, ScalarValue valueToEncode)
         {
-            if (group.HasTypeReference())
+            if (group.HasTypeReference)
                 _currentApplicationType = group.TypeReference;
             dictionary.Store(group, _currentApplicationType, key, valueToEncode);
         }
@@ -136,7 +135,7 @@ namespace OpenFAST
 
         public void NewMessage(MessageTemplate template)
         {
-            _currentApplicationType = (template.HasTypeReference())
+            _currentApplicationType = (template.HasTypeReference)
                                          ? template.TypeReference
                                          : FastConstants.ANY_TYPE;
         }

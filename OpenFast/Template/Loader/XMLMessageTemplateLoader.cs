@@ -28,7 +28,7 @@ using System.Collections.Generic;
 
 namespace OpenFAST.Template.Loader
 {
-    public sealed class XMLMessageTemplateLoader : IMessageTemplateLoader
+    public sealed class XmlMessageTemplateLoader : IMessageTemplateLoader
     {
         internal const string TemplateDefinitionNs = "http://www.fixprotocol.org/ns/fast/td/1.1";
 
@@ -42,7 +42,7 @@ namespace OpenFAST.Template.Loader
 
         private bool _loadTemplateIdFromAuxId;
 
-        static XMLMessageTemplateLoader()
+        static XmlMessageTemplateLoader()
         {
             IoError = new ErrorCode(FastConstants.STATIC, - 1, "IOERROR", "IO Error", FastAlertSeverity.ERROR);
             XmlParsingError = new ErrorCode(FastConstants.STATIC, - 1, "XMLPARSEERR", "XML Parsing Error",
@@ -51,23 +51,24 @@ namespace OpenFAST.Template.Loader
                                          FastAlertSeverity.ERROR);
         }
 
-        public XMLMessageTemplateLoader()
+        public XmlMessageTemplateLoader()
         {
             _initialContext = CreateInitialContext();
         }
 
-        public IErrorHandler ErrorHandler
+        public void SetErrorHandler(IErrorHandler value)
         {
-            set { _initialContext.ErrorHandler = value; }
+            _initialContext.ErrorHandler = value;
         }
 
-        public Dictionary<string, FASTType> TypeMap
+        public void SetTypeMap(Dictionary<string, FASTType> value)
         {
-            set { _initialContext.TypeMap = value; }
+            _initialContext.TypeMap = value;
         }
 
         public bool LoadTemplateIdFromAuxId
         {
+            get { return _loadTemplateIdFromAuxId; }
             set { _loadTemplateIdFromAuxId = value; }
         }
 
@@ -121,7 +122,7 @@ namespace OpenFAST.Template.Loader
         {
             var initialContext = new ParsingContext
                                      {
-                                         ErrorHandler = ErrorHandler_Fields.DEFAULT,
+                                         ErrorHandler = ErrorHandlerFields.Default,
                                          TemplateRegistry = new BasicTemplateRegistry(),
                                          TypeMap = FASTType.RegisteredTypeMap,
                                          FieldParsers = new List<IFieldParser>()

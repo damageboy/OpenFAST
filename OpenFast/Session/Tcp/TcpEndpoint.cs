@@ -31,7 +31,7 @@ namespace OpenFAST.Session.Tcp
         private readonly string _host;
         private readonly int _port;
         private bool _closed = true;
-        private ConnectionListener _connectionListener = ConnectionListener.NULL;
+        private ConnectionListener _connectionListener = ConnectionListener.Null;
         private TcpListener _serverSocket;
 
         public TcpEndpoint(int port)

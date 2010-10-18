@@ -36,7 +36,7 @@ namespace OpenFAST
         private readonly Dictionary<MessageTemplate, IMessageHandler> _templateHandlers =
             new Dictionary<MessageTemplate, IMessageHandler>();
 
-        private IMessageBlockReader _blockReader = MessageBlockReader_Fields.NULL;
+        private IMessageBlockReader _blockReader = MessageBlockReaderFields.Null;
 
         public MessageInputStream(Stream inputStream) : this(inputStream, new Context())
         {

@@ -150,7 +150,7 @@ namespace OpenFAST.Template
                                       BitVectorBuilder presenceMapBuilder)
         {
             byte[] encoding = Encode(value, encodeTemplate, context);
-            if (Optional)
+            if (IsOptional)
             {
                 if (encoding.Length != 0)
                     presenceMapBuilder.Set();
@@ -182,7 +182,7 @@ namespace OpenFAST.Template
                 {
                     IFieldValue fieldValue = groupValue.GetValue(fieldIndex);
                     Field field = _fields[fieldIndex];
-                    if (!field.Optional && fieldValue == null)
+                    if (!field.IsOptional && fieldValue == null)
                     {
                         Global.HandleError(FastConstants.GENERAL_ERROR, "Mandatory field " + field + " is null");
                     }
@@ -247,12 +247,12 @@ namespace OpenFAST.Template
         {
             if (!UsesPresenceMap())
             {
-                return DecodeFieldValues(inStream, template, BitVectorReader.NULL, context);
+                return DecodeFieldValues(inStream, template, BitVectorReader.Null, context);
             }
             BitVector pmap = ((BitVectorValue) TypeCodec.BIT_VECTOR.Decode(inStream)).Value;
             if (context.TraceEnabled)
                 context.DecodeTrace.Pmap(pmap.Bytes);
-            if (pmap.Overlong)
+            if (pmap.IsOverlong)
             {
                 Global.HandleError(FastConstants.R7_PMAP_OVERLONG,
                                    "The presence map " + pmap + " for the group " + this + " is overlong.");
@@ -288,7 +288,7 @@ namespace OpenFAST.Template
 
         public override bool UsesPresenceMapBit()
         {
-            return Optional;
+            return IsOptional;
         }
 
         public virtual bool UsesPresenceMap()
@@ -374,7 +374,7 @@ namespace OpenFAST.Template
 
         public virtual bool HasField(string fieldName)
         {
-            return _fieldNameMap.ContainsKey(QnameWithChildNs(fieldName));
+            return HasField(QnameWithChildNs(fieldName));
         }
 
         public virtual bool HasField(QName fieldName)
@@ -382,9 +382,9 @@ namespace OpenFAST.Template
             return _fieldNameMap.ContainsKey(fieldName);
         }
 
-        public bool HasTypeReference()
+        public bool HasTypeReference
         {
-            return _typeReference != null;
+            get { return _typeReference != null; }
         }
 
         public override string ToString()
@@ -419,18 +419,6 @@ namespace OpenFAST.Template
         }
 
         #endregion
-
-#warning Never used? Not sure why IDs are even used by this class
-        public virtual bool HasFieldWithId(string fid)
-        {
-            return _fieldIdMap.ContainsKey(fid);
-        }
-
-#warning Never used? Not sure why IDs are even used by this class
-        public virtual Field GetFieldById(string fid)
-        {
-            return _fieldIdMap[fid];
-        }
 
         public virtual StaticTemplateReference GetStaticTemplateReference(string qname)
         {

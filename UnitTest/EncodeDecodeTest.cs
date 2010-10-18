@@ -39,22 +39,22 @@ namespace UnitTest
                 "Company",
                 new Field[]
                     {
-                        new Scalar("Name", FASTType.STRING, Operator.NONE, ScalarValue.UNDEFINED, false),
-                        new Scalar("Id", FASTType.U32, Operator.INCREMENT, ScalarValue.UNDEFINED, false),
+                        new Scalar("Name", FASTType.STRING, Operator.NONE, ScalarValue.Undefined, false),
+                        new Scalar("Id", FASTType.U32, Operator.INCREMENT, ScalarValue.Undefined, false),
                         new Sequence(
                             "Employees",
                             new Field[]
                                 {
-                                    new Scalar("First Name", FASTType.STRING, Operator.COPY, ScalarValue.UNDEFINED,
+                                    new Scalar("First Name", FASTType.STRING, Operator.COPY, ScalarValue.Undefined,
                                                false),
-                                    new Scalar("Last Name", FASTType.STRING, Operator.COPY, ScalarValue.UNDEFINED, false)
-                                    , new Scalar("Age", FASTType.U32, Operator.DELTA, ScalarValue.UNDEFINED, false)
+                                    new Scalar("Last Name", FASTType.STRING, Operator.COPY, ScalarValue.Undefined, false)
+                                    , new Scalar("Age", FASTType.U32, Operator.DELTA, ScalarValue.Undefined, false)
                                 }, false),
                         new Group("Tax Information",
                                   new Field[]
                                       {
                                           new Scalar("EIN", FASTType.STRING,
-                                                     Operator.NONE, ScalarValue.UNDEFINED,
+                                                     Operator.NONE, ScalarValue.Undefined,
                                                      false)
                                       }, false)
                     });

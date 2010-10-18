@@ -72,7 +72,7 @@ namespace UnitTest.Scenario
                                               new Field[]
                                                   {
                                                       new Scalar("string", FASTType.ASCII, Operator.COPY,
-                                                                 ScalarValue.UNDEFINED, false)
+                                                                 ScalarValue.Undefined, false)
                                                   }, true);
             var group = new Group("group", new Field[] {nestedSequence}, true);
             var t = new MessageTemplate("template", new Field[] {group});

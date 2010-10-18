@@ -29,32 +29,32 @@ namespace OpenFAST.Template
     public abstract class Field : IEquatable<Field>
     {
         private readonly QName _name;
-        private readonly bool _optional;
+        private readonly bool _isOptional;
         private Dictionary<QName, string> _attributes;
         private string _id;
         private QName _key;
 
-        protected Field(QName name, bool optional)
+        protected Field(QName name, bool isOptional)
         {
             _name = name;
             _key = name;
-            _optional = optional;
+            _isOptional = isOptional;
         }
 
 
-        protected Field(QName name, QName key, bool optional)
+        protected Field(QName name, QName key, bool isOptional)
         {
             _name = name;
             _key = key;
-            _optional = optional;
+            _isOptional = isOptional;
         }
 
 
-        protected Field(string name, string key, bool optional, string id)
+        protected Field(string name, string key, bool isOptional, string id)
         {
             _name = new QName(name);
             _key = new QName(key);
-            _optional = optional;
+            _isOptional = isOptional;
             _id = id;
         }
 
@@ -68,9 +68,9 @@ namespace OpenFAST.Template
             get { return _name; }
         }
 
-        public bool Optional
+        public bool IsOptional
         {
-            get { return _optional; }
+            get { return _isOptional; }
         }
 
         public QName Key
@@ -100,7 +100,7 @@ namespace OpenFAST.Template
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(other._name, _name) && other._optional.Equals(_optional) &&
+            return Equals(other._name, _name) && other._isOptional.Equals(_isOptional) &&
                    Equals(other._attributes, _attributes) && Equals(other._id, _id) && Equals(other._key, _key);
         }
 
@@ -117,7 +117,7 @@ namespace OpenFAST.Template
             unchecked
             {
                 int result = (_name != null ? _name.GetHashCode() : 0);
-                result = (result * 397) ^ _optional.GetHashCode();
+                result = (result * 397) ^ _isOptional.GetHashCode();
                 result = (result * 397) ^ (_attributes != null ? _attributes.GetHashCode() : 0);
                 result = (result * 397) ^ (_id != null ? _id.GetHashCode() : 0);
                 result = (result * 397) ^ (_key != null ? _key.GetHashCode() : 0);

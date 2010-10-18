@@ -65,20 +65,24 @@ namespace OpenFAST
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(other._namespace, _namespace) && Equals(other._name, _name);
+            // first compare name, as it is more likely to be different.
+            return Equals(other._name, _name) && Equals(other._namespace, _namespace);
         }
 
         public override int GetHashCode()
         {
-            if (_hashCode == -1)
+            var hc = _hashCode;
+
+            if (hc == -1)
             {
                 // Cache hash code
                 unchecked
                 {
-                    _hashCode = (_namespace.GetHashCode()*397) ^ _name.GetHashCode();
+                    _hashCode = hc = (_namespace.GetHashCode()*397) ^ _name.GetHashCode();
                 }
             }
-            return _hashCode;
+
+            return hc;
         }
 
         public override bool Equals(object obj)

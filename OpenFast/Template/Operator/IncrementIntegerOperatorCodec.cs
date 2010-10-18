@@ -40,17 +40,17 @@ namespace OpenFAST.Template.Operator
             }
             if (value == null)
             {
-                if (field.Optional)
+                if (field.IsOptional)
                 {
-                    if (priorValue == ScalarValue.UNDEFINED && field.DefaultValue.Undefined)
+                    if (priorValue == ScalarValue.Undefined && field.DefaultValue.IsUndefined)
                     {
                         return null;
                     }
-                    return ScalarValue.NULL;
+                    return ScalarValue.Null;
                 }
                 throw new ArgumentException();
             }
-            if (priorValue.Undefined)
+            if (priorValue.IsUndefined)
             {
                 if (value.Equals(field.DefaultValue))
                 {
@@ -74,15 +74,15 @@ namespace OpenFAST.Template.Operator
         {
             if (previousValue == null)
                 return null;
-            if (previousValue.Undefined)
+            if (previousValue.IsUndefined)
             {
-                if (field.DefaultValue.Undefined)
+                if (field.DefaultValue.IsUndefined)
                 {
-                    if (field.Optional)
+                    if (field.IsOptional)
                     {
                         return null;
                     }
-                    throw new SystemException(
+                    throw new InvalidOperationException(
                         "Field with operator increment must send a value if no previous value existed.");
                 }
                 return field.DefaultValue;

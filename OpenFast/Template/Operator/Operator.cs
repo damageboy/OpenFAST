@@ -129,7 +129,7 @@ namespace OpenFAST.Template.Operator
 
             public override void Validate(Scalar scalar)
             {
-                if (scalar.DefaultValue.Undefined)
+                if (scalar.DefaultValue.IsUndefined)
                 {
                     Global.HandleError(FastConstants.S4_NO_INITIAL_VALUE_FOR_CONST,
                                        "The field " + scalar + " must have a default value defined.");
@@ -172,7 +172,7 @@ namespace OpenFAST.Template.Operator
 
             public override void Validate(Scalar scalar)
             {
-                if (!scalar.Optional && scalar.DefaultValue.Undefined)
+                if (!scalar.IsOptional && scalar.DefaultValue.IsUndefined)
                 {
                     Global.HandleError(FastConstants.S5_NO_INITVAL_MNDTRY_DFALT,
                                        "The field " + scalar + " must have a default value defined.");

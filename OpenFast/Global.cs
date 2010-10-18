@@ -26,7 +26,7 @@ namespace OpenFAST
 {
     public static class Global
     {
-        private static IErrorHandler _errorHandler = ErrorHandler_Fields.DEFAULT;
+        private static IErrorHandler _errorHandler = ErrorHandlerFields.Default;
         private static int _currentImplicitId = (int) ((DateTime.Now.Ticks - 621355968000000000)/10000%10000);
 
         public static IErrorHandler ErrorHandler

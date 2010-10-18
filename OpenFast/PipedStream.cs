@@ -85,12 +85,12 @@ namespace OpenFAST
 
         public override long Seek(long offset, SeekOrigin origin)
         {
-            throw new Exception("The method or operation is not implemented.");
+            throw new NotImplementedException();
         }
 
         public override void SetLength(long value)
         {
-            throw new Exception("The method or operation is not implemented.");
+            throw new NotImplementedException();
         }
 
         public void Write(byte[] buffer)

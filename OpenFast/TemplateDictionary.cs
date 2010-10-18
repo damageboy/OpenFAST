@@ -42,7 +42,7 @@ namespace OpenFAST
                     return value2;
             }
 
-            return ScalarValue.UNDEFINED;
+            return ScalarValue.Undefined;
         }
 
         public void Reset()

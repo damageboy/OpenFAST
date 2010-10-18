@@ -25,16 +25,16 @@ namespace OpenFAST
 {
     public class BitVectorReader
     {
-        public static readonly BitVectorReader NULL;
-        public static readonly BitVectorReader INFINITE_TRUE;
+        public static readonly BitVectorReader Null;
+        public static readonly BitVectorReader InfiniteTrue;
 
         private readonly BitVector _vector;
         private int _index;
 
         static BitVectorReader()
         {
-            NULL = new NullBitVectorReader(null);
-            INFINITE_TRUE = new InfiniteBitVectorReader(null);
+            Null = new NullBitVectorReader(null);
+            InfiniteTrue = new InfiniteBitVectorReader(null);
         }
 
         public BitVectorReader(BitVector vector)
@@ -98,7 +98,7 @@ namespace OpenFAST
 
             public override bool Read()
             {
-                throw new SystemException();
+                throw new InvalidOperationException();
             }
 
             public override bool HasMoreBitsSet()

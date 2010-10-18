@@ -23,12 +23,10 @@ using System;
 
 namespace OpenFAST.Error
 {
-    public struct ErrorHandler_Fields
+    public struct ErrorHandlerFields
     {
-// ReSharper disable InconsistentNaming
-        public static readonly IErrorHandler DEFAULT = new DefaultErrorHandler();
-        public static readonly IErrorHandler NULL = new NullErrorHandler();
-// ReSharper restore InconsistentNaming
+        public static readonly IErrorHandler Default = new DefaultErrorHandler();
+        public static readonly IErrorHandler Null = new NullErrorHandler();
     }
 
     public class DefaultErrorHandler : IErrorHandler

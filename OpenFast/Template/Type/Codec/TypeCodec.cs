@@ -58,7 +58,7 @@ namespace OpenFAST.Template.Type.Codec
         public static readonly TypeCodec TIME_INTEGER = new TimeInteger();
         public static readonly TypeCodec TIME_IN_MS = new MillisecondsSinceMidnight();
 
-        public virtual bool Nullable
+        public virtual bool IsNullable
         {
             get { return false; }
         }

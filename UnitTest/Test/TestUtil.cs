@@ -31,10 +31,9 @@ namespace UnitTest.Test
         public static byte[] ToByte(StreamWriter stream)
         {
             if (stream.BaseStream is MemoryStream)
-            {
                 return ToByte((MemoryStream) stream.BaseStream);
-            }
-            throw new Exception("Invalid base stream");
+
+            throw new ArgumentException("Invalid base stream", "stream");
         }
 
         public static byte[] ToByte(MemoryStream stream)

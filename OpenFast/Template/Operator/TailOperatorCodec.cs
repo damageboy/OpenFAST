@@ -40,9 +40,9 @@ namespace OpenFAST.Template.Operator
             {
                 if (priorValue == null)
                     return null;
-                if (priorValue.Undefined && field.DefaultValue.Undefined)
+                if (priorValue.IsUndefined && field.DefaultValue.IsUndefined)
                     return null;
-                return ScalarValue.NULL;
+                return ScalarValue.Null;
             }
 
             if (priorValue == null)
@@ -50,7 +50,7 @@ namespace OpenFAST.Template.Operator
                 return value;
             }
 
-            if (priorValue.Undefined)
+            if (priorValue.IsUndefined)
             {
                 priorValue = field.BaseValue;
             }
@@ -81,12 +81,12 @@ namespace OpenFAST.Template.Operator
         {
             StringValue baseValue;
 
-            if ((previousValue == null) && !field.Optional)
+            if ((previousValue == null) && !field.IsOptional)
             {
                 Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "");
                 return null;
             }
-            if ((previousValue == null) || previousValue.Undefined)
+            if ((previousValue == null) || previousValue.IsUndefined)
             {
                 baseValue = (StringValue) field.BaseValue;
             }
@@ -95,9 +95,9 @@ namespace OpenFAST.Template.Operator
                 baseValue = (StringValue) previousValue;
             }
 
-            if (newValue == null || newValue.Null)
+            if (newValue == null || newValue.IsNull)
             {
-                if (field.Optional)
+                if (field.IsOptional)
                 {
                     return null;
                 }
@@ -114,9 +114,9 @@ namespace OpenFAST.Template.Operator
         public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)
         {
             ScalarValue value = previousValue;
-            if (value != null && value.Undefined)
-                value = (field.DefaultValue.Undefined) ? null : field.DefaultValue;
-            if (value == null && !field.Optional)
+            if (value != null && value.IsUndefined)
+                value = (field.DefaultValue.IsUndefined) ? null : field.DefaultValue;
+            if (value == null && !field.IsOptional)
             {
                 Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT,
                                    "The field " + field + " was not present.");

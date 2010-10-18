@@ -59,7 +59,7 @@ namespace OpenFAST.Template.Type
         public override ScalarValue GetValue(string value)
         {
             if (value == null)
-                return ScalarValue.UNDEFINED;
+                return ScalarValue.Undefined;
 
             try
             {

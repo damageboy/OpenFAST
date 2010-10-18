@@ -76,7 +76,7 @@ namespace OpenFAST
             get { return _bytes.Length * 7; }
         }
 
-        public bool Overlong
+        public bool IsOverlong
         {
             get { return (_bytes.Length > 1) && ((_bytes[_bytes.Length - 1] & VALUE_BITS_SET) == 0); }
         }

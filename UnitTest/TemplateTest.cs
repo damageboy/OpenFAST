@@ -36,7 +36,7 @@ namespace UnitTest
         [SetUp]
         protected void SetUp()
         {
-            loader = new XMLMessageTemplateLoader();
+            loader = new XmlMessageTemplateLoader();
             loader.Load(new StreamReader("components.xml").BaseStream);
             loader.Load(new StreamReader("preTrade.xml").BaseStream);
             loader.Load(new StreamReader("session.xml").BaseStream);
@@ -54,14 +54,14 @@ namespace UnitTest
 
         public void TestTemplateExtension()
         {
-            MessageTemplate logon = loader.TemplateRegistry[new QName("Logon", SESSION_NS)];
+            MessageTemplate logon = loader.TemplateRegistry.GetTemplate(new QName("Logon", SESSION_NS));
             Assert.IsTrue(logon.HasAttribute(new QName("reset", SCP_1_1_NS)));
         }
 
         [Test]
         public void TestTemplates()
         {
-            MessageTemplate quote = loader.TemplateRegistry[new QName("Quote", PRE_TRADE_NS)];
+            MessageTemplate quote = loader.TemplateRegistry.GetTemplate(new QName("Quote", PRE_TRADE_NS));
 
             Assert.AreEqual(FIX_44_NS, quote.GetField("QuoteID").QName.Namespace);
             Assert.IsNotNull(quote.GetField(new QName("Group", EXT_NS)));

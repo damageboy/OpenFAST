@@ -46,7 +46,7 @@ namespace OpenFAST
             for (int i = 0; i < flds.Length; i++)
             {
                 var scalar = flds[i] as Scalar;
-                if (scalar != null && scalar.Operator.Equals(Operator.CONSTANT) && !scalar.Optional)
+                if (scalar != null && scalar.Operator.Equals(Operator.CONSTANT) && !scalar.IsOptional)
                 {
                     values[i] = scalar.DefaultValue;
                 }

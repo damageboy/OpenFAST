@@ -19,6 +19,7 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
+using System;
 using System.Collections.Generic;
 
 namespace OpenFAST.Template
@@ -31,9 +32,9 @@ namespace OpenFAST.Template
 
         public abstract MessageTemplate[] Templates { get; }
 
-        public virtual MessageTemplate this[string name]
+        public virtual MessageTemplate GetTemplate(string name)
         {
-            get { return this[new QName(name)]; }
+            return GetTemplate(new QName(name));
         }
 
         public virtual int GetId(string name)
@@ -63,9 +64,11 @@ namespace OpenFAST.Template
             Remove(new QName(name));
         }
 
-        public bool TryGetValue(string name, out MessageTemplate template)
+        public abstract bool TryGetTemplate(int id, out MessageTemplate template);
+
+        public bool TryGetTemplate(string name, out MessageTemplate template)
         {
-            return TryGetValue(new QName(name), out template);
+            return TryGetTemplate(new QName(name), out template);
         }
 
         public bool TryGetId(string name, out int id)
@@ -84,10 +87,10 @@ namespace OpenFAST.Template
         }
 
         public abstract void Define(MessageTemplate param1);
-        public abstract MessageTemplate this[int key] { get; }
+        public abstract MessageTemplate GetTemplate(int key);
         public abstract int GetId(QName param1);
         public abstract void Remove(QName param1);
-        public abstract MessageTemplate this[QName key] { get; }
+        public abstract MessageTemplate GetTemplate(QName key);
         public abstract bool IsRegistered(int param1);
         public abstract void Register(int param1, MessageTemplate param2);
         public abstract void Remove(MessageTemplate param1);
@@ -97,7 +100,8 @@ namespace OpenFAST.Template
         public abstract void Remove(int param1);
         public abstract int GetId(MessageTemplate param1);
         public abstract void Register(int param1, QName param2);
-        public abstract bool TryGetValue(QName templateName, out MessageTemplate template);
+        public abstract bool TryRegister(int param1, QName param2);
+        public abstract bool TryGetTemplate(QName templateName, out MessageTemplate template);
         public abstract bool TryGetId(QName templateName, out int id);
         public abstract bool TryGetId(MessageTemplate template, out int id);
 

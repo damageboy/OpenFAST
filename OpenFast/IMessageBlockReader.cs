@@ -23,19 +23,14 @@ using System.IO;
 
 namespace OpenFAST
 {
-    public struct MessageBlockReader_Fields
+    public struct MessageBlockReaderFields
     {
-        public static readonly IMessageBlockReader NULL;
-
-        static MessageBlockReader_Fields()
-        {
-            NULL = new NullMessageBlockReader();
-        }
+        public static readonly IMessageBlockReader Null = new NullMessageBlockReader();
     }
 
     public sealed class NullMessageBlockReader : IMessageBlockReader
     {
-        #region MessageBlockReader Members
+        #region IMessageBlockReader Members
 
         public bool ReadBlock(Stream inStream)
         {

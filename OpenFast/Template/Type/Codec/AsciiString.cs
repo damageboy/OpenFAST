@@ -35,10 +35,8 @@ namespace OpenFAST.Template.Type.Codec
 
         public override byte[] EncodeValue(ScalarValue value)
         {
-            if ((value == null) || value.Null)
-            {
-                throw new SystemException("Only nullable strings can represent null values.");
-            }
+            if (value == null || value.IsNull)
+                throw new ArgumentNullException("value", "Only nullable strings can represent null values.");
 
             string str = value.ToString();
 #warning Bug?
@@ -54,6 +52,7 @@ namespace OpenFAST.Template.Type.Codec
                 }
                 return Encoding.UTF8.GetBytes(str);
             }
+
             return NULL_VALUE_ENCODING;
         }
 

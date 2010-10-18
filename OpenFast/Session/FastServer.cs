@@ -30,7 +30,7 @@ namespace OpenFAST.Session
         private readonly IEndpoint _endpoint;
         private readonly string _serverName;
         private readonly ISessionProtocol _sessionProtocol;
-        private IErrorHandler _errorHandler = ErrorHandler_Fields.DEFAULT;
+        private IErrorHandler _errorHandler = ErrorHandlerFields.Default;
         private bool _listening;
         private SupportClass.ThreadClass _serverThread;
         private ISessionHandler _sessionHandler = SessionHandlerFields.Null;

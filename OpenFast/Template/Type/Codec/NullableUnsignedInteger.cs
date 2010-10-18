@@ -31,14 +31,14 @@ namespace OpenFAST.Template.Type.Codec
         {
         }
 
-        public override bool Nullable
+        public override bool IsNullable
         {
             get { return true; }
         }
 
         public override byte[] EncodeValue(ScalarValue v)
         {
-            if (v.Null)
+            if (v.IsNull)
                 return NULL_VALUE_ENCODING;
 
             return UINT.EncodeValue(((NumericValue) v).Increment());

@@ -33,14 +33,14 @@ namespace OpenFAST.Template.Type.Codec
             get { return new DecimalValue(0.0); }
         }
 
-        public override bool Nullable
+        public override bool IsNullable
         {
             get { return true; }
         }
 
         public override byte[] EncodeValue(ScalarValue v)
         {
-            if (v == ScalarValue.NULL)
+            if (v == ScalarValue.Null)
             {
                 return NULL_VALUE_ENCODING;
             }
@@ -73,7 +73,7 @@ namespace OpenFAST.Template.Type.Codec
         {
             ScalarValue exp = NULLABLE_INTEGER.Decode(inStream);
 
-            if ((exp == null) || exp.Null)
+            if ((exp == null) || exp.IsNull)
             {
                 return null;
             }

@@ -24,16 +24,18 @@ using System;
 namespace OpenFAST.Error
 {
     [Serializable]
-    public class FastException : SystemException
+    public class FastException : Exception
     {
         private readonly ErrorCode _code;
 
-        public FastException(string message, ErrorCode code) : base(message)
+        public FastException(string message, ErrorCode code)
+            : base(message)
         {
             _code = code;
         }
 
-        public FastException(string message, ErrorCode code, Exception cause) : base(message, cause)
+        public FastException(string message, ErrorCode code, Exception cause)
+            : base(message, cause)
         {
             _code = code;
         }

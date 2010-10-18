@@ -59,7 +59,7 @@ namespace OpenFAST.Session.Template.Exchange
         {
             FASTType type = _templateTypeMap[fieldDef.GetGroup()];
             bool optional = fieldDef.GetBool("Optional");
-            ScalarValue initialValue = ScalarValue.UNDEFINED;
+            ScalarValue initialValue = ScalarValue.Undefined;
             if (fieldDef.IsDefined("InitialValue"))
                 initialValue = (ScalarValue) fieldDef.GetValue("InitialValue");
 
@@ -87,14 +87,14 @@ namespace OpenFAST.Session.Template.Exchange
             var scalarTemplate = (MessageTemplate) _typeTemplateMap[scalar.Type];
             var scalarMsg = new Message(scalarTemplate);
             SetNameAndId(scalar, scalarMsg);
-            scalarMsg.SetInteger("Optional", scalar.Optional ? 1 : 0);
+            scalarMsg.SetInteger("Optional", scalar.IsOptional ? 1 : 0);
             
             if (!scalar.Operator.Equals(Operator.NONE))
                 scalarMsg.SetFieldValue(
                     "Operator",
                     new GroupValue(scalarTemplate.GetGroup("Operator"), new IFieldValue[] {CreateOperator(scalar)}));
 
-            if (!scalar.DefaultValue.Undefined)
+            if (!scalar.DefaultValue.IsUndefined)
                 scalarMsg.SetFieldValue("InitialValue", scalar.DefaultValue);
 
             return scalarMsg;

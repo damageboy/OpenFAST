@@ -43,7 +43,7 @@ namespace OpenFAST.Session.Template.Exchange
         {
             var group = (Group) field;
             Message groupMsg = Convert(group, new Message(SessionControlProtocol_1_1.GROUP_INSTR), context);
-            groupMsg.SetBool("Optional", field.Optional);
+            groupMsg.SetBool("Optional", field.IsOptional);
             return groupMsg;
         }
 
@@ -55,16 +55,18 @@ namespace OpenFAST.Session.Template.Exchange
         public static Message Convert(Group group, Message groupMsg, ConversionContext context)
         {
             SetNameAndId(group, groupMsg);
-            var instructions =
-                new SequenceValue(SessionControlProtocol_1_1.TEMPLATE_DEFINITION.GetSequence("Instructions"));
-            int i = group is MessageTemplate ? 1 : 0;
+            var instructions = new SequenceValue(
+                SessionControlProtocol_1_1.TEMPLATE_DEFINITION.GetSequence("Instructions"));
+
             Field[] fields = group.FieldDefinitions;
-            for (; i < fields.Length; i++)
+            for (int i = group is MessageTemplate ? 1 : 0; i < fields.Length; i++)
             {
                 Field field = fields[i];
+                
                 IFieldInstructionConverter converter = context.GetConverter(field);
                 if (converter == null)
-                    throw new SystemException("No converter found for type " + field.GetType());
+                    throw new InvalidOperationException("No converter found for type " + field.GetType());
+
                 IFieldValue v = converter.Convert(field, context);
                 instructions.Add(new[] {v});
             }

@@ -47,9 +47,9 @@ namespace UnitTest.Test
                     new Field[]
                         {
                             new Scalar("bid", FASTType.DECIMAL, Operator.DELTA,
-                                       ScalarValue.UNDEFINED, false),
+                                       ScalarValue.Undefined, false),
                             new Scalar("ask", FASTType.DECIMAL, Operator.DELTA,
-                                       ScalarValue.UNDEFINED, false)
+                                       ScalarValue.Undefined, false)
                         });
             }
 
@@ -80,7 +80,7 @@ namespace UnitTest.Test
                     "Header",
                     new Field[]
                         {
-                            new Scalar("Sent", FASTType.U32, Operator.DELTA, ScalarValue.UNDEFINED, false)
+                            new Scalar("Sent", FASTType.U32, Operator.DELTA, ScalarValue.Undefined, false)
                         });
             }
 
@@ -121,10 +121,10 @@ namespace UnitTest.Test
                         {
                             Allocations(),
                             Instrument(),
-                            new Scalar("ID", FASTType.ASCII, Operator.DELTA, ScalarValue.UNDEFINED, false),
-                            new Scalar("Side", FASTType.U32, Operator.COPY, ScalarValue.UNDEFINED, false),
-                            new Scalar("Quantity", FASTType.DECIMAL, Operator.DELTA, ScalarValue.UNDEFINED, false),
-                            new Scalar("Average Price", FASTType.DECIMAL, Operator.DELTA, ScalarValue.UNDEFINED, false)
+                            new Scalar("ID", FASTType.ASCII, Operator.DELTA, ScalarValue.Undefined, false),
+                            new Scalar("Side", FASTType.U32, Operator.COPY, ScalarValue.Undefined, false),
+                            new Scalar("Quantity", FASTType.DECIMAL, Operator.DELTA, ScalarValue.Undefined, false),
+                            new Scalar("Average Price", FASTType.DECIMAL, Operator.DELTA, ScalarValue.Undefined, false)
                         });
             }
 
@@ -139,10 +139,10 @@ namespace UnitTest.Test
                     "Allocations",
                     new Field[]
                         {
-                            new Scalar("Account", FASTType.ASCII, Operator.COPY, ScalarValue.UNDEFINED, false),
-                            new Scalar("Price", FASTType.DECIMAL, Operator.DELTA, ScalarValue.UNDEFINED, false),
-                            new Scalar("Quantity", FASTType.DECIMAL, Operator.DELTA, ScalarValue.UNDEFINED, false),
-                            new Scalar("Average Price", FASTType.DECIMAL, Operator.DELTA, ScalarValue.UNDEFINED, false)
+                            new Scalar("Account", FASTType.ASCII, Operator.COPY, ScalarValue.Undefined, false),
+                            new Scalar("Price", FASTType.DECIMAL, Operator.DELTA, ScalarValue.Undefined, false),
+                            new Scalar("Quantity", FASTType.DECIMAL, Operator.DELTA, ScalarValue.Undefined, false),
+                            new Scalar("Average Price", FASTType.DECIMAL, Operator.DELTA, ScalarValue.Undefined, false)
                         }, false);
             }
 
@@ -157,8 +157,8 @@ namespace UnitTest.Test
                     "Instrmt",
                     new Field[]
                         {
-                            new Scalar("Symbol", FASTType.ASCII, Operator.COPY, ScalarValue.UNDEFINED, false),
-                            new Scalar("MMY", FASTType.ASCII, Operator.DELTA, ScalarValue.UNDEFINED, false),
+                            new Scalar("Symbol", FASTType.ASCII, Operator.COPY, ScalarValue.Undefined, false),
+                            new Scalar("MMY", FASTType.ASCII, Operator.DELTA, ScalarValue.Undefined, false),
                         }, false);
             }
 

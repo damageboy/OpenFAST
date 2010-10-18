@@ -25,44 +25,44 @@ namespace OpenFAST.Session
 {
     public sealed class FastClient
     {
-        private readonly string clientName;
-        private readonly IEndpoint endpoint;
+        private readonly string _clientName;
+        private readonly IEndpoint _endpoint;
 
-        private readonly ISessionListener sessionListener = SessionListenerFields.Null;
-        private readonly ISessionProtocol sessionProtocol;
-        private ITemplateRegistry inboundRegistry = TemplateRegistryFields.Null;
-        private IMessageListener messageListener = MessageListener_Fields.NULL;
-        private ITemplateRegistry outboundRegistry = TemplateRegistryFields.Null;
+        private readonly ISessionListener _sessionListener = SessionListenerFields.Null;
+        private readonly ISessionProtocol _sessionProtocol;
+        private ITemplateRegistry _inboundRegistry = TemplateRegistryFields.Null;
+        private IMessageListener _messageListener = MessageListenerFields.Null;
+        private ITemplateRegistry _outboundRegistry = TemplateRegistryFields.Null;
 
         public FastClient(string clientName, ISessionProtocol sessionProtocol, IEndpoint endpoint)
         {
-            this.clientName = clientName;
-            this.sessionProtocol = sessionProtocol;
-            this.endpoint = endpoint;
+            _clientName = clientName;
+            _sessionProtocol = sessionProtocol;
+            _endpoint = endpoint;
         }
 
         public IMessageListener MessageListener
         {
-            set { messageListener = value; }
+            set { _messageListener = value; }
         }
 
         public ITemplateRegistry InboundTemplateRegistry
         {
-            set { inboundRegistry = value; }
-            get { return inboundRegistry; }
+            set { _inboundRegistry = value; }
+            get { return _inboundRegistry; }
         }
 
         public ITemplateRegistry OutboundTemplateRegistry
         {
-            set { outboundRegistry = value; }
-            get { return outboundRegistry; }
+            set { _outboundRegistry = value; }
+            get { return _outboundRegistry; }
         }
 
         public Session Connect()
         {
-            IConnection connection = endpoint.Connect();
-            Session session = sessionProtocol.Connect(clientName, connection, inboundRegistry, outboundRegistry,
-                                                      messageListener, sessionListener);
+            IConnection connection = _endpoint.Connect();
+            Session session = _sessionProtocol.Connect(_clientName, connection, _inboundRegistry, _outboundRegistry,
+                                                       _messageListener, _sessionListener);
             return session;
         }
     }

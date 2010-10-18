@@ -106,7 +106,7 @@ namespace OpenFAST.Template
         private static Scalar CreateLength(QName name, bool optional)
         {
             return new Scalar(Global.CreateImplicitName(name), FASTType.U32, Operator.Operator.NONE,
-                              ScalarValue.UNDEFINED, optional);
+                              ScalarValue.Undefined, optional);
         }
 
         public override bool UsesPresenceMapBit()
@@ -122,7 +122,7 @@ namespace OpenFAST.Template
         public override byte[] Encode(IFieldValue value, Group encodeTemplate, Context context,
                                       BitVectorBuilder presenceMapBuilder)
         {
-            if (HasTypeReference())
+            if (HasTypeReference)
                 context.CurrentApplicationType = TypeReference;
             if (value == null)
                 return _length.Encode(null, encodeTemplate, context, presenceMapBuilder);
@@ -156,7 +156,7 @@ namespace OpenFAST.Template
             var sequenceValue = new SequenceValue(this);
             IFieldValue lengthValue = _length.Decode(inStream, decodeTemplate, context, pmapReader);
 
-            if ((lengthValue == ScalarValue.NULL) || (lengthValue == null))
+            if ((lengthValue == ScalarValue.Null) || (lengthValue == null))
             {
                 return null;
             }
@@ -165,7 +165,7 @@ namespace OpenFAST.Template
 
             for (int i = 0; i < len; i++)
                 sequenceValue.Add(
-                    (GroupValue) _group.Decode(inStream, decodeTemplate, context, BitVectorReader.INFINITE_TRUE));
+                    (GroupValue) _group.Decode(inStream, decodeTemplate, context, BitVectorReader.InfiniteTrue));
 
             return sequenceValue;
         }
@@ -180,9 +180,9 @@ namespace OpenFAST.Template
             return _group.HasField(fieldName);
         }
 
-        public bool HasTypeReference()
+        public bool HasTypeReference
         {
-            return _group.HasTypeReference();
+            get { return _group.HasTypeReference; }
         }
 
         public override string ToString()

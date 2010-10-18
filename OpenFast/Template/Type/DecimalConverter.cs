@@ -29,7 +29,7 @@ namespace OpenFAST.Template.Type
         private static readonly IFieldValue[] NullSet = new IFieldValue[] {null, null};
 
         private static readonly IFieldValue[] UndefinedSet =
-            new IFieldValue[] {ScalarValue.UNDEFINED, ScalarValue.UNDEFINED};
+            new IFieldValue[] {ScalarValue.Undefined, ScalarValue.Undefined};
 
         #region ComposedValueConverter Members
 
@@ -37,7 +37,7 @@ namespace OpenFAST.Template.Type
         {
             if (value == null)
                 return NullSet;
-            if (value == ScalarValue.UNDEFINED)
+            if (value == ScalarValue.Undefined)
                 return UndefinedSet;
             var decValue = (DecimalValue) value;
             return new IFieldValue[] {new IntegerValue(decValue.Exponent), new LongValue(decValue.Mantissa)};
@@ -47,8 +47,8 @@ namespace OpenFAST.Template.Type
         {
             if (values[0] == null)
                 return null;
-            if (values[0] == ScalarValue.UNDEFINED)
-                return ScalarValue.UNDEFINED;
+            if (values[0] == ScalarValue.Undefined)
+                return ScalarValue.Undefined;
             return new DecimalValue(((ScalarValue) values[1]).ToLong(), ((IntegerValue) values[0]).Value);
         }
 

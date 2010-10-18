@@ -39,13 +39,13 @@ namespace OpenFAST.Session.Template.Exchange
             GroupValue exponentDef = fieldDef.GetGroup("Exponent");
             GroupValue exponentOperatorDef = exponentDef.GetGroup("Operator").GetGroup(0);
             Operator exponentOperator = GetOperator(exponentOperatorDef.GetGroup());
-            ScalarValue exponentDefaultValue = ScalarValue.UNDEFINED;
+            ScalarValue exponentDefaultValue = ScalarValue.Undefined;
             if (exponentDef.IsDefined("InitialValue"))
                 exponentDefaultValue = new IntegerValue(exponentDef.GetInt("InitialValue"));
             GroupValue mantissaDef = fieldDef.GetGroup("Mantissa");
             GroupValue mantissaOperatorDef = mantissaDef.GetGroup("Operator").GetGroup(0);
             Operator mantissaOperator = GetOperator(mantissaOperatorDef.GetGroup());
-            ScalarValue mantissaDefaultValue = ScalarValue.UNDEFINED;
+            ScalarValue mantissaDefaultValue = ScalarValue.Undefined;
             if (mantissaDef.IsDefined("InitialValue"))
                 mantissaDefaultValue = new LongValue(mantissaDef.GetInt("InitialValue"));
             return Util.ComposedDecimal(name, exponentOperator, exponentDefaultValue, mantissaOperator,
@@ -57,7 +57,7 @@ namespace OpenFAST.Session.Template.Exchange
             var composedScalar = (ComposedScalar) field;
             var message = new Message(SessionControlProtocol_1_1.COMP_DECIMAL_INSTR);
             SetNameAndId(field, message);
-            message.SetInteger("Optional", field.Optional ? 1 : 0);
+            message.SetInteger("Optional", field.IsOptional ? 1 : 0);
             GroupValue exponentDef = CreateComponent(composedScalar.Fields[0], "Exponent");
             GroupValue mantissaDef = CreateComponent(composedScalar.Fields[1], "Mantissa");
             message.SetFieldValue("Exponent", exponentDef);
@@ -73,7 +73,7 @@ namespace OpenFAST.Session.Template.Exchange
             var componentOperatorGroup = new GroupValue(componentGroup.GetGroup("Operator"));
             componentDef.SetFieldValue("Operator", componentOperatorGroup);
             componentOperatorGroup.SetFieldValue(0, componentOperatorDef);
-            if (!component.DefaultValue.Undefined)
+            if (!component.DefaultValue.IsUndefined)
                 componentDef.SetInteger("InitialValue", component.DefaultValue.ToInt());
             return componentDef;
         }

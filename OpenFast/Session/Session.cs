@@ -32,7 +32,7 @@ namespace OpenFAST.Session
     {
         private readonly IConnection _connection;
         private readonly ISessionProtocol _protocol;
-        private IErrorHandler _errorHandler = ErrorHandler_Fields.DEFAULT;
+        private IErrorHandler _errorHandler = ErrorHandlerFields.Default;
         private MessageInputStream _inStream;
         private bool _listening;
         private SupportClass.ThreadClass _listeningThread;
@@ -73,7 +73,7 @@ namespace OpenFAST.Session
             set
             {
                 if (value == null)
-                    _errorHandler = ErrorHandler_Fields.NULL;
+                    _errorHandler = ErrorHandlerFields.Null;
                 _errorHandler = value;
             }
         }
@@ -88,12 +88,13 @@ namespace OpenFAST.Session
             set
             {
                 _messageListener = value;
-                Listening = true;
+                IsListening = true;
             }
         }
 
-        public virtual bool Listening
+        public virtual bool IsListening
         {
+            get { return _listening; }
             set
             {
                 _listening = value;
@@ -184,15 +185,14 @@ namespace OpenFAST.Session
                 throw new NotSupportedException("The procotol " + _protocol +
                                                 " does not support template exchange.");
             }
-            MessageTemplate[] templates = registry.Templates;
-            for (int i = 0; i < templates.Length; i++)
+            foreach (MessageTemplate template in registry.Templates)
             {
-                MessageTemplate template = templates[i];
                 _outStream.WriteMessage(_protocol.CreateTemplateDefinitionMessage(template));
                 
                 var templateId = registry.GetId(template);
                 
                 _outStream.WriteMessage(_protocol.CreateTemplateDeclarationMessage(template, templateId));
+
                 // BUG? double check if IsRegister() done on the same object as RegisterTemplate
                 if (!_outStream.GetTemplateRegistry().IsRegistered(template))
                     _outStream.RegisterTemplate(templateId, template);
@@ -207,17 +207,13 @@ namespace OpenFAST.Session
 
         public virtual void RegisterDynamicTemplate(QName templateName, int id)
         {
-#warning replace with Try* ?
-            if (!_inStream.GetTemplateRegistry().IsDefined(templateName))
+            if (!_inStream.GetTemplateRegistry().TryRegister(id, templateName))
                 throw new ArgumentOutOfRangeException("templateName", templateName,
                                                       "Template is not defined in the input stream.");
 
-            _inStream.GetTemplateRegistry().Register(id, templateName);
-            if (!_outStream.GetTemplateRegistry().IsDefined(templateName))
+            if (!_outStream.GetTemplateRegistry().TryRegister(id, templateName))
                 throw new ArgumentOutOfRangeException("templateName", templateName,
                                                       "Template is not defined in the output stream.");
-
-            _outStream.GetTemplateRegistry().Register(id, templateName);
         }
 
         #region Nested type: SessionThread
@@ -261,7 +257,7 @@ namespace OpenFAST.Session
                         }
                         else
                         {
-                            throw new SystemException("Received non-protocol message without a message listener.");
+                            throw new InvalidOperationException("Received non-protocol message without a message listener.");
                         }
                     }
                     catch (Exception e)

@@ -26,21 +26,21 @@ namespace OpenFAST
     [Serializable]
     public class ScalarValue : IFieldValue
     {
-        public static readonly ScalarValue UNDEFINED;
-        public static readonly ScalarValue NULL;
+        public static readonly ScalarValue Undefined;
+        public static readonly ScalarValue Null;
 
         static ScalarValue()
         {
-            UNDEFINED = new UndefinedScalarValue();
-            NULL = new NullScalarValue();
+            Undefined = new UndefinedScalarValue();
+            Null = new NullScalarValue();
         }
 
-        public virtual bool Undefined
+        public virtual bool IsUndefined
         {
             get { return false; }
         }
 
-        public virtual bool Null
+        public virtual bool IsNull
         {
             get { return false; }
         }
@@ -104,7 +104,7 @@ namespace OpenFAST
         [Serializable]
         public sealed class NullScalarValue : ScalarValue, IEquatable<NullScalarValue>
         {
-            public override bool Null
+            public override bool IsNull
             {
                 get { return true; }
             }
@@ -144,7 +144,7 @@ namespace OpenFAST
         [Serializable]
         public sealed class UndefinedScalarValue : ScalarValue, IEquatable<UndefinedScalarValue>
         {
-            public override bool Undefined
+            public override bool IsUndefined
             {
                 get { return true; }
             }

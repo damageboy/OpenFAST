@@ -27,12 +27,7 @@ namespace OpenFAST.Session
 
     public abstract class ConnectionListener
     {
-        public static readonly ConnectionListener NULL;
-
-        static ConnectionListener()
-        {
-            NULL = new NullConnectionListener();
-        }
+        public static readonly ConnectionListener Null = new NullConnectionListener();
 
         public virtual void OnConnect(IConnection connection)
         {

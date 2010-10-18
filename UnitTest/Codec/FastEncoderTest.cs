@@ -51,17 +51,17 @@ namespace UnitTest.Codec
                                                new Field[]
                                                    {
                                                        new Scalar("1", FASTType.STRING, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false),
+                                                                  ScalarValue.Undefined, false),
                                                        new Scalar("2", FASTType.BYTE_VECTOR, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false),
+                                                                  ScalarValue.Undefined, false),
                                                        new Scalar("3", FASTType.DECIMAL, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false),
+                                                                  ScalarValue.Undefined, false),
                                                        new Scalar("4", FASTType.I32, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false),
+                                                                  ScalarValue.Undefined, false),
                                                        new Scalar("5", FASTType.STRING, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false),
+                                                                  ScalarValue.Undefined, false),
                                                        new Scalar("6", FASTType.U32, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false),
+                                                                  ScalarValue.Undefined, false),
                                                    });
             var context = new Context();
             context.RegisterTemplate(113, template);
@@ -122,13 +122,13 @@ namespace UnitTest.Codec
                                                new Field[]
                                                    {
                                                        new Scalar("1", FASTType.I32, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false),
+                                                                  ScalarValue.Undefined, false),
                                                        new Scalar("2", FASTType.I32, Operator.DELTA,
-                                                                  ScalarValue.UNDEFINED, false),
+                                                                  ScalarValue.Undefined, false),
                                                        new Scalar("3", FASTType.I32, Operator.INCREMENT,
                                                                   new IntegerValue(10), false),
                                                        new Scalar("4", FASTType.I32, Operator.INCREMENT,
-                                                                  ScalarValue.UNDEFINED, false),
+                                                                  ScalarValue.Undefined, false),
                                                        new Scalar("5", FASTType.I32, Operator.CONSTANT,
                                                                   new IntegerValue(1), false), /* NON-TRANSFERRABLE */
                                                        new Scalar("6", FASTType.I32, Operator.DEFAULT,
@@ -177,9 +177,9 @@ namespace UnitTest.Codec
                                                new Field[]
                                                    {
                                                        new Scalar("1", FASTType.STRING, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false),
+                                                                  ScalarValue.Undefined, false),
                                                        new Scalar("2", FASTType.STRING, Operator.DELTA,
-                                                                  ScalarValue.UNDEFINED, false),
+                                                                  ScalarValue.Undefined, false),
                                                        new Scalar("3", FASTType.STRING, Operator.CONSTANT,
                                                                   new StringValue("e"), false), /* NON-TRANSFERRABLE */
                                                        new Scalar("4", FASTType.STRING, Operator.DEFAULT,
@@ -218,13 +218,13 @@ namespace UnitTest.Codec
                                                new Field[]
                                                    {
                                                        new Scalar("1", FASTType.U32, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false),
+                                                                  ScalarValue.Undefined, false),
                                                        new Scalar("2", FASTType.U32, Operator.DELTA,
-                                                                  ScalarValue.UNDEFINED, false),
+                                                                  ScalarValue.Undefined, false),
                                                        new Scalar("3", FASTType.I32, Operator.INCREMENT,
                                                                   new IntegerValue(10), false),
                                                        new Scalar("4", FASTType.I32, Operator.INCREMENT,
-                                                                  ScalarValue.UNDEFINED, false),
+                                                                  ScalarValue.Undefined, false),
                                                        new Scalar("5", FASTType.I32, Operator.CONSTANT,
                                                                   new IntegerValue(1), false), /* NON-TRANSFERRABLE */
                                                        new Scalar("6", FASTType.I32, Operator.DEFAULT,
@@ -291,7 +291,7 @@ namespace UnitTest.Codec
                                                new Field[]
                                                    {
                                                        new Scalar("1", FASTType.U32, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false)
+                                                                  ScalarValue.Undefined, false)
                                                    });
             var context = new Context();
             context.RegisterTemplate(113, template);

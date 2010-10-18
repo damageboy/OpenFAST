@@ -35,7 +35,7 @@ namespace OpenFAST.Session.Template.Exchange
         {
             var name = new QName(fieldDef.GetString("Name"), fieldDef.GetString("Ns"));
             MessageTemplate template;
-            if (templateRegistry.TryGetValue(name, out template))
+            if (templateRegistry.TryGetTemplate(name, out template))
                 return new StaticTemplateReference(template);
 
             throw new ArgumentOutOfRangeException("fieldDef", name, "Referenced template name not defined.");

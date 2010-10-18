@@ -52,15 +52,15 @@ namespace UnitTest
         public void TestGetTruncatedBytes()
         {
             var vector = new BitVector(new byte[] {0x00, 0x00});
-            Assert.IsTrue(vector.Overlong);
+            Assert.IsTrue(vector.IsOverlong);
             Assert.AreEqual(new byte[] {0x80}, vector.TruncatedBytes);
 
             vector = new BitVector(new byte[] {0x00});
-            Assert.IsFalse(vector.Overlong);
+            Assert.IsFalse(vector.IsOverlong);
             Assert.AreEqual(new byte[] {0x80}, vector.TruncatedBytes);
 
             vector = new BitVector(new byte[] {0x60, 0x00, 0x04, 0x00});
-            Assert.IsTrue(vector.Overlong);
+            Assert.IsTrue(vector.IsOverlong);
             Assert.AreEqual(new byte[] {0x60, 0x00, 0x84}, vector.TruncatedBytes);
         }
 

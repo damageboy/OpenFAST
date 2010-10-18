@@ -65,7 +65,7 @@ namespace OpenFAST
             Exponent = SupportClass.BigDecimal_Scale(bigDecimal);
         }
 
-        public override bool Null
+        public override bool IsNull
         {
             get { return false; }
         }

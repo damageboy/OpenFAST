@@ -19,6 +19,7 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
+using System;
 using System.Collections.Generic;
 
 namespace OpenFAST.Template
@@ -36,14 +37,19 @@ namespace OpenFAST.Template
     public interface ITemplateRegistry
     {
         MessageTemplate[] Templates { get; }
-        MessageTemplate this[int id] { get; }
-        MessageTemplate this[string name] { get; }
-        MessageTemplate this[QName templateName] { get; }
+
+        MessageTemplate GetTemplate(int id);
+        MessageTemplate GetTemplate(string name);
+        MessageTemplate GetTemplate(QName templateName);
 
         void RegisterAll(ITemplateRegistry registry);
+
         void Register(int id, MessageTemplate template);
+        [Obsolete]
         void Register(int id, string name);
+        [Obsolete]
         void Register(int id, QName templateName);
+        bool TryRegister(int id, QName templateName);
 
         void Define(MessageTemplate template);
 
@@ -52,20 +58,33 @@ namespace OpenFAST.Template
         void Remove(MessageTemplate template);
         void Remove(int id);
 
+        [Obsolete]
         int GetId(string name);
+        [Obsolete]
         int GetId(QName templateName);
+        [Obsolete]
         int GetId(MessageTemplate template);
 
+        [Obsolete]
         bool IsDefined(string templateName);
+        [Obsolete]
         bool IsDefined(QName templateName);
 
+        [Obsolete]
         bool IsRegistered(string name);
+
+        [Obsolete]
         bool IsRegistered(QName templateName);
+
+        [Obsolete]
         bool IsRegistered(int id);
+
+        [Obsolete]
         bool IsRegistered(MessageTemplate template);
-        
-        bool TryGetValue(string name, out MessageTemplate template);
-        bool TryGetValue(QName templateName, out MessageTemplate template);
+
+        bool TryGetTemplate(int id, out MessageTemplate template);
+        bool TryGetTemplate(string name, out MessageTemplate template);
+        bool TryGetTemplate(QName templateName, out MessageTemplate template);
 
         bool TryGetId(string name, out int id);
         bool TryGetId(QName templateName, out int id);

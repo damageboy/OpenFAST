@@ -35,7 +35,7 @@ namespace OpenFAST.Template.Operator
         public override ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar field)
         {
             return value == null
-                       ? (field.DefaultValue.Undefined ? null : ScalarValue.NULL)
+                       ? (field.DefaultValue.IsUndefined ? null : ScalarValue.Null)
                        : (value.Equals(field.DefaultValue) ? null : value);
         }
 
@@ -46,7 +46,7 @@ namespace OpenFAST.Template.Operator
 
         public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)
         {
-            return field.DefaultValue.Undefined ? null : field.DefaultValue;
+            return field.DefaultValue.IsUndefined ? null : field.DefaultValue;
         }
 
         public override bool Equals(object obj)

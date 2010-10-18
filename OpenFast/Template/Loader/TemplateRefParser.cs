@@ -38,7 +38,7 @@ namespace OpenFAST.Template.Loader
                                          : new QName(element.GetAttribute("name"), "");
 
                 MessageTemplate template;
-                if (context.TemplateRegistry.TryGetValue(templateName, out template))
+                if (context.TemplateRegistry.TryGetTemplate(templateName, out template))
                     return new StaticTemplateReference(template);
 
                 context.ErrorHandler.Error(FastConstants.D8_TEMPLATE_NOT_EXIST,

@@ -57,7 +57,7 @@ namespace OpenFAST.Session.Template.Exchange
                 Operator op = Operator.NONE;
                 if (lengthDef.IsDefined("Operator"))
                     op = GetOperator(lengthDef.GetGroup("Operator").GetGroup(0).GetGroup());
-                ScalarValue initialValue = ScalarValue.UNDEFINED;
+                ScalarValue initialValue = ScalarValue.Undefined;
                 if (lengthDef.IsDefined("InitialValue"))
                     initialValue = (ScalarValue) lengthDef.GetValue("InitialValue");
                 length = new Scalar(lengthName, FASTType.U32, op, initialValue, optional) {Id = id};
@@ -72,7 +72,7 @@ namespace OpenFAST.Session.Template.Exchange
             Message seqDef = GroupConverter.Convert(sequence.Group,
                                                     new Message(SessionControlProtocol_1_1.SEQUENCE_INSTR),
                                                     context);
-            seqDef.SetBool("Optional", sequence.Optional);
+            seqDef.SetBool("Optional", sequence.IsOptional);
             if (!sequence.ImplicitLength)
             {
                 Group lengthGroup = SessionControlProtocol_1_1.SEQUENCE_INSTR.GetGroup("Length");
@@ -90,7 +90,7 @@ namespace OpenFAST.Session.Template.Exchange
                     lengthDef.SetFieldValue("Operator", operatorDef);
                 }
 
-                if (!length.DefaultValue.Undefined)
+                if (!length.DefaultValue.IsUndefined)
                 {
                     lengthDef.SetFieldValue("InitialValue", length.DefaultValue);
                 }

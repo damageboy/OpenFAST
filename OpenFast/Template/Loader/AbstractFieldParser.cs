@@ -64,7 +64,7 @@ namespace OpenFAST.Template.Loader
             {
                 var attribute = (XmlAttribute) attributes.Item(i);
                 if (attribute.NamespaceURI == null || attribute.NamespaceURI.Equals("") ||
-                    attribute.NamespaceURI.Equals(XMLMessageTemplateLoader.TemplateDefinitionNs))
+                    attribute.NamespaceURI.Equals(XmlMessageTemplateLoader.TemplateDefinitionNs))
                     continue;
                 field.AddAttribute(new QName(attribute.LocalName, attribute.NamespaceURI), attribute.Value);
             }

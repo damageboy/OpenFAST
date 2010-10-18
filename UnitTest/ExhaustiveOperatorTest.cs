@@ -319,7 +319,7 @@ namespace UnitTest
         public void TestEmptyOperatorWithMandatoryField()
         {
             var field = new Scalar("", FASTType.U32, Operator.NONE,
-                                   ScalarValue.UNDEFINED, false);
+                                   ScalarValue.Undefined, false);
             MessageTemplate template = registerTemplate(field);
 
             var msg1 = new Message(template);
@@ -348,7 +348,7 @@ namespace UnitTest
         public void TestEmptyOperatorWithOptionalField()
         {
             var field = new Scalar("", FASTType.U32, Operator.NONE,
-                                   ScalarValue.UNDEFINED, true);
+                                   ScalarValue.Undefined, true);
             MessageTemplate template = registerTemplate(field);
 
             var message = new Message(template);
@@ -368,7 +368,7 @@ namespace UnitTest
         public void TestEmptyOperatorWithOptionalFieldOnNullValue()
         {
             var field = new Scalar("", FASTType.U32, Operator.NONE,
-                                   ScalarValue.UNDEFINED, true);
+                                   ScalarValue.Undefined, true);
             MessageTemplate template = registerTemplate(field);
 
             var message = new Message(template);
@@ -387,7 +387,7 @@ namespace UnitTest
         public void TestEmptyOperatorWithSequenceOfMessages()
         {
             var field = new Scalar("", FASTType.U32, Operator.NONE,
-                                   ScalarValue.UNDEFINED, true);
+                                   ScalarValue.Undefined, true);
             MessageTemplate template = registerTemplate(field);
 
             var msg1 = new Message(template);

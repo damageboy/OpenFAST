@@ -35,7 +35,7 @@ namespace OpenFAST.Template.Operator
         public override ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar field,
                                                      BitVectorBuilder presenceMapBuilder)
         {
-            if (field.Optional)
+            if (field.IsOptional)
                 presenceMapBuilder.OnValueSkipOnNull = value;
             return null; // Never encode constant value.
         }
@@ -57,7 +57,7 @@ namespace OpenFAST.Template.Operator
 
         public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)
         {
-            if (!field.Optional)
+            if (!field.IsOptional)
             {
                 return field.DefaultValue;
             }
@@ -76,7 +76,7 @@ namespace OpenFAST.Template.Operator
 
         public override bool CanEncode(ScalarValue value, Scalar field)
         {
-            if (field.Optional && value == null)
+            if (field.IsOptional && value == null)
                 return true;
             return field.DefaultValue.Equals(value);
         }

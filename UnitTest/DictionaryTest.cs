@@ -88,12 +88,12 @@ namespace UnitTest
         [Test]
         public void TestMultipleDictionaryTypes()
         {
-            var bid = new Scalar("bid", FASTType.DECIMAL, Operator.COPY, ScalarValue.UNDEFINED, false)
-                          {Dictionary = DictionaryFields.TEMPLATE};
+            var bid = new Scalar("bid", FASTType.DECIMAL, Operator.COPY, ScalarValue.Undefined, false)
+                          {Dictionary = DictionaryFields.Template};
 
             var quote = new MessageTemplate("quote", new Field[] {bid});
 
-            var bidR = new Scalar("bid", FASTType.DECIMAL, Operator.COPY, ScalarValue.UNDEFINED, false);
+            var bidR = new Scalar("bid", FASTType.DECIMAL, Operator.COPY, ScalarValue.Undefined, false);
             var request = new MessageTemplate("request",
                                               new Field[] {bidR});
 

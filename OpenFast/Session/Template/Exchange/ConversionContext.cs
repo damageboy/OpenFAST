@@ -53,7 +53,7 @@ namespace OpenFAST.Session.Template.Exchange
                 if (_converters[i].ShouldConvert(field))
                     return _converters[i];
 
-            throw new SystemException("No valid converter found for the field: " + field);
+            throw new ArgumentOutOfRangeException("field", field, "No valid converter found for the field");
         }
     }
 }

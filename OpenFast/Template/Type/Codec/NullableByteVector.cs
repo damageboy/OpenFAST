@@ -57,8 +57,8 @@ namespace OpenFAST.Template.Type.Codec
 
         public override byte[] EncodeValue(ScalarValue value)
         {
-            if (value.Null)
-                return NULLABLE_UNSIGNED_INTEGER.EncodeValue(ScalarValue.NULL);
+            if (value.IsNull)
+                return NULLABLE_UNSIGNED_INTEGER.EncodeValue(ScalarValue.Null);
             var byteVectorValue = (ByteVectorValue) value;
             int lengthSize = IntegerCodec.GetUnsignedIntegerSize(byteVectorValue.Value.Length);
             var encoding = new byte[byteVectorValue.Value.Length + lengthSize];

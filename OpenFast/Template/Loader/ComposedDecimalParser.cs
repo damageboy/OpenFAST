@@ -69,8 +69,8 @@ namespace OpenFAST.Template.Loader
         {
             string mantissaOperator = "none";
             string exponentOperator = "none";
-            ScalarValue mantissaDefaultValue = ScalarValue.UNDEFINED;
-            ScalarValue exponentDefaultValue = ScalarValue.UNDEFINED;
+            ScalarValue mantissaDefaultValue = ScalarValue.Undefined;
+            ScalarValue exponentDefaultValue = ScalarValue.Undefined;
             QName mantissaKey = null;
             QName exponentKey = null;
             string mantissaDictionary = context.Dictionary;

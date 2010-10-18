@@ -35,9 +35,9 @@ namespace UnitTest.Test
 {
     public abstract class OpenFastTestCase
     {
-        protected static readonly ScalarValue Null = ScalarValue.NULL;
+        protected static readonly ScalarValue Null = ScalarValue.Null;
 
-        protected static readonly ScalarValue Undef = ScalarValue.UNDEFINED;
+        protected static readonly ScalarValue Undef = ScalarValue.Undefined;
 
         protected static DecimalValue Decimal(double value)
         {
@@ -66,7 +66,7 @@ namespace UnitTest.Test
 
         protected static void AssertEncodeDecode(ScalarValue value, String bitString, TypeCodec type)
         {
-            Assert.AreEqual(bitString, type.Encode(value ?? ScalarValue.NULL));
+            Assert.AreEqual(bitString, type.Encode(value ?? ScalarValue.Null));
             Assert.AreEqual(value, type.Decode(ByteUtil.CreateByteStream(bitString)));
         }
 
@@ -143,7 +143,7 @@ namespace UnitTest.Test
 
         protected static MessageTemplate Template(String templateXml)
         {
-            MessageTemplate[] templates = new XMLMessageTemplateLoader().Load
+            MessageTemplate[] templates = new XmlMessageTemplateLoader().Load
                 (new MemoryStream(Encoding.ASCII.GetBytes(templateXml)));
             return templates[0];
         }
@@ -228,7 +228,7 @@ namespace UnitTest.Test
             var field = (Scalar) fieldSet.GetField(fieldIndex);
             AssertScalarField(field, type, name);
             Assert.AreEqual(operator_ren, field.Operator);
-            Assert.IsTrue(field.Optional);
+            Assert.IsTrue(field.IsOptional);
         }
 
         private static void AssertScalarField(Scalar field, Type type, String name)
@@ -264,7 +264,7 @@ namespace UnitTest.Test
             Assert.AreEqual(id, scalar.Id);
             Assert.AreEqual(dictionary, scalar.Dictionary);
             Assert.AreEqual(defaultVal, scalar.DefaultValue);
-            Assert.AreEqual(optional, scalar.Optional);
+            Assert.AreEqual(optional, scalar.IsOptional);
         }
 
         protected static void AssertEquals(decimal expected, decimal actual)

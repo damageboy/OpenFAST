@@ -44,14 +44,14 @@ namespace OpenFAST.Template.Operator
 
             if (value == null)
             {
-                if (field.Optional)
+                if (field.IsOptional)
                 {
-                    return ScalarValue.NULL;
+                    return ScalarValue.Null;
                 }
                 throw new ArgumentException("Mandatory fields can't be null.");
             }
 
-            if (priorValue.Undefined)
+            if (priorValue.IsUndefined)
             {
                 priorValue = field.BaseValue;
             }
@@ -68,14 +68,14 @@ namespace OpenFAST.Template.Operator
                 return null;
             }
 
-            if ((newValue == null) || newValue.Null)
+            if ((newValue == null) || newValue.IsNull)
             {
                 return null;
             }
 
-            if (previousValue.Undefined)
+            if (previousValue.IsUndefined)
             {
-                previousValue = field.DefaultValue.Undefined ? field.BaseValue : field.DefaultValue;
+                previousValue = field.DefaultValue.IsUndefined ? field.BaseValue : field.DefaultValue;
             }
 
             return ((NumericValue) newValue).Add((NumericValue) previousValue);
@@ -83,13 +83,13 @@ namespace OpenFAST.Template.Operator
 
         public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)
         {
-            if (previousValue.Undefined)
+            if (previousValue.IsUndefined)
             {
-                if (field.DefaultValue.Undefined)
+                if (field.DefaultValue.IsUndefined)
                 {
-                    if (field.Optional)
+                    if (field.IsOptional)
                     {
-                        return ScalarValue.UNDEFINED;
+                        return ScalarValue.Undefined;
                     }
                     Global.HandleError(FastConstants.D5_NO_DEFAULT_VALUE, "");
                 }

@@ -86,7 +86,7 @@ namespace OpenFAST.Template.Loader
             FASTType value;
             if (!context.TypeMap.TryGetValue(typeName, out value))
             {
-                context.ErrorHandler.Error(XMLMessageTemplateLoader.InvalidType,
+                context.ErrorHandler.Error(XmlMessageTemplateLoader.InvalidType,
                                            "The type " + typeName + " is not defined.  Possible types: " +
                                            Util.CollectionToString(context.TypeMap.Keys, ", "));
             }

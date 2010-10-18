@@ -35,7 +35,7 @@ namespace OpenFAST
         public ScalarValue Lookup(Group template, QName key, QName applicationType)
         {
             ScalarValue value;
-            return _table.TryGetValue(key, out value) ? value : ScalarValue.UNDEFINED;
+            return _table.TryGetValue(key, out value) ? value : ScalarValue.Undefined;
         }
 
         public void Store(Group group, QName applicationType, QName key, ScalarValue value)

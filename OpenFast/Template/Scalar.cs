@@ -53,11 +53,11 @@ namespace OpenFAST.Template
             InitBlock();
             _operator = op;
             _operatorCodec = op.GetCodec(type);
-            _dictionary = DictionaryFields.GLOBAL;
-            _defaultValue = defaultValue ?? ScalarValue.UNDEFINED;
+            _dictionary = DictionaryFields.Global;
+            _defaultValue = defaultValue ?? ScalarValue.Undefined;
             _type = type;
             _typeCodec = type.GetCodec(op, optional);
-            _initialValue = ((defaultValue == null) || defaultValue.Undefined) ? _type.DefaultValue : defaultValue;
+            _initialValue = ((defaultValue == null) || defaultValue.IsUndefined) ? _type.DefaultValue : defaultValue;
             op.Validate(this);
         }
 
@@ -68,10 +68,10 @@ namespace OpenFAST.Template
             _operator = operatorCodec.Operator;
             _operatorCodec = operatorCodec;
             _dictionary = "global";
-            _defaultValue = defaultValue ?? ScalarValue.UNDEFINED;
+            _defaultValue = defaultValue ?? ScalarValue.Undefined;
             _type = type;
             _typeCodec = type.GetCodec(_operator, optional);
-            _initialValue = ((defaultValue == null) || defaultValue.Undefined) ? _type.DefaultValue : defaultValue;
+            _initialValue = ((defaultValue == null) || defaultValue.IsUndefined) ? _type.DefaultValue : defaultValue;
             _operator.Validate(this);
         }
 
@@ -127,7 +127,7 @@ namespace OpenFAST.Template
 
         private void InitBlock()
         {
-            _defaultValue = ScalarValue.UNDEFINED;
+            _defaultValue = ScalarValue.Undefined;
         }
 
         public override byte[] Encode(IFieldValue fieldValue, Group encodeTemplate, Context context,
@@ -172,7 +172,7 @@ namespace OpenFAST.Template
 
         public override bool UsesPresenceMapBit()
         {
-            return _operatorCodec.UsesPresenceMapBit(Optional);
+            return _operatorCodec.UsesPresenceMapBit(IsOptional);
         }
 
         public override bool IsPresenceMapBitSet(byte[] encoding, IFieldValue fieldValue)
@@ -187,10 +187,12 @@ namespace OpenFAST.Template
             {
                 ScalarValue previousValue = null;
                 IDictionary dict = null;
+                var key = Key;
+
                 if (_operator.UsesDictionary)
                 {
                     dict = context.GetDictionary(Dictionary);
-                    previousValue = context.Lookup(dict, decodeTemplate, Key);
+                    previousValue = context.Lookup(dict, decodeTemplate, key);
                     ValidateDictionaryTypeAgainstFieldType(previousValue, _type);
                 }
 
@@ -218,7 +220,7 @@ namespace OpenFAST.Template
                 ValidateDecodedValueIsCorrectForType(value, _type);
                 if (Operator != Template.Operator.Operator.DELTA || value != null)
                 {
-                    context.Store(dict ?? context.GetDictionary(Dictionary), decodeTemplate, Key, value);
+                    context.Store(dict ?? context.GetDictionary(Dictionary), decodeTemplate, key, value);
                     return value;
                 }
                 return value;
@@ -238,7 +240,7 @@ namespace OpenFAST.Template
 
         private static void ValidateDictionaryTypeAgainstFieldType(ScalarValue previousValue, FASTType type)
         {
-            if (previousValue == null || previousValue.Undefined)
+            if (previousValue == null || previousValue.IsUndefined)
                 return;
             if (!type.IsValueOf(previousValue))
             {

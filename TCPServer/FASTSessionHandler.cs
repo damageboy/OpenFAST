@@ -13,7 +13,7 @@ namespace TCPServer
 
         public void NewSession(Session session)
         {
-            //session.Listening = true;
+            //session.IsListening = true;
             session.ErrorHandler = new FASTServer.ServerErrorHandler();
             session.MessageHandler = new FASTMessageListener();
             //register a template
@@ -22,13 +22,13 @@ namespace TCPServer
                                                new Field[]
                                                    {
                                                        new Scalar("1", FASTType.I32, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false),
+                                                                  ScalarValue.Undefined, false),
                                                        new Scalar("2", FASTType.I32, Operator.DELTA,
-                                                                  ScalarValue.UNDEFINED, false),
+                                                                  ScalarValue.Undefined, false),
                                                        new Scalar("3", FASTType.I32, Operator.INCREMENT,
                                                                   new IntegerValue(10), false),
                                                        new Scalar("4", FASTType.I32, Operator.INCREMENT,
-                                                                  ScalarValue.UNDEFINED, false),
+                                                                  ScalarValue.Undefined, false),
                                                        new Scalar("5", FASTType.I32, Operator.CONSTANT,
                                                                   new IntegerValue(1), false), /* NON-TRANSFERRABLE */
                                                        new Scalar("6", FASTType.I32, Operator.DEFAULT,
