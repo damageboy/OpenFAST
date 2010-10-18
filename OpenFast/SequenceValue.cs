@@ -84,10 +84,10 @@ namespace OpenFAST
 
         public override bool Equals(object other)
         {
-            if (other == this)
+            if (ReferenceEquals(other , this))
                 return true;
 
-            if ((other == null) || !(other is SequenceValue))
+            if (ReferenceEquals(other , null))//|| !(other is SequenceValue))
                 return false;
 
             return equals((SequenceValue) other);

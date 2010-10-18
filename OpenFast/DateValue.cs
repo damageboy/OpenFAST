@@ -50,9 +50,9 @@ namespace OpenFAST
 
         public override bool Equals(Object other)
         {
-            if (other == this)
+            if(ReferenceEquals(other,this))
                 return true;
-            if (other == null || !(other is DateValue))
+            if (ReferenceEquals(other, null))// || !(other is DateValue))
                 return false;
             return Equals((DateValue) other);
         }

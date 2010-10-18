@@ -60,7 +60,7 @@ namespace OpenFAST
 
         public override bool Equals(object obj)
         {
-            if ((obj == null) || !(obj is Message))
+            if ((obj == null) )//|| !(obj is Message))
             {
                 return false;
             }

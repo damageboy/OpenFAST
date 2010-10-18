@@ -37,7 +37,7 @@ namespace OpenFAST.Template
 
         public override bool Equals(Object obj)
         {
-            if ((obj == null) || !(obj is TwinValue))
+            if (ReferenceEquals(obj, null) )//|| !(obj is TwinValue))
             {
                 return false;
             }

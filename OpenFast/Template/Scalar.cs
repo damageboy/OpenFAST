@@ -265,9 +265,9 @@ namespace OpenFAST.Template
 
         public override bool Equals(Object other)
         {
-            if (other == this)
+            if (ReferenceEquals(other,this))
                 return true;
-            if (other == null || !(other is Scalar))
+            if (ReferenceEquals(other , null))// || !(other is Scalar))
                 return false;
             return Equals((Scalar) other);
         }

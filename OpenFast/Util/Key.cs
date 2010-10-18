@@ -25,7 +25,7 @@ namespace OpenFAST.util
 {
     public sealed class Key
     {
-        private readonly Object[] keys;
+        private readonly Object[] _keys;
 
         public Key(Object key1, Object key2) : this(new[] {key1, key2})
         {
@@ -37,29 +37,29 @@ namespace OpenFAST.util
 
         public Key(Object[] keys)
         {
-            this.keys = keys;
+            _keys = keys;
             CheckNull();
         }
 
         private void CheckNull()
         {
-            for (int i = 0; i < keys.Length; i++)
-                if (keys[i] == null)
+            for (int i = 0; i < _keys.Length; i++)
+                if (_keys[i] == null)
                     throw new NullReferenceException();
         }
 
         public override bool Equals(Object obj)
         {
-            if (this == obj)
+            if(ReferenceEquals(obj,this))
                 return true;
-            if ((obj == null) || !(obj is Key))
+            if (ReferenceEquals(obj, null))// || !(obj is Key))
                 return false;
 
             var other = ((Key) obj);
-            if (other.keys.Length != keys.Length)
+            if (other._keys.Length != _keys.Length)
                 return false;
-            for (int i = 0; i < keys.Length; i++)
-                if (!other.keys[i].Equals(keys[i]))
+            for (int i = 0; i < _keys.Length; i++)
+                if (!other._keys[i].Equals(_keys[i]))
                     return false;
             return true;
         }
@@ -67,8 +67,8 @@ namespace OpenFAST.util
         public override int GetHashCode()
         {
             int hashCode = 0;
-            for (int i = 0; i < keys.Length; i++)
-                hashCode += keys[i].GetHashCode()*(37 ^ i);
+            for (int i = 0; i < _keys.Length; i++)
+                hashCode += _keys[i].GetHashCode()*(37 ^ i);
             return hashCode;
         }
 

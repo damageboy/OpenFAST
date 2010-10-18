@@ -59,7 +59,9 @@ namespace OpenFAST
 
         public override bool Equals(Object obj)
         {
-            if ((obj == null) || !(obj is ByteVectorValue))
+            if(ReferenceEquals(obj,null))
+                return false;
+            if (!(obj is ByteVectorValue))
             {
                 return false;
             }

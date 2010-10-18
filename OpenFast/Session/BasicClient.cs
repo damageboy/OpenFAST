@@ -51,9 +51,9 @@ namespace OpenFAST.Session
 
         public override bool Equals(Object obj)
         {
-            if (obj == this)
+            if (ReferenceEquals(obj , this))
                 return true;
-            if (obj == null || !(obj is BasicClient))
+            if (ReferenceEquals(obj , null))//|| !(obj is BasicClient))
                 return false;
             return ((BasicClient) obj).name.Equals(name);
         }

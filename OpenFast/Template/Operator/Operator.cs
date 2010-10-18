@@ -96,9 +96,9 @@ namespace OpenFAST.Template.Operator
 
         public override bool Equals(object other) //POINTP
         {
-            if (other == this)
+            if (ReferenceEquals(other ,this))
                 return true;
-            if (other == null || !(other is Operator))
+            if (ReferenceEquals(other , null))//|| !(other is Operator))
                 return false;
             return Equals((Operator) other);
         }
