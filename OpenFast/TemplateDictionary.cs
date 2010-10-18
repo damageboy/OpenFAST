@@ -22,25 +22,23 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System.Collections.Generic;
 using System.Text;
 using OpenFAST.Template;
+using OpenFAST.Utility;
+using System.Linq;
 
 namespace OpenFAST
 {
     public sealed class TemplateDictionary : IDictionary
     {
-        private readonly Dictionary<Group, Dictionary<QName, ScalarValue>> _table =
-            new Dictionary<Group, Dictionary<QName, ScalarValue>>();
+        private readonly Dictionary<Tuple<Group,QName>, ScalarValue> _table =
+            new Dictionary<Tuple<Group, QName>, ScalarValue>();
 
         #region Dictionary Members
 
         public ScalarValue Lookup(Group template, QName key, QName applicationType)
         {
-            Dictionary<QName, ScalarValue> value;
-            if (_table.TryGetValue(template, out value))
-            {
-                ScalarValue value2;
-                if (value.TryGetValue(key, out value2)) 
-                    return value2;
-            }
+            ScalarValue value;
+            if (_table.TryGetValue(Tuple.Create(template, key), out value))
+                return value;
 
             return ScalarValue.Undefined;
         }
@@ -52,11 +50,7 @@ namespace OpenFAST
 
         public void Store(Group group, QName applicationType, QName key, ScalarValue valueToEncode)
         {
-            Dictionary<QName, ScalarValue> value;
-            if (!_table.TryGetValue(group, out value))
-                _table[group] = value = new Dictionary<QName, ScalarValue>();
-
-            value[key] = valueToEncode;
+            _table[Tuple.Create(group, key)] = valueToEncode;
         }
 
         #endregion
@@ -64,13 +58,12 @@ namespace OpenFAST
         public override string ToString()
         {
             var builder = new StringBuilder();
-            foreach (Group template in _table.Keys)
+            foreach (var kv in _table.GroupBy(i=>i.Key.Item1))
             {
-                builder.Append("Dictionary: Template=" + template);
-                var tmplMap = _table[template];
+                builder.Append("Dictionary: Template=").Append(kv.Key);
 
-                foreach (var kv in tmplMap)
-                    builder.Append(kv.Key).Append("=").Append(kv.Value).Append("\n");
+                foreach (var kv2 in kv)
+                    builder.Append(kv2.Key.Item2).Append("=").Append(kv2.Value).Append("\n");
             }
             return builder.ToString();
         }

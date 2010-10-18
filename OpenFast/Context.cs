@@ -58,7 +58,6 @@ namespace OpenFAST
         public ITemplateRegistry TemplateRegistry
         {
             get { return _templateRegistry; }
-
             set { _templateRegistry = value; }
         }
 

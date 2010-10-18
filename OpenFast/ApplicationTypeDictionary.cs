@@ -22,39 +22,35 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System.Collections.Generic;
 using System.Text;
 using OpenFAST.Template;
+using OpenFAST.Utility;
+using System.Linq;
 
 namespace OpenFAST
 {
     public sealed class ApplicationTypeDictionary : IDictionary
     {
-        private Dictionary<QName, Dictionary<QName, ScalarValue>> _dictionary =
-            new Dictionary<QName, Dictionary<QName, ScalarValue>>();
+        private readonly Dictionary<Tuple<QName,QName>,  ScalarValue> _dictionary =
+            new Dictionary<Tuple<QName, QName>, ScalarValue>();
 
         #region Dictionary Members
 
         public ScalarValue Lookup(Group template, QName key, QName applicationType)
         {
-            Dictionary<QName, ScalarValue> value;
-            if (_dictionary.TryGetValue(template.TypeReference, out value))
-            {
-                ScalarValue value2;
-                if (value.TryGetValue(key, out value2))
-                    return value2;
-            }
+            ScalarValue value;
+            if (_dictionary.TryGetValue(Tuple.Create(template.TypeReference, key), out value))
+                return value;
+
             return ScalarValue.Undefined;
         }
 
         public void Reset()
         {
-            _dictionary = new Dictionary<QName, Dictionary<QName, ScalarValue>>();
+            _dictionary.Clear();
         }
 
         public void Store(Group group, QName applicationType, QName key, ScalarValue value)
         {
-            Dictionary<QName, ScalarValue> dict;
-            if (!_dictionary.TryGetValue(group.TypeReference, out dict))
-                _dictionary[group.TypeReference] = dict = new Dictionary<QName, ScalarValue>();
-            dict[key] = value;
+            _dictionary[Tuple.Create(group.TypeReference, key)] = value;
         }
 
         #endregion
@@ -62,15 +58,15 @@ namespace OpenFAST
         public override string ToString()
         {
             var builder = new StringBuilder();
-            foreach (var val in _dictionary)
+            
+            foreach (var kv in _dictionary.GroupBy(i=>i.Key.Item1))
             {
-                builder.Append("Dictionary: Type=").Append(val.Key);
+                builder.Append("Dictionary: Type=").Append(kv.Key);
 
-                foreach (var val2 in val.Value)
-                {
-                    builder.Append(val2.Key).Append("=").Append(val2.Value).Append("\n");
-                }
+                foreach (var kv2 in kv)
+                    builder.Append(kv2.Key.Item2).Append("=").Append(kv2.Value).Append("\n");
             }
+
             return builder.ToString();
         }
     }

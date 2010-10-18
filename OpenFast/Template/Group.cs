@@ -225,12 +225,13 @@ namespace OpenFAST.Template
                 if (!UsesPresenceMapBit() || pmapReader.Read())
                 {
                     if (context.TraceEnabled)
-                    {
                         context.DecodeTrace.GroupStart(this);
-                    }
+
                     var groupValue = new GroupValue(this, DecodeFieldValues(inStream, decodeTemplate, context));
+                    
                     if (context.TraceEnabled)
                         context.DecodeTrace.GroupEnd();
+                    
                     return groupValue;
                 }
                 return null;
