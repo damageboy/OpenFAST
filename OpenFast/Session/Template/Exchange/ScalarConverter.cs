@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
 using OpenFAST.Template.Type;
-using OpenFAST.util;
+using OpenFAST.Utility;
 
 namespace OpenFAST.Session.Template.Exchange
 {

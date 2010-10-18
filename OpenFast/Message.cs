@@ -21,17 +21,19 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System;
 using OpenFAST.Template;
+using OpenFAST.Utility;
 
 namespace OpenFAST
 {
     [Serializable]
-    public class Message : GroupValue
+    public class Message : GroupValue, IEquatable<Message>
     {
         private readonly MessageTemplate _template;
 
         public Message(MessageTemplate template, IFieldValue[] fieldValues)
             : base(template, fieldValues)
         {
+            if (template == null) throw new ArgumentNullException("template");
             _template = template;
         }
 
@@ -58,50 +60,37 @@ namespace OpenFAST
 
         #region Equals
 
-        public override bool Equals(object obj)
+        public bool Equals(Message other)
         {
-            if ((obj == null) )//|| !(obj is Message))
-            {
-                return false;
-            }
-            return equals((Message) obj);
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+
+            // bug: ?? Ignore base, because we ignore the first field
+            return Util.ArrayEqualsSlow(Values, other.Values, 1) && Equals(other._template, _template);
         }
 
-        public bool equals(Message message)
+        public override bool Equals(object obj)
         {
-            if (FieldCount != message.FieldCount)
-                return false;
-            for (int i = 1; i < message.FieldCount; i++)
-                if (message.GetValue(i) == null)
-                {
-                    if (GetValue(i) == null)
-                    {
-                        continue;
-                    }
-                    return false;
-                }
-                else if (!message.GetValue(i).Equals(GetValue(i)))
-                {
-                    return false;
-                }
-            return true;
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return Equals(obj as Message);
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode() + _template.GetHashCode();
+            unchecked
+            {
+                // bug: ?? Ignore base, because we ignore the first field
+                return (Util.ArrayHashCode(Values) * 397) ^ _template.GetHashCode();
+            }
         }
 
         #endregion
 
         public override IFieldValue Copy()
         {
-            var copies = new IFieldValue[Values.Length];
-            for (int i = 0; i < copies.Length; i++)
-            {
-                copies[i] = Values[i].Copy();
-            }
-            return new Message(_template, Values);
+            var copy = (GroupValue) base.Copy();
+            return new Message(_template, copy.Values);
         }
     }
 }

@@ -21,7 +21,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
-using OpenFAST.util;
+using OpenFAST.Utility;
 
 namespace OpenFAST.Session.Template.Exchange
 {

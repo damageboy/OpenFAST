@@ -25,7 +25,7 @@ using OpenFAST.Error;
 namespace OpenFAST
 {
     [Serializable]
-    public sealed class DecimalValue : NumericValue
+    public sealed class DecimalValue : NumericValue, IEquatable<DecimalValue>
     {
         public readonly int Exponent;
         public readonly long Mantissa;
@@ -153,24 +153,27 @@ namespace OpenFAST
 
         #region Equals
 
-        public override bool Equals(Object obj)
+        public bool Equals(DecimalValue other)
         {
-            if ((obj == null) || !(obj is DecimalValue))
-            {
-                return false;
-            }
-
-            return equals((DecimalValue)obj);
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return other.Exponent == Exponent && other.Mantissa == Mantissa;
         }
 
-        public bool equals(DecimalValue other)
+        public override bool Equals(object obj)
         {
-            return other.Mantissa == Mantissa && other.Exponent == Exponent;
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != typeof (DecimalValue)) return false;
+            return Equals((DecimalValue) obj);
         }
 
         public override int GetHashCode()
         {
-            return Exponent*37 + (int) Mantissa;
+            unchecked
+            {
+                return (Exponent*397) ^ Mantissa.GetHashCode();
+            }
         }
 
         #endregion

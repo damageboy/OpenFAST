@@ -25,7 +25,7 @@ using System.IO;
 using System.Linq;
 using OpenFAST.Error;
 using OpenFAST.Template.Type.Codec;
-using OpenFAST.util;
+using OpenFAST.Utility;
 
 namespace OpenFAST.Template
 {
@@ -37,7 +37,7 @@ namespace OpenFAST.Template
         private readonly Dictionary<Field, int> _fieldIndexMap;
         private readonly Dictionary<QName, Field> _fieldNameMap;
         private readonly Field[] _fields;
-        private readonly Dictionary<string, Field> _introspectiveFieldMap;
+        private readonly Dictionary<string, Scalar> _introspectiveFieldMap;
         private readonly StaticTemplateReference[] _staticTemplateReferences;
         private readonly bool _usesPresenceMapRenamedField;
         private string _childNamespace = "";
@@ -128,16 +128,17 @@ namespace OpenFAST.Template
         }
 
         // BAD ABSTRACTION
-        private static Dictionary<string, Field> ConstructInstrospectiveFields(Field[] fields)
+        private static Dictionary<string, Scalar> ConstructInstrospectiveFields(Field[] fields)
         {
-            var map = new Dictionary<string, Field>();
+            var map = new Dictionary<string, Scalar>();
             foreach (Field t in fields)
             {
-                if (t is Scalar)
+                var s = t as Scalar;
+                if (s != null)
                 {
                     string attr;
                     if (t.TryGetAttribute(FastConstants.LENGTH_FIELD, out attr))
-                        map[attr] = t;
+                        map[attr] = s;
                 }
             }
 
@@ -381,7 +382,7 @@ namespace OpenFAST.Template
             return _fieldNameMap.ContainsKey(fieldName);
         }
 
-        public virtual bool HasTypeReference()
+        public bool HasTypeReference()
         {
             return _typeReference != null;
         }
@@ -444,14 +445,9 @@ namespace OpenFAST.Template
             return null;
         }
 
-        public virtual bool HasIntrospectiveField(string fieldName)
+        public virtual bool TryGetIntrospectiveField(string fieldName, out Scalar field)
         {
-            return _introspectiveFieldMap.ContainsKey(fieldName);
-        }
-
-        public virtual Scalar GetIntrospectiveField(string fieldName)
-        {
-            return (Scalar) _introspectiveFieldMap[fieldName];
+            return _introspectiveFieldMap.TryGetValue(fieldName, out field);
         }
     }
 }

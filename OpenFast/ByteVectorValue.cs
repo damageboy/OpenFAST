@@ -21,16 +21,18 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System;
 using System.Text;
+using OpenFAST.Utility;
 
 namespace OpenFAST
 {
     [Serializable]
-    public sealed class ByteVectorValue : ScalarValue
+    public sealed class ByteVectorValue : ScalarValue, IEquatable<ByteVectorValue>
     {
         private readonly byte[] _value;
 
         public ByteVectorValue(byte[] value)
         {
+            if (value == null) throw new ArgumentNullException("value");
             _value = value;
         }
 
@@ -57,37 +59,28 @@ namespace OpenFAST
             return builder.ToString();
         }
 
-        public override bool Equals(Object obj)
-        {
-            if(ReferenceEquals(obj,null))
-                return false;
-            if (!(obj is ByteVectorValue))
-            {
-                return false;
-            }
-
-            return Equals((ByteVectorValue) obj);
-        }
+        #region Equals
 
         public bool Equals(ByteVectorValue other)
         {
-            if (_value.Length != other._value.Length)
-            {
-                return false;
-            }
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Util.ArrayEquals(other._value, _value);
+        }
 
-            for (int i = 0; i < _value.Length; i++)
-                if (_value[i] != other._value[i])
-                {
-                    return false;
-                }
-
-            return true;
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != typeof (ByteVectorValue)) return false;
+            return Equals((ByteVectorValue) obj);
         }
 
         public override int GetHashCode()
         {
-            return _value.GetHashCode();
+            return Util.ArrayHashCodeStruct(_value);
         }
+
+        #endregion
     }
 }

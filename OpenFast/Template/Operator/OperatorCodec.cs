@@ -23,15 +23,15 @@ using System;
 using System.Collections.Generic;
 using OpenFAST.Error;
 using OpenFAST.Template.Type;
-using OpenFAST.util;
+using OpenFAST.Utility;
 
 namespace OpenFAST.Template.Operator
 {
     [Serializable]
     public abstract class OperatorCodec
     {
-        private static readonly Dictionary<Key, OperatorCodec> OperatorMap =
-            new Dictionary<Key, OperatorCodec>();
+        private static readonly Dictionary<Tuple<Operator, FASTType>, OperatorCodec> OperatorMap =
+            new Dictionary<Tuple<Operator, FASTType>, OperatorCodec>();
 
         protected internal static readonly OperatorCodec NoneAll =
             new NoneOperatorCodec(Operator.NONE, FASTType.ALL_TYPES());
@@ -68,10 +68,8 @@ namespace OpenFAST.Template.Operator
             _operator = op;
             for (int i = 0; i < types.Length; i++)
             {
-                var key = new Key(op, types[i]);
-
-                if (!OperatorMap.ContainsKey(key))
-                    OperatorMap[key] = this;
+                var key = Tuple.Create(op, types[i]);
+                OperatorMap[key] = this;
             }
         }
 
@@ -80,19 +78,23 @@ namespace OpenFAST.Template.Operator
             get { return _operator; }
         }
 
+        public virtual bool ShouldDecodeType
+        {
+            get { return true; }
+        }
+
         public static OperatorCodec GetCodec(Operator op, FASTType type)
         {
-            var key = new Key(op, type);
+            var key = Tuple.Create(op, type);
 
-            if (!OperatorMap.ContainsKey(key))
-            {
-                Global.HandleError(FastConstants.S2_OPERATOR_TYPE_INCOMP,
-                                   "The operator \"" + op + "\" is not compatible with type \"" + type +
-                                   "\"");
-                throw new ArgumentException();
-            }
+            OperatorCodec codec;
+            if (OperatorMap.TryGetValue(key, out codec))
+                return codec;
 
-            return OperatorMap[key];
+            Global.HandleError(FastConstants.S2_OPERATOR_TYPE_INCOMP,
+                               "The operator \"" + op + "\" is not compatible with type \"" + type +
+                               "\"");
+            throw new ArgumentOutOfRangeException("op"+",type", key, "Not found");
         }
 
         public abstract ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar field);
@@ -125,11 +127,6 @@ namespace OpenFAST.Template.Operator
         public virtual bool CanEncode(ScalarValue value, Scalar field)
         {
             return true;
-        }
-
-        public virtual bool ShouldDecodeType
-        {
-            get { return true; }
         }
 
         public override bool Equals(object obj) //POINTP

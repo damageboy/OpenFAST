@@ -22,12 +22,12 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System;
 using System.Collections.Generic;
 using OpenFAST.Template.Type.Codec;
-using OpenFAST.util;
+using OpenFAST.Utility;
 
 namespace OpenFAST.Template.Type
 {
     [Serializable]
-    public abstract class FASTType
+    public abstract class FASTType : IEquatable<FASTType>
     {
         private static readonly Dictionary<string, FASTType> TypeNameMap = new Dictionary<string, FASTType>();
 
@@ -45,10 +45,10 @@ namespace OpenFAST.Template.Type
         public static readonly FASTType BYTE_VECTOR = new ByteVectorType();
         public static readonly FASTType DECIMAL = new DecimalType();
 
-        private static FASTType[] staticAllTypes;
-
+        private static FASTType[] _staticAllTypes;
         public static readonly FASTType[] INTEGER_TYPES = new[] {U8, U16, U32, U64, I8, I16, I32, I64};
-        private readonly string name;
+
+        private readonly string _name;
 
         static FASTType()
         {
@@ -59,13 +59,14 @@ namespace OpenFAST.Template.Type
 
         protected FASTType(string typeName)
         {
-            name = typeName;
+            if (typeName == null) throw new ArgumentNullException("typeName");
+            _name = typeName;
             TypeNameMap[typeName] = this;
         }
 
         public virtual string Name
         {
-            get { return name; }
+            get { return _name; }
         }
 
         public abstract ScalarValue DefaultValue { get; }
@@ -88,7 +89,7 @@ namespace OpenFAST.Template.Type
 
         public override string ToString()
         {
-            return name;
+            return _name;
         }
 
         public virtual string Serialize(ScalarValue value)
@@ -106,27 +107,34 @@ namespace OpenFAST.Template.Type
 
         public static FASTType[] ALL_TYPES()
         {
-            if (staticAllTypes == null)
-            {
-                staticAllTypes = new[]
-                                     {
-                                         U8, U16, U32, U64, I8, I16, I32, I64, STRING, ASCII, UNICODE, BYTE_VECTOR,
-                                         DECIMAL
-                                     };
-            }
-            return staticAllTypes;
+            return _staticAllTypes ??
+                   (_staticAllTypes = new[]
+                                         {
+                                             U8, U16, U32, U64, I8, I16, I32, I64, STRING, ASCII,
+                                             UNICODE, BYTE_VECTOR, DECIMAL
+                                         });
         }
 
-        public override bool Equals(Object obj)
+        #region Equals
+
+        public virtual bool Equals(FASTType other)
         {
-            if (obj == null)
-                return false;
-            return obj.GetType().Equals(GetType());
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            if (other.GetType() != GetType()) return false;   // if derived class does not implement Equals, it should still work.
+            return Equals(other._name, _name);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as FASTType);
         }
 
         public override int GetHashCode()
         {
-            return name.GetHashCode();
+            return (_name != null ? _name.GetHashCode() : 0);
         }
+
+        #endregion
     }
 }

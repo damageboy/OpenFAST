@@ -22,21 +22,21 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System;
 using OpenFAST.Error;
 using OpenFAST.Template.Type.Codec;
-using OpenFAST.util;
+using OpenFAST.Utility;
 
 namespace OpenFAST.Template.Type
 {
     [Serializable]
     public abstract class IntegerType : SimpleType
     {
-        protected internal long maxValue;
-        protected internal long minValue;
+        protected internal long MaxValue;
+        protected internal long MinValue;
 
         protected IntegerType(string typeName, long minValue, long maxValue, TypeCodec codec, TypeCodec nullableCodec)
             : base(typeName, codec, nullableCodec)
         {
-            this.minValue = minValue;
-            this.maxValue = maxValue;
+            MinValue = minValue;
+            MaxValue = maxValue;
         }
 
         public override ScalarValue DefaultValue
@@ -47,20 +47,16 @@ namespace OpenFAST.Template.Type
         public override ScalarValue GetVal(string value)
         {
             long longValue;
-            try
-            {
-                longValue = Int64.Parse(value);
-            }
-            catch (FormatException)
+            if (!Int64.TryParse(value, out longValue))
             {
                 Global.HandleError(FastConstants.S3_INITIAL_VALUE_INCOMP,
                                    "The value \"" + value + "\" is not compatable with type " + this);
                 return null;
             }
+
             if (Util.IsBiggerThanInt(longValue))
-            {
                 return new LongValue(longValue);
-            }
+
             return new IntegerValue((int) longValue);
         }
 
@@ -73,7 +69,8 @@ namespace OpenFAST.Template.Type
         {
             if (value == null || value.Undefined)
                 return;
-            if (value.ToLong() > maxValue || value.ToLong() < minValue)
+
+            if (value.ToLong() > MaxValue || value.ToLong() < MinValue)
             {
                 Global.HandleError(FastConstants.D2_INT_OUT_OF_RANGE,
                                    "The value " + value + " is out of range for type " + this);

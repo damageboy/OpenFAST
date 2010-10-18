@@ -25,7 +25,7 @@ using OpenFAST.Error;
 using OpenFAST.Template.Operator;
 using OpenFAST.Template.Type;
 using OpenFAST.Template.Type.Codec;
-using OpenFAST.util;
+using OpenFAST.Utility;
 
 namespace OpenFAST.Template
 {

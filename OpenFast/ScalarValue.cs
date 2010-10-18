@@ -102,7 +102,7 @@ namespace OpenFAST
         #region Nested type: NullScalarValue
 
         [Serializable]
-        public sealed class NullScalarValue : ScalarValue
+        public sealed class NullScalarValue : ScalarValue, IEquatable<NullScalarValue>
         {
             public override bool Null
             {
@@ -113,6 +113,28 @@ namespace OpenFAST
             {
                 return "NULL";
             }
+
+            #region Equals
+
+            public bool Equals(NullScalarValue other)
+            {
+                if (ReferenceEquals(null, other)) return false;
+                return true;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj)) return false;
+                if (obj.GetType() != typeof (NullScalarValue)) return false;
+                return true;
+            }
+
+            public override int GetHashCode()
+            {
+                return 0;
+            }
+
+            #endregion
         }
 
         #endregion
@@ -120,7 +142,7 @@ namespace OpenFAST
         #region Nested type: UndefinedScalarValue
 
         [Serializable]
-        public sealed class UndefinedScalarValue : ScalarValue
+        public sealed class UndefinedScalarValue : ScalarValue, IEquatable<UndefinedScalarValue>
         {
             public override bool Undefined
             {
@@ -131,6 +153,28 @@ namespace OpenFAST
             {
                 return "UNDEFINED";
             }
+
+            #region Equals
+
+            public bool Equals(UndefinedScalarValue other)
+            {
+                if (ReferenceEquals(null, other)) return false;
+                return true;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj)) return false;
+                if (obj.GetType() != typeof(UndefinedScalarValue)) return false;
+                return true;
+            }
+
+            public override int GetHashCode()
+            {
+                return 0;
+            }
+
+            #endregion
         }
 
         #endregion

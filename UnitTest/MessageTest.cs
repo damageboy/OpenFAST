@@ -33,12 +33,12 @@ namespace UnitTest
         [Test]
         public void TestEquals()
         {
-            var template = new MessageTemplate("",
-                                               new Field[]
-                                                   {
-                                                       new Scalar("1", FASTType.U32, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false)
-                                                   });
+            var template = new MessageTemplate(
+                "",
+                new Field[]
+                    {
+                        new Scalar("1", FASTType.U32, Operator.COPY, ScalarValue.UNDEFINED, false)
+                    });
             GroupValue message = new Message(template);
             message.SetInteger(1, 1);
 
@@ -46,27 +46,28 @@ namespace UnitTest
             other.SetInteger(1, 1);
 
             Assert.AreEqual(message, other);
+            //Assert.AreEqual(message.GetHashCode(), other.GetHashCode());
         }
 
         [Test]
         public void TestNotEquals()
         {
-            var template = new MessageTemplate("",
-                                               new Field[]
-                                                   {
-                                                       new Scalar("1", FASTType.U32, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false)
-                                                   });
+            var template = new MessageTemplate(
+                "",
+                new Field[]
+                    {
+                        new Scalar("1", FASTType.U32, Operator.COPY, ScalarValue.UNDEFINED, false)
+                    });
             var message = new Message(template);
-            message.SetInteger(1, 2);
-
             var other = new Message(template);
-            Assert.IsFalse(message.equals(other));
-            Assert.IsFalse(other.equals(message));
-            other.SetInteger(1, 1);
 
-            Assert.IsFalse(message.equals(other));
-            Assert.IsFalse(other.equals(message));
+            message.SetInteger(1, 2);
+            Assert.IsFalse(message.Equals(other));
+            Assert.IsFalse(other.Equals(message));
+
+            other.SetInteger(1, 1);
+            Assert.IsFalse(message.Equals(other));
+            Assert.IsFalse(other.Equals(message));
         }
     }
 }

@@ -33,8 +33,7 @@ namespace OpenFAST.Session.Tcp
 
         public TcpConnection(TcpClient socket)
         {
-            if (socket == null)
-                throw new NullReferenceException();
+            if (socket == null) throw new ArgumentNullException("socket");
             _socket = socket;
             _inputStream = new StreamReader(socket.GetStream());
             _outputStream = new StreamWriter(socket.GetStream());

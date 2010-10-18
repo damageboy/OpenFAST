@@ -34,10 +34,14 @@ namespace OpenFAST
 
         public ScalarValue Lookup(Group template, QName key, QName applicationType)
         {
-            if (_table.ContainsKey(template))
+            Dictionary<QName, ScalarValue> value;
+            if (_table.TryGetValue(template, out value))
             {
-                return (_table[template]).ContainsKey(key) ? _table[template][key] : ScalarValue.UNDEFINED;
+                ScalarValue value2;
+                if (value.TryGetValue(key, out value2)) 
+                    return value2;
             }
+
             return ScalarValue.UNDEFINED;
         }
 
@@ -48,12 +52,11 @@ namespace OpenFAST
 
         public void Store(Group group, QName applicationType, QName key, ScalarValue valueToEncode)
         {
-            if (!_table.ContainsKey(group))
-            {
-                _table[group] = new Dictionary<QName, ScalarValue>();
-            }
+            Dictionary<QName, ScalarValue> value;
+            if (!_table.TryGetValue(group, out value))
+                _table[group] = value = new Dictionary<QName, ScalarValue>();
 
-            _table[group][key] = valueToEncode;
+            value[key] = valueToEncode;
         }
 
         #endregion

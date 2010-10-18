@@ -100,8 +100,8 @@ namespace OpenFAST.Template
             {
                 try
                 {
-                    byte[] temp_byteArray = fields[i].Encode(values[i], encodeTemplate, context, presenceMapBuilder);
-                    buffer.Write(temp_byteArray, 0, temp_byteArray.Length);
+                    byte[] tempByteArray = fields[i].Encode(values[i], encodeTemplate, context, presenceMapBuilder);
+                    buffer.Write(tempByteArray, 0, tempByteArray.Length);
                 }
                 catch (IOException e)
                 {
@@ -157,14 +157,18 @@ namespace OpenFAST.Template
 
         public override string ToString()
         {
+            const string separator = ", ";
+
             var builder = new StringBuilder();
             builder.Append("Composed {");
-            for (int i = 0; i < fields.Length; i++)
+
+            foreach (Scalar t in fields)
             {
-                builder.Append(fields[i].ToString()).Append(", ");
+                builder.Append(t).Append(separator);
             }
-            builder.Remove(builder.Length - 2, builder.Length);
-            return builder.Append("}").ToString();
+            builder.Remove(builder.Length - separator.Length, builder.Length);
+            
+           return builder.Append("}").ToString();
         }
     }
 }

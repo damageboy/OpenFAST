@@ -30,7 +30,7 @@ namespace OpenFAST.Template
     {
         public static readonly DynamicTemplateReference INSTANCE = new DynamicTemplateReference();
 
-        private DynamicTemplateReference() : base(QName.NULL, false)
+        private DynamicTemplateReference() : base(QName.Null, false)
         {
         }
 

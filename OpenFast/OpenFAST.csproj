@@ -271,10 +271,10 @@
     <Compile Include="Template\Type\StringType.cs" />
     <Compile Include="Template\Type\FASTType.cs" />
     <Compile Include="Template\Type\UnsignedIntegerType.cs" />
-    <Compile Include="Util\Key.cs" />
-    <Compile Include="Util\RecordingInputStream.cs" />
-    <Compile Include="Util\RecordingOutputStream.cs" />
-    <Compile Include="Util\Util.cs" />
+    <Compile Include="Utility\Tuple.cs" />
+    <Compile Include="Utility\RecordingInputStream.cs" />
+    <Compile Include="Utility\RecordingOutputStream.cs" />
+    <Compile Include="Utility\Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

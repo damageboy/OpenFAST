@@ -28,7 +28,8 @@ namespace OpenFAST.Template.Type
     [Serializable]
     internal sealed class DecimalType : SimpleType
     {
-        internal DecimalType() : base("decimal", TypeCodec.SF_SCALED_NUMBER, TypeCodec.NULLABLE_SF_SCALED_NUMBER)
+        internal DecimalType()
+            : base("decimal", TypeCodec.SF_SCALED_NUMBER, TypeCodec.NULLABLE_SF_SCALED_NUMBER)
         {
         }
 
@@ -39,16 +40,13 @@ namespace OpenFAST.Template.Type
 
         public override ScalarValue GetVal(string value)
         {
-            try
-            {
-                return new DecimalValue(Double.Parse(value));
-            }
-            catch (FormatException)
-            {
-                Global.HandleError(FastConstants.S3_INITIAL_VALUE_INCOMP,
-                                   "The value \"" + value + "\" is not compatible with type " + this);
-                return null;
-            }
+            double dbl;
+            if (Double.TryParse(value, out dbl))
+                return new DecimalValue(dbl);
+
+            Global.HandleError(FastConstants.S3_INITIAL_VALUE_INCOMP,
+                               "The value \"" + value + "\" is not compatible with type " + this);
+            return null;
         }
 
         public override bool IsValueOf(ScalarValue previousValue)

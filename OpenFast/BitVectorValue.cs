@@ -24,12 +24,13 @@ using System;
 namespace OpenFAST
 {
     [Serializable]
-    public class BitVectorValue : ScalarValue
+    public class BitVectorValue : ScalarValue, IEquatable<BitVectorValue>
     {
         private readonly BitVector _value;
 
         public BitVectorValue(BitVector value)
         {
+            if (value == null) throw new ArgumentNullException("value");
             _value = value;
         }
 
@@ -38,24 +39,28 @@ namespace OpenFAST
             get { return _value; }
         }
 
-        public override bool Equals(Object obj)
-        {
-            if ((obj == null) || !(obj is BitVectorValue))
-            {
-                return false;
-            }
-
-            return Equals((BitVectorValue) obj);
-        }
+        #region Equals
 
         public bool Equals(BitVectorValue other)
         {
-            return other._value.Equals(_value);
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Equals(other._value, _value);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != typeof (BitVectorValue)) return false;
+            return Equals((BitVectorValue) obj);
         }
 
         public override int GetHashCode()
         {
             return _value.GetHashCode();
         }
+
+        #endregion
     }
 }

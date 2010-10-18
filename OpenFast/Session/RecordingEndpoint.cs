@@ -20,41 +20,41 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System.IO;
-using OpenFAST.util;
+using OpenFAST.Utility;
 
 namespace OpenFAST.Session
 {
     public class RecordingEndpoint : IEndpoint
     {
-        private readonly IEndpoint underlyingEndpoint;
+        private readonly IEndpoint _underlyingEndpoint;
 
         public RecordingEndpoint(IEndpoint endpoint)
         {
-            underlyingEndpoint = endpoint;
+            _underlyingEndpoint = endpoint;
         }
 
-        #region Endpoint Members
+        #region IEndpoint Members
 
         public virtual ConnectionListener ConnectionListener
         {
-            set { underlyingEndpoint.ConnectionListener = value; }
+            set { _underlyingEndpoint.ConnectionListener = value; }
         }
 
         public virtual void Accept()
         {
-            underlyingEndpoint.Accept();
+            _underlyingEndpoint.Accept();
         }
 
         public virtual IConnection Connect()
         {
-            IConnection connection = underlyingEndpoint.Connect();
+            IConnection connection = _underlyingEndpoint.Connect();
             IConnection connectionWrapper = new RecordingConnection(connection);
             return connectionWrapper;
         }
 
         public virtual void Close()
         {
-            underlyingEndpoint.Close();
+            _underlyingEndpoint.Close();
         }
 
         #endregion
@@ -63,20 +63,20 @@ namespace OpenFAST.Session
 
         private sealed class RecordingConnection : IConnection
         {
-            private readonly StreamReader in_stream;
-            private readonly StreamWriter out_stream;
+            private readonly StreamReader _inStream;
+            private readonly StreamWriter _outStream;
 
-            private readonly RecordingInputStream recordingInputStream;
-            private readonly RecordingOutputStream recordingOutputStream;
+            private readonly RecordingInputStream _recordingInputStream;
+            private readonly RecordingOutputStream _recordingOutputStream;
 
             internal RecordingConnection(IConnection connection)
             {
                 try
                 {
-                    recordingInputStream = new RecordingInputStream(connection.InputStream.BaseStream);
-                    recordingOutputStream = new RecordingOutputStream(connection.OutputStream.BaseStream);
-                    in_stream = new StreamReader(recordingInputStream);
-                    out_stream = new StreamWriter(recordingOutputStream);
+                    _recordingInputStream = new RecordingInputStream(connection.InputStream.BaseStream);
+                    _recordingOutputStream = new RecordingOutputStream(connection.OutputStream.BaseStream);
+                    _inStream = new StreamReader(_recordingInputStream);
+                    _outStream = new StreamWriter(_recordingOutputStream);
                 }
                 catch (IOException e)
                 {
@@ -84,16 +84,16 @@ namespace OpenFAST.Session
                 }
             }
 
-            #region Connection Members
+            #region IConnection Members
 
             public StreamReader InputStream
             {
-                get { return in_stream; }
+                get { return _inStream; }
             }
 
             public StreamWriter OutputStream
             {
-                get { return out_stream; }
+                get { return _outStream; }
             }
 
             public void Close()

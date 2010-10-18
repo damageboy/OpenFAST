@@ -20,15 +20,16 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 
 */
 using System;
+using OpenFAST.Utility;
 
 namespace OpenFAST
 {
-    public sealed class BitVector
+    public sealed class BitVector : IEquatable<BitVector>
     {
         private const int VALUE_BITS_SET = 0x7F;
         private const int STOP_BIT = 0x80;
-        private readonly byte[] bytes;
-        private readonly int size;
+
+        private readonly byte[] _bytes;
 
         public BitVector(int size) : this(new byte[((size - 1)/7) + 1])
         {
@@ -36,33 +37,33 @@ namespace OpenFAST
 
         public BitVector(byte[] bytes)
         {
-            this.bytes = bytes;
-            size = bytes.Length*7;
+            if (bytes == null) throw new ArgumentNullException("bytes");
+            _bytes = bytes;
             bytes[bytes.Length - 1] |= STOP_BIT;
         }
 
         public byte[] Bytes
         {
-            get { return bytes; }
+            get { return _bytes; }
         }
 
         public byte[] TruncatedBytes
         {
             get
             {
-                int index = bytes.Length - 1;
+                int index = _bytes.Length - 1;
 
-                for (; (index > 0) && ((bytes[index] & VALUE_BITS_SET) == 0); index--)
+                for (; (index > 0) && ((_bytes[index] & VALUE_BITS_SET) == 0); index--)
                 {
                 }
 
-                if (index == (bytes.Length - 1))
+                if (index == (_bytes.Length - 1))
                 {
-                    return bytes;
+                    return _bytes;
                 }
 
                 var truncated = new byte[index + 1];
-                Array.Copy(bytes, 0, truncated, 0, index + 1);
+                Array.Copy(_bytes, 0, truncated, 0, index + 1);
 
                 truncated[truncated.Length - 1] |= STOP_BIT;
 
@@ -72,70 +73,61 @@ namespace OpenFAST
 
         public int Size
         {
-            get { return size; }
+            get { return _bytes.Length * 7; }
         }
 
         public bool Overlong
         {
-            get { return (bytes.Length > 1) && ((bytes[bytes.Length - 1] & VALUE_BITS_SET) == 0); }
+            get { return (_bytes.Length > 1) && ((_bytes[_bytes.Length - 1] & VALUE_BITS_SET) == 0); }
         }
 
         public void Set(int fieldIndex)
         {
-            bytes[fieldIndex/7] |= (byte) ((1 << (6 - (fieldIndex%7))));
+            _bytes[fieldIndex/7] |= (byte) ((1 << (6 - (fieldIndex%7))));
         }
 
         public bool IsSet(int fieldIndex)
         {
-            if (fieldIndex >= bytes.Length*7)
+            if (fieldIndex >= _bytes.Length*7)
                 return false;
-            return (bytes[fieldIndex/7] & (1 << (6 - (fieldIndex%7)))) > 0;
-        }
-
-        public override bool Equals(Object obj)
-        {
-            if ((obj == null) || !(obj is BitVector))
-            {
-                return false;
-            }
-
-            return Equals((BitVector) obj);
-        }
-
-        public bool Equals(BitVector other)
-        {
-            if (other.size != size)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < bytes.Length; i++)
-            {
-                if (bytes[i] != other.bytes[i])
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        public override int GetHashCode()
-        {
-            return bytes.GetHashCode();
+            return (_bytes[fieldIndex/7] & (1 << (6 - (fieldIndex%7)))) > 0;
         }
 
         public override string ToString()
         {
-            return "BitVector [" + ByteUtil.ConvertByteArrayToBitString(bytes) + "]";
+            return "BitVector [" + ByteUtil.ConvertByteArrayToBitString(_bytes) + "]";
         }
 
         public int IndexOfLastSet()
         {
-            int index = bytes.Length*7 - 1;
-            while (index >= 0 && !(((bytes[index/7] & (1 << (6 - (index%7)))) > 0)))
+            int index = _bytes.Length*7 - 1;
+            while (index >= 0 && !(((_bytes[index/7] & (1 << (6 - (index%7)))) > 0)))
                 index--;
             return index;
         }
+
+        #region Equals
+
+        public bool Equals(BitVector other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Util.ArrayEquals(other._bytes, _bytes);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != typeof (BitVector)) return false;
+            return Equals((BitVector) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Util.ArrayHashCodeStruct(_bytes);
+        }
+
+        #endregion
     }
 }

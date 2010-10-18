@@ -22,7 +22,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System;
 using System.Globalization;
 using System.IO;
-using OpenFAST.util;
+using OpenFAST.Utility;
 
 namespace OpenFAST.Template.Type.Codec
 {

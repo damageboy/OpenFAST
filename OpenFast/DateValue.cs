@@ -24,7 +24,7 @@ using System;
 namespace OpenFAST
 {
     [Serializable]
-    public sealed class DateValue : ScalarValue
+    public sealed class DateValue : ScalarValue, IEquatable<DateValue>
     {
         private readonly DateTime _value;
 
@@ -48,23 +48,28 @@ namespace OpenFAST
             return _value.ToString("r");
         }
 
-        public override bool Equals(Object other)
+        #region Equals
+
+        public bool Equals(DateValue other)
         {
-            if(ReferenceEquals(other,this))
-                return true;
-            if (ReferenceEquals(other, null))// || !(other is DateValue))
-                return false;
-            return Equals((DateValue) other);
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return other._value.Equals(_value);
         }
 
-        private bool Equals(DateValue other)
+        public override bool Equals(object obj)
         {
-            return other._value.Equals(_value);
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != typeof (DateValue)) return false;
+            return Equals((DateValue) obj);
         }
 
         public override int GetHashCode()
         {
             return _value.GetHashCode();
         }
+
+        #endregion
     }
 }

@@ -23,7 +23,7 @@ using System;
 using System.Text;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
-using OpenFAST.util;
+using OpenFAST.Utility;
 using Type = OpenFAST.Template.Type.FASTType;
 
 namespace OpenFAST
@@ -74,10 +74,8 @@ namespace OpenFAST
         {
             var copies = new IFieldValue[_values.Length];
             for (int i = 0; i < copies.Length; i++)
-            {
                 copies[i] = _values[i].Copy();
-            }
-            return new GroupValue(_group, _values);
+            return new GroupValue(_group, copies);
         }
 
         #endregion
@@ -93,12 +91,14 @@ namespace OpenFAST
             Field fld;
             if (!_group.TryGetField(fieldName, out fld))
             {
-                if (_group.HasIntrospectiveField(fieldName))
+                Scalar scalar;
+                if (_group.TryGetIntrospectiveField(fieldName, out scalar))
                 {
-                    Scalar scalar = _group.GetIntrospectiveField(fieldName);
-                    if (scalar.Type.Equals(Type.UNICODE) || scalar.Type.Equals(Type.STRING) ||
+                    if (scalar.Type.Equals(Type.UNICODE) ||
+                        scalar.Type.Equals(Type.STRING) ||
                         scalar.Type.Equals(Type.ASCII))
                         return GetString(scalar.Name).Length;
+
                     if (scalar.Type.Equals(Type.BYTE_VECTOR))
                         return GetBytes(scalar.Name).Length;
                 }
@@ -326,12 +326,10 @@ namespace OpenFAST
             var builder = new StringBuilder();
 
             builder.Append(_group).Append(" -> {");
-            for (int i = 0; i < _values.Length; i++)
-            {
-                builder.Append(_values[i]).Append(", ");
-            }
-
+            foreach (var v in _values)
+                builder.Append(v).Append(", ");
             builder.Append("}");
+
             return builder.ToString();
         }
 
@@ -364,34 +362,12 @@ namespace OpenFAST
 
         public bool Equals(GroupValue other)
         {
-            // BUG? for some reason we are not testing this._groups
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Util.ArrayEqualsSlow(_values, other._values);
-        }
 
-        //        private bool Equals(GroupValue other)
-        //        {
-        //            if (_values.Length != other._values.Length)
-        //            {
-        //                return false;
-        //            }
-        //
-        //            for (int i = 0; i < _values.Length; i++)
-        //            {
-        //                if (_values[i] == null)
-        //                {
-        //                    if (other._values[i] != null)
-        //                        return false;
-        //                }
-        //                else if (!_values[i].Equals(other._values[i]))
-        //                {
-        //                    return false;
-        //                }
-        //            }
-        //
-        //            return true;
-        //        }
+            // BUG? for some reason we are ignoring this._groups
+            return Util.ArrayEqualsSlow(_values, other._values, 0);
+        }
 
         public override bool Equals(object obj)
         {
@@ -405,7 +381,8 @@ namespace OpenFAST
         {
             unchecked
             {
-                return ((_group != null ? _group.GetHashCode() : 0)*397) ^ (_values != null ? _values.GetHashCode() : 0);
+                // BUG? for some reason we are ignoring this._groups
+                return Util.ArrayHashCode(_values);
             }
         }
 

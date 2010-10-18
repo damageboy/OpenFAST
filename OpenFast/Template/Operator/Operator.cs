@@ -29,22 +29,17 @@ namespace OpenFAST.Template.Operator
     [Serializable]
     public class Operator
     {
-        private static readonly Dictionary<string, Operator> OperatorNameMap = new Dictionary<string,Operator>();
+        private static readonly Dictionary<string, Operator> OperatorNameMap = new Dictionary<string, Operator>();
 
         public static readonly Operator NONE;
-
         public static readonly Operator CONSTANT;
-
         public static readonly Operator DEFAULT;
-
         public static readonly Operator COPY;
-
         public static readonly Operator INCREMENT = new Operator("increment");
-
         public static readonly Operator DELTA;
-
         public static readonly Operator TAIL = new Operator("tail");
-        private readonly string name;
+        
+        private readonly string _name;
 
         static Operator()
         {
@@ -57,13 +52,18 @@ namespace OpenFAST.Template.Operator
 
         public Operator(string name)
         {
-            this.name = name;
+            _name = name;
             OperatorNameMap[name] = this;
         }
 
         public virtual string Name
         {
-            get { return name; }
+            get { return _name; }
+        }
+
+        public virtual bool UsesDictionary
+        {
+            get { return true; }
         }
 
         public static Operator GetOperator(string name)
@@ -82,7 +82,7 @@ namespace OpenFAST.Template.Operator
 
         public override string ToString()
         {
-            return name;
+            return _name;
         }
 
         public virtual bool ShouldStoreValue(ScalarValue value)
@@ -105,17 +105,12 @@ namespace OpenFAST.Template.Operator
 
         internal bool Equals(Operator other)
         {
-            return name.Equals(other.name);
+            return _name.Equals(other._name);
         }
 
         public override int GetHashCode()
         {
-            return name.GetHashCode();
-        }
-
-        public virtual bool UsesDictionary
-        {
-            get { return true; }
+            return _name.GetHashCode();
         }
 
         #region Nested type: ConstantOperator
@@ -125,6 +120,11 @@ namespace OpenFAST.Template.Operator
         {
             internal ConstantOperator(string name) : base(name)
             {
+            }
+
+            public override bool UsesDictionary
+            {
+                get { return false; }
             }
 
             public override void Validate(Scalar scalar)
@@ -139,11 +139,6 @@ namespace OpenFAST.Template.Operator
             public override bool ShouldStoreValue(ScalarValue value)
             {
                 return false;
-            }
-
-            public override bool UsesDictionary
-            {
-                get { return false; }
             }
         }
 

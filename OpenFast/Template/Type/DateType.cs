@@ -26,15 +26,15 @@ using OpenFAST.Template.Type.Codec;
 namespace OpenFAST.Template.Type
 {
     [Serializable]
-    public sealed class DateType : FASTType
+    public sealed class DateType : FASTType, IEquatable<DateType>
     {
-        private readonly TypeCodec dateCodec;
-        private readonly DateTimeFormatInfo dateFormatter;
+        private readonly TypeCodec _dateCodec;
+        private readonly DateTimeFormatInfo _dateFormatter;
 
         public DateType(DateTimeFormatInfo dateFormat, TypeCodec dateCodec) : base("date")
         {
-            dateFormatter = dateFormat;
-            this.dateCodec = dateCodec;
+            _dateFormatter = dateFormat;
+            _dateCodec = dateCodec;
         }
 
         public override ScalarValue DefaultValue
@@ -53,16 +53,17 @@ namespace OpenFAST.Template.Type
 
         public override TypeCodec GetCodec(Operator.Operator op, bool optional)
         {
-            return dateCodec;
+            return _dateCodec;
         }
 
         public override ScalarValue GetValue(string value)
         {
             if (value == null)
                 return ScalarValue.UNDEFINED;
+
             try
             {
-                DateTime tempAux = DateTime.Parse(value, dateFormatter);
+                DateTime tempAux = DateTime.Parse(value, _dateFormatter);
                 return new DateValue(tempAux);
             }
             catch (FormatException e)
@@ -73,42 +74,42 @@ namespace OpenFAST.Template.Type
 
         public override string Serialize(ScalarValue value)
         {
-            return SupportClass.FormatDateTime(dateFormatter, ((DateValue) value).Value);
+            return SupportClass.FormatDateTime(_dateFormatter, ((DateValue) value).Value);
+        }
+
+        #region Equals
+
+        public override bool Equals(FASTType other)
+        {
+            return Equals(other as DateType);
+        }
+
+        public bool Equals(DateType other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return base.Equals(other) && Equals(other._dateCodec, _dateCodec) &&
+                   Equals(other._dateFormatter, _dateFormatter);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return Equals(obj as DateType);
         }
 
         public override int GetHashCode()
         {
-            const int prime = 31;
-            int result = 1;
-            result = prime*result + ((dateCodec == null) ? 0 : dateCodec.GetHashCode());
-            result = prime*result + ((dateFormatter == null) ? 0 : dateFormatter.GetHashCode());
-            return result;
+            unchecked
+            {
+                int result = base.GetHashCode();
+                result = (result*397) ^ (_dateCodec != null ? _dateCodec.GetHashCode() : 0);
+                result = (result*397) ^ (_dateFormatter != null ? _dateFormatter.GetHashCode() : 0);
+                return result;
+            }
         }
 
-        public override bool Equals(Object obj)
-        {
-            if (this == obj)
-                return true;
-            if (obj == null)
-                return false;
-            if (GetType() != obj.GetType())
-                return false;
-            var other = (DateType) obj;
-            if (dateCodec == null)
-            {
-                if (other.dateCodec != null)
-                    return false;
-            }
-            else if (!dateCodec.Equals(other.dateCodec))
-                return false;
-            if (dateFormatter == null)
-            {
-                if (other.dateFormatter != null)
-                    return false;
-            }
-            else if (!dateFormatter.Equals(other.dateFormatter))
-                return false;
-            return true;
-        }
+        #endregion
     }
 }

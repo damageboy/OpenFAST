@@ -30,10 +30,11 @@ namespace OpenFAST
     [Serializable]
     public sealed class QName : IEquatable<QName>
     {
-        public static readonly QName NULL = new QName("", "");
+        public static readonly QName Null = new QName("", "");
 
         private readonly string _name;
         private readonly string _namespace;
+        private int _hashCode = -1;
 
         public QName(string name)
             : this(name, "")
@@ -67,12 +68,17 @@ namespace OpenFAST
             return Equals(other._namespace, _namespace) && Equals(other._name, _name);
         }
 
-        public override int GetHashCode() //efficient algo to quick search
+        public override int GetHashCode()
         {
-            unchecked
+            if (_hashCode == -1)
             {
-                return (_namespace.GetHashCode()*397) ^ _name.GetHashCode();
+                // Cache hash code
+                unchecked
+                {
+                    _hashCode = (_namespace.GetHashCode()*397) ^ _name.GetHashCode();
+                }
             }
+            return _hashCode;
         }
 
         public override bool Equals(object obj)

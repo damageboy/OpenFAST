@@ -32,71 +32,6 @@ namespace UnitTest.Codec
     [TestFixture]
     public class FastDecoderTest
     {
-        public void testDecodeSimpleMessage()
-        {
-            var template = new MessageTemplate("",
-                                               new Field[]
-                                                   {
-                                                       new Scalar("1", FASTType.U32, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false)
-                                                   });
-            Stream input = ByteUtil.CreateByteStream("11100000 11110001 10000001");
-            var context = new Context();
-            context.RegisterTemplate(113, template);
-
-            var message = new Message(template);
-            message.SetInteger(1, 1);
-
-            var decoder = new FastDecoder(context, input);
-            GroupValue readMessage = decoder.ReadMessage();
-            Assert.AreEqual(message, readMessage);
-            Assert.AreEqual(readMessage, message);
-        }
-
-        public void testDecodeMessageWithStringFieldTypesAndAllOperators()
-        {
-            var template = new MessageTemplate("",
-                                               new Field[]
-                                                   {
-                                                       new Scalar("1", FASTType.ASCII, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false),
-                                                       new Scalar("2", FASTType.ASCII, Operator.DELTA,
-                                                                  ScalarValue.UNDEFINED, false),
-                                                       new Scalar("3", FASTType.ASCII, Operator.CONSTANT,
-                                                                  new StringValue("e"), false), /* NON-TRANSFERRABLE */
-                                                       new Scalar("4", FASTType.ASCII, Operator.DEFAULT,
-                                                                  new StringValue("long"), false)
-                                                   });
-
-            var message = new Message(template);
-            message.SetString(1, "on");
-            message.SetString(2, "DCB32");
-            message.SetString(3, "e");
-            message.SetString(4, "long");
-
-            //             --PMAP-- --TID--- --------#1------- ---------------------#2---------------------
-            const string msg1 =
-                "11100000 11110001 01101111 11101110 10000000 01000100 01000011 01000010 00110011 10110010";
-
-            //             --PMAP-- ------------#2------------ ---------------------#4---------------------
-            const string msg2 = "10010000 10000010 00110001 10110110 01110011 01101000 01101111 01110010 11110100";
-
-            Stream input = ByteUtil.CreateByteStream(msg1 + ' ' + msg2);
-            var context = new Context();
-            context.RegisterTemplate(113, template);
-
-            var decoder = new FastDecoder(context, input);
-
-            Message readMessage = decoder.ReadMessage();
-            Assert.AreEqual(message, readMessage);
-
-            message.SetString(2, "DCB16");
-            message.SetString(4, "short");
-
-            readMessage = decoder.ReadMessage();
-            Assert.AreEqual(message, readMessage);
-        }
-
         [Test]
         public void TestDecodeEmptyMessage()
         {
@@ -112,27 +47,22 @@ namespace UnitTest.Codec
         [Test]
         public void TestDecodeMessageWithAllFieldTypes()
         {
-            //                     --PMAP-- --TID--- ---#1--- -------#2-------- ------------#3------------ ---#4--- ------------#5------------ ---#6---
+            //   --PMAP-- --TID--- ---#1--- -------#2-------- ------------#3------------ ---#4--- ------------#5------------ ---#6---
             const string msgstr =
                 "11111111 11110001 11001000 10000001 11111111 11111101 00001001 10110001 11111111 01100001 01100010 11100011 10000010";
             Stream input = ByteUtil.CreateByteStream(msgstr);
 
-            var template = new MessageTemplate("",
-                                               new Field[]
-                                                   {
-                                                       new Scalar("1", FASTType.ASCII, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false),
-                                                       new Scalar("2", FASTType.BYTE_VECTOR, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false),
-                                                       new Scalar("3", FASTType.DECIMAL, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false),
-                                                       new Scalar("4", FASTType.I32, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false),
-                                                       new Scalar("5", FASTType.ASCII, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false),
-                                                       new Scalar("6", FASTType.U32, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false),
-                                                   });
+            var template = new MessageTemplate(
+                "",
+                new Field[]
+                    {
+                        new Scalar("1", FASTType.ASCII, Operator.COPY, ScalarValue.UNDEFINED, false),
+                        new Scalar("2", FASTType.BYTE_VECTOR, Operator.COPY, ScalarValue.UNDEFINED, false),
+                        new Scalar("3", FASTType.DECIMAL, Operator.COPY, ScalarValue.UNDEFINED, false),
+                        new Scalar("4", FASTType.I32, Operator.COPY, ScalarValue.UNDEFINED, false),
+                        new Scalar("5", FASTType.ASCII, Operator.COPY, ScalarValue.UNDEFINED, false),
+                        new Scalar("6", FASTType.U32, Operator.COPY, ScalarValue.UNDEFINED, false),
+                    });
             var context = new Context();
             context.RegisterTemplate(113, template);
 
@@ -149,22 +79,18 @@ namespace UnitTest.Codec
         [Test]
         public void TestDecodeMessageWithSignedIntegerFieldTypesAndAllOperators()
         {
-            var template = new MessageTemplate("",
-                                               new Field[]
-                                                   {
-                                                       new Scalar("1", FASTType.I32, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false),
-                                                       new Scalar("2", FASTType.I32, Operator.DELTA,
-                                                                  ScalarValue.UNDEFINED, false),
-                                                       new Scalar("3", FASTType.I32, Operator.INCREMENT,
-                                                                  new IntegerValue(10), false),
-                                                       new Scalar("4", FASTType.I32, Operator.INCREMENT,
-                                                                  ScalarValue.UNDEFINED, false),
-                                                       new Scalar("5", FASTType.I32, Operator.CONSTANT,
-                                                                  new IntegerValue(1), false), /* NON-TRANSFERRABLE */
-                                                       new Scalar("6", FASTType.I32, Operator.DEFAULT,
-                                                                  new IntegerValue(2), false)
-                                                   });
+            var template = new MessageTemplate(
+                "",
+                new Field[]
+                    {
+                        new Scalar("1", FASTType.I32, Operator.COPY, ScalarValue.UNDEFINED, false),
+                        new Scalar("2", FASTType.I32, Operator.DELTA, ScalarValue.UNDEFINED, false),
+                        new Scalar("3", FASTType.I32, Operator.INCREMENT, new IntegerValue(10), false),
+                        new Scalar("4", FASTType.I32, Operator.INCREMENT, ScalarValue.UNDEFINED, false),
+                        new Scalar("5", FASTType.I32, Operator.CONSTANT, new IntegerValue(1), false),
+                        /* NON-TRANSFERRABLE */
+                        new Scalar("6", FASTType.I32, Operator.DEFAULT, new IntegerValue(2), false)
+                    });
 
             GroupValue message = new Message(template);
             message.SetInteger(1, 109);
@@ -174,13 +100,13 @@ namespace UnitTest.Codec
             message.SetInteger(5, 1);
             message.SetInteger(6, 2);
 
-            //             --PMAP-- --TID--- --------#1------- ------------#2------------ ---#4---
+            //                   --PMAP-- --TID--- --------#1------- ------------#2------------ ---#4---
             const string msg1 = "11101000 11110001 00000000 11101101 00000001 01100110 10011110 10000011";
 
-            //             --PMAP-- ---#2--- ---#6---
+            //                   --PMAP-- ---#2--- ---#6---
             const string msg2 = "10000100 11111111 10000011";
 
-            //             --PMAP-- --------#1------- --------#2------- ---#4--- ---#6---
+            //                   --PMAP-- --------#1------- --------#2------- ---#4--- ---#6---
             const string msg3 = "10101100 00000000 11100000 00001000 10000111 10000001 10000011";
 
             Stream input = ByteUtil.CreateByteStream(msg1 + ' ' + msg2 + ' ' +
@@ -211,24 +137,63 @@ namespace UnitTest.Codec
         }
 
         [Test]
+        public void TestDecodeMessageWithStringFieldTypesAndAllOperators()
+        {
+            var template = new MessageTemplate(
+                "",
+                new Field[]
+                    {
+                        new Scalar("1", FASTType.ASCII, Operator.COPY, ScalarValue.UNDEFINED, false),
+                        new Scalar("2", FASTType.ASCII, Operator.DELTA, ScalarValue.UNDEFINED, false),
+                        new Scalar("3", FASTType.ASCII, Operator.CONSTANT, new StringValue("e"), false),
+                        /* NON-TRANSFERRABLE */
+                        new Scalar("4", FASTType.ASCII, Operator.DEFAULT, new StringValue("long"), false)
+                    });
+
+            var message = new Message(template);
+            message.SetString(1, "on");
+            message.SetString(2, "DCB32");
+            message.SetString(3, "e");
+            message.SetString(4, "long");
+
+            //   --PMAP-- --TID--- --------#1------- ---------------------#2---------------------
+            const string msg1 =
+                "11100000 11110001 01101111 11101110 10000000 01000100 01000011 01000010 00110011 10110010";
+
+            //                   --PMAP-- ------------#2------------ ---------------------#4---------------------
+            const string msg2 = "10010000 10000010 00110001 10110110 01110011 01101000 01101111 01110010 11110100";
+
+            Stream input = ByteUtil.CreateByteStream(msg1 + ' ' + msg2);
+            var context = new Context();
+            context.RegisterTemplate(113, template);
+
+            var decoder = new FastDecoder(context, input);
+
+            Message readMessage = decoder.ReadMessage();
+            Assert.AreEqual(message, readMessage);
+
+            message.SetString(2, "DCB16");
+            message.SetString(4, "short");
+
+            readMessage = decoder.ReadMessage();
+            Assert.AreEqual(message, readMessage);
+        }
+
+        [Test]
         public void TestDecodeMessageWithUnsignedIntegerFieldTypesAndAllOperators()
         {
-            var template = new MessageTemplate("",
-                                               new Field[]
-                                                   {
-                                                       new Scalar("1", FASTType.U32, Operator.COPY,
-                                                                  ScalarValue.UNDEFINED, false),
-                                                       new Scalar("2", FASTType.U32, Operator.DELTA,
-                                                                  ScalarValue.UNDEFINED, false),
-                                                       new Scalar("3", FASTType.U32, Operator.INCREMENT,
-                                                                  new IntegerValue(10), false),
-                                                       new Scalar("4", FASTType.U32, Operator.INCREMENT,
-                                                                  ScalarValue.UNDEFINED, false),
-                                                       new Scalar("5", FASTType.U32, Operator.CONSTANT,
-                                                                  new IntegerValue(1), false), /* NON-TRANSFERRABLE */
-                                                       new Scalar("6", FASTType.U32, Operator.DEFAULT,
-                                                                  new IntegerValue(2), false)
-                                                   });
+            var template = new MessageTemplate(
+                "",
+                new Field[]
+                    {
+                        new Scalar("1", FASTType.U32, Operator.COPY, ScalarValue.UNDEFINED, false),
+                        new Scalar("2", FASTType.U32, Operator.DELTA, ScalarValue.UNDEFINED, false),
+                        new Scalar("3", FASTType.U32, Operator.INCREMENT, new IntegerValue(10), false),
+                        new Scalar("4", FASTType.U32, Operator.INCREMENT, ScalarValue.UNDEFINED, false),
+                        new Scalar("5", FASTType.U32, Operator.CONSTANT, new IntegerValue(1), false),
+                        /* NON-TRANSFERRABLE */
+                        new Scalar("6", FASTType.U32, Operator.DEFAULT, new IntegerValue(2), false)
+                    });
 
             GroupValue message = new Message(template);
             message.SetInteger(1, 109);
@@ -238,13 +203,13 @@ namespace UnitTest.Codec
             message.SetInteger(5, 1);
             message.SetInteger(6, 2);
 
-            //             --PMAP-- --TID--- ---#1--- ------------#2------------ ---#4---
+            //                   --PMAP-- --TID--- ---#1--- ------------#2------------ ---#4---
             const string msg1 = "11101000 11110001 11101101 00000001 01100110 10011110 10000011";
 
-            //             --PMAP-- ---#2--- ---#6---
+            //                   --PMAP-- ---#2--- ---#6---
             const string msg2 = "10000100 11111111 10000011";
 
-            //             --PMAP-- ---#1--- --------#2------- ---#4--- ---#6---
+            //                   --PMAP-- ---#1--- --------#2------- ---#4--- ---#6---
             const string msg3 = "10101100 11100000 00001000 10000111 10000001 10000011";
 
             Stream input = ByteUtil.CreateByteStream(msg1 + ' ' + msg2 + ' ' +
@@ -287,6 +252,28 @@ namespace UnitTest.Codec
             GroupValue message2 = decoder.ReadMessage();
             Assert.AreEqual(113, message.GetInt(0));
             Assert.AreEqual(113, message2.GetInt(0));
+        }
+
+        [Test]
+        public void TestDecodeSimpleMessage()
+        {
+            var template = new MessageTemplate(
+                "",
+                new Field[]
+                    {
+                        new Scalar("1", FASTType.U32, Operator.COPY, ScalarValue.UNDEFINED, false)
+                    });
+            Stream input = ByteUtil.CreateByteStream("11100000 11110001 10000001");
+            var context = new Context();
+            context.RegisterTemplate(113, template);
+
+            var message = new Message(template);
+            message.SetInteger(1, 1);
+
+            var decoder = new FastDecoder(context, input);
+            GroupValue readMessage = decoder.ReadMessage();
+            Assert.AreEqual(message, readMessage);
+            Assert.AreEqual(readMessage, message);
         }
 
         //[Test]

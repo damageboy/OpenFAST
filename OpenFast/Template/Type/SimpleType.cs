@@ -27,29 +27,25 @@ namespace OpenFAST.Template.Type
     [Serializable]
     public abstract class SimpleType : FASTType
     {
-        private readonly TypeCodec codec;
-        private readonly TypeCodec nullableCodec;
+        private readonly TypeCodec _codec;
+        private readonly TypeCodec _nullableCodec;
 
         protected SimpleType(string typeName, TypeCodec codec, TypeCodec nullableCodec) : base(typeName)
         {
-            this.codec = codec;
-            this.nullableCodec = nullableCodec;
+            _codec = codec;
+            _nullableCodec = nullableCodec;
         }
 
 
         public override TypeCodec GetCodec(Operator.Operator op, bool optional)
         {
-            if (optional)
-                return nullableCodec;
-            return codec;
+            return optional ? _nullableCodec : _codec;
         }
 
 
         public override ScalarValue GetValue(string value)
         {
-            if (value == null)
-                return null;
-            return GetVal(value);
+            return value == null ? null : GetVal(value);
         }
 
         public abstract ScalarValue GetVal(string value);

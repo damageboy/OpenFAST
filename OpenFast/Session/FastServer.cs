@@ -27,23 +27,22 @@ namespace OpenFAST.Session
 {
     public sealed class FastServer : ConnectionListener
     {
-        private readonly IEndpoint endpoint;
-        private readonly string serverName;
-        private readonly ISessionProtocol sessionProtocol;
-        private IErrorHandler errorHandler = ErrorHandler_Fields.DEFAULT;
-        private bool listening;
-        private SupportClass.ThreadClass serverThread;
-        private ISessionHandler sessionHandler = SessionHandlerFields.Null;
+        private readonly IEndpoint _endpoint;
+        private readonly string _serverName;
+        private readonly ISessionProtocol _sessionProtocol;
+        private IErrorHandler _errorHandler = ErrorHandler_Fields.DEFAULT;
+        private bool _listening;
+        private SupportClass.ThreadClass _serverThread;
+        private ISessionHandler _sessionHandler = SessionHandlerFields.Null;
 
         public FastServer(string serverName, ISessionProtocol sessionProtocol, IEndpoint endpoint)
         {
-            if (endpoint == null || sessionProtocol == null)
-            {
-                throw new NullReferenceException();
-            }
-            this.endpoint = endpoint;
-            this.sessionProtocol = sessionProtocol;
-            this.serverName = serverName;
+            if (sessionProtocol == null) throw new ArgumentNullException("sessionProtocol");
+            if (endpoint == null) throw new ArgumentNullException("endpoint");
+
+            _endpoint = endpoint;
+            _sessionProtocol = sessionProtocol;
+            _serverName = serverName;
             endpoint.ConnectionListener = this;
         }
 
@@ -52,41 +51,37 @@ namespace OpenFAST.Session
             // ************* OPTIONAL DEPENDENCY SETTERS **************
             set
             {
-                if (value == null)
-                {
-                    throw new NullReferenceException();
-                }
-
-                errorHandler = value;
+                if (value == null) throw new ArgumentNullException("value");
+                _errorHandler = value;
             }
         }
 
         public ISessionHandler SessionHandler
         {
-            set { sessionHandler = value; }
+            set { _sessionHandler = value; }
         }
 
         public void Listen()
         {
-            listening = true;
-            if (serverThread == null)
+            _listening = true;
+            if (_serverThread == null)
             {
                 IThreadRunnable runnable = new FastServerThread(this);
-                serverThread = new SupportClass.ThreadClass(new ThreadStart(runnable.Run), "FastServer");
+                _serverThread = new SupportClass.ThreadClass(new ThreadStart(runnable.Run), "FastServer");
             }
-            serverThread.Start();
+            _serverThread.Start();
         }
 
         public void Close()
         {
-            listening = false;
-            endpoint.Close();
+            _listening = false;
+            _endpoint.Close();
         }
 
         public override void OnConnect(IConnection connection)
         {
-            Session session = sessionProtocol.OnNewConnection(serverName, connection);
-            sessionHandler.NewSession(session);
+            Session session = _sessionProtocol.OnNewConnection(_serverName, connection);
+            _sessionHandler.NewSession(session);
         }
 
         #region Nested type: FastServerThread
@@ -109,15 +104,15 @@ namespace OpenFAST.Session
 
             public virtual void Run()
             {
-                while (Enclosing_Instance.listening)
+                while (Enclosing_Instance._listening)
                 {
                     try
                     {
-                        Enclosing_Instance.endpoint.Accept();
+                        Enclosing_Instance._endpoint.Accept();
                     }
                     catch (FastConnectionException e)
                     {
-                        Enclosing_Instance.errorHandler.Error(null, null, e);
+                        Enclosing_Instance._errorHandler.Error(null, null, e);
                     }
                     try
                     {

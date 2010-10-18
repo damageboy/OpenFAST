@@ -27,14 +27,13 @@ using OpenFAST.Error;
 namespace OpenFAST
 {
     [Serializable]
-    public class StringValue : ScalarValue
+    public class StringValue : ScalarValue, IEquatable<StringValue>
     {
         private readonly string _value;
 
         public StringValue(string value)
         {
-            if (value == null)
-                throw new NullReferenceException();
+            if (value == null) throw new ArgumentNullException("value");
             _value = value;
         }
 
@@ -124,24 +123,29 @@ namespace OpenFAST
             return _value;
         }
 
-        public override bool Equals(Object obj)
+        #region Equals
+
+        public bool Equals(StringValue other)
         {
-            if ((obj == null) || !(obj is StringValue))
-            {
-                return false;
-            }
-            return Equals((StringValue) obj);
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Equals(other._value, _value);
         }
 
-        internal bool Equals(StringValue otherValue)
+        public override bool Equals(object obj)
         {
-            return _value.Equals(otherValue._value);
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != typeof (StringValue)) return false;
+            return Equals((StringValue) obj);
         }
 
         public override int GetHashCode()
         {
             return _value.GetHashCode();
         }
+
+        #endregion
 
         public override bool EqualsValue(string defaultValue)
         {

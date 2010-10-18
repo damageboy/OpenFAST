@@ -86,7 +86,6 @@ namespace OpenFAST.Template
         public virtual QName TypeReference
         {
             get { return _group.TypeReference; }
-
             set { _group.TypeReference = value; }
         }
 
@@ -181,7 +180,7 @@ namespace OpenFAST.Template
             return _group.HasField(fieldName);
         }
 
-        public virtual bool HasTypeReference()
+        public bool HasTypeReference()
         {
             return _group.HasTypeReference();
         }
