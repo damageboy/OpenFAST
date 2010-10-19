@@ -39,14 +39,25 @@ namespace UnitTest
         protected void SetUp()
         {
             _output = new StreamWriter(new MemoryStream());
-            _session = new Session(new MyConnection(_output.BaseStream), SessionConstants.SCP_1_0,
-                                  TemplateRegistryFields.Null, TemplateRegistryFields.Null);
+            _connection = new MyConnection(_output.BaseStream);
+            _session = new Session(_connection,
+                                   SessionConstants.SCP_1_0,
+                                   TemplateRegistryFields.Null, TemplateRegistryFields.Null);
+        }
+
+        [TearDown]
+        protected void TearDown()
+        {
+            _session.Close();
+            _connection.Close();
+            _output.Dispose();
         }
 
         #endregion
 
         private Session _session;
         private StreamWriter _output;
+        private MyConnection _connection;
 
         private class MyConnection : IConnection
         {
@@ -59,7 +70,7 @@ namespace UnitTest
                 _inStream = new StreamReader(outStream);
             }
 
-            #region Connection Members
+            #region IConnection Members
 
             public StreamReader InputStream
             {
@@ -73,13 +84,8 @@ namespace UnitTest
 
             public void Close()
             {
-                try
-                {
-                    _outStream.Close();
-                }
-                catch (IOException)
-                {
-                }
+                _inStream.Close();
+                _outStream.Close();
             }
 
             #endregion

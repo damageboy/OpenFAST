@@ -20,7 +20,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System;
-using System.IO;
 using NUnit.Framework;
 using OpenFAST;
 using OpenFAST.Codec;
@@ -39,58 +38,50 @@ namespace UnitTest
         [SetUp]
         public void SetUp()
         {
-            output = new PipedStream();
-            input = new PipedStream(output);
-            encodingContext = new Context();
-            decodingContext = new Context();
-            encoder = new FastEncoder(encodingContext);
-            decoder = new FastDecoder(decodingContext, input);
+            _output = new PipedStream();
+            _input = new PipedStream(_output);
+            _encodingContext = new Context();
+            _decodingContext = new Context();
+            _encoder = new FastEncoder(_encodingContext);
+            _decoder = new FastDecoder(_decodingContext, _input);
         }
 
         #endregion
 
-        private Context decodingContext;
-        private Context encodingContext;
-        private FastEncoder encoder;
-        private PipedStream input;
-        private PipedStream output;
-        private FastDecoder decoder;
+        private Context _decodingContext;
+        private Context _encodingContext;
+        private FastEncoder _encoder;
+        private PipedStream _input;
+        private PipedStream _output;
+        private FastDecoder _decoder;
 
-        private MessageTemplate registerTemplate(Field field)
+        private MessageTemplate RegisterTemplate(Field field)
         {
             var messageTemplate = new MessageTemplate("", new[] {field});
-            encodingContext.RegisterTemplate(113, messageTemplate);
-            decodingContext.RegisterTemplate(113, messageTemplate);
+            _encodingContext.RegisterTemplate(113, messageTemplate);
+            _decodingContext.RegisterTemplate(113, messageTemplate);
 
             return messageTemplate;
         }
 
-        private void readMessageAndAssertEquals(GroupValue msg1)
+        private void ReadMessageAndAssertEquals(GroupValue msg1)
         {
-            GroupValue readMessage = decoder.ReadMessage();
+            GroupValue readMessage = _decoder.ReadMessage();
             Assert.AreEqual(msg1, readMessage);
         }
 
-        private void encodeAndAssertEquals(String encoding, Message msg1)
+        private void EncodeAndAssertEquals(String encoding, Message msg1)
         {
-            byte[] encodedMessage = encoder.Encode(msg1);
+            byte[] encodedMessage = _encoder.Encode(msg1);
             TestUtil.AssertBitVectorEquals(encoding, encodedMessage);
-
-            try
-            {
-                output.Write(encodedMessage);
-            }
-            catch (IOException e)
-            {
-                throw new RuntimeException(e);
-            }
+            _output.Write(encodedMessage);
         }
 
         [Test]
         public void TestConstantOperatorWithMandatoryField()
         {
             var field = new Scalar("", FASTType.U32, Operator.CONSTANT, new IntegerValue(16), false);
-            MessageTemplate template = registerTemplate(field);
+            MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
             //        msg1.setInteger(1, 16);
@@ -98,15 +89,15 @@ namespace UnitTest
             var msg2 = new Message(template);
             msg2.SetInteger(1, 16);
 
-            //                 --PMAP-- --TID---
-            encodeAndAssertEquals("11000000 11110001", msg1);
+            //                     --PMAP-- --TID---
+            EncodeAndAssertEquals("11000000 11110001", msg1);
 
             //                     --PMAP--
-            encodeAndAssertEquals("10000000", msg2);
+            EncodeAndAssertEquals("10000000", msg2);
 
-            GroupValue readMessage = decoder.ReadMessage();
+            GroupValue readMessage = _decoder.ReadMessage();
             Assert.AreEqual(msg1, readMessage);
-            readMessage = decoder.ReadMessage();
+            readMessage = _decoder.ReadMessage();
             Assert.AreEqual(msg2, readMessage);
         }
 
@@ -114,7 +105,7 @@ namespace UnitTest
         public void TestConstantOperatorWithOptionalField()
         {
             var field = new Scalar("", FASTType.U32, Operator.CONSTANT, new IntegerValue(16), true);
-            MessageTemplate template = registerTemplate(field);
+            MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
 
@@ -122,13 +113,13 @@ namespace UnitTest
             msg2.SetInteger(1, 16);
 
             //                     --PMAP-- --TID---
-            encodeAndAssertEquals("11000000 11110001", msg1);
+            EncodeAndAssertEquals("11000000 11110001", msg1);
 
             //                     --PMAP--
-            encodeAndAssertEquals("10100000", msg2);
+            EncodeAndAssertEquals("10100000", msg2);
 
-            readMessageAndAssertEquals(msg1);
-            readMessageAndAssertEquals(msg2);
+            ReadMessageAndAssertEquals(msg1);
+            ReadMessageAndAssertEquals(msg2);
         }
 
         [Test]
@@ -136,7 +127,7 @@ namespace UnitTest
         {
             var field = new Scalar("", FASTType.U32, Operator.COPY,
                                    new IntegerValue(16), false);
-            MessageTemplate template = registerTemplate(field);
+            MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
             msg1.SetInteger(1, 16);
@@ -148,17 +139,17 @@ namespace UnitTest
             msg3.SetInteger(1, 20);
 
             //                     --PMAP-- --TID---
-            encodeAndAssertEquals("11000000 11110001", msg1);
+            EncodeAndAssertEquals("11000000 11110001", msg1);
 
             //                     --PMAP-- ---#1---
-            encodeAndAssertEquals("10100000 10010100", msg2);
+            EncodeAndAssertEquals("10100000 10010100", msg2);
 
             //                     --PMAP--
-            encodeAndAssertEquals("10000000", msg3);
+            EncodeAndAssertEquals("10000000", msg3);
 
-            readMessageAndAssertEquals(msg1);
-            readMessageAndAssertEquals(msg2);
-            readMessageAndAssertEquals(msg3);
+            ReadMessageAndAssertEquals(msg1);
+            ReadMessageAndAssertEquals(msg2);
+            ReadMessageAndAssertEquals(msg3);
         }
 
         [Test]
@@ -166,7 +157,7 @@ namespace UnitTest
         {
             var field = new Scalar("", FASTType.U32, Operator.COPY,
                                    new IntegerValue(16), true);
-            MessageTemplate template = registerTemplate(field);
+            MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
             msg1.SetInteger(1, 16);
@@ -180,21 +171,21 @@ namespace UnitTest
             msg4.SetInteger(1, 20);
 
             //                     --PMAP-- --TID---
-            encodeAndAssertEquals("11000000 11110001", msg1);
+            EncodeAndAssertEquals("11000000 11110001", msg1);
 
             //                     --PMAP-- ---#1---
-            encodeAndAssertEquals("10100000 10000000", msg2);
+            EncodeAndAssertEquals("10100000 10000000", msg2);
 
             //                     --PMAP-- ---#1---
-            encodeAndAssertEquals("10100000 10010101", msg3);
+            EncodeAndAssertEquals("10100000 10010101", msg3);
 
             //                     --PMAP--
-            encodeAndAssertEquals("10000000", msg4);
+            EncodeAndAssertEquals("10000000", msg4);
 
-            readMessageAndAssertEquals(msg1);
-            readMessageAndAssertEquals(msg2);
-            readMessageAndAssertEquals(msg3);
-            readMessageAndAssertEquals(msg4);
+            ReadMessageAndAssertEquals(msg1);
+            ReadMessageAndAssertEquals(msg2);
+            ReadMessageAndAssertEquals(msg3);
+            ReadMessageAndAssertEquals(msg4);
         }
 
         [Test]
@@ -202,7 +193,7 @@ namespace UnitTest
         {
             var field = new Scalar("", FASTType.U32, Operator.DEFAULT,
                                    new IntegerValue(16), false);
-            MessageTemplate template = registerTemplate(field);
+            MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
             msg1.SetInteger(1, 16);
@@ -211,13 +202,13 @@ namespace UnitTest
             msg2.SetInteger(1, 20);
 
             //                     --PMAP-- --TID---
-            encodeAndAssertEquals("11000000 11110001", msg1);
+            EncodeAndAssertEquals("11000000 11110001", msg1);
 
             //                     --PMAP-- ---#1---
-            encodeAndAssertEquals("10100000 10010100", msg2);
+            EncodeAndAssertEquals("10100000 10010100", msg2);
 
-            readMessageAndAssertEquals(msg1);
-            readMessageAndAssertEquals(msg2);
+            ReadMessageAndAssertEquals(msg1);
+            ReadMessageAndAssertEquals(msg2);
         }
 
         [Test]
@@ -225,7 +216,7 @@ namespace UnitTest
         {
             var field = new Scalar("", FASTType.U32, Operator.DEFAULT,
                                    new IntegerValue(16), true);
-            MessageTemplate template = registerTemplate(field);
+            MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
 
@@ -236,17 +227,17 @@ namespace UnitTest
             msg3.SetInteger(1, 20);
 
             //                     --PMAP-- --TID--- ---#1---
-            encodeAndAssertEquals("11100000 11110001 10000000", msg1);
+            EncodeAndAssertEquals("11100000 11110001 10000000", msg1);
 
             //                     --PMAP--
-            encodeAndAssertEquals("10000000", msg2);
+            EncodeAndAssertEquals("10000000", msg2);
 
             //                     --PMAP-- ---#1---
-            encodeAndAssertEquals("10100000 10010101", msg3);
+            EncodeAndAssertEquals("10100000 10010101", msg3);
 
-            readMessageAndAssertEquals(msg1);
-            readMessageAndAssertEquals(msg2);
-            readMessageAndAssertEquals(msg3);
+            ReadMessageAndAssertEquals(msg1);
+            ReadMessageAndAssertEquals(msg2);
+            ReadMessageAndAssertEquals(msg3);
         }
 
         [Test]
@@ -254,7 +245,7 @@ namespace UnitTest
         {
             var field = new Scalar("", FASTType.U32,
                                    Operator.INCREMENT, new IntegerValue(16), false);
-            MessageTemplate template = registerTemplate(field);
+            MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
             msg1.SetInteger(1, 16);
@@ -266,17 +257,17 @@ namespace UnitTest
             msg3.SetInteger(1, 20);
 
             //                     --PMAP-- --TID---
-            encodeAndAssertEquals("11000000 11110001", msg1);
+            EncodeAndAssertEquals("11000000 11110001", msg1);
 
             //                     --PMAP-- ---#1---
-            encodeAndAssertEquals("10000000", msg2);
+            EncodeAndAssertEquals("10000000", msg2);
 
             //                     --PMAP--
-            encodeAndAssertEquals("10100000 10010100", msg3);
+            EncodeAndAssertEquals("10100000 10010100", msg3);
 
-            readMessageAndAssertEquals(msg1);
-            readMessageAndAssertEquals(msg2);
-            readMessageAndAssertEquals(msg3);
+            ReadMessageAndAssertEquals(msg1);
+            ReadMessageAndAssertEquals(msg2);
+            ReadMessageAndAssertEquals(msg3);
         }
 
         [Test]
@@ -284,7 +275,7 @@ namespace UnitTest
         {
             var field = new Scalar("", FASTType.U32, Operator.DELTA,
                                    new IntegerValue(16), true);
-            MessageTemplate template = registerTemplate(field);
+            MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
             msg1.SetInteger(1, 16);
@@ -298,21 +289,21 @@ namespace UnitTest
             msg4.SetInteger(1, 20);
 
             //                     --PMAP-- --TID--- ---#1---
-            encodeAndAssertEquals("11000000 11110001 10000001", msg1);
+            EncodeAndAssertEquals("11000000 11110001 10000001", msg1);
 
             //                     --PMAP-- ---#1---
-            encodeAndAssertEquals("10000000 10000010", msg2);
+            EncodeAndAssertEquals("10000000 10000010", msg2);
 
             //                     --PMAP-- ---#1---
-            encodeAndAssertEquals("10000000 10000000", msg3);
+            EncodeAndAssertEquals("10000000 10000000", msg3);
 
             //                     --PMAP-- ---#1---
-            encodeAndAssertEquals("10000000 10000100", msg4);
+            EncodeAndAssertEquals("10000000 10000100", msg4);
 
-            readMessageAndAssertEquals(msg1);
-            readMessageAndAssertEquals(msg2);
-            readMessageAndAssertEquals(msg3);
-            readMessageAndAssertEquals(msg4);
+            ReadMessageAndAssertEquals(msg1);
+            ReadMessageAndAssertEquals(msg2);
+            ReadMessageAndAssertEquals(msg3);
+            ReadMessageAndAssertEquals(msg4);
         }
 
         [Test]
@@ -320,7 +311,7 @@ namespace UnitTest
         {
             var field = new Scalar("", FASTType.U32, Operator.NONE,
                                    ScalarValue.Undefined, false);
-            MessageTemplate template = registerTemplate(field);
+            MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
             msg1.SetInteger(1, 0);
@@ -330,17 +321,17 @@ namespace UnitTest
 
             //                 --PMAP-- --TID--- ---#1---
             String encoding = "11000000 11110001 10000000";
-            encodeAndAssertEquals(encoding, msg1);
+            EncodeAndAssertEquals(encoding, msg1);
 
             //          --PMAP-- ---#1---
             encoding = "10000000 10010000";
-            byte[] encodedMessage = encoder.Encode(msg2);
+            byte[] encodedMessage = _encoder.Encode(msg2);
             TestUtil.AssertBitVectorEquals(encoding, encodedMessage);
-            output.Write(encodedMessage);
+            _output.Write(encodedMessage);
 
-            GroupValue readMessage = decoder.ReadMessage();
+            GroupValue readMessage = _decoder.ReadMessage();
             Assert.AreEqual(msg1, readMessage);
-            readMessage = decoder.ReadMessage();
+            readMessage = _decoder.ReadMessage();
             Assert.AreEqual(msg2, readMessage);
         }
 
@@ -349,17 +340,17 @@ namespace UnitTest
         {
             var field = new Scalar("", FASTType.U32, Operator.NONE,
                                    ScalarValue.Undefined, true);
-            MessageTemplate template = registerTemplate(field);
+            MessageTemplate template = RegisterTemplate(field);
 
             var message = new Message(template);
             message.SetInteger(1, 126);
 
-            //                 --PMAP-- --TID--- ---#1---
+            //                       --PMAP-- --TID--- ---#1---
             const string encoding = "11000000 11110001 11111111";
 
-            encodeAndAssertEquals(encoding, message);
+            EncodeAndAssertEquals(encoding, message);
 
-            GroupValue readMessage = decoder.ReadMessage();
+            GroupValue readMessage = _decoder.ReadMessage();
 
             Assert.AreEqual(message, readMessage);
         }
@@ -369,16 +360,16 @@ namespace UnitTest
         {
             var field = new Scalar("", FASTType.U32, Operator.NONE,
                                    ScalarValue.Undefined, true);
-            MessageTemplate template = registerTemplate(field);
+            MessageTemplate template = RegisterTemplate(field);
 
             var message = new Message(template);
 
-            //                 --PMAP-- --TID--- ---#1---
+            //                       --PMAP-- --TID--- ---#1---
             const string encoding = "11000000 11110001 10000000";
 
-            encodeAndAssertEquals(encoding, message);
+            EncodeAndAssertEquals(encoding, message);
 
-            GroupValue readMessage = decoder.ReadMessage();
+            GroupValue readMessage = _decoder.ReadMessage();
 
             Assert.AreEqual(message, readMessage);
         }
@@ -388,7 +379,7 @@ namespace UnitTest
         {
             var field = new Scalar("", FASTType.U32, Operator.NONE,
                                    ScalarValue.Undefined, true);
-            MessageTemplate template = registerTemplate(field);
+            MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
 
@@ -397,17 +388,17 @@ namespace UnitTest
 
             //                 --PMAP-- --TID--- ---#1---
             String encoding = "11000000 11110001 10000000";
-            encodeAndAssertEquals(encoding, msg1);
+            EncodeAndAssertEquals(encoding, msg1);
 
             //          --PMAP-- ---#1---
             encoding = "10000000 10010000";
-            byte[] encodedMessage = encoder.Encode(msg2);
+            byte[] encodedMessage = _encoder.Encode(msg2);
             TestUtil.AssertBitVectorEquals(encoding, encodedMessage);
-            output.Write(encodedMessage);
+            _output.Write(encodedMessage);
 
-            GroupValue readMessage = decoder.ReadMessage();
+            GroupValue readMessage = _decoder.ReadMessage();
             Assert.AreEqual(msg1, readMessage);
-            readMessage = decoder.ReadMessage();
+            readMessage = _decoder.ReadMessage();
             Assert.AreEqual(msg2, readMessage);
         }
 
@@ -416,7 +407,7 @@ namespace UnitTest
         {
             var field = new Scalar("", FASTType.U32,
                                    Operator.INCREMENT, new IntegerValue(16), false);
-            MessageTemplate template = registerTemplate(field);
+            MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
             msg1.SetInteger(1, 16);
@@ -428,17 +419,17 @@ namespace UnitTest
             msg3.SetInteger(1, 20);
 
             //                     --PMAP-- --TID---
-            encodeAndAssertEquals("11000000 11110001", msg1);
+            EncodeAndAssertEquals("11000000 11110001", msg1);
 
             //                     --PMAP-- ---#1---
-            encodeAndAssertEquals("10000000", msg2);
+            EncodeAndAssertEquals("10000000", msg2);
 
             //                     --PMAP--
-            encodeAndAssertEquals("10100000 10010100", msg3);
+            EncodeAndAssertEquals("10100000 10010100", msg3);
 
-            readMessageAndAssertEquals(msg1);
-            readMessageAndAssertEquals(msg2);
-            readMessageAndAssertEquals(msg3);
+            ReadMessageAndAssertEquals(msg1);
+            ReadMessageAndAssertEquals(msg2);
+            ReadMessageAndAssertEquals(msg3);
         }
 
         [Test]
@@ -446,7 +437,7 @@ namespace UnitTest
         {
             var field = new Scalar("", FASTType.U32,
                                    Operator.INCREMENT, new IntegerValue(16), true);
-            MessageTemplate template = registerTemplate(field);
+            MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
             msg1.SetInteger(1, 16);
@@ -460,21 +451,21 @@ namespace UnitTest
             msg4.SetInteger(1, 20);
 
             //                     --PMAP-- --TID---
-            encodeAndAssertEquals("11000000 11110001", msg1);
+            EncodeAndAssertEquals("11000000 11110001", msg1);
 
             //                     --PMAP--
-            encodeAndAssertEquals("10000000", msg2);
+            EncodeAndAssertEquals("10000000", msg2);
 
             //                     --PMAP-- ---#1---
-            encodeAndAssertEquals("10100000 10000000", msg3);
+            EncodeAndAssertEquals("10100000 10000000", msg3);
 
             //                     --PMAP-- ---#1---
-            encodeAndAssertEquals("10100000 10010101", msg4);
+            EncodeAndAssertEquals("10100000 10010101", msg4);
 
-            readMessageAndAssertEquals(msg1);
-            readMessageAndAssertEquals(msg2);
-            readMessageAndAssertEquals(msg3);
-            readMessageAndAssertEquals(msg4);
+            ReadMessageAndAssertEquals(msg1);
+            ReadMessageAndAssertEquals(msg2);
+            ReadMessageAndAssertEquals(msg3);
+            ReadMessageAndAssertEquals(msg4);
         }
 
         [Test]
@@ -482,7 +473,7 @@ namespace UnitTest
         {
             var field = new Scalar("", FASTType.STRING, Operator.TAIL,
                                    new StringValue("abc"), false);
-            MessageTemplate template = registerTemplate(field);
+            MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
             msg1.SetString(1, "abc");
@@ -497,22 +488,22 @@ namespace UnitTest
             msg4.SetString(1, "dbef");
 
             //                     --PMAP-- --TID---
-            encodeAndAssertEquals("11000000 11110001", msg1);
+            EncodeAndAssertEquals("11000000 11110001", msg1);
 
             //                     --PMAP-- ---#1---
-            encodeAndAssertEquals("10100000 11100100", msg2);
+            EncodeAndAssertEquals("10100000 11100100", msg2);
 
             //                     --PMAP-- ---#1---
-            encodeAndAssertEquals("10100000 11100011", msg3);
+            EncodeAndAssertEquals("10100000 11100011", msg3);
 
             //                     --PMAP-- -----------------#1----------------
-            encodeAndAssertEquals("10100000 01100100 01100010 01100101 11100110",
+            EncodeAndAssertEquals("10100000 01100100 01100010 01100101 11100110",
                                   msg4);
 
-            readMessageAndAssertEquals(msg1);
-            readMessageAndAssertEquals(msg2);
-            readMessageAndAssertEquals(msg3);
-            readMessageAndAssertEquals(msg4);
+            ReadMessageAndAssertEquals(msg1);
+            ReadMessageAndAssertEquals(msg2);
+            ReadMessageAndAssertEquals(msg3);
+            ReadMessageAndAssertEquals(msg4);
         }
 
         [Test]
@@ -520,7 +511,7 @@ namespace UnitTest
         {
             var field = new Scalar("", FASTType.STRING, Operator.TAIL,
                                    new StringValue("abc"), true);
-            MessageTemplate template = registerTemplate(field);
+            MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
             msg1.SetString(1, "abc");
@@ -534,22 +525,22 @@ namespace UnitTest
             msg4.SetString(1, "dbef");
 
             //                     --PMAP-- --TID---
-            encodeAndAssertEquals("11000000 11110001", msg1);
+            EncodeAndAssertEquals("11000000 11110001", msg1);
 
             //                     --PMAP-- ---#1---
-            encodeAndAssertEquals("10100000 11100100", msg2);
+            EncodeAndAssertEquals("10100000 11100100", msg2);
 
             //                     --PMAP-- ---#1---
-            encodeAndAssertEquals("10100000 10000000", msg3);
+            EncodeAndAssertEquals("10100000 10000000", msg3);
 
             //                     --PMAP-- -----------------#1----------------
-            encodeAndAssertEquals("10100000 01100100 01100010 01100101 11100110",
+            EncodeAndAssertEquals("10100000 01100100 01100010 01100101 11100110",
                                   msg4);
 
-            readMessageAndAssertEquals(msg1);
-            readMessageAndAssertEquals(msg2);
-            readMessageAndAssertEquals(msg3);
-            readMessageAndAssertEquals(msg4);
+            ReadMessageAndAssertEquals(msg1);
+            ReadMessageAndAssertEquals(msg2);
+            ReadMessageAndAssertEquals(msg3);
+            ReadMessageAndAssertEquals(msg4);
         }
     }
 }
