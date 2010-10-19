@@ -26,30 +26,10 @@ using OpenFAST.Utility;
 
 namespace OpenFAST.Template.Type
 {
-    public enum FastType
-    {
-        Unknown,
-        Custom,
-        U8,
-        U16,
-        U32,
-        U64,
-        I8,
-        I16,
-        I32,
-        I64,
-        String,
-        Ascii,
-        Unicode,
-        ByteVector,
-        Decimal,
-    }
-
     [Serializable]
     public abstract class FASTType : IEquatable<FASTType>
     {
         private static readonly Dictionary<string, FASTType> TypeNameMap = new Dictionary<string, FASTType>();
-        private static readonly Dictionary<FastType, FASTType> TypeMap = new Dictionary<FastType, FASTType>();
 
         public static readonly FASTType U8 = new UnsignedIntegerType(8, 256);
         public static readonly FASTType U16 = new UnsignedIntegerType(16, 65536);
@@ -69,7 +49,6 @@ namespace OpenFAST.Template.Type
         public static readonly FASTType[] INTEGER_TYPES = new[] {U8, U16, U32, U64, I8, I16, I32, I64};
 
         private readonly string _name;
-        private readonly FastType _type;
 
         static FASTType()
         {
@@ -78,16 +57,11 @@ namespace OpenFAST.Template.Type
             UNICODE = new StringType("unicode", TypeCodec.UNICODE, TypeCodec.NULLABLE_UNICODE);
         }
 
-        protected FASTType(string typeName, FastType type)
+        protected FASTType(string typeName)
         {
             if (typeName == null) throw new ArgumentNullException("typeName");
-            if (type == FastType.Unknown) throw new ArgumentNullException("type");
-
             _name = typeName;
-            _type = type;
             TypeNameMap[typeName] = this;
-            if (type != FastType.Custom)
-                TypeMap[type] = this;
         }
 
         public virtual string Name
@@ -102,33 +76,16 @@ namespace OpenFAST.Template.Type
             get { return TypeNameMap; }
         }
 
-        public static Dictionary<FastType, FASTType> RegisteredTypeMapEnum
-        {
-            get { return TypeMap; }
-        }
-
         public static FASTType GetType(string typeName)
         {
             FASTType value;
-            if (TypeNameMap.TryGetValue(typeName, out value))
+            if (!TypeNameMap.TryGetValue(typeName, out value))
+            {
+                throw new ArgumentException("The type named " + typeName + " does not exist.  Existing types are " +
+                                            Util.CollectionToString(TypeNameMap.Keys));
+            }
                 return value;
-
-            throw new ArgumentOutOfRangeException(
-                "typename", typeName,
-                "The type does not exist.  Existing types are " + Util.CollectionToString(TypeNameMap.Keys));
         }
-
-#error aaa
-        //public static FASTType GetType(FastType type)
-        //{
-        //    FASTType value;
-        //    if (TypeMap.TryGetValue(type, out value))
-        //        return value;
-
-        //    throw new ArgumentOutOfRangeException(
-        //        "type", type,
-        //        "The type does not exist.  Existing types are " + Util.CollectionToString(TypeNameMap.Keys));
-        //}
 
         public override string ToString()
         {
