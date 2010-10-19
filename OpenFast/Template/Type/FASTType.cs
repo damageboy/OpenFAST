@@ -79,12 +79,12 @@ namespace OpenFAST.Template.Type
         public static FASTType GetType(string typeName)
         {
             FASTType value;
-            if (!TypeNameMap.TryGetValue(typeName, out value))
-            {
-                throw new ArgumentException("The type named " + typeName + " does not exist.  Existing types are " +
-                                            Util.CollectionToString(TypeNameMap.Keys));
-            }
+            if (TypeNameMap.TryGetValue(typeName, out value))
                 return value;
+
+            throw new ArgumentOutOfRangeException(
+                "typename", typeName,
+                "The type does not exist.  Existing types are " + Util.CollectionToString(TypeNameMap.Keys));
         }
 
         public override string ToString()
@@ -105,7 +105,7 @@ namespace OpenFAST.Template.Type
         {
         }
 
-        public static FASTType[] ALL_TYPES()
+        public static FASTType[] AllTypes()
         {
             return _staticAllTypes ??
                    (_staticAllTypes = new[]

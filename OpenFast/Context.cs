@@ -31,6 +31,9 @@ namespace OpenFAST
         private readonly Dictionary<string, IDictionary> _dictionaries =
             new Dictionary<string, IDictionary>();
 
+        private readonly GlobalDictionary _globalDictionary = new GlobalDictionary();
+        private readonly TemplateDictionary _templateDictionary = new TemplateDictionary();
+
         private QName _currentApplicationType;
         private ITrace _encodeTraceInternal;
         private IErrorHandler _errorHandler = ErrorHandlerFields.Default;
@@ -38,8 +41,8 @@ namespace OpenFAST
 
         public Context()
         {
-            _dictionaries["global"] = new GlobalDictionary();
-            _dictionaries["template"] = new TemplateDictionary();
+            _dictionaries[DictionaryFields.Global] = _globalDictionary;
+            _dictionaries[DictionaryFields.Template] = _templateDictionary;
             _dictionaries["type"] = new ApplicationTypeDictionary();
         }
 
@@ -118,6 +121,10 @@ namespace OpenFAST
 
         internal IDictionary GetDictionary(string dictionary)
         {
+            // Speed optimization for the well-known dictionaries in case the same constant was used
+            if (ReferenceEquals(dictionary, DictionaryFields.Global)) return _globalDictionary;
+            if (ReferenceEquals(dictionary, DictionaryFields.Template)) return _templateDictionary;
+
             IDictionary value;
             if (!_dictionaries.TryGetValue(dictionary, out value))
                 _dictionaries[dictionary] = value = new GlobalDictionary();
@@ -127,9 +134,7 @@ namespace OpenFAST
         public void Reset()
         {
             foreach (IDictionary dict in _dictionaries.Values)
-            {
                 dict.Reset();
-            }
         }
 
         public void NewMessage(MessageTemplate template)

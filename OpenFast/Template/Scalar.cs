@@ -37,7 +37,7 @@ namespace OpenFAST.Template
         private readonly OperatorCodec _operatorCodec;
         private readonly FASTType _type;
         private readonly TypeCodec _typeCodec;
-        private ScalarValue _defaultValue;
+        private readonly ScalarValue _defaultValue;
         private string _dictionary;
 
         public Scalar(string name, FASTType type, Operator.Operator op, ScalarValue defaultValue,
@@ -48,31 +48,26 @@ namespace OpenFAST.Template
 
         public Scalar(QName name, FASTType type, Operator.Operator op, ScalarValue defaultValue,
                       bool optional)
+            : this(name, type, op, op.GetCodec(type), defaultValue, optional)
+        {
+        }
+
+        public Scalar(QName name, FASTType type, OperatorCodec operatorCodec, ScalarValue defaultValue, bool optional)
+            : this(name, type, operatorCodec.Operator, operatorCodec, defaultValue, optional)
+        {
+        }
+
+        private Scalar(QName name, FASTType type, Operator.Operator op, OperatorCodec operatorCodec, ScalarValue defaultValue, bool optional)
             : base(name, optional)
         {
-            InitBlock();
             _operator = op;
-            _operatorCodec = op.GetCodec(type);
+            _operatorCodec = operatorCodec;
             _dictionary = DictionaryFields.Global;
             _defaultValue = defaultValue ?? ScalarValue.Undefined;
             _type = type;
             _typeCodec = type.GetCodec(op, optional);
             _initialValue = ((defaultValue == null) || defaultValue.IsUndefined) ? _type.DefaultValue : defaultValue;
             op.Validate(this);
-        }
-
-        public Scalar(QName name, FASTType type, OperatorCodec operatorCodec, ScalarValue defaultValue, bool optional)
-            : base(name, optional)
-        {
-            InitBlock();
-            _operator = operatorCodec.Operator;
-            _operatorCodec = operatorCodec;
-            _dictionary = "global";
-            _defaultValue = defaultValue ?? ScalarValue.Undefined;
-            _type = type;
-            _typeCodec = type.GetCodec(_operator, optional);
-            _initialValue = ((defaultValue == null) || defaultValue.IsUndefined) ? _type.DefaultValue : defaultValue;
-            _operator.Validate(this);
         }
 
         public FASTType Type
@@ -123,11 +118,6 @@ namespace OpenFAST.Template
         public TypeCodec TypeCodec
         {
             get { return _typeCodec; }
-        }
-
-        private void InitBlock()
-        {
-            _defaultValue = ScalarValue.Undefined;
         }
 
         public override byte[] Encode(IFieldValue fieldValue, Group encodeTemplate, Context context,
@@ -202,12 +192,13 @@ namespace OpenFAST.Template
                 {
                     if (context.TraceEnabled)
                         inStream = new RecordingInputStream(inStream);
+                    
                     if (!_operatorCodec.ShouldDecodeType)
-                    {
                         return _operatorCodec.DecodeValue(null, null, this);
-                    }
+
                     ScalarValue decodedValue = _typeCodec.Decode(inStream);
                     value = DecodeValue(decodedValue, previousValue);
+                    
                     if (context.TraceEnabled)
                         context.DecodeTrace.Field(this, value, decodedValue,
                                                   ((RecordingInputStream) inStream).Buffer, pmapIndex);

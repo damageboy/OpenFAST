@@ -34,13 +34,13 @@ namespace OpenFAST.Template.Operator
             new Dictionary<Tuple<Operator, FASTType>, OperatorCodec>();
 
         protected internal static readonly OperatorCodec NoneAll =
-            new NoneOperatorCodec(Operator.NONE, FASTType.ALL_TYPES());
+            new NoneOperatorCodec(Operator.NONE, FASTType.AllTypes());
 
         protected internal static readonly OperatorCodec ConstantAll
-            = new ConstantOperatorCodec(Operator.CONSTANT, FASTType.ALL_TYPES());
+            = new ConstantOperatorCodec(Operator.CONSTANT, FASTType.AllTypes());
 
         protected internal static readonly OperatorCodec DefaultAll
-            = new DefaultOperatorCodec(Operator.DEFAULT, FASTType.ALL_TYPES());
+            = new DefaultOperatorCodec(Operator.DEFAULT, FASTType.AllTypes());
 
         protected internal static readonly OperatorCodec CopyAll
             = new CopyOperatorCodec();

@@ -44,7 +44,7 @@ namespace OpenFAST.Template.Loader
 
         static ParsingContext()
         {
-            Null.Dictionary = "global";
+            Null.Dictionary = DictionaryFields.Global;
             Null.Namespace = "";
             Null.TemplateNamespace = "";
         }

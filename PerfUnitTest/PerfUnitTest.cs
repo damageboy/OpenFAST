@@ -14,7 +14,7 @@ namespace PerfUnitTest
         private static Context CreateContext()
         {
             var ctx = new Context();
-
+            
             var zero = new IntegerValue(0);
             var emptyStr = new StringValue("");
 

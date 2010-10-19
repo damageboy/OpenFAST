@@ -57,6 +57,8 @@ namespace OpenFAST.Utility
 
         public bool Equals(Tuple<TItem1, TItem2> other)
         {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
             return Equals(other._item1, _item1) && Equals(other._item2, _item2);
         }
 

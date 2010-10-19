@@ -48,16 +48,17 @@ namespace UnitTest
                                     new Scalar("First Name", FASTType.STRING, Operator.COPY, ScalarValue.Undefined,
                                                false),
                                     new Scalar("Last Name", FASTType.STRING, Operator.COPY, ScalarValue.Undefined, false)
-                                    , new Scalar("Age", FASTType.U32, Operator.DELTA, ScalarValue.Undefined, false)
+                                    ,
+                                    new Scalar("Age", FASTType.U32, Operator.DELTA, ScalarValue.Undefined, false)
                                 }, false),
-                        new Group("Tax Information",
-                                  new Field[]
-                                      {
-                                          new Scalar("EIN", FASTType.STRING,
-                                                     Operator.NONE, ScalarValue.Undefined,
-                                                     false)
-                                      }, false)
+                        new Group(
+                            "Tax Information",
+                            new Field[]
+                                {
+                                    new Scalar("EIN", FASTType.STRING, Operator.NONE, ScalarValue.Undefined, false)
+                                }, false)
                     });
+
             var aaaInsurance = new Message(template);
             aaaInsurance.SetFieldValue(1, new StringValue("AAA Insurance"));
             aaaInsurance.SetFieldValue(2, new IntegerValue(5));

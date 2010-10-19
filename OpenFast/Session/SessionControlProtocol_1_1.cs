@@ -145,19 +145,19 @@ namespace OpenFAST.Session
                         new Scalar("VendorId", Type.ASCII, Operator.NONE, ScalarValue.Undefined, true)
                     });
 
-            RESET = new ResetMessage(FAST_RESET_TEMPLATE);
+            RESET = new ResetMessageObj(FAST_RESET_TEMPLATE);
             FAST_RESET_TEMPLATE.AddAttribute(RESET_PROPERTY, "yes");
 
-            ResetHandler = new RESETMessageHandler();
-            AlertHandler = new ALERTSessionMessageHandler();
+            ResetHandler = new ResetMessageHandler();
+            AlertHandler = new AlertSessionMessageHandler();
             Attribute = new MessageTemplate(
                 new QName("Attribute", NAMESPACE),
-                new[] {dict("Ns", true, "template"), unicode("Name"), unicode("Value")});
+                new[] { dict("Ns", true, DictionaryFields.Template), unicode("Name"), unicode("Value") });
             Element = new MessageTemplate(
                 new QName("Element", NAMESPACE),
                 new[]
                     {
-                        dict("Ns", true, "template"), unicode("Name"),
+                        dict("Ns", true, DictionaryFields.Template), unicode("Name"),
                         new Sequence(
                             qualify("Attributes"), new Field[] {new StaticTemplateReference(Attribute)}, false),
                         new Sequence(
@@ -174,7 +174,7 @@ namespace OpenFAST.Session
                 new QName("NsName", NAMESPACE),
                 new[]
                     {
-                        dict("Ns", false, "template"),
+                        dict("Ns", false, DictionaryFields.Template),
                         new Scalar(qualify("Name"), Type.UNICODE, Operator.NONE, null, false)
                     });
             NsNameWithAuxId = new MessageTemplate(
@@ -377,24 +377,24 @@ namespace OpenFAST.Session
         {
             get
             {
-                if (_staticOther == null)
-                {
-                    _staticOther = new MessageTemplate(
-                        new QName("Other", NAMESPACE),
-                        new Field[]
-                            {
-                                new Group(
-                                    qualify("Other"),
-                                    new Field[]
-                                        {
-                                            new Sequence(qualify("ForeignAttributes"),
-                                                         new Field[] {new StaticTemplateReference(Attribute)}, true),
-                                            new Sequence(qualify("ForeignElements"),
-                                                         new Field[] {new StaticTemplateReference(Element)}, true)
-                                        }, true)
-                            });
-                }
-                return _staticOther;
+                return _staticOther ??
+                       (_staticOther =
+                        new MessageTemplate(
+                            new QName("Other", NAMESPACE),
+                            new Field[]
+                                {
+                                    new Group(
+                                        qualify("Other"),
+                                        new Field[]
+                                            {
+                                                new Sequence(
+                                                    qualify("ForeignAttributes"),
+                                                    new Field[] {new StaticTemplateReference(Attribute)}, true),
+                                                new Sequence(
+                                                    qualify("ForeignElements"),
+                                                    new Field[] {new StaticTemplateReference(Element)}, true)
+                                            }, true)
+                                }));
             }
         }
 
@@ -402,14 +402,15 @@ namespace OpenFAST.Session
         {
             get
             {
-                if (_staticLengthPreamble == null)
-                {
-                    _staticLengthPreamble = new MessageTemplate(
-                        new QName("LengthPreamble", NAMESPACE),
-                        new Field[]
-                            {new StaticTemplateReference(NsNameWithAuxId), new StaticTemplateReference(Other)});
-                }
-                return _staticLengthPreamble;
+                return _staticLengthPreamble ??
+                       (_staticLengthPreamble =
+                        new MessageTemplate(
+                            new QName("LengthPreamble", NAMESPACE),
+                            new Field[]
+                                {
+                                    new StaticTemplateReference(NsNameWithAuxId),
+                                    new StaticTemplateReference(Other)
+                                }));
             }
         }
 
@@ -417,18 +418,16 @@ namespace OpenFAST.Session
         {
             get
             {
-                if (_staticPrimFieldBaseWithLength == null)
-                {
-                    _staticPrimFieldBaseWithLength = new MessageTemplate(
-                        new QName("PrimFieldBaseWithLength", NAMESPACE),
-                        new Field[]
-                            {
-                                new StaticTemplateReference(PrimFieldBase),
-                                new Group(qualify("Length"),
-                                          new Field[] {new StaticTemplateReference(LengthPreamble)}, true)
-                            });
-                }
-                return _staticPrimFieldBaseWithLength;
+                return _staticPrimFieldBaseWithLength ??
+                       (_staticPrimFieldBaseWithLength =
+                        new MessageTemplate(
+                            new QName("PrimFieldBaseWithLength", NAMESPACE),
+                            new Field[]
+                                {
+                                    new StaticTemplateReference(PrimFieldBase),
+                                    new Group(qualify("Length"),
+                                              new Field[] {new StaticTemplateReference(LengthPreamble)}, true)
+                                }));
             }
         }
 
@@ -436,20 +435,20 @@ namespace OpenFAST.Session
         {
             get
             {
-                if (_staticTypeRef == null)
-                {
-                    _staticTypeRef = new MessageTemplate(
-                        new QName("TypeRef", NAMESPACE),
-                        new Field[]
-                            {
-                                new Group(
-                                    qualify("TypeRef"),
-                                    new Field[]
-                                        {new StaticTemplateReference(NsName), new StaticTemplateReference(Other)},
-                                    true)
-                            });
-                }
-                return _staticTypeRef;
+                return _staticTypeRef ??
+                       (_staticTypeRef = new MessageTemplate(
+                                             new QName("TypeRef", NAMESPACE),
+                                             new Field[]
+                                                 {
+                                                     new Group(
+                                                         qualify("TypeRef"),
+                                                         new Field[]
+                                                             {
+                                                                 new StaticTemplateReference(NsName),
+                                                                 new StaticTemplateReference(Other)
+                                                             },
+                                                         true)
+                                                 }));
             }
         }
 
@@ -457,13 +456,14 @@ namespace OpenFAST.Session
         {
             get
             {
-                if (_staticTemplateDeclaration == null)
-                {
-                    _staticTemplateDeclaration = new MessageTemplate(
-                        new QName("TemplateDecl", NAMESPACE),
-                        new[] {new StaticTemplateReference(TemplateName), u32("TemplateId")});
-                }
-                return _staticTemplateDeclaration;
+                return _staticTemplateDeclaration ??
+                       (_staticTemplateDeclaration =
+                        new MessageTemplate(
+                            new QName("TemplateDecl", NAMESPACE),
+                            new[]
+                                {
+                                    new StaticTemplateReference(TemplateName), u32("TemplateId")
+                                }));
             }
         }
 
@@ -471,20 +471,16 @@ namespace OpenFAST.Session
         {
             get
             {
-                if (_staticOpBase == null)
-                {
-                    _staticOpBase = new MessageTemplate(new QName("OpBase", NAMESPACE),
-                                                        new[]
-                                                            {
-                                                                unicodeopt("Dictionary"),
-                                                                new Group(qualify("Key"),
-                                                                          new Field[]
-                                                                              {new StaticTemplateReference(NsName)},
-                                                                          true)
-                                                                , new StaticTemplateReference(Other)
-                                                            });
-                }
-                return _staticOpBase;
+                return _staticOpBase ??
+                       (_staticOpBase =
+                        new MessageTemplate(
+                            new QName("OpBase", NAMESPACE),
+                            new[]
+                                {
+                                    unicodeopt("Dictionary"),
+                                    new Group(qualify("Key"), new Field[] {new StaticTemplateReference(NsName)}, true),
+                                    new StaticTemplateReference(Other)
+                                }));
             }
         }
 
@@ -492,12 +488,10 @@ namespace OpenFAST.Session
         {
             get
             {
-                if (_staticConstantOp == null)
-                {
-                    _staticConstantOp = new MessageTemplate(
-                        new QName("ConstantOp", NAMESPACE), new Field[] {new StaticTemplateReference(Other)});
-                }
-                return _staticConstantOp;
+                return _staticConstantOp ??
+                       (_staticConstantOp = new MessageTemplate(
+                                                new QName("ConstantOp", NAMESPACE),
+                                                new Field[] {new StaticTemplateReference(Other)}));
             }
         }
 
@@ -505,12 +499,10 @@ namespace OpenFAST.Session
         {
             get
             {
-                if (_staticDefaultOp == null)
-                {
-                    _staticDefaultOp = new MessageTemplate(
-                        new QName("DefaultOp", NAMESPACE), new Field[] {new StaticTemplateReference(Other)});
-                }
-                return _staticDefaultOp;
+                return _staticDefaultOp ??
+                       (_staticDefaultOp = new MessageTemplate(
+                                               new QName("DefaultOp", NAMESPACE),
+                                               new Field[] {new StaticTemplateReference(Other)}));
             }
         }
 
@@ -518,12 +510,10 @@ namespace OpenFAST.Session
         {
             get
             {
-                if (_staticCopyOp == null)
-                {
-                    _staticCopyOp = new MessageTemplate(
-                        new QName("CopyOp", NAMESPACE), new Field[] {new StaticTemplateReference(OpBase)});
-                }
-                return _staticCopyOp;
+                return _staticCopyOp ??
+                       (_staticCopyOp = new MessageTemplate(
+                                            new QName("CopyOp", NAMESPACE),
+                                            new Field[] {new StaticTemplateReference(OpBase)}));
             }
         }
 
@@ -531,12 +521,10 @@ namespace OpenFAST.Session
         {
             get
             {
-                if (_staticIncrementOp == null)
-                {
-                    _staticIncrementOp = new MessageTemplate(
-                        new QName("IncrementOp", NAMESPACE), new Field[] {new StaticTemplateReference(OpBase)});
-                }
-                return _staticIncrementOp;
+                return _staticIncrementOp ??
+                       (_staticIncrementOp = new MessageTemplate(
+                                                 new QName("IncrementOp", NAMESPACE),
+                                                 new Field[] {new StaticTemplateReference(OpBase)}));
             }
         }
 
@@ -544,12 +532,10 @@ namespace OpenFAST.Session
         {
             get
             {
-                if (staticDELTA_OP == null)
-                {
-                    staticDELTA_OP = new MessageTemplate(
-                        new QName("DeltaOp", NAMESPACE), new Field[] {new StaticTemplateReference(OpBase)});
-                }
-                return staticDELTA_OP;
+                return staticDELTA_OP
+                       ?? (staticDELTA_OP = new MessageTemplate(
+                                                new QName("DeltaOp", NAMESPACE),
+                                                new Field[] {new StaticTemplateReference(OpBase)}));
             }
         }
 
@@ -557,12 +543,10 @@ namespace OpenFAST.Session
         {
             get
             {
-                if (staticTAIL_OP == null)
-                {
-                    staticTAIL_OP = new MessageTemplate(
-                        new QName("TailOp", NAMESPACE), new Field[] {new StaticTemplateReference(OpBase)});
-                }
-                return staticTAIL_OP;
+                return staticTAIL_OP ??
+                       (staticTAIL_OP = new MessageTemplate(
+                                            new QName("TailOp", NAMESPACE),
+                                            new Field[] {new StaticTemplateReference(OpBase)}));
             }
         }
 
@@ -570,17 +554,15 @@ namespace OpenFAST.Session
         {
             get
             {
-                if (_staticStatTempRefInstr == null)
-                {
-                    _staticStatTempRefInstr = new MessageTemplate(
-                        new QName("StaticTemplateRefInstr", NAMESPACE),
-                        new Field[]
-                            {
-                                new StaticTemplateReference(TemplateName),
-                                new StaticTemplateReference(Other)
-                            });
-                }
-                return _staticStatTempRefInstr;
+                return _staticStatTempRefInstr
+                       ?? (_staticStatTempRefInstr =
+                           new MessageTemplate(
+                               new QName("StaticTemplateRefInstr", NAMESPACE),
+                               new Field[]
+                                   {
+                                       new StaticTemplateReference(TemplateName),
+                                       new StaticTemplateReference(Other)
+                                   }));
             }
         }
 
@@ -588,13 +570,10 @@ namespace OpenFAST.Session
         {
             get
             {
-                if (_staticDynTempRefInstr == null)
-                {
-                    _staticDynTempRefInstr = new MessageTemplate(
-                        new QName("DynamicTemplateRefInstr", NAMESPACE),
-                        new Field[] {new StaticTemplateReference(Other)});
-                }
-                return _staticDynTempRefInstr;
+                return _staticDynTempRefInstr
+                       ?? (_staticDynTempRefInstr = new MessageTemplate(
+                                                        new QName("DynamicTemplateRefInstr", NAMESPACE),
+                                                        new Field[] {new StaticTemplateReference(Other)}));
             }
         }
 
@@ -602,13 +581,10 @@ namespace OpenFAST.Session
         {
             get
             {
-                if (_staticForeignInstr == null)
-                {
-                    _staticForeignInstr = new MessageTemplate(
-                        qualify("ForeignInstr"),
-                        new Field[] {new StaticTemplateReference(Element)});
-                }
-                return _staticForeignInstr;
+                return _staticForeignInstr
+                       ?? (_staticForeignInstr = new MessageTemplate(
+                                                     qualify("ForeignInstr"),
+                                                     new Field[] {new StaticTemplateReference(Element)}));
             }
         }
 
@@ -616,11 +592,8 @@ namespace OpenFAST.Session
         {
             get
             {
-                if (_staticDynTempRefMessage == null)
-                {
-                    _staticDynTempRefMessage = new Message(DYN_TEMP_REF_INSTR);
-                }
-                return _staticDynTempRefMessage;
+                return _staticDynTempRefMessage
+                       ?? (_staticDynTempRefMessage = new Message(DYN_TEMP_REF_INSTR));
             }
         }
 
@@ -628,11 +601,8 @@ namespace OpenFAST.Session
         {
             get
             {
-                if (_staticClose == null)
-                {
-                    _staticClose = CreateFastAlertMessage(SessionConstants.CLOSE);
-                }
-                return _staticClose;
+                return _staticClose ??
+                       (_staticClose = CreateFastAlertMessage(SessionConstants.CLOSE));
             }
         }
 
@@ -832,7 +802,7 @@ namespace OpenFAST.Session
 
         #region Nested type: ALERTSessionMessageHandler
 
-        public class ALERTSessionMessageHandler : ISessionMessageHandler
+        public class AlertSessionMessageHandler : ISessionMessageHandler
         {
             #region ISessionMessageHandler Members
 
@@ -914,9 +884,26 @@ namespace OpenFAST.Session
 
         #endregion
 
-        #region Nested type: RESETMessageHandler
+        #region Nested type: ResetMessageObj
 
-        public class RESETMessageHandler : IMessageHandler
+        [Serializable]
+        public class ResetMessageObj : Message
+        {
+            internal ResetMessageObj(MessageTemplate template) : base(template)
+            {
+            }
+
+            public override void SetFieldValue(int fieldIndex, IFieldValue value)
+            {
+                throw new InvalidOperationException("Cannot set values on a fast reserved message.");
+            }
+        }
+
+        #endregion
+
+        #region Nested type: ResetMessageHandler
+
+        public class ResetMessageHandler : IMessageHandler
         {
             #region IMessageHandler Members
 
@@ -927,23 +914,6 @@ namespace OpenFAST.Session
             }
 
             #endregion
-        }
-
-        #endregion
-
-        #region Nested type: ResetMessage
-
-        [Serializable]
-        public class ResetMessage : Message
-        {
-            internal ResetMessage(MessageTemplate template) : base(template)
-            {
-            }
-
-            public override void SetFieldValue(int fieldIndex, IFieldValue value)
-            {
-                throw new InvalidOperationException("Cannot set values on a fast reserved message.");
-            }
         }
 
         #endregion

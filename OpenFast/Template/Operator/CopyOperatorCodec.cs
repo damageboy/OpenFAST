@@ -28,7 +28,7 @@ namespace OpenFAST.Template.Operator
     [Serializable]
     public sealed class CopyOperatorCodec : OptionallyPresentOperatorCodec
     {
-        internal CopyOperatorCodec() : base(Operator.COPY, FASTType.ALL_TYPES())
+        internal CopyOperatorCodec() : base(Operator.COPY, FASTType.AllTypes())
         {
         }
 
