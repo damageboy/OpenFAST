@@ -30,7 +30,7 @@ using Type = OpenFAST.Template.Type.FASTType;
 
 namespace OpenFAST.Utility
 {
-    public class Util
+    internal class Util
     {
         private static readonly TwinValue NoDiff = new TwinValue(new IntegerValue(0), new StringValue(""));
 
@@ -118,38 +118,38 @@ namespace OpenFAST.Utility
         public static int MillisecondsSinceMidnight(DateTime date)
         {
             Calendar cal = new GregorianCalendar();
-            SupportClass.CalendarManager.manager.SetDateTime(cal, date);
-            return SupportClass.CalendarManager.manager.Get(cal, SupportClass.CalendarManager.HOUR_OF_DAY) * 3600000 +
-                   SupportClass.CalendarManager.manager.Get(cal, SupportClass.CalendarManager.MINUTE) * 60000 +
-                   SupportClass.CalendarManager.manager.Get(cal, SupportClass.CalendarManager.SECOND) * 1000 +
-                   SupportClass.CalendarManager.manager.Get(cal, SupportClass.CalendarManager.MILLISECOND);
+            SupportClass.CalendarManager.Manager.SetDateTime(cal, date);
+            return SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.HOUR_OF_DAY) * 3600000 +
+                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.MINUTE) * 60000 +
+                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.SECOND) * 1000 +
+                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.MILLISECOND);
         }
 
 
         public static DateTime Date(int year, int month, int day)
         {
             Calendar cal = new GregorianCalendar();
-            SupportClass.CalendarManager.manager.Set(cal, year - 1900, month - 1, day);
-            return SupportClass.CalendarManager.manager.GetDateTime(cal);
+            SupportClass.CalendarManager.Manager.Set(cal, year - 1900, month - 1, day);
+            return SupportClass.CalendarManager.Manager.GetDateTime(cal);
         }
 
         public static int DateToInt(DateTime date)
         {
             Calendar cal = new GregorianCalendar();
-            SupportClass.CalendarManager.manager.SetDateTime(cal, date);
-            return SupportClass.CalendarManager.manager.Get(cal, SupportClass.CalendarManager.YEAR) * 10000 +
-                   (SupportClass.CalendarManager.manager.Get(cal, SupportClass.CalendarManager.MONTH) + 1) * 100 +
-                   SupportClass.CalendarManager.manager.Get(cal, SupportClass.CalendarManager.DATE);
+            SupportClass.CalendarManager.Manager.SetDateTime(cal, date);
+            return SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.YEAR) * 10000 +
+                   (SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.MONTH) + 1) * 100 +
+                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.DATE);
         }
 
         public static int TimeToInt(DateTime date)
         {
             Calendar cal = new GregorianCalendar();
-            SupportClass.CalendarManager.manager.SetDateTime(cal, date);
-            return SupportClass.CalendarManager.manager.Get(cal, SupportClass.CalendarManager.HOUR_OF_DAY) * 10000000 +
-                   SupportClass.CalendarManager.manager.Get(cal, SupportClass.CalendarManager.MINUTE) * 100000 +
-                   SupportClass.CalendarManager.manager.Get(cal, SupportClass.CalendarManager.SECOND) * 1000 +
-                   SupportClass.CalendarManager.manager.Get(cal, SupportClass.CalendarManager.MILLISECOND);
+            SupportClass.CalendarManager.Manager.SetDateTime(cal, date);
+            return SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.HOUR_OF_DAY) * 10000000 +
+                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.MINUTE) * 100000 +
+                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.SECOND) * 1000 +
+                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.MILLISECOND);
         }
 
         public static int TimestampToInt(DateTime date)
@@ -172,9 +172,9 @@ namespace OpenFAST.Utility
             value %= 100000;
             var sec = (int)(value / 1000);
             var ms = (int)(value % 1000);
-            SupportClass.CalendarManager.manager.Set(cal, year, month - 1, day, hour, min, sec);
-            SupportClass.CalendarManager.manager.Set(cal, SupportClass.CalendarManager.MILLISECOND, ms);
-            return SupportClass.CalendarManager.manager.GetDateTime(cal);
+            SupportClass.CalendarManager.Manager.Set(cal, year, month - 1, day, hour, min, sec);
+            SupportClass.CalendarManager.Manager.Set(cal, SupportClass.CalendarManager.MILLISECOND, ms);
+            return SupportClass.CalendarManager.Manager.GetDateTime(cal);
         }
 
         public static ComposedScalar ComposedDecimal(QName name, Operator exponentOp, ScalarValue exponentVal,
@@ -263,6 +263,32 @@ namespace OpenFAST.Utility
             for (int i = 0; i < arr1.Length; i++)
                 if (arr1[i] != arr2[i])
                     return false;
+
+            return true;
+        }
+
+        public static bool ListEquals<T>(IList<T> arr1, IList<T> arr2)
+            where T:IEquatable<T>
+        {
+            if ((arr1 == null) != (arr2 == null)) return false;
+            if (arr1 == arr2) return true;
+            if (arr1.Count != arr2.Count) return false;
+
+            for (int i = 0; i < arr1.Count; i++)
+            {
+                var v1 = arr1[i];
+
+                if (ReferenceEquals(v1, null))
+                {
+                    if (!ReferenceEquals(arr2[i], null))
+                        return false;
+                }
+                else
+                {
+                    if (!v1.Equals(arr2[i]))
+                        return false;
+                }
+            }
 
             return true;
         }

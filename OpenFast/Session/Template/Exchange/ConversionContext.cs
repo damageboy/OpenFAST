@@ -35,9 +35,8 @@ namespace OpenFAST.Session.Template.Exchange
 
         public virtual void AddFieldInstructionConverter(IFieldInstructionConverter converter)
         {
-            Group[] templs = converter.TemplateExchangeTemplates;
-            for (int i = 0; i < templs.Length; i++)
-                _converterTemplateMap[templs[i]] = converter;
+            foreach (Group t in converter.TemplateExchangeTemplates)
+                _converterTemplateMap[t] = converter;
 
             _converters.Add(converter);
         }

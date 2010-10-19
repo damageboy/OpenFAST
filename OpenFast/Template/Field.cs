@@ -28,8 +28,8 @@ namespace OpenFAST.Template
     [Serializable]
     public abstract class Field : IEquatable<Field>
     {
-        private readonly QName _name;
         private readonly bool _isOptional;
+        private readonly QName _name;
         private Dictionary<QName, string> _attributes;
         private string _id;
         private QName _key;
@@ -82,13 +82,7 @@ namespace OpenFAST.Template
 
         public string Id
         {
-            get
-            {
-                if (_id == null)
-                    return "";
-                return _id;
-            }
-
+            get { return _id ?? ""; }
             set
             {
                 _id = value;
@@ -112,12 +106,14 @@ namespace OpenFAST.Template
                    Equals(other._attributes, _attributes) && Equals(other.Id, Id) && Equals(other._key, _key);
         }
 
+        #endregion
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof(Field)) return false;
-            return Equals((Field)obj);
+            if (obj.GetType() != typeof (Field)) return false;
+            return Equals((Field) obj);
         }
 
         public override int GetHashCode()
@@ -125,15 +121,13 @@ namespace OpenFAST.Template
             unchecked
             {
                 int result = (_name != null ? _name.GetHashCode() : 0);
-                result = (result * 397) ^ _isOptional.GetHashCode();
-                result = (result * 397) ^ (_attributes != null ? _attributes.GetHashCode() : 0);
-                result = (result * 397) ^ (_id != null ? _id.GetHashCode() : 0);
-                result = (result * 397) ^ (_key != null ? _key.GetHashCode() : 0);
+                result = (result*397) ^ _isOptional.GetHashCode();
+                result = (result*397) ^ (_attributes != null ? _attributes.GetHashCode() : 0);
+                result = (result*397) ^ (_id != null ? _id.GetHashCode() : 0);
+                result = (result*397) ^ (_key != null ? _key.GetHashCode() : 0);
                 return result;
             }
         }
-
-        #endregion
 
         public virtual bool HasAttribute(QName attributeName)
         {

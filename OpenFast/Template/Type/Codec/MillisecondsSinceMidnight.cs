@@ -36,16 +36,16 @@ namespace OpenFAST.Template.Type.Codec
             Calendar cal = new GregorianCalendar();
             int hour = millisecondsSinceMidnight/3600000;
             millisecondsSinceMidnight -= hour*3600000;
-            SupportClass.CalendarManager.manager.Set(cal, SupportClass.CalendarManager.HOUR_OF_DAY, hour);
+            SupportClass.CalendarManager.Manager.Set(cal, SupportClass.CalendarManager.HOUR_OF_DAY, hour);
             int minute = millisecondsSinceMidnight/60000;
             millisecondsSinceMidnight -= minute*60000;
-            SupportClass.CalendarManager.manager.Set(cal, SupportClass.CalendarManager.MINUTE, minute);
+            SupportClass.CalendarManager.Manager.Set(cal, SupportClass.CalendarManager.MINUTE, minute);
             int second = millisecondsSinceMidnight/1000;
             millisecondsSinceMidnight -= second*1000;
-            SupportClass.CalendarManager.manager.Set(cal, SupportClass.CalendarManager.SECOND, second);
+            SupportClass.CalendarManager.Manager.Set(cal, SupportClass.CalendarManager.SECOND, second);
             int millisecond = millisecondsSinceMidnight;
-            SupportClass.CalendarManager.manager.Set(cal, SupportClass.CalendarManager.MILLISECOND, millisecond);
-            DateTime tempAux = SupportClass.CalendarManager.manager.GetDateTime(cal);
+            SupportClass.CalendarManager.Manager.Set(cal, SupportClass.CalendarManager.MILLISECOND, millisecond);
+            DateTime tempAux = SupportClass.CalendarManager.Manager.GetDateTime(cal);
             return new DateValue(tempAux);
         }
 

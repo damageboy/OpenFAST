@@ -23,11 +23,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using OpenFAST.Template;
+using OpenFAST.Utility;
 
 namespace OpenFAST
 {
     [Serializable]
-    public sealed class SequenceValue : IFieldValue
+    public sealed class SequenceValue : IFieldValue, IEquatable<SequenceValue>
     {
         private readonly List<GroupValue> _elements = new List<GroupValue>();
         private readonly Sequence _sequence;
@@ -65,8 +66,8 @@ namespace OpenFAST
         public IFieldValue Copy()
         {
             var copy = new SequenceValue(_sequence);
-            for (int i = 0; i < _elements.Count; i++)
-                copy.Add((GroupValue) _elements[i].Copy());
+            foreach (GroupValue t in _elements)
+                copy.Add((GroupValue) t.Copy());
             return copy;
         }
 
@@ -82,34 +83,6 @@ namespace OpenFAST
             _elements.Add(new GroupValue(_sequence.Group, values));
         }
 
-        public override bool Equals(object other)
-        {
-            if (ReferenceEquals(other, this))
-                return true;
-
-            if (ReferenceEquals(other, null) || !(other is SequenceValue))
-                return false;
-
-            return Equals((SequenceValue) other);
-        }
-
-        private bool Equals(SequenceValue other)
-        {
-            if (Length != other.Length)
-                return false;
-
-            for (int i = 0; i < Length; i++)
-                if (!_elements[i].Equals(other._elements[i]))
-                    return false;
-
-            return true;
-        }
-
-        public override int GetHashCode()
-        {
-            return _elements.GetHashCode()*37 + _sequence.GetHashCode();
-        }
-
         public override string ToString()
         {
             var builder = new StringBuilder();
@@ -122,5 +95,57 @@ namespace OpenFAST
 
             return builder.ToString();
         }
+
+        #region Equals
+
+        public bool Equals(SequenceValue other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Util.ListEquals(other._elements, _elements);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != typeof (SequenceValue)) return false;
+            return Equals((SequenceValue) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return _elements.GetHashCode();
+        }
+
+//public override bool Equals(object other)
+        //{
+        //    if (ReferenceEquals(other, this))
+        //        return true;
+
+        //    if (ReferenceEquals(other, null) || !(other is SequenceValue))
+        //        return false;
+
+        //    return Equals((SequenceValue) other);
+        //}
+
+        //private bool Equals(SequenceValue other)
+        //{
+        //    if (Length != other.Length)
+        //        return false;
+
+        //    for (int i = 0; i < Length; i++)
+        //        if (!_elements[i].Equals(other._elements[i]))
+        //            return false;
+
+        //    return true;
+        //}
+
+        //public override int GetHashCode()
+        //{
+        //    return _elements.GetHashCode()*37 + _sequence.GetHashCode();
+        //}
+
+        #endregion
     }
 }

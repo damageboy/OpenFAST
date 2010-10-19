@@ -49,9 +49,9 @@ namespace OpenFAST
         public override string ToString()
         {
             var builder = new StringBuilder(_value.Length*2);
-            for (int i = 0; i < _value.Length; i++)
+            foreach (byte t in _value)
             {
-                string hex = Convert.ToString(_value[i], 16);
+                string hex = Convert.ToString(t, 16);
                 if (hex.Length == 1)
                     builder.Append('0');
                 builder.Append(hex);

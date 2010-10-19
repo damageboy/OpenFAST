@@ -36,10 +36,10 @@ namespace UnitTest
         [SetUp]
         protected void SetUp()
         {
-            loader = new XmlMessageTemplateLoader();
-            loader.Load(new StreamReader("components.xml").BaseStream);
-            loader.Load(new StreamReader("preTrade.xml").BaseStream);
-            loader.Load(new StreamReader("session.xml").BaseStream);
+            _loader = new XmlMessageTemplateLoader();
+            _loader.Load(new StreamReader("components.xml").BaseStream);
+            _loader.Load(new StreamReader("preTrade.xml").BaseStream);
+            _loader.Load(new StreamReader("session.xml").BaseStream);
         }
 
         #endregion
@@ -50,18 +50,19 @@ namespace UnitTest
         private const string COMPONENTS_NS = "http://www.openfast.org/fix44/components";
         private const string FIX_44_NS = "http://www.openfast.org/fix44";
         private const string EXT_NS = "http://www.openfast.org/ext";
-        private IMessageTemplateLoader loader;
+        private IMessageTemplateLoader _loader;
 
+        [Test]
         public void TestTemplateExtension()
         {
-            MessageTemplate logon = loader.TemplateRegistry.GetTemplate(new QName("Logon", SESSION_NS));
+            MessageTemplate logon = _loader.TemplateRegistry.GetTemplate(new QName("Logon", SESSION_NS));
             Assert.IsTrue(logon.HasAttribute(new QName("reset", SCP_1_1_NS)));
         }
 
         [Test]
         public void TestTemplates()
         {
-            MessageTemplate quote = loader.TemplateRegistry.GetTemplate(new QName("Quote", PRE_TRADE_NS));
+            MessageTemplate quote = _loader.TemplateRegistry.GetTemplate(new QName("Quote", PRE_TRADE_NS));
 
             Assert.AreEqual(FIX_44_NS, quote.GetField("QuoteID").QName.Namespace);
             Assert.IsNotNull(quote.GetField(new QName("Group", EXT_NS)));

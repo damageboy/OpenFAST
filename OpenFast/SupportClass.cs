@@ -45,14 +45,14 @@ namespace OpenFAST
         /// <returns>A string representing the date with the time and date patterns</returns>
         public static string FormatDateTime(DateTimeFormatInfo format, DateTime date)
         {
-            string timePattern = DateTimeFormatManager.manager.GetTimeFormatPattern(format);
-            string datePattern = DateTimeFormatManager.manager.GetDateFormatPattern(format);
+            string timePattern = DateTimeFormatManager.Manager.GetTimeFormatPattern(format);
+            string datePattern = DateTimeFormatManager.Manager.GetDateFormatPattern(format);
             return date.ToString(datePattern + " " + timePattern, format);
         }
 
         /*******************************/
 
-        public static int BigDecimal_Scale(decimal d)
+        public static int BigDecimalScale(decimal d)
         {
             int val = 0;
             while (Math.Truncate(d) != d)
@@ -64,7 +64,7 @@ namespace OpenFAST
         }
 
 
-        public static long BigDecimal_UnScaledValue(decimal d)
+        public static long BigDecimalUnScaledValue(decimal d)
         {
             while (Math.Truncate(d) != d)
             {
@@ -79,6 +79,7 @@ namespace OpenFAST
         /// This class manages different features for calendars.
         /// The different calendars are internally managed using a hashtable structure.
         /// </summary>
+        [Obsolete("Migrate to native .NET DateTime support")]
         public class CalendarManager
         {
             /// <summary>
@@ -154,7 +155,7 @@ namespace OpenFAST
             /// <summary>
             /// The hashtable that contains the calendars and its properties.
             /// </summary>
-            public static CalendarHashTable manager = new CalendarHashTable();
+            public static CalendarHashTable Manager = new CalendarHashTable();
 
             #region Nested type: CalendarHashTable
 
@@ -175,8 +176,8 @@ namespace OpenFAST
                 public DateTime GetDateTime(Calendar calendar)
                 {
                     if (this[calendar] != null)
-                        return ((CalendarProperties) this[calendar]).dateTime;
-                    var tempProps = new CalendarProperties {dateTime = DateTime.Now};
+                        return ((CalendarProperties) this[calendar]).DateTime;
+                    var tempProps = new CalendarProperties {DateTime = DateTime.Now};
                     Add(calendar, tempProps);
                     return GetDateTime(calendar);
                 }
@@ -190,11 +191,11 @@ namespace OpenFAST
                 {
                     if (this[calendar] != null)
                     {
-                        ((CalendarProperties) this[calendar]).dateTime = date;
+                        ((CalendarProperties) this[calendar]).DateTime = date;
                     }
                     else
                     {
-                        var tempProps = new CalendarProperties {dateTime = date};
+                        var tempProps = new CalendarProperties {DateTime = date};
                         Add(calendar, tempProps);
                     }
                 }
@@ -212,7 +213,7 @@ namespace OpenFAST
                 {
                     if (this[calendar] != null)
                     {
-                        DateTime tempDate = ((CalendarProperties) this[calendar]).dateTime;
+                        DateTime tempDate = ((CalendarProperties) this[calendar]).DateTime;
                         switch (field)
                         {
                             case DATE:
@@ -253,11 +254,11 @@ namespace OpenFAST
                             default:
                                 break;
                         }
-                        ((CalendarProperties) this[calendar]).dateTime = tempDate;
+                        ((CalendarProperties) this[calendar]).DateTime = tempDate;
                     }
                     else
                     {
-                        var tempProps = new CalendarProperties {dateTime = DateTime.Now};
+                        var tempProps = new CalendarProperties {DateTime = DateTime.Now};
                         Add(calendar, tempProps);
                         Set(calendar, field, fieldValue);
                     }
@@ -282,7 +283,7 @@ namespace OpenFAST
                     }
                     else
                     {
-                        var tempProps = new CalendarProperties {dateTime = DateTime.Now};
+                        var tempProps = new CalendarProperties {DateTime = DateTime.Now};
                         Add(calendar, tempProps);
                         Set(calendar, year, month, day);
                     }
@@ -312,7 +313,7 @@ namespace OpenFAST
                     }
                     else
                     {
-                        var tempProps = new CalendarProperties {dateTime = DateTime.Now};
+                        var tempProps = new CalendarProperties {DateTime = DateTime.Now};
                         Add(calendar, tempProps);
                         Set(calendar, year, month, day, hour, minute);
                     }
@@ -345,7 +346,7 @@ namespace OpenFAST
                     }
                     else
                     {
-                        var tempProps = new CalendarProperties {dateTime = DateTime.Now};
+                        var tempProps = new CalendarProperties {DateTime = DateTime.Now};
                         Add(calendar, tempProps);
                         Set(calendar, year, month, day, hour, minute, second);
                     }
@@ -365,38 +366,38 @@ namespace OpenFAST
                         switch (field)
                         {
                             case DATE:
-                                return ((CalendarProperties) this[calendar]).dateTime.Day;
+                                return ((CalendarProperties) this[calendar]).DateTime.Day;
                             case HOUR:
-                                tempHour = ((CalendarProperties) this[calendar]).dateTime.Hour;
+                                tempHour = ((CalendarProperties) this[calendar]).DateTime.Hour;
                                 return tempHour > 12 ? tempHour - 12 : tempHour;
                             case MILLISECOND:
-                                return ((CalendarProperties) this[calendar]).dateTime.Millisecond;
+                                return ((CalendarProperties) this[calendar]).DateTime.Millisecond;
                             case MINUTE:
-                                return ((CalendarProperties) this[calendar]).dateTime.Minute;
+                                return ((CalendarProperties) this[calendar]).DateTime.Minute;
                             case MONTH:
                                 //Month value is 0-based. e.g., 0 for January
-                                return ((CalendarProperties) this[calendar]).dateTime.Month - 1;
+                                return ((CalendarProperties) this[calendar]).DateTime.Month - 1;
                             case SECOND:
-                                return ((CalendarProperties) this[calendar]).dateTime.Second;
+                                return ((CalendarProperties) this[calendar]).DateTime.Second;
                             case YEAR:
-                                return ((CalendarProperties) this[calendar]).dateTime.Year;
+                                return ((CalendarProperties) this[calendar]).DateTime.Year;
                             case DAY_OF_MONTH:
-                                return ((CalendarProperties) this[calendar]).dateTime.Day;
+                                return ((CalendarProperties) this[calendar]).DateTime.Day;
                             case DAY_OF_YEAR:
-                                return ((CalendarProperties) this[calendar]).dateTime.DayOfYear;
+                                return ((CalendarProperties) this[calendar]).DateTime.DayOfYear;
                             case DAY_OF_WEEK:
-                                return (int) (((CalendarProperties) this[calendar]).dateTime.DayOfWeek) + 1;
+                                return (int) (((CalendarProperties) this[calendar]).DateTime.DayOfWeek) + 1;
                             case HOUR_OF_DAY:
-                                return ((CalendarProperties) this[calendar]).dateTime.Hour;
+                                return ((CalendarProperties) this[calendar]).DateTime.Hour;
                             case AM_PM:
-                                tempHour = ((CalendarProperties) this[calendar]).dateTime.Hour;
+                                tempHour = ((CalendarProperties) this[calendar]).DateTime.Hour;
                                 return tempHour > 12 ? PM : AM;
 
                             default:
                                 return 0;
                         }
                     }
-                    var tempProps = new CalendarProperties {dateTime = DateTime.Now};
+                    var tempProps = new CalendarProperties {DateTime = DateTime.Now};
                     Add(calendar, tempProps);
                     return Get(calendar, field);
                 }
@@ -411,13 +412,13 @@ namespace OpenFAST
                 {
                     if (this[calendar] != null)
                     {
-                        ((CalendarProperties) this[calendar]).dateTime = new DateTime(milliseconds);
+                        ((CalendarProperties) this[calendar]).DateTime = new DateTime(milliseconds);
                     }
                     else
                     {
                         var tempProps = new CalendarProperties
                                             {
-                                                dateTime =
+                                                DateTime =
                                                     new DateTime(TimeSpan.TicksPerMillisecond*milliseconds)
                                             };
                         Add(calendar, tempProps);
@@ -433,20 +434,20 @@ namespace OpenFAST
                 {
                     if (this[calendar] != null)
                     {
-                        if (((CalendarProperties) this[calendar]).dateTimeFormat == null)
+                        if (((CalendarProperties) this[calendar]).DateTimeFormat == null)
                         {
-                            ((CalendarProperties) this[calendar]).dateTimeFormat = new DateTimeFormatInfo
+                            ((CalendarProperties) this[calendar]).DateTimeFormat = new DateTimeFormatInfo
                                                                                        {
                                                                                            FirstDayOfWeek =
                                                                                                DayOfWeek.Sunday
                                                                                        };
                         }
-                        return ((CalendarProperties) this[calendar]).dateTimeFormat.FirstDayOfWeek;
+                        return ((CalendarProperties) this[calendar]).DateTimeFormat.FirstDayOfWeek;
                     }
                     var tempProps = new CalendarProperties
                                         {
-                                            dateTime = DateTime.Now,
-                                            dateTimeFormat = new DateTimeFormatInfo
+                                            DateTime = DateTime.Now,
+                                            DateTimeFormat = new DateTimeFormatInfo
                                                                  {
                                                                      FirstDayOfWeek = DayOfWeek.Sunday
                                                                  }
@@ -465,18 +466,18 @@ namespace OpenFAST
                 {
                     if (this[calendar] != null)
                     {
-                        if (((CalendarProperties) this[calendar]).dateTimeFormat == null)
-                            ((CalendarProperties) this[calendar]).dateTimeFormat =
+                        if (((CalendarProperties) this[calendar]).DateTimeFormat == null)
+                            ((CalendarProperties) this[calendar]).DateTimeFormat =
                                 new DateTimeFormatInfo();
 
-                        ((CalendarProperties) this[calendar]).dateTimeFormat.FirstDayOfWeek = firstDayOfWeek;
+                        ((CalendarProperties) this[calendar]).DateTimeFormat.FirstDayOfWeek = firstDayOfWeek;
                     }
                     else
                     {
                         var tempProps = new CalendarProperties
                                             {
-                                                dateTime = DateTime.Now,
-                                                dateTimeFormat = new DateTimeFormatInfo()
+                                                DateTime = DateTime.Now,
+                                                DateTimeFormat = new DateTimeFormatInfo()
                                             };
                         Add(calendar, tempProps);
                         SetFirstDayOfWeek(calendar, firstDayOfWeek);
@@ -515,12 +516,12 @@ namespace OpenFAST
                     /// <summary>
                     /// The date and time of a calendar.
                     /// </summary>
-                    public DateTime dateTime;
+                    public DateTime DateTime;
 
                     /// <summary>
                     /// The format for the date and time in a calendar.
                     /// </summary>
-                    public DateTimeFormatInfo dateTimeFormat;
+                    public DateTimeFormatInfo DateTimeFormat;
                 }
 
                 #endregion
@@ -536,9 +537,10 @@ namespace OpenFAST
         /// <summary>
         /// Provides support for DateFormat
         /// </summary>
+        [Obsolete("Migrate to native .NET DateTime support")]
         public class DateTimeFormatManager
         {
-            public static DateTimeFormatHashTable manager = new DateTimeFormatHashTable();
+            public static DateTimeFormatHashTable Manager = new DateTimeFormatHashTable();
 
             #region Nested type: DateTimeFormatHashTable
 
@@ -769,6 +771,7 @@ namespace OpenFAST
         /// <summary>
         /// Support class used to handle threads
         /// </summary>
+        [Obsolete("Migrate to native .NET DateTime support")]
         public class ThreadClass : IThreadRunnable
         {
             private readonly object _suspendResume = new object();
@@ -789,31 +792,31 @@ namespace OpenFAST
             /// <summary>
             /// Initializes a new instance of the Thread class.
             /// </summary>
-            /// <param name="Name">The name of the thread</param>
-            public ThreadClass(string Name)
+            /// <param name="name">The name of the thread</param>
+            public ThreadClass(string name)
             {
                 _threadField = new Thread(Run);
-                this.Name = Name;
+                Name = name;
             }
 
             /// <summary>
             /// Initializes a new instance of the Thread class.
             /// </summary>
-            /// <param name="Start">A ThreadStart delegate that references the methods to be invoked when this thread begins executing</param>
-            public ThreadClass(ThreadStart Start)
+            /// <param name="start">A ThreadStart delegate that references the methods to be invoked when this thread begins executing</param>
+            public ThreadClass(ThreadStart start)
             {
-                _threadField = new Thread(Start);
+                _threadField = new Thread(start);
             }
 
             /// <summary>
             /// Initializes a new instance of the Thread class.
             /// </summary>
-            /// <param name="Start">A ThreadStart delegate that references the methods to be invoked when this thread begins executing</param>
-            /// <param name="Name">The name of the thread</param>
-            public ThreadClass(ThreadStart Start, string Name)
+            /// <param name="start">A ThreadStart delegate that references the methods to be invoked when this thread begins executing</param>
+            /// <param name="name">The name of the thread</param>
+            public ThreadClass(ThreadStart start, string name)
             {
-                _threadField = new Thread(Start);
-                this.Name = Name;
+                _threadField = new Thread(start);
+                Name = name;
             }
 
             /// <summary>
@@ -902,25 +905,25 @@ namespace OpenFAST
             /// <summary>
             /// Blocks the calling thread until a thread terminates or the specified time elapses
             /// </summary>
-            /// <param name="MiliSeconds">Time of wait in milliseconds</param>
-            public void Join(long MiliSeconds)
+            /// <param name="miliseconds">Time of wait in milliseconds</param>
+            public void Join(long miliseconds)
             {
                 lock (this)
                 {
-                    _threadField.Join(new TimeSpan(MiliSeconds*10000));
+                    _threadField.Join(new TimeSpan(miliseconds*10000));
                 }
             }
 
             /// <summary>
             /// Blocks the calling thread until a thread terminates or the specified time elapses
             /// </summary>
-            /// <param name="MiliSeconds">Time of wait in milliseconds</param>
-            /// <param name="NanoSeconds">Time of wait in nanoseconds</param>
-            public void Join(long MiliSeconds, int NanoSeconds)
+            /// <param name="miliseconds">Time of wait in milliseconds</param>
+            /// <param name="nanoseconds">Time of wait in nanoseconds</param>
+            public void Join(long miliseconds, int nanoseconds)
             {
                 lock (this)
                 {
-                    _threadField.Join(new TimeSpan(MiliSeconds*10000 + NanoSeconds*100));
+                    _threadField.Join(new TimeSpan(miliseconds*10000 + nanoseconds*100));
                 }
             }
 
@@ -989,8 +992,7 @@ namespace OpenFAST
             /// <returns>The currently running thread</returns>
             public static ThreadClass Current()
             {
-                var CurrentThread = new ThreadClass {Instance = Thread.CurrentThread};
-                return CurrentThread;
+                return new ThreadClass {Instance = Thread.CurrentThread};
             }
         }
 
@@ -1086,13 +1088,9 @@ namespace OpenFAST
             /// <param name="packet">Instance of the recieved datagram packet</param>
             public static void Receive(UdpClient tempClient, out PacketSupport packet)
             {
-                var remoteIpEndPoint =
-                    new IPEndPoint(IPAddress.Any, 0);
-
-                PacketSupport tempPacket;
+                var remoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
                 byte[] dataIn = tempClient.Receive(ref remoteIpEndPoint);
-                tempPacket = new PacketSupport(dataIn, dataIn.Length) {IpEndPoint = remoteIpEndPoint};
-                packet = tempPacket;
+                packet = new PacketSupport(dataIn, dataIn.Length) {IpEndPoint = remoteIpEndPoint};
             }
 
             /// <summary>

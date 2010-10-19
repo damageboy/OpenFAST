@@ -185,6 +185,7 @@ namespace OpenFAST.Template
                     if (!field.IsOptional && fieldValue == null)
                     {
                         Global.HandleError(FastConstants.GENERAL_ERROR, "Mandatory field " + field + " is null");
+                        // BUG? error is ignored?
                     }
                     byte[] encoding = field.Encode(fieldValue, template, context, presenceMapBuilder);
                     fieldEncodings[fieldIndex] = encoding;
@@ -333,7 +334,7 @@ namespace OpenFAST.Template
 
         private static Dictionary<Field, int> ConstructFieldIndexMap(Field[] fields)
         {
-            var map = new Dictionary<Field, int>();
+            var map = new Dictionary<Field, int>(fields.Length);
             for (int i = 0; i < fields.Length; i++)
                 map[fields[i]] = i;
             return map;

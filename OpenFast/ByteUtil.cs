@@ -30,9 +30,7 @@ namespace OpenFAST
         public static byte[] ConvertBitStringToFastByteArray(string bitString)
         {
             if (bitString.Length == 0)
-            {
                 return new byte[0];
-            }
 
             string[] bitStrings = bitString.Split(' ');
             var bytes = new byte[bitStrings.Length];
@@ -48,9 +46,7 @@ namespace OpenFAST
         public static byte[] ConvertHexStringToByteArray(string hexString)
         {
             if (hexString == null)
-            {
                 return new byte[0];
-            }
 
             hexString = hexString.Replace(" ", "");
             var bytes = new byte[hexString.Length/2];
@@ -71,9 +67,7 @@ namespace OpenFAST
         public static string ConvertByteArrayToBitString(byte[] bytes, int length)
         {
             if (bytes.Length == 0)
-            {
                 return "";
-            }
 
             var builder = new StringBuilder();
 

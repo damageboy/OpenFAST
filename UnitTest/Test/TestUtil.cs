@@ -39,18 +39,14 @@ namespace UnitTest.Test
         public static byte[] ToByte(MemoryStream stream)
         {
             var ret = new byte[stream.Length];
-            byte[] buff = stream.GetBuffer();
-            for (int i = 0; i < ret.Length; i++)
-            {
-                ret[i] = buff[i];
-            }
+            Array.Copy(stream.GetBuffer(), ret, ret.Length);
             return ret;
         }
 
         public static void AssertBitVectorEquals(String bitString, byte[] encoding)
         {
-            Assert.AreEqual(ByteUtil.ConvertBitStringToFastByteArray(
-                bitString), encoding);
+            Assert.AreEqual(
+                ByteUtil.ConvertBitStringToFastByteArray(bitString), encoding);
         }
     }
 }

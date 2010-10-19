@@ -44,17 +44,17 @@ namespace UnitTest.Test
             return new DecimalValue(value);
         }
 
-        protected static IntegerValue i(int value)
+        protected static IntegerValue Int(int value)
         {
             return new IntegerValue(value);
         }
 
-        protected static LongValue l(long value)
+        protected static LongValue Long(long value)
         {
             return new LongValue(value);
         }
 
-        protected static TwinValue twin(ScalarValue first, ScalarValue second)
+        protected static TwinValue Twin(ScalarValue first, ScalarValue second)
         {
             return new TwinValue(first, second);
         }
@@ -195,19 +195,18 @@ namespace UnitTest.Test
             Assert.AreEqual(mantissaValue, fields[1].DefaultValue);
         }
 
-        protected static void AssertScalarField(IFieldSet fieldSet, int fieldIndex, Type type, String name,
-                                                Operator operator_ren)
+        protected static void AssertScalarField(IFieldSet fieldSet, int fieldIndex, Type type, String name, Operator op)
         {
             var field = (Scalar) fieldSet.GetField(fieldIndex);
             AssertScalarField(field, type, name);
-            Assert.AreEqual(operator_ren, field.Operator);
+            Assert.AreEqual(op, field.Operator);
         }
 
-        protected static void AssertSequenceLengthField(Sequence sequence, String name, Type type, Operator operator_ren)
+        protected static void AssertSequenceLengthField(Sequence sequence, String name, Type type, Operator op)
         {
             Assert.AreEqual(type, sequence.Length.Type);
             Assert.AreEqual(name, sequence.Length.Name);
-            Assert.AreEqual(operator_ren, sequence.Length.Operator);
+            Assert.AreEqual(op, sequence.Length.Operator);
         }
 
         protected static void AssertSequence(MessageTemplate messageTemplate, int fieldIndex, int fieldCount)
@@ -223,11 +222,11 @@ namespace UnitTest.Test
         }
 
         protected static void AssertOptionalScalarField(IFieldSet fieldSet, int fieldIndex, Type type, String name,
-                                                        Operator operator_ren)
+                                                        Operator op)
         {
             var field = (Scalar) fieldSet.GetField(fieldIndex);
             AssertScalarField(field, type, name);
-            Assert.AreEqual(operator_ren, field.Operator);
+            Assert.AreEqual(op, field.Operator);
             Assert.IsTrue(field.IsOptional);
         }
 

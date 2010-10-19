@@ -66,11 +66,8 @@ namespace OpenFAST.Template.Operator
         protected internal OperatorCodec(Operator op, FASTType[] types)
         {
             _operator = op;
-            for (int i = 0; i < types.Length; i++)
-            {
-                var key = Tuple.Create(op, types[i]);
-                OperatorMap[key] = this;
-            }
+            foreach (FASTType t in types)
+                OperatorMap[Tuple.Create(op, t)] = this;
         }
 
         public virtual Operator Operator

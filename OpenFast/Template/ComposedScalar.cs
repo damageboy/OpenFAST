@@ -139,17 +139,20 @@ namespace OpenFAST.Template
                 return false;
             for (int i = 0; i < fields.Length; i++)
             {
-                if (!other.fields[i].Type.Equals(fields[i].Type))
+                var fld1 = fields[i];
+                var fld2 = other.fields[i];
+
+                if (!fld2.Type.Equals(fld1.Type))
                     return false;
-                if (!other.fields[i].TypeCodec.Equals(fields[i].TypeCodec))
+                if (!fld2.TypeCodec.Equals(fld1.TypeCodec))
                     return false;
-                if (!other.fields[i].Operator.Equals(fields[i].Operator))
+                if (!fld2.Operator.Equals(fld1.Operator))
                     return false;
-                if (!other.fields[i].OperatorCodec.Equals(fields[i].OperatorCodec))
+                if (!fld2.OperatorCodec.Equals(fld1.OperatorCodec))
                     return false;
-                if (!other.fields[i].DefaultValue.Equals(fields[i].DefaultValue))
+                if (!fld2.DefaultValue.Equals(fld1.DefaultValue))
                     return false;
-                if (!other.fields[i].Dictionary.Equals(fields[i].Dictionary))
+                if (!fld2.Dictionary.Equals(fld1.Dictionary))
                     return false;
             }
             return true;

@@ -115,10 +115,8 @@ namespace OpenFAST
 
                 byte[] data = _encoder.Encode(message);
 
-                if ((data == null) || (data.Length == 0))
-                {
+                if (data == null || data.Length == 0)
                     return;
-                }
 
                 byte[] tmp = data;
                 _outStream.Write(tmp, 0, tmp.Length);

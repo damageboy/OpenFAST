@@ -48,9 +48,8 @@ namespace UnitTest
         [TearDown]
         protected void TearDown()
         {
+            // TODO: test proper session closing
             _session.Close();
-            _connection.Close();
-            _output.Dispose();
         }
 
         #endregion

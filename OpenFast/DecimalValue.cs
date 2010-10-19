@@ -40,8 +40,8 @@ namespace OpenFAST
             }
 
             var decimalValue = (Decimal) value;
-            int exp = SupportClass.BigDecimal_Scale(decimalValue);
-            long mant = SupportClass.BigDecimal_UnScaledValue(decimalValue);
+            int exp = SupportClass.BigDecimalScale(decimalValue);
+            long mant = SupportClass.BigDecimalUnScaledValue(decimalValue);
 
             while (((mant%10) == 0) && (mant != 0))
             {
@@ -61,8 +61,8 @@ namespace OpenFAST
 
         public DecimalValue(Decimal bigDecimal)
         {
-            Mantissa = SupportClass.BigDecimal_UnScaledValue(bigDecimal);
-            Exponent = SupportClass.BigDecimal_Scale(bigDecimal);
+            Mantissa = SupportClass.BigDecimalUnScaledValue(bigDecimal);
+            Exponent = SupportClass.BigDecimalScale(bigDecimal);
         }
 
         public override bool IsNull

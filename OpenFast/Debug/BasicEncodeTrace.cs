@@ -71,10 +71,7 @@ namespace OpenFAST.Debug
 
         public static string Indent(int indent)
         {
-            string tab = "";
-            for (int i = 0; i < indent; i++)
-                tab += " ";
-            return tab;
+            return new string(' ', indent);
         }
 
         #region Nested type: ITraceNode
@@ -155,10 +152,10 @@ namespace OpenFAST.Debug
                 if (_pmap != null)
                     builder.Append(Indent(indent)).Append("PMAP: ").Append(ByteUtil.ConvertByteArrayToBitString(_pmap)).
                         Append("\n");
-                for (int i = 0; i < _nodes.Count; i++)
-                {
-                    _nodes[i].Serialize(builder, indent);
-                }
+                
+                foreach (ITraceNode t in _nodes)
+                    t.Serialize(builder, indent);
+
                 //indent -= 2;
                 return builder;
             }

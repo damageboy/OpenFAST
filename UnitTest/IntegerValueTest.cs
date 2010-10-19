@@ -32,13 +32,13 @@ namespace UnitTest
         [Test]
         public void TestToBigDecimal()
         {
-            Assert.AreEqual(new Decimal(125), i(125).ToBigDecimal());
+            Assert.AreEqual(new Decimal(125), Int(125).ToBigDecimal());
         }
 
         [Test]
         public void TestToByte()
         {
-            AssertEquals(0x7f, i(127).ToByte());
+            AssertEquals(0x7f, Int(127).ToByte());
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace UnitTest
         {
             try
             {
-                i(128).ToByte();
+                Int(128).ToByte();
                 Assert.Fail();
             }
             catch (FastException e)
@@ -58,25 +58,25 @@ namespace UnitTest
         [Test]
         public void TestToDouble()
         {
-            Assert.AreEqual(125.0, i(125).ToDouble(), 0.1);
+            Assert.AreEqual(125.0, Int(125).ToDouble(), 0.1);
         }
 
         [Test]
         public void TestToInt()
         {
-            AssertEquals(125, i(125).ToInt());
+            AssertEquals(125, Int(125).ToInt());
         }
 
         [Test]
         public void TestToLong()
         {
-            AssertEquals(125L, i(125).ToLong());
+            AssertEquals(125L, Int(125).ToLong());
         }
 
         [Test]
         public void TestToShort()
         {
-            AssertEquals((short) 32767, i(32767).ToShort());
+            AssertEquals((short) 32767, Int(32767).ToShort());
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace UnitTest
         {
             try
             {
-                i(32768).ToByte();
+                Int(32768).ToByte();
                 Assert.Fail();
             }
             catch (FastException e)
@@ -96,7 +96,7 @@ namespace UnitTest
         [Test]
         public void TestToString()
         {
-            Assert.AreEqual("105", i(105).ToString());
+            Assert.AreEqual("105", Int(105).ToString());
         }
     }
 }

@@ -26,7 +26,7 @@ namespace OpenFAST.Template.Loader
 {
     public abstract class AbstractFieldParser : IFieldParser
     {
-        private readonly string[] parseableNodeNames;
+        private readonly string[] _parseableNodeNames;
 
         protected internal AbstractFieldParser(string nodeName) : this(new[] {nodeName})
         {
@@ -34,15 +34,15 @@ namespace OpenFAST.Template.Loader
 
         protected internal AbstractFieldParser(string[] nodeNames)
         {
-            parseableNodeNames = nodeNames;
+            _parseableNodeNames = nodeNames;
         }
 
         #region FieldParser Members
 
         public virtual bool CanParse(XmlElement element, ParsingContext context)
         {
-            for (int i = 0; i < parseableNodeNames.Length; i++)
-                if (parseableNodeNames[i].Equals(element.Name))
+            for (int i = 0; i < _parseableNodeNames.Length; i++)
+                if (_parseableNodeNames[i].Equals(element.Name))
                     return true;
             return false;
         }
@@ -63,8 +63,7 @@ namespace OpenFAST.Template.Loader
             for (int i = 0; i < attributes.Count; i++)
             {
                 var attribute = (XmlAttribute) attributes.Item(i);
-                if (attribute.NamespaceURI == null || attribute.NamespaceURI.Equals("") ||
-                    attribute.NamespaceURI.Equals(XmlMessageTemplateLoader.TemplateDefinitionNs))
+                if (string.IsNullOrEmpty(attribute.NamespaceURI) || attribute.NamespaceURI.Equals(XmlMessageTemplateLoader.TemplateDefinitionNs))
                     continue;
                 field.AddAttribute(new QName(attribute.LocalName, attribute.NamespaceURI), attribute.Value);
             }

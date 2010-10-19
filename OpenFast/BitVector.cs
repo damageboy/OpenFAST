@@ -53,17 +53,15 @@ namespace OpenFAST
             {
                 int index = _bytes.Length - 1;
 
-                for (; (index > 0) && ((_bytes[index] & VALUE_BITS_SET) == 0); index--)
+                for (; index > 0 && (_bytes[index] & VALUE_BITS_SET) == 0; index--)
                 {
                 }
 
                 if (index == (_bytes.Length - 1))
-                {
                     return _bytes;
-                }
 
                 var truncated = new byte[index + 1];
-                Array.Copy(_bytes, 0, truncated, 0, index + 1);
+                Array.Copy(_bytes, truncated, index + 1);
 
                 truncated[truncated.Length - 1] |= STOP_BIT;
 

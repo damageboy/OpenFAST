@@ -43,6 +43,7 @@ namespace OpenFAST.Template.Type.Codec
             var encoding = new byte[length];
 
             for (int i = 0; i < length; i++)
+            {
                 try
                 {
                     encoding[i] = (byte) inStream.ReadByte();
@@ -51,7 +52,10 @@ namespace OpenFAST.Template.Type.Codec
                 {
                     Global.HandleError(FastConstants.IO_ERROR,
                                        "An error occurred while decoding a nullable byte vector.", e);
+                    // BUG? Continue processing on IO exception???
                 }
+            }
+
             return new ByteVectorValue(encoding);
         }
 

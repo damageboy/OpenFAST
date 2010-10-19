@@ -147,6 +147,7 @@ namespace OpenFAST.Session
             _outStream.WriteMessage(_protocol.CloseMessage);
             _inStream.Close();
             _outStream.Close();
+            _connection.Close();
         }
 
         // RESPONDER

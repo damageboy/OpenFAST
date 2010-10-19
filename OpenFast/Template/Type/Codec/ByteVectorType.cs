@@ -41,18 +41,18 @@ namespace OpenFAST.Template.Type.Codec
 
         public override ScalarValue Decode(Stream inStream)
         {
-            int length = ((IntegerValue) UINT.Decode(inStream)).Value;
-            var encoding = new byte[length];
-            for (int i = 0; i < length; i++)
-                try
-                {
+            try
+            {
+                int length = ((IntegerValue)UINT.Decode(inStream)).Value;
+                var encoding = new byte[length];
+                for (int i = 0; i < length; i++)
                     encoding[i] = (byte) inStream.ReadByte();
-                }
-                catch (IOException e)
-                {
-                    throw new RuntimeException(e);
-                }
-            return new ByteVectorValue(encoding);
+                return new ByteVectorValue(encoding);
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
         }
 
         public override byte[] EncodeValue(ScalarValue value)

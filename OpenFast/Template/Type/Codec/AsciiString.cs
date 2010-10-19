@@ -39,7 +39,7 @@ namespace OpenFAST.Template.Type.Codec
                 throw new ArgumentNullException("value", "Only nullable strings can represent null values.");
 
             string str = value.ToString();
-#warning Bug?
+#warning Bug? ToString should always have a non-null value
             if (str != null)
             {
                 if (str.Length == 0)
@@ -79,6 +79,7 @@ namespace OpenFAST.Template.Type.Codec
 
             if (bytes[0] == 0)
             {
+                // BUG? optimize with "else if"?
                 if (!ByteUtil.IsEmpty(bytes))
                     Global.HandleError(FastConstants.R9_STRING_OVERLONG, null);
                 if (bytes.Length > 1 && bytes[1] == 0)
