@@ -118,5 +118,16 @@ namespace OpenFAST
                     return false;
             return true;
         }
+
+        public static byte[] Combine(byte[] first, int firstOffset, int firstLength, byte[] second, int secondOffset, int secondLength)
+        {
+            int fLen = Math.Min(firstLength, first.Length - firstOffset);
+            int sLen = Math.Min(secondLength, second.Length - secondOffset);
+            int totalLength = fLen + sLen;
+            byte[] result = new byte[totalLength];
+            Array.Copy(first, firstOffset, result, 0, fLen);
+            Array.Copy(second, secondOffset, result, fLen, sLen);
+            return result;
+        }
     }
 }

@@ -57,28 +57,35 @@ namespace OpenFAST.Session.Template.Exchange
 
         public override Field Convert(GroupValue fieldDef, ITemplateRegistry templateRegistry, ConversionContext context)
         {
-            FASTType type = _templateTypeMap[fieldDef.GetGroup()];
+            FASTType type =  _templateTypeMap[fieldDef.GetGroup()];
             bool optional = fieldDef.GetBool("Optional");
             ScalarValue initialValue = ScalarValue.Undefined;
             if (fieldDef.IsDefined("InitialValue"))
                 initialValue = (ScalarValue) fieldDef.GetValue("InitialValue");
-
-            if (fieldDef.IsDefined("Operator"))
-            {
+            Scalar scalar = null;
+            string name = fieldDef.GetString("Name");
+            string tempnamespace = "";
+            if (fieldDef.IsDefined("Ns"))
+                tempnamespace = fieldDef.GetString("Ns");
+            QName qname = new QName(name, tempnamespace);
+            if (fieldDef.IsDefined("Operator")) {
                 GroupValue operatorGroup = fieldDef.GetGroup("Operator").GetGroup(0);
-                Operator op = GetOperator(operatorGroup.GetGroup());
-                var scalar = new Scalar(fieldDef.GetString("Name"), type, op, initialValue, optional);
+                Operator operatortemp = GetOperator(operatorGroup.GetGroup());
+                scalar = new Scalar(qname, type, operatortemp, initialValue, optional);
                 if (operatorGroup.IsDefined("Dictionary"))
                     scalar.Dictionary = operatorGroup.GetString("Dictionary");
-                if (operatorGroup.IsDefined("Key"))
-                {
-                    string name = operatorGroup.GetGroup("Key").GetString("Name");
+                if (operatorGroup.IsDefined("Key")) {
+                    string keyName = operatorGroup.GetGroup("Key").GetString("Name");
                     string ns = operatorGroup.GetGroup("Key").GetString("Ns");
-                    scalar.Key = new QName(name, ns);
+                    scalar.Key = new QName(keyName, ns);
                 }
-                return scalar;
+            } else {
+                scalar = new Scalar(qname, type, Operator.NONE, initialValue, optional);
             }
-            return new Scalar(fieldDef.GetString("Name"), type, Operator.NONE, initialValue, optional);
+            if (fieldDef.IsDefined("AuxId")) {
+                scalar.Id =fieldDef.GetString("AuxId");
+            }
+            return scalar;
         }
 
         public override GroupValue Convert(Field field, ConversionContext context)

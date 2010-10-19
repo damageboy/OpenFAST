@@ -276,11 +276,26 @@ namespace OpenFAST.Template
 
         internal bool Equals(Scalar other)
         {
-            return QName.Equals(other.QName) && _type.Equals(other._type) && _typeCodec.Equals(other._typeCodec) &&
-                   _operator.Equals(other._operator) && _operatorCodec.Equals(other._operatorCodec) &&
-                   _initialValue.Equals(other._initialValue) && _dictionary.Equals(other._dictionary);
+            bool equals = EqualsPrivate(Name, other.Name);
+            equals = equals && EqualsPrivate(_type, other._type);
+            equals = equals && EqualsPrivate(_typeCodec, other._typeCodec);
+            equals = equals && EqualsPrivate(_operator, other._operator);
+            equals = equals && EqualsPrivate(_operatorCodec, other._operatorCodec);
+            equals = equals && EqualsPrivate(_initialValue, other._initialValue);
+            equals = equals && EqualsPrivate(_dictionary, other._dictionary);
+            equals = equals && EqualsPrivate(Id, other.Id);
+            return equals;
         }
-
+        private bool EqualsPrivate(object o, object o2)
+        {
+            if (o == null)
+            {
+                if (o2 == null)
+                    return true;
+                return false;
+            }
+            return o.Equals(o2);
+        }
         public override int GetHashCode()
         {
             return QName.GetHashCode() + _type.GetHashCode() + _typeCodec.GetHashCode() + _operator.GetHashCode() +

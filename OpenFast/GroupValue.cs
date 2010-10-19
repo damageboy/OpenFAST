@@ -230,6 +230,18 @@ namespace OpenFAST
             return _values[_group.GetFieldIndex(fieldName)];
         }
 
+        public bool TryGetValue(string fieldName,out IFieldValue value)
+        {
+            int index = -1;
+            value = null;
+            if(_group.TryGetFieldIndex(fieldName, out index))
+            {
+                value = _values[index];
+                return true;
+            }
+            return false;
+        }
+
         public virtual Group GetGroup()
         {
             return _group;
@@ -355,7 +367,13 @@ namespace OpenFAST
 
         public virtual bool IsDefined(string fieldName)
         {
-            return GetValue(fieldName) != null;
+            IFieldValue ret;
+            if (TryGetValue(fieldName, out ret))
+            {
+                if (ret != null)
+                    return true;
+            }
+            return false;
         }
 
         #region Equals

@@ -61,9 +61,11 @@
     <Compile Include="MessageTest.cs" />
     <Compile Include="Scenario\CmeTemplateTest.cs" />
     <Compile Include="Scenario\ErrorCasesTest.cs" />
+    <Compile Include="Session\SessionControlProtocol_1_1Test.cs" />
     <Compile Include="StringValueTest.cs" />
     <Compile Include="TemplateDictionaryTest.cs" />
     <Compile Include="TemplateTest.cs" />
+    <Compile Include="Template\BasicTemplateRegistryTest.cs" />
     <Compile Include="Test\ObjectMother.cs" />
     <Compile Include="Test\OpenFastTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

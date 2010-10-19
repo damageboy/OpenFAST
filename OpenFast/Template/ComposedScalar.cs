@@ -118,6 +118,11 @@ namespace OpenFAST.Template
 
         public override bool UsesPresenceMapBit()
         {
+            for (int i = 0; i < fields.Length; i++)
+            {
+                if (fields[i].UsesPresenceMapBit())
+                    return true;
+            }
             return false;
         }
 

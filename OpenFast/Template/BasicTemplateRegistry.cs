@@ -87,7 +87,10 @@ namespace OpenFAST.Template
 
         public override MessageTemplate GetTemplate(int templateId)
         {
-            return _regIdMap[templateId];
+            MessageTemplate value = null;
+            _regIdMap.TryGetValue(templateId, out value);
+            return value;
+
         }
 
         public override MessageTemplate GetTemplate(QName templateName)

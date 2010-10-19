@@ -32,16 +32,16 @@ namespace OpenFAST.Template
     [Serializable]
     public class Group : Field, IEquatable<Group>
     {
-        private readonly Field[] _fieldDefinitions;
-        private readonly Dictionary<string, Field> _fieldIdMap;
-        private readonly Dictionary<Field, int> _fieldIndexMap;
-        private readonly Dictionary<QName, Field> _fieldNameMap;
-        private readonly Field[] _fields;
-        private readonly Dictionary<string, Scalar> _introspectiveFieldMap;
-        private readonly StaticTemplateReference[] _staticTemplateReferences;
-        private readonly bool _usesPresenceMapRenamedField;
-        private string _childNamespace = "";
         private QName _typeReference;
+        protected readonly Field[] _fieldDefinitions;
+        protected readonly Dictionary<string, Field> _fieldIdMap;
+        protected readonly Dictionary<Field, int> _fieldIndexMap;
+        protected readonly Dictionary<QName, Field> _fieldNameMap;
+        protected readonly Field[] _fields;
+        protected readonly Dictionary<string, Scalar> _introspectiveFieldMap;
+        protected readonly StaticTemplateReference[] _staticTemplateReferences;
+        protected readonly bool _usesPresenceMapRenamedField;
+        protected string _childNamespace = "";
 
         public Group(string name, Field[] fields, bool optional)
             : this(new QName(name), fields, optional)
@@ -344,6 +344,19 @@ namespace OpenFAST.Template
             return _fieldIndexMap[GetField(fieldName)];
         }
 
+        public bool TryGetFieldIndex(string fieldName,out int index)
+        {
+            index = -1;
+            Field field;
+            if (_fieldNameMap.TryGetValue(QnameWithChildNs(fieldName), out field))
+            {
+                if (field != null)
+                {
+                    return _fieldIndexMap.TryGetValue(field, out index);
+                }
+            }
+            return false;
+        }
         public virtual int GetFieldIndex(Field field)
         {
             int index;
@@ -421,6 +434,17 @@ namespace OpenFAST.Template
 
         #endregion
 
+        public void SetTypeReference(QName typeReference)
+        {
+            this._typeReference = typeReference;
+        }
+        
+        public QName GetTypeReference()
+        {
+            return _typeReference;
+        }
+        
+        
         public virtual StaticTemplateReference GetStaticTemplateReference(string qname)
         {
             return GetStaticTemplateReference(new QName(qname, QName.Namespace));

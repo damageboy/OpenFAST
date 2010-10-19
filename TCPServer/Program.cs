@@ -6,7 +6,14 @@ namespace TCPServer
     {
         private static void Main(string[] args)
         {
-            new FASTServer();
+            try
+            {
+                new FASTServer();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
             Console.ReadLine();
         }
     }

@@ -506,7 +506,7 @@ namespace OpenFAST.Session
                 if (_staticConstantOp == null)
                 {
                     _staticConstantOp = new MessageTemplate(
-                        new QName("ConstantOp", NAMESPACE), new Field[] {new StaticTemplateReference(OpBase)});
+                        new QName("ConstantOp", NAMESPACE), new Field[] {new StaticTemplateReference(Other)});
                 }
                 return _staticConstantOp;
             }
@@ -519,7 +519,7 @@ namespace OpenFAST.Session
                 if (_staticDefaultOp == null)
                 {
                     _staticDefaultOp = new MessageTemplate(
-                        new QName("DefaultOp", NAMESPACE), new Field[] {new StaticTemplateReference(OpBase)});
+                        new QName("DefaultOp", NAMESPACE), new Field[] {new StaticTemplateReference(Other)});
                 }
                 return _staticDefaultOp;
             }
@@ -773,9 +773,27 @@ namespace OpenFAST.Session
 
         public virtual MessageTemplate CreateTemplateFromMessage(Message templateDef, ITemplateRegistry registry)
         {
+            //string name = templateDef.GetString("Name");
+            //Field[] fields = GroupConverter.ParseFieldInstructions(templateDef, registry, _initialContext);
+            //return new MessageTemplate(name, fields);
             string name = templateDef.GetString("Name");
+            string tempnamespace = "";
+            if (templateDef.IsDefined("Ns"))
+                tempnamespace = templateDef.GetString("Ns");
             Field[] fields = GroupConverter.ParseFieldInstructions(templateDef, registry, _initialContext);
-            return new MessageTemplate(name, fields);
+            MessageTemplate group = new MessageTemplate(new QName(name, tempnamespace), fields);
+            if (templateDef.IsDefined("TypeRef")) {
+                GroupValue typeRef = templateDef.GetGroup("TypeRef");
+                string typeRefName = typeRef.GetString("Name");
+                string typeRefNs = ""; // context.getNamespace();
+                if (typeRef.IsDefined("Ns"))
+                    typeRefNs = typeRef.GetString("Ns");
+                group.SetTypeReference(new QName(typeRefName, typeRefNs));
+            }
+            if (templateDef.IsDefined("AuxId")) {
+                group.Id = templateDef.GetString("AuxId");
+            }
+            return group;
         }
 
         private static Field u32(string name)

@@ -19,6 +19,7 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
+using OpenFAST.Error;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
 using OpenFAST.Template.Type;
@@ -63,7 +64,18 @@ namespace OpenFAST.Session.Template.Exchange
                 length = new Scalar(lengthName, FASTType.U32, op, initialValue, optional) {Id = id};
             }
 
-            return new Sequence(qname, length, fields, optional);
+            Sequence sequence = new Sequence(qname, length, fields, optional);
+
+            if (fieldDef.IsDefined("TypeRef"))
+            {
+                GroupValue typeRef = fieldDef.GetGroup("TypeRef");
+                string typeRefName = typeRef.GetString("Name");
+                string typeRefNs = ""; // context.getNamespace();
+                if (typeRef.IsDefined("Ns"))
+                    typeRefNs = typeRef.GetString("Ns");
+                sequence.TypeReference = new QName(typeRefName, typeRefNs);
+            }
+            return sequence;
         }
 
         public override GroupValue Convert(Field field, ConversionContext context)
@@ -94,6 +106,12 @@ namespace OpenFAST.Session.Template.Exchange
                 {
                     lengthDef.SetFieldValue("InitialValue", length.DefaultValue);
                 }
+            }
+            if (sequence.TypeReference != null && !FastConstants.ANY_TYPE.Equals(sequence.TypeReference))
+            {
+                GroupValue typeRef = new GroupValue((Group)SessionControlProtocol_1_1.TypeRef.GetField(new QName("TypeRef", SessionControlProtocol_1_1.NAMESPACE)));
+                SetName(typeRef, sequence.TypeReference);
+                seqDef.SetFieldValue("TypeRef", typeRef);
             }
             return seqDef;
         }

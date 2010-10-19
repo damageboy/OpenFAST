@@ -33,6 +33,7 @@ namespace OpenFAST.Template
         private Dictionary<QName, string> _attributes;
         private string _id;
         private QName _key;
+        private MessageTemplate template;
 
         protected Field(QName name, bool isOptional)
         {
@@ -88,7 +89,14 @@ namespace OpenFAST.Template
                 return _id;
             }
 
-            set { _id = value; }
+            set
+            {
+                _id = value;
+            }
+        }
+        public bool IsIdNull()
+        {
+            return _id == null;
         }
 
         public abstract System.Type ValueType { get; }
@@ -101,7 +109,7 @@ namespace OpenFAST.Template
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return Equals(other._name, _name) && other._isOptional.Equals(_isOptional) &&
-                   Equals(other._attributes, _attributes) && Equals(other._id, _id) && Equals(other._key, _key);
+                   Equals(other._attributes, _attributes) && Equals(other.Id, Id) && Equals(other._key, _key);
         }
 
         public override bool Equals(object obj)
@@ -147,7 +155,15 @@ namespace OpenFAST.Template
                 _attributes = new Dictionary<QName, string>();
             _attributes[qname] = value;
         }
-
+        
+        public void SetMessageTemplate(MessageTemplate template)
+        {
+            this.template = template;
+        }
+        public MessageTemplate GetTemplate()
+        {
+            return this.template;
+        }
         protected bool IsPresent(BitVectorReader presenceMapReader)
         {
             return (!UsesPresenceMapBit()) || presenceMapReader.Read();

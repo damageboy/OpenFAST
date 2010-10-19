@@ -40,7 +40,7 @@ namespace UnitTest
         {
             _output = new StreamWriter(new MemoryStream());
             _connection = new MyConnection(_output.BaseStream);
-            _session = new Session(_connection,
+            _session = new OpenFAST.Session.Session(_connection,
                                    SessionConstants.SCP_1_0,
                                    TemplateRegistryFields.Null, TemplateRegistryFields.Null);
         }
@@ -55,7 +55,7 @@ namespace UnitTest
 
         #endregion
 
-        private Session _session;
+        private OpenFAST.Session.Session _session;
         private StreamWriter _output;
         private MyConnection _connection;
 

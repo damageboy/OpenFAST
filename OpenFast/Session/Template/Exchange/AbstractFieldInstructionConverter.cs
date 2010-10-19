@@ -62,14 +62,18 @@ namespace OpenFAST.Session.Template.Exchange
         public static void SetNameAndId(Field field, GroupValue fieldDef)
         {
             SetName(field, fieldDef);
-            if (field.Id != null)
+            if (!field.IsIdNull())
                 fieldDef.SetString("AuxId", field.Id);
         }
-
+        public static void SetName(GroupValue fieldDef, QName qname)
+        {
+            fieldDef.SetString("Name", qname.Name);
+            fieldDef.SetString("Ns", qname.Namespace);
+        }
         public static void SetName(Field field, GroupValue fieldDef)
         {
-            fieldDef.SetString("Name", field.Name);
-            fieldDef.SetString("Ns", field.QName.Namespace);
+            QName qname = field.QName;
+            SetName(fieldDef, qname);
         }
 
         public static GroupValue CreateOperator(Scalar scalar)

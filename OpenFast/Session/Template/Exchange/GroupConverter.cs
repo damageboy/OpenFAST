@@ -20,6 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System;
+using OpenFAST.Error;
 using OpenFAST.Template;
 
 namespace OpenFAST.Session.Template.Exchange
@@ -34,9 +35,24 @@ namespace OpenFAST.Session.Template.Exchange
         public override Field Convert(GroupValue fieldDef, ITemplateRegistry templateRegistry, ConversionContext context)
         {
             string name = fieldDef.GetString("Name");
+            string namespacetemp = "";
+            if (fieldDef.IsDefined("Ns"))
+                namespacetemp = fieldDef.GetString("Ns");
             Field[] fields = ParseFieldInstructions(fieldDef, templateRegistry, context);
             bool optional = fieldDef.GetBool("Optional");
-            return new Group(name, fields, optional);
+            Group group = new Group(new QName(name, namespacetemp), fields, optional);
+            if (fieldDef.IsDefined("TypeRef")) {
+                GroupValue typeRef = fieldDef.GetGroup("TypeRef");
+                String typeRefName = typeRef.GetString("Name");
+                String typeRefNs = ""; // context.getNamespace();
+                if (typeRef.IsDefined("Ns"))
+                    typeRefNs = typeRef.GetString("Ns");
+                group.SetTypeReference(new QName(typeRefName, typeRefNs));
+            }
+            if (fieldDef.IsDefined("AuxId")) {
+                group.Id= fieldDef.GetString("AuxId");
+            }
+            return group;
         }
 
         public override GroupValue Convert(Field field, ConversionContext context)
@@ -55,8 +71,26 @@ namespace OpenFAST.Session.Template.Exchange
         public static Message Convert(Group group, Message groupMsg, ConversionContext context)
         {
             SetNameAndId(group, groupMsg);
+            if (group.TypeReference != null && !FastConstants.ANY_TYPE.Equals(group.TypeReference))
+            {
+                GroupValue typeRef =
+                    new GroupValue(
+                        (Group)
+                        SessionControlProtocol_1_1.TypeRef.GetField(new QName("TypeRef",
+                                                                              SessionControlProtocol_1_1.NAMESPACE)));
+                SetName(typeRef, group.TypeReference);
+                groupMsg.SetFieldValue("TypeRef", typeRef);
+            }
+
             var instructions = new SequenceValue(
                 SessionControlProtocol_1_1.TEMPLATE_DEFINITION.GetSequence("Instructions"));
+            
+            if (group.TypeReference != null && !OpenFAST.Error.FastConstants.ANY_TYPE.Equals(group.TypeReference))
+            {
+                GroupValue typeRef = new GroupValue((Group)SessionControlProtocol_1_1.TypeRef.GetField(new QName("TypeRef", SessionControlProtocol_1_1.NAMESPACE)));
+                SetName(typeRef, group.TypeReference);
+                groupMsg.SetFieldValue("TypeRef", typeRef);
+            }
 
             Field[] fields = group.FieldDefinitions;
             for (int i = group is MessageTemplate ? 1 : 0; i < fields.Length; i++)

@@ -31,10 +31,20 @@ namespace OpenFAST.Template
     {
         public MessageTemplate(QName name, Field[] fields) : base(name, AddTemplateIdField(fields), false)
         {
+            UpdateTemplateReference(_fields);
+            _fields[0].SetMessageTemplate(this);
         }
 
         public MessageTemplate(string name, Field[] fields) : this(new QName(name), fields)
         {
+        }
+
+        private void UpdateTemplateReference(Field[] fields)
+        {
+            for (int i = 0; i < fields.Length; i++)
+            {
+                fields[i].SetMessageTemplate(this);
+            }
         }
 
         public new static System.Type ValueType
@@ -121,7 +131,16 @@ namespace OpenFAST.Template
 
         public bool Equals(MessageTemplate other)
         {
-            return base.Equals(other);
+            if (!Name.Equals(other.Name))
+                return false;
+            if (_fields.Length != other._fields.Length)
+                return false;
+            for (int i = 0; i < _fields.Length; i++)
+            {
+                if (!_fields[i].Equals(other._fields[i]))
+                    return false;
+            }
+            return true;
         }
 
         public override bool Equals(object obj)
