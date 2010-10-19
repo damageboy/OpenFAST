@@ -35,12 +35,12 @@ namespace UnitTest
         public void TestExistingTemplateValueLookup()
         {
             IDictionary dictionary = new TemplateDictionary();
-            Group template = new MessageTemplate("Position",
-                                                 new Field[]
-                                                     {
-                                                         new Scalar("exchange", FASTType.STRING, Operator.COPY,
-                                                                    ScalarValue.Undefined, false)
-                                                     });
+            Group template = new MessageTemplate(
+                "Position",
+                new Field[]
+                    {
+                        new Scalar("exchange", FASTType.STRING, Operator.COPY, ScalarValue.Undefined, false)
+                    });
             ScalarValue value = new StringValue("NYSE");
             dictionary.Store(template, FastConstants.ANY_TYPE, new QName("exchange"), value);
 
@@ -51,12 +51,12 @@ namespace UnitTest
         public void TestLookupMultipleValuesForTemplate()
         {
             IDictionary dictionary = new TemplateDictionary();
-            Group template = new MessageTemplate("Position",
-                                                 new Field[]
-                                                     {
-                                                         new Scalar("exchange", FASTType.STRING, Operator.COPY,
-                                                                    ScalarValue.Undefined, false)
-                                                     });
+            Group template = new MessageTemplate(
+                "Position",
+                new Field[]
+                    {
+                        new Scalar("exchange", FASTType.STRING, Operator.COPY, ScalarValue.Undefined, false)
+                    });
             ScalarValue value = new StringValue("NYSE");
             ScalarValue marketValue = new DecimalValue(100000.00);
             dictionary.Store(template, FastConstants.ANY_TYPE, new QName("exchange"), value);
@@ -71,12 +71,12 @@ namespace UnitTest
         public void TestReset()
         {
             IDictionary dictionary = new TemplateDictionary();
-            Group template = new MessageTemplate("Position",
-                                                 new Field[]
-                                                     {
-                                                         new Scalar("exchange", FASTType.STRING, Operator.COPY,
-                                                                    ScalarValue.Undefined, false)
-                                                     });
+            Group template = new MessageTemplate(
+                "Position",
+                new Field[]
+                    {
+                        new Scalar("exchange", FASTType.STRING, Operator.COPY, ScalarValue.Undefined, false)
+                    });
             ScalarValue value = new StringValue("NYSE");
             dictionary.Store(template, FastConstants.ANY_TYPE, new QName("exchange"), value);
 
@@ -90,23 +90,23 @@ namespace UnitTest
         public void TestTemplateValueLookup()
         {
             IDictionary dictionary = new TemplateDictionary();
-            Group template = new MessageTemplate("Position",
-                                                 new Field[]
-                                                     {
-                                                         new Scalar("exchange", FASTType.STRING, Operator.COPY,
-                                                                    ScalarValue.Undefined, false)
-                                                     });
+            Group template = new MessageTemplate(
+                "Position",
+                new Field[]
+                    {
+                        new Scalar("exchange", FASTType.STRING, Operator.COPY, ScalarValue.Undefined, false)
+                    });
             ScalarValue value = new StringValue("NYSE");
             dictionary.Store(template, FastConstants.ANY_TYPE, new QName("exchange"), value);
 
             Assert.AreEqual(value, dictionary.Lookup(template, new QName("exchange"), FastConstants.ANY_TYPE));
 
-            Group quoteTemplate = new MessageTemplate("Quote",
-                                                      new Field[]
-                                                          {
-                                                              new Scalar("bid", FASTType.DECIMAL, Operator.DELTA,
-                                                                         ScalarValue.Undefined, false)
-                                                          });
+            Group quoteTemplate = new MessageTemplate(
+                "Quote",
+                new Field[]
+                    {
+                        new Scalar("bid", FASTType.DECIMAL, Operator.DELTA, ScalarValue.Undefined, false)
+                    });
             Assert.AreEqual(ScalarValue.Undefined,
                             dictionary.Lookup(quoteTemplate, new QName("exchange"), FastConstants.ANY_TYPE));
         }
