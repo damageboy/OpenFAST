@@ -66,6 +66,11 @@
     <Compile Include="TemplateDictionaryTest.cs" />
     <Compile Include="TemplateTest.cs" />
     <Compile Include="Template\BasicTemplateRegistryTest.cs" />
+    <Compile Include="Template\DynamicTemplateReferenceTest.cs" />
+    <Compile Include="Template\GroupTest.cs" />
+    <Compile Include="Template\MessageTemplateTest.cs" />
+    <Compile Include="Template\SequenceTest.cs" />
+    <Compile Include="Template\TypeTest.cs" />
     <Compile Include="Test\ObjectMother.cs" />
     <Compile Include="Test\OpenFastTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
