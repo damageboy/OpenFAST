@@ -348,8 +348,8 @@ namespace OpenFAST.Template
         {
             int index;
             if (!_fieldIndexMap.TryGetValue(field, out index))
-                throw new ArgumentOutOfRangeException("field", field,
-                                                      "Field does not exist in group " + this);
+                throw new ArgumentOutOfRangeException(
+                    "field", field, "Field does not exist in group " + this);
             return index;
         }
 

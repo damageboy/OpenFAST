@@ -30,6 +30,7 @@ namespace UnitTest
     [TestFixture]
     public class StringValueTest : OpenFastTestCase
     {
+        [Test]
         public void TestToLongWithLargeValue()
         {
             try
@@ -44,23 +45,27 @@ namespace UnitTest
             }
         }
 
+        [Test]
         public void TestGetBytes()
         {
             AssertEquals("01100001 01100010 01100011 01100100", String("abcd").Bytes);
             AssertEquals("01000001 01000010 01000011 01000100", String("ABCD").Bytes);
         }
 
+        [Test]
         public void TestToDouble()
         {
             ScalarValue value = String("  -1.234 ");
             Assert.AreEqual(-1.234, value.ToDouble(), .001);
         }
 
+        [Test]
         public void TestToBigDecimal()
         {
             Assert.AreEqual(new Decimal(-1.234), String("-1.234").ToBigDecimal());
         }
 
+        [Test]
         public void TestToString()
         {
             ScalarValue value = String("1234abcd");

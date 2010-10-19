@@ -73,44 +73,35 @@ namespace OpenFAST
 
         public override int ToInt()
         {
-            try
-            {
-                return Int32.Parse(_value);
-            }
-            catch (Exception e)
-            {
-                Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
-                                   "The value \"" + _value + "\" is too large to fit into an int.", e);
-                return 0;
-            }
+            int result;
+            if (Int32.TryParse(_value, out result))
+                return result;
+            
+            Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
+                               "The value \"" + _value + "\" is too large to fit into an int.");
+            return 0;
         }
 
         public override long ToLong()
         {
-            try
-            {
-                return Int64.Parse(_value);
-            }
-            catch (FormatException e)
-            {
-                Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
-                                   "The value \"" + _value + "\" is too large to fit into a long.", e);
-                return 0;
-            }
+            long result;
+            if (Int64.TryParse(_value, out result))
+                return result;
+
+            Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
+                               "The value \"" + _value + "\" is too large to fit into a long.");
+            return 0;
         }
 
         public override double ToDouble()
         {
-            try
-            {
-                return Double.Parse(_value);
-            }
-            catch (FormatException e)
-            {
-                Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
-                                   "The value\"" + _value + "\" is too large to fit into a double.", e);
-                return 0.0;
-            }
+            double result;
+            if (Double.TryParse(_value, out result))
+                return result;
+            
+            Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
+                               "The value\"" + _value + "\" is too large to fit into a double.");
+            return 0.0;
         }
 
         public override Decimal ToBigDecimal()
