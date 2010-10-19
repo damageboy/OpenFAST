@@ -38,11 +38,28 @@ namespace OpenFAST.Codec
             _context = context;
         }
 
-        #region Coder Members
+        #region ICoder Members
 
         public void Reset()
         {
             _context.Reset();
+        }
+
+        #endregion
+
+        #region IEnumerable<Message> Members
+
+        public IEnumerator<Message> GetEnumerator()
+        {
+            Reset();
+            Message msg;
+            while ((msg = ReadMessage()) != null)
+                yield return msg;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         #endregion
@@ -72,19 +89,6 @@ namespace OpenFAST.Codec
             _context.LastTemplateId = templateId;
 
             return template.Decode(_inStream, templateId, presenceMapReader, _context);
-        }
-
-        public IEnumerator<Message> GetEnumerator()
-        {
-            Reset();
-            Message msg;
-            while ((msg = ReadMessage()) != null)
-                yield return msg;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 }

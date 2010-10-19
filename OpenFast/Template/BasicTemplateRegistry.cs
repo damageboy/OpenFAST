@@ -27,11 +27,10 @@ namespace OpenFAST.Template
 {
     public sealed class BasicTemplateRegistry : AbstractTemplateRegistry
     {
-        private readonly Dictionary<int, MessageTemplate> _regIdMap = new Dictionary<int, MessageTemplate>();
-        private readonly Dictionary<MessageTemplate, int> _regTemplateMap = new Dictionary<MessageTemplate, int>();
-
         private readonly Dictionary<QName, MessageTemplate> _defNameMap = new Dictionary<QName, MessageTemplate>();
         private readonly HashSet<MessageTemplate> _defTemplates = new HashSet<MessageTemplate>();
+        private readonly Dictionary<int, MessageTemplate> _regIdMap = new Dictionary<int, MessageTemplate>();
+        private readonly Dictionary<MessageTemplate, int> _regTemplateMap = new Dictionary<MessageTemplate, int>();
 
         public override MessageTemplate[] Templates
         {
@@ -90,7 +89,6 @@ namespace OpenFAST.Template
             MessageTemplate value = null;
             _regIdMap.TryGetValue(templateId, out value);
             return value;
-
         }
 
         public override MessageTemplate GetTemplate(QName templateName)
@@ -101,7 +99,7 @@ namespace OpenFAST.Template
         public override int GetId(MessageTemplate template)
         {
             int value;
-            if(_regTemplateMap.TryGetValue(template, out value))
+            if (_regTemplateMap.TryGetValue(template, out value))
                 return value;
             return -1;
         }

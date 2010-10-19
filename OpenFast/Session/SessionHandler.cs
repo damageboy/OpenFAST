@@ -33,7 +33,7 @@ namespace OpenFAST.Session
 
     public class NullSessionHandler : ISessionHandler
     {
-        #region SessionHandler Members
+        #region ISessionHandler Members
 
         public virtual void NewSession(Session session)
         {

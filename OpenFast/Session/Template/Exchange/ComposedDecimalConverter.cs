@@ -48,7 +48,8 @@ namespace OpenFAST.Session.Template.Exchange
             ScalarValue mantissaDefaultValue = ScalarValue.Undefined;
             if (mantissaDef.IsDefined("InitialValue"))
                 mantissaDefaultValue = new LongValue(mantissaDef.GetInt("InitialValue"));
-            ComposedScalar composedDecimal = Util.ComposedDecimal(name, exponentOperator, exponentDefaultValue, mantissaOperator, mantissaDefaultValue, optional);
+            ComposedScalar composedDecimal = Util.ComposedDecimal(name, exponentOperator, exponentDefaultValue,
+                                                                  mantissaOperator, mantissaDefaultValue, optional);
             if (fieldDef.IsDefined("AuxId"))
             {
                 composedDecimal.Id = fieldDef.GetString("AuxId");

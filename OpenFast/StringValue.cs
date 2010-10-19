@@ -76,7 +76,7 @@ namespace OpenFAST
             int result;
             if (Int32.TryParse(_value, out result))
                 return result;
-            
+
             Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
                                "The value \"" + _value + "\" is too large to fit into an int.");
             return 0;
@@ -98,7 +98,7 @@ namespace OpenFAST
             double result;
             if (Double.TryParse(_value, out result))
                 return result;
-            
+
             Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
                                "The value\"" + _value + "\" is too large to fit into a double.");
             return 0.0;
@@ -112,6 +112,11 @@ namespace OpenFAST
         public override string ToString()
         {
             return _value;
+        }
+
+        public override bool EqualsValue(string defaultValue)
+        {
+            return _value.Equals(defaultValue);
         }
 
         #region Equals
@@ -137,10 +142,5 @@ namespace OpenFAST
         }
 
         #endregion
-
-        public override bool EqualsValue(string defaultValue)
-        {
-            return _value.Equals(defaultValue);
-        }
     }
 }

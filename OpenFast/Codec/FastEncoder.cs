@@ -32,7 +32,7 @@ namespace OpenFAST.Codec
             _context = context;
         }
 
-        #region Coder Members
+        #region ICoder Members
 
         public void Reset()
         {

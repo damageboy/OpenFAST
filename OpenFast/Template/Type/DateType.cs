@@ -79,17 +79,17 @@ namespace OpenFAST.Template.Type
 
         #region Equals
 
-        public override bool Equals(FASTType other)
-        {
-            return Equals(other as DateType);
-        }
-
         public bool Equals(DateType other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return base.Equals(other) && Equals(other._dateCodec, _dateCodec) &&
                    Equals(other._dateFormatter, _dateFormatter);
+        }
+
+        public override bool Equals(FASTType other)
+        {
+            return Equals(other as DateType);
         }
 
         public override bool Equals(object obj)

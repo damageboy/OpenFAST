@@ -74,7 +74,7 @@ namespace OpenFAST.Template
         }
 
         public override IFieldValue Decode(Stream inStream, Group decodeTemplate, Context context,
-                                          BitVectorReader presenceMapReader)
+                                           BitVectorReader presenceMapReader)
         {
             var values = new IFieldValue[fields.Length];
             for (int i = 0; i < fields.Length; i++)
@@ -139,8 +139,8 @@ namespace OpenFAST.Template
                 return false;
             for (int i = 0; i < fields.Length; i++)
             {
-                var fld1 = fields[i];
-                var fld2 = other.fields[i];
+                Scalar fld1 = fields[i];
+                Scalar fld2 = other.fields[i];
 
                 if (!fld2.Type.Equals(fld1.Type))
                     return false;
@@ -175,8 +175,8 @@ namespace OpenFAST.Template
                 builder.Append(t).Append(separator);
             }
             builder.Remove(builder.Length - separator.Length, builder.Length);
-            
-           return builder.Append("}").ToString();
+
+            return builder.Append("}").ToString();
         }
     }
 }

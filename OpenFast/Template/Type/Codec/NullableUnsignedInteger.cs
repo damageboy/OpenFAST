@@ -46,7 +46,7 @@ namespace OpenFAST.Template.Type.Codec
 
         public override ScalarValue Decode(Stream inStream)
         {
-            var value = (NumericValue)UINT.Decode(inStream);
+            var value = (NumericValue) UINT.Decode(inStream);
 
             if (value.Equals(0))
                 return null;

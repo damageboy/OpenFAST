@@ -40,7 +40,7 @@ namespace OpenFAST.Template
 
         public override bool Equals(Object obj)
         {
-            if (ReferenceEquals(obj ,null))
+            if (ReferenceEquals(obj, null))
                 return false;
             if (!(obj is NumericValue))
                 return false;

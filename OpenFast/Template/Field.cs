@@ -83,14 +83,7 @@ namespace OpenFAST.Template
         public string Id
         {
             get { return _id ?? ""; }
-            set
-            {
-                _id = value;
-            }
-        }
-        public bool IsIdNull()
-        {
-            return _id == null;
+            set { _id = value; }
         }
 
         public abstract System.Type ValueType { get; }
@@ -107,6 +100,11 @@ namespace OpenFAST.Template
         }
 
         #endregion
+
+        public bool IsIdNull()
+        {
+            return _id == null;
+        }
 
         public override bool Equals(object obj)
         {
@@ -149,15 +147,17 @@ namespace OpenFAST.Template
                 _attributes = new Dictionary<QName, string>();
             _attributes[qname] = value;
         }
-        
+
         public void SetMessageTemplate(MessageTemplate template)
         {
             this.template = template;
         }
+
         public MessageTemplate GetTemplate()
         {
-            return this.template;
+            return template;
         }
+
         protected bool IsPresent(BitVectorReader presenceMapReader)
         {
             return (!UsesPresenceMapBit()) || presenceMapReader.Read();

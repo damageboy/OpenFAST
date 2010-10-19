@@ -81,13 +81,13 @@ namespace OpenFAST.Utility
 
         public static StringValue ApplyDifference(StringValue baseValue, TwinValue diffValue)
         {
-            int subtraction = ((IntegerValue)diffValue.First).Value;
+            int subtraction = ((IntegerValue) diffValue.First).Value;
             string baseVal = baseValue.Value;
-            string diff = ((StringValue)diffValue.Second).Value;
+            string diff = ((StringValue) diffValue.Second).Value;
 
             if (subtraction < 0)
             {
-                subtraction = ((-1) * subtraction) - 1;
+                subtraction = ((-1)*subtraction) - 1;
 
                 return new StringValue(diff + baseVal.Substring(subtraction, (baseVal.Length) - (subtraction)));
             }
@@ -106,7 +106,7 @@ namespace OpenFAST.Utility
 
             str.Append("{");
 
-            foreach (var v in set)
+            foreach (string v in set)
                 str.Append(v).Append(sep);
 
             str.Length = str.Length - sep.Length;
@@ -119,9 +119,9 @@ namespace OpenFAST.Utility
         {
             Calendar cal = new GregorianCalendar();
             SupportClass.CalendarManager.Manager.SetDateTime(cal, date);
-            return SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.HOUR_OF_DAY) * 3600000 +
-                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.MINUTE) * 60000 +
-                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.SECOND) * 1000 +
+            return SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.HOUR_OF_DAY)*3600000 +
+                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.MINUTE)*60000 +
+                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.SECOND)*1000 +
                    SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.MILLISECOND);
         }
 
@@ -137,8 +137,8 @@ namespace OpenFAST.Utility
         {
             Calendar cal = new GregorianCalendar();
             SupportClass.CalendarManager.Manager.SetDateTime(cal, date);
-            return SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.YEAR) * 10000 +
-                   (SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.MONTH) + 1) * 100 +
+            return SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.YEAR)*10000 +
+                   (SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.MONTH) + 1)*100 +
                    SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.DATE);
         }
 
@@ -146,32 +146,32 @@ namespace OpenFAST.Utility
         {
             Calendar cal = new GregorianCalendar();
             SupportClass.CalendarManager.Manager.SetDateTime(cal, date);
-            return SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.HOUR_OF_DAY) * 10000000 +
-                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.MINUTE) * 100000 +
-                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.SECOND) * 1000 +
+            return SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.HOUR_OF_DAY)*10000000 +
+                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.MINUTE)*100000 +
+                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.SECOND)*1000 +
                    SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.MILLISECOND);
         }
 
         public static int TimestampToInt(DateTime date)
         {
-            return DateToInt(date) * 1000000000 + TimeToInt(date);
+            return DateToInt(date)*1000000000 + TimeToInt(date);
         }
 
         public static DateTime ToTimestamp(long value)
         {
             Calendar cal = new GregorianCalendar();
-            var year = (int)(value / 10000000000000L);
+            var year = (int) (value/10000000000000L);
             value %= 10000000000000L;
-            var month = (int)(value / 100000000000L);
+            var month = (int) (value/100000000000L);
             value %= 100000000000L;
-            var day = (int)(value / 1000000000);
+            var day = (int) (value/1000000000);
             value %= 1000000000;
-            var hour = (int)(value / 10000000);
+            var hour = (int) (value/10000000);
             value %= 10000000;
-            var min = (int)(value / 100000);
+            var min = (int) (value/100000);
             value %= 100000;
-            var sec = (int)(value / 1000);
-            var ms = (int)(value % 1000);
+            var sec = (int) (value/1000);
+            var ms = (int) (value%1000);
             SupportClass.CalendarManager.Manager.Set(cal, year, month - 1, day, hour, min, sec);
             SupportClass.CalendarManager.Manager.Set(cal, SupportClass.CalendarManager.MILLISECOND, ms);
             return SupportClass.CalendarManager.Manager.GetDateTime(cal);
@@ -180,9 +180,9 @@ namespace OpenFAST.Utility
         public static ComposedScalar ComposedDecimal(QName name, Operator exponentOp, ScalarValue exponentVal,
                                                      Operator mantissaOp, ScalarValue mantissaVal, bool optional)
         {
-            var exponentScalar = new Scalar(Global.CreateImplicitName(name), FASTType.I32, exponentOp, exponentVal, optional);
-            var mantissaScalar = new Scalar(Global.CreateImplicitName(name), FASTType.I64, mantissaOp, mantissaVal, false);
-            return new ComposedScalar(name, FASTType.DECIMAL, new[] { exponentScalar, mantissaScalar }, optional,
+            var exponentScalar = new Scalar(Global.CreateImplicitName(name), Type.I32, exponentOp, exponentVal, optional);
+            var mantissaScalar = new Scalar(Global.CreateImplicitName(name), Type.I64, mantissaOp, mantissaVal, false);
+            return new ComposedScalar(name, Type.DECIMAL, new[] {exponentScalar, mantissaScalar}, optional,
                                       new DecimalConverter());
         }
 
@@ -203,7 +203,7 @@ namespace OpenFAST.Utility
             var array = new T[c.Count];
 
             int i = 0;
-            foreach (var v in c)
+            foreach (T v in c)
                 array[i++] = v;
 
             return array;
@@ -217,7 +217,9 @@ namespace OpenFAST.Utility
             return dict;
         }
 
-        [Obsolete("This method allows multiple key values to override one another. Shouldn't we through an exception instead?")]
+        [Obsolete(
+            "This method allows multiple key values to override one another. Shouldn't we through an exception instead?"
+            )]
         public static Dictionary<TKey, Field> ToSafeDictionary<TKey>(Field[] fields, Func<Field, TKey> keySelector)
         {
             var map = new Dictionary<TKey, Field>();
@@ -237,7 +239,7 @@ namespace OpenFAST.Utility
 
             for (int i = 0; i < arr1.Length; i++)
             {
-                var v1 = arr1[i];
+                T v1 = arr1[i];
                 if (ReferenceEquals(v1, null))
                 {
                     if (!ReferenceEquals(arr2[i], null))
@@ -268,7 +270,7 @@ namespace OpenFAST.Utility
         }
 
         public static bool ListEquals<T>(IList<T> arr1, IList<T> arr2)
-            where T:IEquatable<T>
+            where T : IEquatable<T>
         {
             if ((arr1 == null) != (arr2 == null)) return false;
             if (arr1 == arr2) return true;
@@ -276,7 +278,7 @@ namespace OpenFAST.Utility
 
             for (int i = 0; i < arr1.Count; i++)
             {
-                var v1 = arr1[i];
+                T v1 = arr1[i];
 
                 if (ReferenceEquals(v1, null))
                 {
@@ -317,7 +319,7 @@ namespace OpenFAST.Utility
 
             int result = 1;
             for (int i = 0; i < array.Length; i++)
-                result = (result * 397) ^ (array[i] == null ? 0 : array[i].GetHashCode());
+                result = (result*397) ^ (array[i] == null ? 0 : array[i].GetHashCode());
 
             return result;
         }
@@ -330,7 +332,7 @@ namespace OpenFAST.Utility
 
             int result = 1;
             for (int i = 0; i < array.Length; i++)
-                result = (result * 397) ^ array[i].GetHashCode();
+                result = (result*397) ^ array[i].GetHashCode();
 
             return result;
         }

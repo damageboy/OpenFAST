@@ -82,7 +82,7 @@ namespace OpenFAST.Template.Operator
 
         public static OperatorCodec GetCodec(Operator op, FASTType type)
         {
-            var key = Tuple.Create(op, type);
+            Tuple<Operator, FASTType> key = Tuple.Create(op, type);
 
             OperatorCodec codec;
             if (OperatorMap.TryGetValue(key, out codec))
@@ -91,7 +91,7 @@ namespace OpenFAST.Template.Operator
             Global.HandleError(FastConstants.S2_OPERATOR_TYPE_INCOMP,
                                "The operator \"" + op + "\" is not compatible with type \"" + type +
                                "\"");
-            throw new ArgumentOutOfRangeException("op"+",type", key, "Not found");
+            throw new ArgumentOutOfRangeException("op" + ",type", key, "Not found");
         }
 
         public abstract ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar field);

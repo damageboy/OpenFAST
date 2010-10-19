@@ -31,7 +31,7 @@ namespace OpenFAST.Error
 
     public class DefaultErrorHandler : IErrorHandler
     {
-        #region ErrorHandler Members
+        #region IErrorHandler Members
 
         public virtual void Error(ErrorCode code, string message)
         {
@@ -48,7 +48,7 @@ namespace OpenFAST.Error
 
     public class NullErrorHandler : IErrorHandler
     {
-        #region ErrorHandler Members
+        #region IErrorHandler Members
 
         public virtual void Error(ErrorCode code, string message)
         {

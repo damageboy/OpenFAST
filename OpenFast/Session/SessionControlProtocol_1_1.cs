@@ -144,7 +144,7 @@ namespace OpenFAST.Session
                         new Scalar("SenderName", Type.ASCII, Operator.NONE, ScalarValue.Undefined, false),
                         new Scalar("VendorId", Type.ASCII, Operator.NONE, ScalarValue.Undefined, true)
                     });
-            
+
             RESET = new ResetMessage(FAST_RESET_TEMPLATE);
             FAST_RESET_TEMPLATE.AddAttribute(RESET_PROPERTY, "yes");
 
@@ -366,17 +366,6 @@ namespace OpenFAST.Session
             MessageHandlers[FASTAlertTemplate] = AlertHandler;
             MessageHandlers[TEMPLATE_DEFINITION] = new ProtocolDefinationSessionMessageHandler(this);
             MessageHandlers[TemplateDeclaration] = new ProtocolDeclarationSessionMessageHandler(this);
-        }
-
-        private static void SetNamespaces(Group value)
-        {
-            value.ChildNamespace = NAMESPACE;
-            foreach (Field fld in value.Fields)
-            {
-                var grp = fld as Group;
-                if (grp != null)
-                    SetNamespaces(grp);
-            }
         }
 
         public override Message CloseMessage
@@ -647,6 +636,17 @@ namespace OpenFAST.Session
             }
         }
 
+        private static void SetNamespaces(Group value)
+        {
+            value.ChildNamespace = NAMESPACE;
+            foreach (Field fld in value.Fields)
+            {
+                var grp = fld as Group;
+                if (grp != null)
+                    SetNamespaces(grp);
+            }
+        }
+
         public static ConversionContext CreateInitialContext()
         {
             var context = new ConversionContext();
@@ -781,8 +781,9 @@ namespace OpenFAST.Session
             if (templateDef.IsDefined("Ns"))
                 tempnamespace = templateDef.GetString("Ns");
             Field[] fields = GroupConverter.ParseFieldInstructions(templateDef, registry, _initialContext);
-            MessageTemplate group = new MessageTemplate(new QName(name, tempnamespace), fields);
-            if (templateDef.IsDefined("TypeRef")) {
+            var group = new MessageTemplate(new QName(name, tempnamespace), fields);
+            if (templateDef.IsDefined("TypeRef"))
+            {
                 GroupValue typeRef = templateDef.GetGroup("TypeRef");
                 string typeRefName = typeRef.GetString("Name");
                 string typeRefNs = ""; // context.getNamespace();
@@ -790,7 +791,8 @@ namespace OpenFAST.Session
                     typeRefNs = typeRef.GetString("Ns");
                 group.SetTypeReference(new QName(typeRefName, typeRefNs));
             }
-            if (templateDef.IsDefined("AuxId")) {
+            if (templateDef.IsDefined("AuxId"))
+            {
                 group.Id = templateDef.GetString("AuxId");
             }
             return group;
@@ -912,23 +914,6 @@ namespace OpenFAST.Session
 
         #endregion
 
-        #region Nested type: ResetMessage
-
-        [Serializable]
-        public class ResetMessage : Message
-        {
-            internal ResetMessage(MessageTemplate template) : base(template)
-            {
-            }
-
-            public override void SetFieldValue(int fieldIndex, IFieldValue value)
-            {
-                throw new InvalidOperationException("Cannot set values on a fast reserved message.");
-            }
-        }
-
-        #endregion
-
         #region Nested type: RESETMessageHandler
 
         public class RESETMessageHandler : IMessageHandler
@@ -942,6 +927,23 @@ namespace OpenFAST.Session
             }
 
             #endregion
+        }
+
+        #endregion
+
+        #region Nested type: ResetMessage
+
+        [Serializable]
+        public class ResetMessage : Message
+        {
+            internal ResetMessage(MessageTemplate template) : base(template)
+            {
+            }
+
+            public override void SetFieldValue(int fieldIndex, IFieldValue value)
+            {
+                throw new InvalidOperationException("Cannot set values on a fast reserved message.");
+            }
         }
 
         #endregion

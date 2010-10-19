@@ -51,7 +51,7 @@ namespace OpenFAST.Template
 
 
         public override IFieldValue Decode(Stream inStream, Group decodeTemplate, Context context,
-                                          BitVectorReader pmapReader)
+                                           BitVectorReader pmapReader)
         {
             return new FastDecoder(context, inStream).ReadMessage();
         }

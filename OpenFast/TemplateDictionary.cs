@@ -20,19 +20,19 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using OpenFAST.Template;
 using OpenFAST.Utility;
-using System.Linq;
 
 namespace OpenFAST
 {
     public sealed class TemplateDictionary : IDictionary
     {
-        private readonly Dictionary<Tuple<Group,QName>, ScalarValue> _table =
+        private readonly Dictionary<Tuple<Group, QName>, ScalarValue> _table =
             new Dictionary<Tuple<Group, QName>, ScalarValue>();
 
-        #region Dictionary Members
+        #region IDictionary Members
 
         public ScalarValue Lookup(Group template, QName key, QName applicationType)
         {
@@ -58,7 +58,7 @@ namespace OpenFAST
         public override string ToString()
         {
             var builder = new StringBuilder();
-            foreach (var kv in _table.GroupBy(i=>i.Key.Item1))
+            foreach (var kv in _table.GroupBy(i => i.Key.Item1))
             {
                 builder.Append("Dictionary: Template=").Append(kv.Key);
 

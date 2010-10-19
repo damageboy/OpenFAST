@@ -37,7 +37,7 @@ namespace OpenFAST.Debug
             set { _writer = value; }
         }
 
-        #region Trace Members
+        #region ITrace Members
 
         public void GroupStart(Group group)
         {

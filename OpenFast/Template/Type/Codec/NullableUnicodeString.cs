@@ -51,7 +51,7 @@ namespace OpenFAST.Template.Type.Codec
             ScalarValue decodedValue = NULLABLE_BYTE_VECTOR_TYPE.Decode(inStream);
             if (decodedValue == null)
                 return null;
-            var value = (ByteVectorValue)decodedValue;
+            var value = (ByteVectorValue) decodedValue;
             return new StringValue(Encoding.UTF8.GetString(value.Value));
         }
 

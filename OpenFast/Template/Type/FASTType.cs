@@ -109,10 +109,10 @@ namespace OpenFAST.Template.Type
         {
             return _staticAllTypes ??
                    (_staticAllTypes = new[]
-                                         {
-                                             U8, U16, U32, U64, I8, I16, I32, I64, STRING, ASCII,
-                                             UNICODE, BYTE_VECTOR, DECIMAL
-                                         });
+                                          {
+                                              U8, U16, U32, U64, I8, I16, I32, I64, STRING, ASCII,
+                                              UNICODE, BYTE_VECTOR, DECIMAL
+                                          });
         }
 
         #region Equals
@@ -121,7 +121,8 @@ namespace OpenFAST.Template.Type
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            if (other.GetType() != GetType()) return false;   // if derived class does not implement Equals, it should still work.
+            if (other.GetType() != GetType())
+                return false; // if derived class does not implement Equals, it should still work.
             return Equals(other._name, _name);
         }
 

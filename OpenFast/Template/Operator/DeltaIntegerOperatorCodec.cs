@@ -28,7 +28,7 @@ namespace OpenFAST.Template.Operator
     [Serializable]
     internal sealed class DeltaIntegerOperatorCodec : AlwaysPresentOperatorCodec
     {
-        internal DeltaIntegerOperatorCodec(Operator op, FASTType[] types) 
+        internal DeltaIntegerOperatorCodec(Operator op, FASTType[] types)
             : base(op, types)
         {
         }

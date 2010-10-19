@@ -59,15 +59,15 @@ namespace OpenFAST.Template.Type.Codec
         public override ScalarValue Decode(Stream inStream)
         {
             var buffer = new MemoryStream();
-            byte byt;
 
             try
             {
+                byte b;
                 do
                 {
-                    byt = (byte) inStream.ReadByte();
-                    buffer.WriteByte(byt);
-                } while ((byt & STOP_BIT) == 0);
+                    b = (byte) inStream.ReadByte();
+                    buffer.WriteByte(b);
+                } while ((b & STOP_BIT) == 0);
             }
             catch (IOException e)
             {

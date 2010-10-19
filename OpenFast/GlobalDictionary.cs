@@ -30,7 +30,7 @@ namespace OpenFAST
         private readonly Dictionary<QName, ScalarValue> _table =
             new Dictionary<QName, ScalarValue>();
 
-        #region Dictionary Members
+        #region IDictionary Members
 
         public ScalarValue Lookup(Group template, QName key, QName applicationType)
         {

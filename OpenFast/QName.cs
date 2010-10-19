@@ -71,7 +71,7 @@ namespace OpenFAST
 
         public override int GetHashCode()
         {
-            var hc = _hashCode;
+            int hc = _hashCode;
 
             if (hc == -1)
             {

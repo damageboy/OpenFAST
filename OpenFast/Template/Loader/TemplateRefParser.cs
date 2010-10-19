@@ -19,7 +19,6 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
-using System;
 using System.Xml;
 using OpenFAST.Error;
 
@@ -27,7 +26,7 @@ namespace OpenFAST.Template.Loader
 {
     public class TemplateRefParser : IFieldParser
     {
-        #region FieldParser Members
+        #region IFieldParser Members
 
         public virtual Field Parse(XmlElement element, ParsingContext context)
         {

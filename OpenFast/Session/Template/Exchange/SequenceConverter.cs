@@ -64,7 +64,7 @@ namespace OpenFAST.Session.Template.Exchange
                 length = new Scalar(lengthName, FASTType.U32, op, initialValue, optional) {Id = id};
             }
 
-            Sequence sequence = new Sequence(qname, length, fields, optional);
+            var sequence = new Sequence(qname, length, fields, optional);
 
             if (fieldDef.IsDefined("TypeRef"))
             {
@@ -81,9 +81,11 @@ namespace OpenFAST.Session.Template.Exchange
         public override GroupValue Convert(Field field, ConversionContext context)
         {
             var sequence = (Sequence) field;
-            Message seqDef = GroupConverter.Convert(sequence.Group,
-                                                    new Message(SessionControlProtocol_1_1.SEQUENCE_INSTR),
-                                                    context);
+            Message seqDef = GroupConverter.Convert(
+                sequence.Group,
+                new Message(SessionControlProtocol_1_1.SEQUENCE_INSTR),
+                context);
+
             seqDef.SetBool("Optional", sequence.IsOptional);
             if (!sequence.ImplicitLength)
             {
@@ -107,12 +109,18 @@ namespace OpenFAST.Session.Template.Exchange
                     lengthDef.SetFieldValue("InitialValue", length.DefaultValue);
                 }
             }
+
             if (sequence.TypeReference != null && !FastConstants.ANY_TYPE.Equals(sequence.TypeReference))
             {
-                GroupValue typeRef = new GroupValue((Group)SessionControlProtocol_1_1.TypeRef.GetField(new QName("TypeRef", SessionControlProtocol_1_1.NAMESPACE)));
+                var typeRef =
+                    new GroupValue(
+                        (Group)
+                        SessionControlProtocol_1_1.TypeRef.GetField(new QName("TypeRef",
+                                                                              SessionControlProtocol_1_1.NAMESPACE)));
                 SetName(typeRef, sequence.TypeReference);
                 seqDef.SetFieldValue("TypeRef", typeRef);
             }
+
             return seqDef;
         }
 

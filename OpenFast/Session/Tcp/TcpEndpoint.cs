@@ -45,7 +45,7 @@ namespace OpenFAST.Session.Tcp
             _host = host;
         }
 
-        #region Endpoint Members
+        #region IEndpoint Members
 
         public ConnectionListener ConnectionListener
         {

@@ -28,7 +28,7 @@ namespace OpenFAST.Error
     {
         private readonly ErrorCode _error;
 
-        public FastDynamicError(ErrorCode error) 
+        public FastDynamicError(ErrorCode error)
             : base(error.ShortName + ": " + error.Description)
         {
             _error = error;

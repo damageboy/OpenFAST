@@ -55,7 +55,7 @@ namespace OpenFAST.Template.Type.Codec
         public override ScalarValue Decode(Stream inStream)
         {
             var numericValue = (NumericValue) INTEGER.Decode(inStream);
-            
+
             long value = numericValue.ToLong();
             if (value == 0)
                 return null;

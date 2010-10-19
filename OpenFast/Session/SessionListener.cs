@@ -33,7 +33,7 @@ namespace OpenFAST.Session
 
     public class NullSessionListener : ISessionListener
     {
-        #region SessionListener Members
+        #region ISessionListener Members
 
         public virtual void OnClose()
         {

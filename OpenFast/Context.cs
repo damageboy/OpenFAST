@@ -135,8 +135,8 @@ namespace OpenFAST
         public void NewMessage(MessageTemplate template)
         {
             _currentApplicationType = (template.HasTypeReference)
-                                         ? template.TypeReference
-                                         : FastConstants.ANY_TYPE;
+                                          ? template.TypeReference
+                                          : FastConstants.ANY_TYPE;
         }
 
         public void StartTrace()

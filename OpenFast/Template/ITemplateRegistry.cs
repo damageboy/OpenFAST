@@ -45,10 +45,13 @@ namespace OpenFAST.Template
         void RegisterAll(ITemplateRegistry registry);
 
         void Register(int id, MessageTemplate template);
+
         [Obsolete]
         void Register(int id, string name);
+
         [Obsolete]
         void Register(int id, QName templateName);
+
         bool TryRegister(int id, QName templateName);
 
         void Define(MessageTemplate template);
@@ -60,13 +63,16 @@ namespace OpenFAST.Template
 
         [Obsolete]
         int GetId(string name);
+
         [Obsolete]
         int GetId(QName templateName);
+
         [Obsolete]
         int GetId(MessageTemplate template);
 
         [Obsolete]
         bool IsDefined(string templateName);
+
         [Obsolete]
         bool IsDefined(QName templateName);
 

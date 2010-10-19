@@ -43,7 +43,7 @@ namespace OpenFAST.Template.Type.Codec
         {
             try
             {
-                int length = ((IntegerValue)UINT.Decode(inStream)).Value;
+                int length = ((IntegerValue) UINT.Decode(inStream)).Value;
                 var encoding = new byte[length];
                 for (int i = 0; i < length; i++)
                     encoding[i] = (byte) inStream.ReadByte();

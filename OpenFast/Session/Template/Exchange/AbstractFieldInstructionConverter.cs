@@ -46,7 +46,7 @@ namespace OpenFAST.Session.Template.Exchange
             TemplateOperatorMap = Util.ReverseDictionary(OperatorTemplateMap);
         }
 
-        #region FieldInstructionConverter Members
+        #region IFieldInstructionConverter Members
 
         public abstract Group[] TemplateExchangeTemplates { get; }
 
@@ -65,11 +65,13 @@ namespace OpenFAST.Session.Template.Exchange
             if (!field.IsIdNull())
                 fieldDef.SetString("AuxId", field.Id);
         }
+
         public static void SetName(GroupValue fieldDef, QName qname)
         {
             fieldDef.SetString("Name", qname.Name);
             fieldDef.SetString("Ns", qname.Namespace);
         }
+
         public static void SetName(Field field, GroupValue fieldDef)
         {
             QName qname = field.QName;

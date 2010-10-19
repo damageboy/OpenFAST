@@ -89,6 +89,11 @@ namespace OpenFAST.Template
             set { _group.TypeReference = value; }
         }
 
+        public bool HasTypeReference
+        {
+            get { return _group.HasTypeReference; }
+        }
+
         #region IFieldSet Members
 
         public virtual int FieldCount
@@ -178,11 +183,6 @@ namespace OpenFAST.Template
         public virtual bool HasField(string fieldName)
         {
             return _group.HasField(fieldName);
-        }
-
-        public bool HasTypeReference
-        {
-            get { return _group.HasTypeReference; }
         }
 
         public override string ToString()

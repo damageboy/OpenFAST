@@ -37,7 +37,7 @@ namespace OpenFAST.Session.Multicast
             _group = group;
         }
 
-        #region Endpoint Members
+        #region IEndpoint Members
 
         public ConnectionListener ConnectionListener
         {

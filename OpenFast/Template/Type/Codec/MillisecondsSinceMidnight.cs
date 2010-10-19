@@ -32,7 +32,7 @@ namespace OpenFAST.Template.Type.Codec
         public override ScalarValue Decode(Stream inStream)
         {
             int millisecondsSinceMidnight = INTEGER.Decode(inStream).ToInt();
-            
+
             Calendar cal = new GregorianCalendar();
             int hour = millisecondsSinceMidnight/3600000;
             millisecondsSinceMidnight -= hour*3600000;

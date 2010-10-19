@@ -38,12 +38,12 @@ namespace OpenFAST.Debug
             set { _writer = value; }
         }
 
-        #region Trace Members
+        #region ITrace Members
 
         public void GroupStart(Group group)
         {
             var traceGroup = new TraceGroup(group);
-            
+
             if (_stack.Count != 0)
                 _stack.Peek().AddGroup(traceGroup);
 
@@ -57,7 +57,7 @@ namespace OpenFAST.Debug
 
         public void GroupEnd()
         {
-            var group = _stack.Pop();
+            TraceGroup group = _stack.Pop();
             if (_stack.Count == 0)
                 _writer.WriteLine(group);
         }
@@ -152,7 +152,7 @@ namespace OpenFAST.Debug
                 if (_pmap != null)
                     builder.Append(Indent(indent)).Append("PMAP: ").Append(ByteUtil.ConvertByteArrayToBitString(_pmap)).
                         Append("\n");
-                
+
                 foreach (ITraceNode t in _nodes)
                     t.Serialize(builder, indent);
 

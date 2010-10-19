@@ -58,6 +58,12 @@ namespace OpenFAST
             return fields;
         }
 
+        public override IFieldValue Copy()
+        {
+            var copy = (GroupValue) base.Copy();
+            return new Message(_template, copy.Values);
+        }
+
         #region Equals
 
         public bool Equals(Message other)
@@ -81,16 +87,10 @@ namespace OpenFAST
             unchecked
             {
                 // bug: ?? Ignore base, because we ignore the first field
-                return (Util.ArrayHashCode(Values) * 397) ^ _template.GetHashCode();
+                return (Util.ArrayHashCode(Values)*397) ^ _template.GetHashCode();
             }
         }
 
         #endregion
-
-        public override IFieldValue Copy()
-        {
-            var copy = (GroupValue) base.Copy();
-            return new Message(_template, copy.Values);
-        }
     }
 }

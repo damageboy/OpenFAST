@@ -187,7 +187,7 @@ namespace OpenFAST.Template
             {
                 ScalarValue previousValue = null;
                 IDictionary dict = null;
-                var key = Key;
+                QName key = Key;
 
                 if (_operator.UsesDictionary)
                 {
@@ -286,6 +286,7 @@ namespace OpenFAST.Template
             equals = equals && EqualsPrivate(Id, other.Id);
             return equals;
         }
+
         private bool EqualsPrivate(object o, object o2)
         {
             if (o == null)
@@ -296,6 +297,7 @@ namespace OpenFAST.Template
             }
             return o.Equals(o2);
         }
+
         public override int GetHashCode()
         {
             return QName.GetHashCode() + _type.GetHashCode() + _typeCodec.GetHashCode() + _operator.GetHashCode() +

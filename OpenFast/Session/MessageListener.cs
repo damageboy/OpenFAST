@@ -28,7 +28,7 @@ namespace OpenFAST.Session
 
     public sealed class NullMessageListener : IMessageListener
     {
-        #region MessageListener Members
+        #region IMessageListener Members
 
         public void OnMessage(Session session, Message message)
         {

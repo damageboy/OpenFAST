@@ -189,9 +189,9 @@ namespace OpenFAST.Session
             foreach (MessageTemplate template in registry.Templates)
             {
                 _outStream.WriteMessage(_protocol.CreateTemplateDefinitionMessage(template));
-                
-                var templateId = registry.GetId(template);
-                
+
+                int templateId = registry.GetId(template);
+
                 _outStream.WriteMessage(_protocol.CreateTemplateDeclarationMessage(template, templateId));
 
                 // BUG? double check if IsRegister() done on the same object as RegisterTemplate
@@ -258,7 +258,8 @@ namespace OpenFAST.Session
                         }
                         else
                         {
-                            throw new InvalidOperationException("Received non-protocol message without a message listener.");
+                            throw new InvalidOperationException(
+                                "Received non-protocol message without a message listener.");
                         }
                     }
                     catch (Exception e)

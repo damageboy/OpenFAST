@@ -39,7 +39,7 @@ namespace OpenFAST.Session.Multicast
             _inputStream = new StreamReader(new MulticastInputStream(socket));
         }
 
-        #region Connection Members
+        #region IConnection Members
 
         public StreamReader InputStream
         {

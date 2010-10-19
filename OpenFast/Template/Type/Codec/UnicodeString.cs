@@ -42,7 +42,7 @@ namespace OpenFAST.Template.Type.Codec
 
         public override ScalarValue Decode(Stream inStream)
         {
-            var value = (ByteVectorValue)BYTE_VECTOR.Decode(inStream);
+            var value = (ByteVectorValue) BYTE_VECTOR.Decode(inStream);
             return new StringValue(Encoding.UTF8.GetString(value.Value));
         }
 

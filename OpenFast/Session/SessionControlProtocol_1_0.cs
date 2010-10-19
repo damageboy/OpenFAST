@@ -164,7 +164,7 @@ namespace OpenFAST.Session
 
         public class RESETMessageHandler : IMessageHandler
         {
-            #region MessageHandler Members
+            #region IMessageHandler Members
 
             public virtual void HandleMessage(Message readMessage, Context context, ICoder coder)
             {

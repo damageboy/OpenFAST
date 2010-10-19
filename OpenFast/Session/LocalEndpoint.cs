@@ -39,7 +39,7 @@ namespace OpenFAST.Session
             _server = server;
         }
 
-        #region Endpoint Members
+        #region IEndpoint Members
 
         public virtual ConnectionListener ConnectionListener
         {
@@ -52,7 +52,7 @@ namespace OpenFAST.Session
             {
                 lock (this)
                 {
-                    var c = _connections[0];
+                    LocalConnection c = _connections[0];
                     _connections.RemoveAt(0);
                     _listener.OnConnect(c);
                 }

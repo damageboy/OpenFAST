@@ -50,7 +50,7 @@ namespace OpenFAST
             get { throw new NotSupportedException(); }
         }
 
-        #region FieldValue Members
+        #region IFieldValue Members
 
         public virtual IFieldValue Copy()
         {
@@ -165,7 +165,7 @@ namespace OpenFAST
             public override bool Equals(object obj)
             {
                 if (ReferenceEquals(null, obj)) return false;
-                if (obj.GetType() != typeof(UndefinedScalarValue)) return false;
+                if (obj.GetType() != typeof (UndefinedScalarValue)) return false;
                 return true;
             }
 

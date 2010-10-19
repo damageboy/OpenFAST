@@ -71,7 +71,7 @@ namespace OpenFAST
 
         public int Size
         {
-            get { return _bytes.Length * 7; }
+            get { return _bytes.Length*7; }
         }
 
         public bool IsOverlong

@@ -47,7 +47,7 @@ namespace OpenFAST.Session
             }
         }
 
-        #region Connection Members
+        #region IConnection Members
 
         public virtual StreamReader InputStream
         {

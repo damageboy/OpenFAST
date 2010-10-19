@@ -32,6 +32,11 @@ namespace OpenFAST.Template.Operator
         {
         }
 
+        public override bool ShouldDecodeType
+        {
+            get { return false; }
+        }
+
         public override ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar field,
                                                      BitVectorBuilder presenceMapBuilder)
         {
@@ -48,11 +53,6 @@ namespace OpenFAST.Template.Operator
         public override bool IsPresenceMapBitSet(byte[] encoding, IFieldValue fieldValue)
         {
             return fieldValue != null;
-        }
-
-        public override bool ShouldDecodeType
-        {
-            get { return false; }
         }
 
         public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)

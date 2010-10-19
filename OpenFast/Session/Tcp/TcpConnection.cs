@@ -39,7 +39,7 @@ namespace OpenFAST.Session.Tcp
             _outputStream = new StreamWriter(socket.GetStream());
         }
 
-        #region Connection Members
+        #region IConnection Members
 
         public StreamReader InputStream
         {

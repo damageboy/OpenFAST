@@ -32,7 +32,6 @@ namespace OpenFAST.Template
     [Serializable]
     public class Group : Field, IEquatable<Group>
     {
-        private QName _typeReference;
         protected readonly Field[] _fieldDefinitions;
         protected readonly Dictionary<string, Field> _fieldIdMap;
         protected readonly Dictionary<Field, int> _fieldIndexMap;
@@ -42,6 +41,7 @@ namespace OpenFAST.Template
         protected readonly StaticTemplateReference[] _staticTemplateReferences;
         protected readonly bool _usesPresenceMapRenamedField;
         protected string _childNamespace = "";
+        private QName _typeReference;
 
         public Group(string name, Field[] fields, bool optional)
             : this(new QName(name), fields, optional)
@@ -125,6 +125,11 @@ namespace OpenFAST.Template
         public Field[] FieldDefinitions
         {
             get { return _fieldDefinitions; }
+        }
+
+        public bool HasTypeReference
+        {
+            get { return _typeReference != null; }
         }
 
         // BAD ABSTRACTION
@@ -229,10 +234,10 @@ namespace OpenFAST.Template
                         context.DecodeTrace.GroupStart(this);
 
                     var groupValue = new GroupValue(this, DecodeFieldValues(inStream, decodeTemplate, context));
-                    
+
                     if (context.TraceEnabled)
                         context.DecodeTrace.GroupEnd();
-                    
+
                     return groupValue;
                 }
                 return null;
@@ -345,7 +350,7 @@ namespace OpenFAST.Template
             return _fieldIndexMap[GetField(fieldName)];
         }
 
-        public bool TryGetFieldIndex(string fieldName,out int index)
+        public bool TryGetFieldIndex(string fieldName, out int index)
         {
             index = -1;
             Field field;
@@ -358,6 +363,7 @@ namespace OpenFAST.Template
             }
             return false;
         }
+
         public virtual int GetFieldIndex(Field field)
         {
             int index;
@@ -397,55 +403,22 @@ namespace OpenFAST.Template
             return _fieldNameMap.ContainsKey(fieldName);
         }
 
-        public bool HasTypeReference
-        {
-            get { return _typeReference != null; }
-        }
-
         public override string ToString()
         {
             return Name;
         }
 
-        #region Equals
-
-        public bool Equals(Group other)
-        {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return base.Equals(other) && Util.ArrayEquals(other._fields, _fields);
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int result = base.GetHashCode();
-                result = (result * 397) ^ Util.ArrayHashCode(_fields);
-                return result;
-            }
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            return Equals(obj as Group);
-        }
-
-        #endregion
-
         public void SetTypeReference(QName typeReference)
         {
-            this._typeReference = typeReference;
+            _typeReference = typeReference;
         }
-        
+
         public QName GetTypeReference()
         {
             return _typeReference;
         }
-        
-        
+
+
         public virtual StaticTemplateReference GetStaticTemplateReference(string qname)
         {
             return GetStaticTemplateReference(new QName(qname, QName.Namespace));
@@ -463,5 +436,33 @@ namespace OpenFAST.Template
         {
             return _introspectiveFieldMap.TryGetValue(fieldName, out field);
         }
+
+        #region Equals
+
+        public bool Equals(Group other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return base.Equals(other) && Util.ArrayEquals(other._fields, _fields);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int result = base.GetHashCode();
+                result = (result*397) ^ Util.ArrayHashCode(_fields);
+                return result;
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return Equals(obj as Group);
+        }
+
+        #endregion
     }
 }

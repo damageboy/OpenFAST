@@ -37,7 +37,7 @@ namespace OpenFAST.Template.Loader
             _parseableNodeNames = nodeNames;
         }
 
-        #region FieldParser Members
+        #region IFieldParser Members
 
         public virtual bool CanParse(XmlElement element, ParsingContext context)
         {
@@ -63,7 +63,8 @@ namespace OpenFAST.Template.Loader
             for (int i = 0; i < attributes.Count; i++)
             {
                 var attribute = (XmlAttribute) attributes.Item(i);
-                if (string.IsNullOrEmpty(attribute.NamespaceURI) || attribute.NamespaceURI.Equals(XmlMessageTemplateLoader.TemplateDefinitionNs))
+                if (string.IsNullOrEmpty(attribute.NamespaceURI) ||
+                    attribute.NamespaceURI.Equals(XmlMessageTemplateLoader.TemplateDefinitionNs))
                     continue;
                 field.AddAttribute(new QName(attribute.LocalName, attribute.NamespaceURI), attribute.Value);
             }

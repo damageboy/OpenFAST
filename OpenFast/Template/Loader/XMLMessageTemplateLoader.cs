@@ -20,11 +20,11 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using OpenFAST.Error;
 using OpenFAST.Template.Type;
-using System.Collections.Generic;
 
 namespace OpenFAST.Template.Loader
 {
@@ -46,24 +46,14 @@ namespace OpenFAST.Template.Loader
         {
             IoError = new ErrorCode(FastConstants.STATIC, - 1, "IOERROR", "IO Error", FastAlertSeverity.ERROR);
             XmlParsingError = new ErrorCode(FastConstants.STATIC, - 1, "XMLPARSEERR", "XML Parsing Error",
-                                              FastAlertSeverity.ERROR);
+                                            FastAlertSeverity.ERROR);
             InvalidType = new ErrorCode(FastConstants.STATIC, - 1, "INVALIDTYPE", "Invalid Type",
-                                         FastAlertSeverity.ERROR);
+                                        FastAlertSeverity.ERROR);
         }
 
         public XmlMessageTemplateLoader()
         {
             _initialContext = CreateInitialContext();
-        }
-
-        public void SetErrorHandler(IErrorHandler value)
-        {
-            _initialContext.ErrorHandler = value;
-        }
-
-        public void SetTypeMap(Dictionary<string, FASTType> value)
-        {
-            _initialContext.TypeMap = value;
         }
 
         public bool LoadTemplateIdFromAuxId
@@ -72,7 +62,7 @@ namespace OpenFAST.Template.Loader
             set { _loadTemplateIdFromAuxId = value; }
         }
 
-        #region MessageTemplateLoader Members
+        #region IMessageTemplateLoader Members
 
         public ITemplateRegistry TemplateRegistry
         {
@@ -110,13 +100,23 @@ namespace OpenFAST.Template.Loader
                     return templates;
                 }
                 _initialContext.ErrorHandler.Error(FastConstants.S1_INVALID_XML,
-                                                  "Invalid root node " + root.Name +
-                                                  ", \"template\" or \"templates\" expected.");
+                                                   "Invalid root node " + root.Name +
+                                                   ", \"template\" or \"templates\" expected.");
             }
             return new MessageTemplate[] {};
         }
 
         #endregion
+
+        public void SetErrorHandler(IErrorHandler value)
+        {
+            _initialContext.ErrorHandler = value;
+        }
+
+        public void SetTypeMap(Dictionary<string, FASTType> value)
+        {
+            _initialContext.TypeMap = value;
+        }
 
         public static ParsingContext CreateInitialContext()
         {

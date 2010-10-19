@@ -33,7 +33,7 @@ namespace OpenFAST.Session
 
     public class NullSessionFactory : ISessionFactory
     {
-        #region SessionFactory Members
+        #region ISessionFactory Members
 
         public virtual Session Session
         {

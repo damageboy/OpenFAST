@@ -29,6 +29,7 @@ namespace OpenFAST.Template.Loader
     public class ParsingContext
     {
         private static readonly ParsingContext Null = new ParsingContext();
+        private readonly QName _name;
 
         private readonly ParsingContext _parent;
 
@@ -36,7 +37,6 @@ namespace OpenFAST.Template.Loader
         private IErrorHandler _errorHandler;
         private List<IFieldParser> _fieldParsers;
 
-        private readonly QName _name;
         private string _namespace;
         private string _templateNamespace;
         private ITemplateRegistry _templateRegistry;
@@ -101,7 +101,7 @@ namespace OpenFAST.Template.Loader
             set { _templateRegistry = value; }
         }
 
-        public virtual Dictionary<string,FASTType> TypeMap
+        public virtual Dictionary<string, FASTType> TypeMap
         {
             get { return _typeMap ?? _parent.TypeMap; }
             set { _typeMap = value; }
@@ -118,21 +118,21 @@ namespace OpenFAST.Template.Loader
             get { return _parent; }
         }
 
+        public virtual QName Name
+        {
+            get { return _name; }
+        }
+
         public virtual IFieldParser GetFieldParser(XmlElement element)
         {
-            var parsers = FieldParsers;
+            List<IFieldParser> parsers = FieldParsers;
             for (int i = parsers.Count - 1; i >= 0; i--)
             {
-                var fieldParser = parsers[i];
+                IFieldParser fieldParser = parsers[i];
                 if (fieldParser.CanParse(element, this))
                     return fieldParser;
             }
             return null;
-        }
-
-        public virtual QName Name
-        {
-            get { return _name; }
         }
 
         public virtual void AddFieldParser(IFieldParser parser)

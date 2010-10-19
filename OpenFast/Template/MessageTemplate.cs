@@ -39,14 +39,6 @@ namespace OpenFAST.Template
         {
         }
 
-        private void UpdateTemplateReference(Field[] fields)
-        {
-            for (int i = 0; i < fields.Length; i++)
-            {
-                fields[i].SetMessageTemplate(this);
-            }
-        }
-
         public new static System.Type ValueType
         {
             get { return typeof (Message); }
@@ -70,6 +62,14 @@ namespace OpenFAST.Template
         }
 
         #endregion
+
+        private void UpdateTemplateReference(Field[] fields)
+        {
+            for (int i = 0; i < fields.Length; i++)
+            {
+                fields[i].SetMessageTemplate(this);
+            }
+        }
 
         public override bool UsesPresenceMap()
         {

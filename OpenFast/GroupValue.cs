@@ -230,11 +230,11 @@ namespace OpenFAST
             return _values[_group.GetFieldIndex(fieldName)];
         }
 
-        public bool TryGetValue(string fieldName,out IFieldValue value)
+        public bool TryGetValue(string fieldName, out IFieldValue value)
         {
             int index = -1;
             value = null;
-            if(_group.TryGetFieldIndex(fieldName, out index))
+            if (_group.TryGetFieldIndex(fieldName, out index))
             {
                 value = _values[index];
                 return true;
@@ -338,7 +338,7 @@ namespace OpenFAST
             var builder = new StringBuilder();
 
             builder.Append(_group).Append(" -> {");
-            foreach (var v in _values)
+            foreach (IFieldValue v in _values)
                 builder.Append(v).Append(", ");
             builder.Append("}");
 

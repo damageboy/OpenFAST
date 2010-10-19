@@ -31,7 +31,7 @@ namespace OpenFAST.Template.Type
         private static readonly IFieldValue[] UndefinedSet =
             new IFieldValue[] {ScalarValue.Undefined, ScalarValue.Undefined};
 
-        #region ComposedValueConverter Members
+        #region IComposedValueConverter Members
 
         public IFieldValue[] Split(IFieldValue value)
         {
