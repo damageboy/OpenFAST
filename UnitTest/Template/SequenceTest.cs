@@ -19,11 +19,11 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
+using System.IO;
 using NUnit.Framework;
 using OpenFAST;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
-using System.IO;
 using OpenFAST.Template.Type;
 using UnitTest.Test;
 
@@ -32,60 +32,65 @@ namespace UnitTest.Template
     [TestFixture]
     public class SequenceTest
     {
-        private Group template;
-        private Context context;
+        #region Setup/Teardown
+
         [SetUp]
         protected void SetUp()
         {
-            template = new MessageTemplate("", new Field[] { });
-            context = new Context();
+            _template = new MessageTemplate("", new Field[] {});
+            _context = new Context();
         }
-        [Test]
-        public void TestEncode()
-        {
-            Scalar firstName = new Scalar("First Name", FASTType.I32,
-                    Operator.COPY, ScalarValue.Undefined, false);
-            Scalar lastName = new Scalar("Last Name", FASTType.I32,
-                    Operator.COPY, ScalarValue.Undefined, false);
-            Sequence sequence1 = new Sequence("Contacts",
-                    new Field[] { firstName, lastName }, false);
 
-            SequenceValue sequenceValue = new SequenceValue(sequence1);
-            sequenceValue.Add(new IFieldValue[] {
-                new IntegerValue(1), new IntegerValue(2)
-            });
-            sequenceValue.Add(new IFieldValue[] {
-                new IntegerValue(3), new IntegerValue(4)
-            });
+        #endregion
 
-            byte[] actual = sequence1.Encode(sequenceValue, template, context, new BitVectorBuilder(1));
-            string expected = "10000010 11100000 10000001 10000010 11100000 10000011 10000100";
-            TestUtil.AssertBitVectorEquals(expected, actual);
-        }
+        private Group _template;
+        private Context _context;
+
         [Test]
         public void TestDecode()
         {
-            string actual = "10000010 11100000 10000001 10000010 11100000 10000011 10000100";
+            const string actual = "10000010 11100000 10000001 10000010 11100000 10000011 10000100";
             Stream stream = ByteUtil.CreateByteStream(actual);
 
-            Scalar firstNumber = new Scalar("First Number", FASTType.I32,
-                    Operator.COPY, ScalarValue.Undefined, false);
-            Scalar lastNumber = new Scalar("Second Number", FASTType.I32,
-                    Operator.COPY, ScalarValue.Undefined, false);
-            Sequence sequence1 = new Sequence("Contants",
-                    new Field[] { firstNumber, lastNumber }, false);
+            var firstNumber = new Scalar("First Number", FASTType.I32, Operator.COPY, ScalarValue.Undefined, false);
+            var lastNumber = new Scalar("Second Number", FASTType.I32, Operator.COPY, ScalarValue.Undefined, false);
+            var sequence1 = new Sequence("Contants", new Field[] {firstNumber, lastNumber}, false);
 
-            SequenceValue sequenceValue = new SequenceValue(sequence1);
-            sequenceValue.Add(new IFieldValue[] {
-                new IntegerValue(1), new IntegerValue(2)
-            });
-            sequenceValue.Add(new IFieldValue[] {
-                new IntegerValue(3), new IntegerValue(4)
-            });
+            var sequenceValue = new SequenceValue(sequence1);
+            sequenceValue.Add(new IFieldValue[]
+                                  {
+                                      new IntegerValue(1), new IntegerValue(2)
+                                  });
+            sequenceValue.Add(new IFieldValue[]
+                                  {
+                                      new IntegerValue(3), new IntegerValue(4)
+                                  });
 
-            IFieldValue result = sequence1.Decode(stream, template, context, BitVectorReader.InfiniteTrue);
+            IFieldValue result = sequence1.Decode(stream, _template, _context, BitVectorReader.InfiniteTrue);
             Assert.AreEqual(sequenceValue, result);
         }
 
+        [Test]
+        public void TestEncode()
+        {
+            var firstName = new Scalar("First Name", FASTType.I32, Operator.COPY, ScalarValue.Undefined, false);
+            var lastName = new Scalar("Last Name", FASTType.I32, Operator.COPY, ScalarValue.Undefined, false);
+            var sequence1 = new Sequence("Contacts", new Field[] {firstName, lastName}, false);
+
+            var sequenceValue = new SequenceValue(sequence1) {};
+            sequenceValue.Add(new IFieldValue[]
+                                  {
+                                      new IntegerValue(1), new IntegerValue(2)
+                                  });
+            sequenceValue.Add(new IFieldValue[]
+                                  {
+                                      new IntegerValue(3), new IntegerValue(4)
+                                  });
+
+            byte[] actual = sequence1.Encode(sequenceValue, _template, _context, new BitVectorBuilder(1));
+            
+            const string expected = "10000010 11100000 10000001 10000010 11100000 10000011 10000100";
+            TestUtil.AssertBitVectorEquals(expected, actual);
+        }
     }
 }

@@ -72,31 +72,31 @@ namespace OpenFAST.Template.Type.Codec
 
         public static int GetSignedIntegerSize(long value)
         {
-            if ((value >= - 64) && (value <= 63))
+            if (value >= - 64 && value <= 63)
                 return 1; // - 2 ^ 6 ... 2 ^ 6 -1
 
-            if ((value >= - 8192) && (value <= 8191))
+            if (value >= - 8192 && value <= 8191)
                 return 2; // - 2 ^ 13 ... 2 ^ 13 -1
 
-            if ((value >= - 1048576) && (value <= 1048575))
+            if (value >= - 1048576 && value <= 1048575)
                 return 3; // - 2 ^ 20 ... 2 ^ 20 -1
 
-            if ((value >= - 134217728) && (value <= 134217727))
+            if (value >= - 134217728 && value <= 134217727)
                 return 4; // - 2 ^ 27 ... 2 ^ 27 -1
 
-            if ((value >= - 17179869184L) && (value <= 17179869183L))
+            if (value >= - 17179869184L && value <= 17179869183L)
                 return 5; // - 2 ^ 34 ... 2 ^ 34 -1
 
-            if ((value >= - 2199023255552L) && (value <= 2199023255551L))
+            if (value >= - 2199023255552L && value <= 2199023255551L)
                 return 6; // - 2 ^ 41 ... 2 ^ 41 -1
 
-            if ((value >= - 281474976710656L) && (value <= 281474976710655L))
+            if (value >= - 281474976710656L && value <= 281474976710655L)
                 return 7; // - 2 ^ 48 ... 2 ^ 48 -1
 
-            if ((value >= - 36028797018963968L) && (value <= 36028797018963967L))
+            if (value >= - 36028797018963968L && value <= 36028797018963967L)
                 return 8; // - 2 ^ 55 ... 2 ^ 55 -1
 
-            if ((value >= - 4611686018427387904L && value <= 4611686018427387903L))
+            if (value >= - 4611686018427387904L && value <= 4611686018427387903L)
                 return 9;
 
             return 10;

@@ -20,10 +20,10 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using NUnit.Framework;
+using OpenFAST;
 using OpenFAST.Codec;
 using OpenFAST.Template;
 using UnitTest.Test;
-using OpenFAST;
 
 namespace UnitTest.Template
 {
@@ -34,12 +34,12 @@ namespace UnitTest.Template
         public void TestMessageTemplateWithNoFieldsThatUsePresenceMapStillEncodesPresenceMap()
         {
             MessageTemplate template = Template(
-                    "<template>" +
-                    "  <string name=\"string\"/>" +
-                    "  <decimal name=\"decimal\"><delta/></decimal>" +
-                    "</template>");
+                "<template>" +
+                "  <string name='string'/>" +
+                "  <decimal name='decimal'><delta/></decimal>" +
+                "</template>");
 
-            string encoding = "11000000 10000001 11100001 10000000 10000001";
+            const string encoding = "11000000 10000001 11100001 10000000 10000001";
 
             FastDecoder decoder = Decoder(encoding, template);
             FastEncoder encoder = Encoder(template);

@@ -45,7 +45,7 @@ namespace UnitTest.Session
         public void TestSimpleCreateTemplateDefinitionMessage()
         {
             Message templateDef = SCP_1_1.CreateTemplateDefinitionMessage(ObjectMother.QuoteTemplate());
-            Assert.AreEqual("Quote", templateDef.GetString(("Name")));
+            Assert.AreEqual("Quote", templateDef.GetString("Name"));
             SequenceValue instructions = templateDef.GetSequence("Instructions");
             Assert.AreEqual("bid", instructions[0].GetGroup(0).GetString("Name"));
             Assert.AreEqual("ask", templateDef.GetSequence("Instructions")[1].GetGroup(0).GetString("Name"));

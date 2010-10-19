@@ -27,38 +27,39 @@ using UnitTest.Test;
 
 namespace UnitTest.Template
 {
-    //[TestFixture]
-    //public class TypeTest : OpenFastTestCase
-    //{
-    //    [Test]
-    //    public void TestGetType()
-    //    {
-    //        Assert.Equals(FASTType.U32, FASTType.GetType("uInt32"));
-    //        try
-    //        {
-    //            FASTType.GetType("u32");
-    //            Assert.Fail();
-    //        }
-    //        catch (Exception e)
-    //        {
-    //            Assert.Equals(
-    //                    "The type named u32 does not exist.  Existing types are {uInt8,uInt16,uInt32,uInt64,int8,int16,int32,int64,string,ascii,unicode,byteVector,decimal}",
-    //                    e.Message);
-    //        }
-    //    }
-    //    [Test]
-    //    public void TestIncompatibleDefaultValue()
-    //    {
-    //        try
-    //        {
-    //            Template("<template>" + "  <decimal><copy value=\"10a\"/></decimal>" + "</template>");
-    //            Assert.Fail();
-    //        }
-    //        catch (FastException e)
-    //        {
-    //            Assert.Equals(FastConstants.S3_INITIAL_VALUE_INCOMP, e.Code);
-    //            Assert.Equals("The value \"10a\" is not compatible with type decimal", e.Message);
-    //        }
-    //    }
-    //}
+    [TestFixture]
+    public class TypeTest : OpenFastTestCase
+    {
+//        [Test]
+//        public void TestGetType()
+//        {
+//            Assert.Equals(FASTType.U32, FASTType.GetType("uInt32"));
+//            try
+//            {
+//                FASTType.GetType("u32");
+//                Assert.Fail();
+//            }
+//            catch (Exception e)
+//            {
+//                Assert.Equals(
+//                    "The type named u32 does not exist.  Existing types are {uInt8,uInt16,uInt32,uInt64,int8,int16,int32,int64,string,ascii,unicode,byteVector,decimal}",
+//                    e.Message);
+//            }
+//        }
+//
+//        [Test]
+//        public void TestIncompatibleDefaultValue()
+//        {
+//            try
+//            {
+//                Template("<template>" + "  <decimal><copy value=\"10a\"/></decimal>" + "</template>");
+//                Assert.Fail();
+//            }
+//            catch (FastException e)
+//            {
+//                Assert.Equals(FastConstants.S3_INITIAL_VALUE_INCOMP, e.Code);
+//                Assert.Equals("The value \"10a\" is not compatible with type decimal", e.Message);
+//            }
+//        }
+    }
 }

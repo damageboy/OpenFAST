@@ -30,49 +30,61 @@ namespace UnitTest.Template
     [TestFixture]
     public class DynamicTemplateReferenceTest : OpenFastTestCase
     {
-        private MessageTemplate nameTemplate;
-        private MessageTemplate template;
-        private Message message;
-        private Message name;
-        private Context context;
+        #region Setup/Teardown
+
         [SetUp]
         protected void SetUp()
         {
-            nameTemplate = Template("<template>" +
-                            "  <string name=\"name\"/>" +
-                            "</template>");
-            template = Template("<template>" +
-                            "  <uInt32 name=\"quantity\"/>" +
-                            "  <templateRef />" +
-                            "  <decimal name=\"price\"/>" +
-                            "</template>");
-            message = new Message(template);
-            message.SetInteger(1, 15);
-            message.SetDecimal(3, 102.0);
+            _nameTemplate = Template("<template>" +
+                                     "  <string name=\"name\"/>" +
+                                     "</template>");
+            _template = Template("<template>" +
+                                 "  <uInt32 name=\"quantity\"/>" +
+                                 "  <templateRef />" +
+                                 "  <decimal name=\"price\"/>" +
+                                 "</template>");
+            _message = new Message(_template);
+            _message.SetInteger(1, 15);
+            _message.SetDecimal(3, 102.0);
 
-            name = new Message(nameTemplate);
-            name.SetString(1, "IBM");
-            message.SetFieldValue(2, name);
+            _name = new Message(_nameTemplate);
+            _name.SetString(1, "IBM");
+            _message.SetFieldValue(2, _name);
 
-            context = new Context();
-            context.RegisterTemplate(1, template);
-            context.RegisterTemplate(2, nameTemplate);
+            _context = new Context();
+            _context.RegisterTemplate(1, _template);
+            _context.RegisterTemplate(2, _nameTemplate);
         }
-        [Test]
-        public void TestEncode()
-        {
-            FastEncoder encoder = new FastEncoder(context);
-            //            --PMAP-- --TID--- ---#1--- --PMAP-- --TID--- ------------#1------------ ------------#3------------
-            TestUtil.AssertBitVectorEquals("11000000 10000001 10001111 11000000 10000010 01001001 01000010 11001101 10000000 00000000 11100110", encoder.Encode(message));
-        }
+
+        #endregion
+
+        private MessageTemplate _nameTemplate;
+        private MessageTemplate _template;
+        private Message _message;
+        private Message _name;
+        private Context _context;
+
         [Test]
         public void TestDecode()
         {
-            //                 --PMAP-- --TID--- ---#1--- --PMAP-- --TID--- ------------#1------------ ------------#3------------
-            string encoding = "11000000 10000001 10001111 11000000 10000010 01001001 01000010 11001101 10000000 00000000 11100110";
-            FastDecoder decoder = new FastDecoder(context, BitStream(encoding));
+            //   --PMAP-- --TID--- ---#1--- --PMAP-- --TID--- ------------#1------------ ------------#3------------
+            const string encoding =
+                "11000000 10000001 10001111 11000000 10000010 01001001 01000010 11001101 10000000 00000000 11100110";
+            
+            var decoder = new FastDecoder(_context, BitStream(encoding));
             Message readMessage = decoder.ReadMessage();
-            Assert.AreEqual(message, readMessage);
+            Assert.AreEqual(_message, readMessage);
+        }
+
+        [Test]
+        public void TestEncode()
+        {
+            var encoder = new FastEncoder(_context);
+            
+            //   --PMAP-- --TID--- ---#1--- --PMAP-- --TID--- ------------#1------------ ------------#3------------
+            TestUtil.AssertBitVectorEquals(
+                "11000000 10000001 10001111 11000000 10000010 01001001 01000010 11001101 10000000 00000000 11100110",
+                encoder.Encode(_message));
         }
     }
 }

@@ -53,10 +53,8 @@ namespace OpenFAST.Template.Type.Codec
 
             if (str != null)
             {
-                if ((str.Length == 0))
-                {
+                if (str.Length == 0)
                     return NullableEmptyString;
-                }
 
                 return str.StartsWith("\u0000") ? ZeroEncoding : Encoding.UTF8.GetBytes(str);
             }
@@ -88,18 +86,15 @@ namespace OpenFAST.Template.Type.Codec
             {
                 if (!ByteUtil.IsEmpty(bytes))
                     Global.HandleError(FastConstants.R9_STRING_OVERLONG, null);
-                if ((bytes.Length == 1))
-                {
+
+                if (bytes.Length == 1)
                     return null;
-                }
+
                 if (bytes.Length == 2 && bytes[1] == 0)
-                {
                     return new StringValue("");
-                }
+
                 if (bytes.Length == 3 && bytes[2] == 0)
-                {
                     return new StringValue("\u0000");
-                }
             }
 
             return new StringValue(Encoding.UTF8.GetString(bytes));
