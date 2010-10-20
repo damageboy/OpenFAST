@@ -30,7 +30,7 @@ using OpenFAST.Utility;
 namespace OpenFAST.Template
 {
     [Serializable]
-    public class Group : Field, IEquatable<Group>
+    public class Group : Field
     {
         protected readonly Field[] _fieldDefinitions;
         protected readonly Dictionary<string, Field> _fieldIdMap;
@@ -439,11 +439,13 @@ namespace OpenFAST.Template
 
         #region Equals
 
-        public bool Equals(Group other)
+        public override bool Equals(object obj)
         {
+            if (ReferenceEquals(this, obj)) return true;
+            
+            var other = obj as Group;
             if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return base.Equals(other) && Util.ArrayEquals(other._fields, _fields);
+            return base.Equals(other) && Util.ArrayEqualsSlow(other._fields, _fields, 0);
         }
 
         public override int GetHashCode()
@@ -451,16 +453,9 @@ namespace OpenFAST.Template
             unchecked
             {
                 int result = base.GetHashCode();
-                result = (result*397) ^ Util.ArrayHashCode(_fields);
+                result = (result*397) ^ Util.GetCollectionHashCode(_fields);
                 return result;
             }
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            return Equals(obj as Group);
         }
 
         #endregion

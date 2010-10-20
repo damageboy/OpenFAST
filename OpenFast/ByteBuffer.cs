@@ -26,19 +26,19 @@ namespace OpenFAST
 {
     public class ByteBuffer : MemoryStream
     {
-        internal static ByteBuffer Allocate(int BUFFER_SIZE)
+        internal static ByteBuffer Allocate(int bufferSize)
         {
             var buff = new ByteBuffer();
-            buff.SetLength(BUFFER_SIZE);
+            buff.SetLength(bufferSize);
             return buff;
         }
 
-        public void flip()
+        public void Flip()
         {
             throw new NotImplementedException();
         }
 
-        public bool hasRemaining()
+        public bool HasRemaining()
         {
             throw new NotImplementedException();
         }
@@ -48,12 +48,12 @@ namespace OpenFAST
             throw new NotImplementedException();
         }
 
-        public byte[] array()
+        public byte[] Array()
         {
             throw new NotImplementedException();
         }
 
-        public void limit(int p)
+        public void Limit(int p)
         {
             throw new NotImplementedException();
         }

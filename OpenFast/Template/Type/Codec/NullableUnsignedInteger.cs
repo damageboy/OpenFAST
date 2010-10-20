@@ -48,7 +48,7 @@ namespace OpenFAST.Template.Type.Codec
         {
             var value = (NumericValue) UINT.Decode(inStream);
 
-            if (value.Equals(0))
+            if (value.EqualsInt(0))
                 return null;
 
             return value.Decrement();

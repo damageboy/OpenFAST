@@ -35,42 +35,42 @@ namespace OpenFAST.Session
     {
         public const string NAMESPACE = "http://www.fixprotocol.org/ns/fast/scp/1.1";
 
-        public new const int FAST_RESET_TEMPLATE_ID = 120;
-        public const int FAST_HELLO_TEMPLATE_ID = 16002;
-        public const int FAST_ALERT_TEMPLATE_ID = 16003;
-        public const int TEMPLATE_DECL_ID = 16010;
-        public const int TEMPLATE_DEF_ID = 16011;
-        public const int INT32_INSTR_ID = 16012;
-        public const int UINT32_INSTR_ID = 16013;
-        public const int INT64_INSTR_ID = 16014;
-        public const int UINT64_INSTR_ID = 16015;
-        public const int DECIMAL_INSTR_ID = 16016;
-        public const int COMP_DECIMAL_INSTR_ID = 16017;
-        public const int ASCII_INSTR_ID = 16018;
-        public const int UNICODE_INSTR_ID = 16019;
-        public const int BYTE_VECTOR_INSTR_ID = 16020;
-        public const int STAT_TEMP_REF_INSTR_ID = 16021;
-        public const int DYN_TEMP_REF_INSTR_ID = 16022;
-        public const int SEQUENCE_INSTR_ID = 16023;
-        public const int GROUP_INSTR_ID = 16024;
-        public const int CONSTANT_OP_ID = 16025;
-        public const int DEFAULT_OP_ID = 16026;
-        public const int COPY_OP_ID = 16027;
-        public const int INCREMENT_OP_ID = 16028;
-        public const int DELTA_OP_ID = 16029;
-        public const int TAIL_OP_ID = 16030;
-        public const int FOREIGN_INSTR_ID = 16031;
-        public const int ELEMENT_ID = 16032;
-        public const int TEXT_ID = 16033;
+        private new const int FAST_RESET_TEMPLATE_ID = 120;
+        private const int FAST_HELLO_TEMPLATE_ID = 16002;
+        private const int FAST_ALERT_TEMPLATE_ID = 16003;
+        private const int TEMPLATE_DECL_ID = 16010;
+        private const int TEMPLATE_DEF_ID = 16011;
+        private const int INT32_INSTR_ID = 16012;
+        private const int UINT32_INSTR_ID = 16013;
+        private const int INT64_INSTR_ID = 16014;
+        private const int UINT64_INSTR_ID = 16015;
+        private const int DECIMAL_INSTR_ID = 16016;
+        private const int COMP_DECIMAL_INSTR_ID = 16017;
+        private const int ASCII_INSTR_ID = 16018;
+        private const int UNICODE_INSTR_ID = 16019;
+        private const int BYTE_VECTOR_INSTR_ID = 16020;
+        private const int STAT_TEMP_REF_INSTR_ID = 16021;
+        private const int DYN_TEMP_REF_INSTR_ID = 16022;
+        private const int SEQUENCE_INSTR_ID = 16023;
+        private const int GROUP_INSTR_ID = 16024;
+        private const int CONSTANT_OP_ID = 16025;
+        private const int DEFAULT_OP_ID = 16026;
+        private const int COPY_OP_ID = 16027;
+        private const int INCREMENT_OP_ID = 16028;
+        private const int DELTA_OP_ID = 16029;
+        private const int TAIL_OP_ID = 16030;
+        private const int FOREIGN_INSTR_ID = 16031;
+        private const int ELEMENT_ID = 16032;
+        private const int TEXT_ID = 16033;
 
         private static readonly QName RESET_PROPERTY = new QName("reset", NAMESPACE);
 
         private static readonly Dictionary<MessageTemplate, ISessionMessageHandler> MessageHandlers =
             new Dictionary<MessageTemplate, ISessionMessageHandler>();
 
-        public static readonly MessageTemplate FASTAlertTemplate;
-        public static readonly MessageTemplate FASTHelloTemplate;
-        public new static readonly Message RESET;
+        private static readonly MessageTemplate FASTAlertTemplate;
+        private static readonly MessageTemplate FASTHelloTemplate;
+        private new static readonly Message RESET;
 
         /// <summary>
         /// ************************ MESSAGE HANDLERS *********************************************
@@ -145,14 +145,14 @@ namespace OpenFAST.Session
                         new Scalar("VendorId", Type.ASCII, Operator.NONE, ScalarValue.Undefined, true)
                     });
 
-            RESET = new ResetMessageObj(FAST_RESET_TEMPLATE);
-            FAST_RESET_TEMPLATE.AddAttribute(RESET_PROPERTY, "yes");
+            RESET = new ResetMessageObj(FastResetTemplate);
+            FastResetTemplate.AddAttribute(RESET_PROPERTY, "yes");
 
             ResetHandler = new ResetMessageHandler();
             AlertHandler = new AlertSessionMessageHandler();
             Attribute = new MessageTemplate(
                 new QName("Attribute", NAMESPACE),
-                new[] { dict("Ns", true, DictionaryFields.Template), unicode("Name"), unicode("Value") });
+                new[] {dict("Ns", true, DictionaryFields.Template), unicode("Name"), unicode("Value")});
             Element = new MessageTemplate(
                 new QName("Element", NAMESPACE),
                 new[]
@@ -330,7 +330,7 @@ namespace OpenFAST.Session
             {
                 TemplateRegistry.Register(FAST_HELLO_TEMPLATE_ID, FASTHelloTemplate);
                 TemplateRegistry.Register(FAST_ALERT_TEMPLATE_ID, FASTAlertTemplate);
-                TemplateRegistry.Register(FAST_RESET_TEMPLATE_ID, FAST_RESET_TEMPLATE);
+                TemplateRegistry.Register(FAST_RESET_TEMPLATE_ID, FastResetTemplate);
                 TemplateRegistry.Register(TEMPLATE_DECL_ID, TemplateDeclaration);
                 TemplateRegistry.Register(TEMPLATE_DEF_ID, TEMPLATE_DEFINITION);
                 TemplateRegistry.Register(INT32_INSTR_ID, INT32_INSTR);
@@ -641,8 +641,8 @@ namespace OpenFAST.Session
         {
             RegisterSessionTemplates(session.MessageInputStream.GetTemplateRegistry());
             RegisterSessionTemplates(session.MessageOutputStream.GetTemplateRegistry());
-            session.MessageInputStream.AddMessageHandler(FAST_RESET_TEMPLATE, ResetHandler);
-            session.MessageOutputStream.AddMessageHandler(FAST_RESET_TEMPLATE, ResetHandler);
+            session.MessageInputStream.AddMessageHandler(FastResetTemplate, ResetHandler);
+            session.MessageOutputStream.AddMessageHandler(FastResetTemplate, ResetHandler);
         }
 
         public virtual void RegisterSessionTemplates(ITemplateRegistry registry)
@@ -800,7 +800,7 @@ namespace OpenFAST.Session
             return new Scalar(qualify(name), Type.U32, Operator.NONE, null, true);
         }
 
-        #region Nested type: ALERTSessionMessageHandler
+        #region Nested type: AlertSessionMessageHandler
 
         public class AlertSessionMessageHandler : ISessionMessageHandler
         {
@@ -884,6 +884,23 @@ namespace OpenFAST.Session
 
         #endregion
 
+        #region Nested type: ResetMessageHandler
+
+        private sealed class ResetMessageHandler : IMessageHandler
+        {
+            #region IMessageHandler Members
+
+            public void HandleMessage(Message readMessage, Context context, ICoder coder)
+            {
+                if (readMessage.Template.HasAttribute(RESET_PROPERTY))
+                    coder.Reset();
+            }
+
+            #endregion
+        }
+
+        #endregion
+
         #region Nested type: ResetMessageObj
 
         [Serializable]
@@ -897,23 +914,6 @@ namespace OpenFAST.Session
             {
                 throw new InvalidOperationException("Cannot set values on a fast reserved message.");
             }
-        }
-
-        #endregion
-
-        #region Nested type: ResetMessageHandler
-
-        public class ResetMessageHandler : IMessageHandler
-        {
-            #region IMessageHandler Members
-
-            public virtual void HandleMessage(Message readMessage, Context context, ICoder coder)
-            {
-                if (readMessage.Template.HasAttribute(RESET_PROPERTY))
-                    coder.Reset();
-            }
-
-            #endregion
         }
 
         #endregion

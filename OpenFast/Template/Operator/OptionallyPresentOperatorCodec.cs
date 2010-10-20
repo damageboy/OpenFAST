@@ -35,7 +35,7 @@ namespace OpenFAST.Template.Operator
 
         public override ScalarValue DecodeEmptyValue(ScalarValue priorValue, Scalar field)
         {
-            return priorValue == ScalarValue.Undefined ? GetInitialValue(field) : GetEmptyValue(priorValue);
+            return ScalarValue.Undefined.Equals(priorValue) ? GetInitialValue(field) : GetEmptyValue(priorValue);
         }
 
         public override ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar field)
@@ -47,8 +47,8 @@ namespace OpenFAST.Template.Operator
 
             if (field.IsOptional)
             {
-                if (((priorValue == ScalarValue.Undefined) && !field.DefaultValue.IsUndefined) ||
-                    ((priorValue != ScalarValue.Undefined) && (priorValue != null)))
+                bool e = ScalarValue.Undefined.Equals(priorValue);
+                if ((e && !field.DefaultValue.IsUndefined) || (!e && priorValue != null))
                 {
                     return ScalarValue.Null;
                 }
@@ -56,17 +56,17 @@ namespace OpenFAST.Template.Operator
             else
             {
                 Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT,
-                                   "The field \"" + field + " is not present.");
+                                   "The field '" + field + " is not present.");
             }
 
             return null;
         }
 
-        protected internal abstract ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue,
+        protected abstract ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue,
                                                                  ScalarValue defaultValue);
 
-        protected internal abstract ScalarValue GetInitialValue(Scalar field);
+        protected abstract ScalarValue GetInitialValue(Scalar field);
 
-        protected internal abstract ScalarValue GetEmptyValue(ScalarValue priorValue);
+        protected abstract ScalarValue GetEmptyValue(ScalarValue priorValue);
     }
 }

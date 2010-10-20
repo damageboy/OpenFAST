@@ -26,7 +26,7 @@ using OpenFAST.Template;
 namespace OpenFAST
 {
     [Serializable]
-    public sealed class IntegerValue : NumericValue
+    public sealed class IntegerValue : NumericValue, IEquatable<IntegerValue>
     {
         private readonly int _value;
 
@@ -40,25 +40,31 @@ namespace OpenFAST
             get { return _value; }
         }
 
-        public override bool Equals(object obj)
-        {
-            if ((obj == null) || !(obj is NumericValue))
-            {
-                return false;
-            }
+        #region Equals (optimized for empty parent class)
 
-            return Equals((ScalarValue) obj);
+        public bool Equals(IntegerValue other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return other._value == _value;
         }
 
-        private bool Equals(ScalarValue otherValue)
+        public override bool Equals(object obj)
         {
-            return _value == otherValue.ToLong();
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != typeof (IntegerValue)) return false;
+            return Equals((IntegerValue) obj);
         }
 
         public override int GetHashCode()
         {
             return _value;
         }
+
+#warning This class used to perform Equals with any NumericValue: _value == otherValue.ToLong(), which is not correct. Should it be equatable to any other NumericValue types?
+
+        #endregion
 
         public override bool EqualsValue(string defaultValue)
         {
@@ -100,9 +106,9 @@ namespace OpenFAST
             return Convert.ToString(_value);
         }
 
-        public override bool Equals(int valueRenamed)
+        public override bool EqualsInt(int value)
         {
-            return valueRenamed == _value;
+            return value == _value;
         }
 
         public override long ToLong()
@@ -124,7 +130,7 @@ namespace OpenFAST
         {
             if (_value > SByte.MaxValue || _value < SByte.MinValue)
                 Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
-                                   "The value \"" + _value + "\" is too large for a byte.");
+                                   "The value '" + _value + "' is too large for a byte.");
             return (byte) _value;
         }
 
@@ -132,7 +138,7 @@ namespace OpenFAST
         {
             if (_value > Int16.MaxValue || _value < Int16.MinValue)
                 Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
-                                   "The value \"" + _value + "\" is too large for a short.");
+                                   "The value '" + _value + "' is too large for a short.");
             return (short) _value;
         }
 

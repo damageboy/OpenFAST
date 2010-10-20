@@ -45,13 +45,13 @@ namespace OpenFAST.Template.Type
                 return new DecimalValue(dbl);
 
             Global.HandleError(FastConstants.S3_INITIAL_VALUE_INCOMP,
-                               "The value \"" + value + "\" is not compatible with type " + this);
+                               "The value '" + value + "' is not compatible with type " + this);
             return null;
         }
 
-        public override bool IsValueOf(ScalarValue previousValue)
+        public override bool IsValueOf(ScalarValue priorValue)
         {
-            return previousValue is DecimalValue;
+            return priorValue is DecimalValue;
         }
     }
 }

@@ -70,12 +70,22 @@ namespace OpenFAST.Template.Operator
                 OperatorMap[Tuple.Create(op, t)] = this;
         }
 
-        public virtual Operator Operator
+        public Operator Operator
         {
             get { return _operator; }
         }
 
         public virtual bool ShouldDecodeType
+        {
+            get { return true; }
+        }
+
+        public virtual bool DecodeNewValueNeedsPrevious
+        {
+            get { return true; }
+        }
+
+        public virtual bool DecodeEmptyValueNeedsPrevious
         {
             get { return true; }
         }
@@ -89,8 +99,8 @@ namespace OpenFAST.Template.Operator
                 return codec;
 
             Global.HandleError(FastConstants.S2_OPERATOR_TYPE_INCOMP,
-                               "The operator \"" + op + "\" is not compatible with type \"" + type +
-                               "\"");
+                               "The operator '" + op + "' is not compatible with type '" + type +
+                               "'");
             throw new ArgumentOutOfRangeException("op" + ",type", key, "Not found");
         }
 
@@ -103,7 +113,7 @@ namespace OpenFAST.Template.Operator
             return encoding.Length != 0;
         }
 
-        public abstract ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field);
+        public abstract ScalarValue DecodeEmptyValue(ScalarValue priorValue, Scalar field);
 
         public virtual bool UsesPresenceMapBit(bool optional)
         {
@@ -126,19 +136,23 @@ namespace OpenFAST.Template.Operator
             return true;
         }
 
-        public override bool Equals(object obj) //POINTP
-        {
-            return obj != null && obj.GetType() == GetType();
-        }
-
         public override string ToString()
         {
             return _operator.ToString();
+        }
+
+        #region Equals
+
+        public override bool Equals(object obj) //POINTP
+        {
+            return obj != null && obj.GetType() == GetType();
         }
 
         public override int GetHashCode()
         {
             return base.GetHashCode();
         }
+
+        #endregion
     }
 }

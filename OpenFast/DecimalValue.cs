@@ -100,7 +100,7 @@ namespace OpenFAST
             return ToString();
         }
 
-        public override bool Equals(int valueRenamed)
+        public override bool EqualsInt(int value)
         {
             return false;
         }
@@ -151,7 +151,7 @@ namespace OpenFAST
             return ToBigDecimal().ToString();
         }
 
-        #region Equals
+        #region Equals (optimized for empty parent class)
 
         public bool Equals(DecimalValue other)
         {

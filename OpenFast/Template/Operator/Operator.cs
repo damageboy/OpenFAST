@@ -56,14 +56,9 @@ namespace OpenFAST.Template.Operator
             OperatorNameMap[name] = this;
         }
 
-        public virtual string Name
+        public string Name
         {
             get { return _name; }
-        }
-
-        public virtual bool UsesDictionary
-        {
-            get { return true; }
         }
 
         public static Operator GetOperator(string name)
@@ -120,11 +115,6 @@ namespace OpenFAST.Template.Operator
         {
             internal ConstantOperator(string name) : base(name)
             {
-            }
-
-            public override bool UsesDictionary
-            {
-                get { return false; }
             }
 
             public override void Validate(Scalar scalar)
@@ -211,11 +201,6 @@ namespace OpenFAST.Template.Operator
         {
             internal NoneOperator(string name) : base(name)
             {
-            }
-
-            public override bool UsesDictionary
-            {
-                get { return false; }
             }
 
             public override bool ShouldStoreValue(ScalarValue value)

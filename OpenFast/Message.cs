@@ -26,7 +26,7 @@ using OpenFAST.Utility;
 namespace OpenFAST
 {
     [Serializable]
-    public class Message : GroupValue, IEquatable<Message>
+    public class Message : GroupValue
     {
         private readonly MessageTemplate _template;
 
@@ -66,20 +66,15 @@ namespace OpenFAST
 
         #region Equals
 
-        public bool Equals(Message other)
-        {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-
-            // bug: ?? Ignore base, because we ignore the first field
-            return Util.ArrayEqualsSlow(Values, other.Values, 1) && Equals(other._template, _template);
-        }
-
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return Equals(obj as Message);
+            
+            var other = obj as Message;
+            if (ReferenceEquals(null, other)) return false;
+            
+#warning bug: ?? Ignore base, because we ignore the first field
+            return Util.ArrayEqualsSlow(Values, other.Values, 1) && Equals(other._template, _template);
         }
 
         public override int GetHashCode()
@@ -87,7 +82,7 @@ namespace OpenFAST
             unchecked
             {
                 // bug: ?? Ignore base, because we ignore the first field
-                return (Util.ArrayHashCode(Values)*397) ^ _template.GetHashCode();
+                return (Util.GetCollectionHashCode(Values)*397) ^ _template.GetHashCode();
             }
         }
 

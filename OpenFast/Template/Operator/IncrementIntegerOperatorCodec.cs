@@ -32,63 +32,60 @@ namespace OpenFAST.Template.Operator
         {
         }
 
+        public override bool DecodeNewValueNeedsPrevious
+        {
+            get { return false; }
+        }
+
         public override ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar field)
         {
             if (priorValue == null)
-            {
                 return value;
-            }
+
             if (value == null)
             {
-                if (field.IsOptional)
-                {
-                    if (priorValue == ScalarValue.Undefined && field.DefaultValue.IsUndefined)
-                    {
-                        return null;
-                    }
-                    return ScalarValue.Null;
-                }
-                throw new ArgumentException();
-            }
-            if (priorValue.IsUndefined)
-            {
-                if (value.Equals(field.DefaultValue))
-                {
+                if (!field.IsOptional)
+                    throw new ArgumentNullException("value");
+
+                if (priorValue == ScalarValue.Undefined && field.DefaultValue.IsUndefined)
                     return null;
-                }
-                return value;
+
+                return ScalarValue.Null;
             }
-            if (!value.Equals(((NumericValue) priorValue).Increment()))
-            {
-                return value;
-            }
-            return null;
+
+            if (priorValue.IsUndefined)
+                return value.Equals(field.DefaultValue) ? null : value;
+
+            var inc = ((NumericValue) priorValue).Increment();
+            return !value.Equals(inc) ? value : null;
         }
 
-        public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue previousValue, Scalar field)
+        public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue priorValue, Scalar field)
         {
             return newValue;
         }
 
-        public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)
+        public override ScalarValue DecodeEmptyValue(ScalarValue priorValue, Scalar field)
         {
-            if (previousValue == null)
+            if (priorValue == null)
                 return null;
-            if (previousValue.IsUndefined)
+
+            if (priorValue.IsUndefined)
             {
-                if (field.DefaultValue.IsUndefined)
-                {
-                    if (field.IsOptional)
-                    {
-                        return null;
-                    }
+                if (!field.DefaultValue.IsUndefined)
+                    return field.DefaultValue;
+
+                if (!field.IsOptional)
                     throw new InvalidOperationException(
                         "Field with operator increment must send a value if no previous value existed.");
-                }
-                return field.DefaultValue;
+
+                return null;
             }
-            return ((NumericValue) previousValue).Increment();
+
+            return ((NumericValue) priorValue).Increment();
         }
+
+        #region Equals
 
         public override bool Equals(object obj)
         {
@@ -99,5 +96,7 @@ namespace OpenFAST.Template.Operator
         {
             return base.GetHashCode();
         }
+
+        #endregion
     }
 }

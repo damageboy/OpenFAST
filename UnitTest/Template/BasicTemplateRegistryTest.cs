@@ -31,7 +31,7 @@ namespace UnitTest.Template
         [Test]
         public void TestDefine()
         {
-            MessageTemplate mt = new MessageTemplate("Logon", new Field[0]);
+            var mt = new MessageTemplate("Logon", new Field[0]);
             AbstractTemplateRegistry registry = new BasicTemplateRegistry();
             registry.Define(mt);
 
@@ -46,7 +46,7 @@ namespace UnitTest.Template
         [Test]
         public void TestRegister()
         {
-            MessageTemplate mt = new MessageTemplate("Logon", new Field[0]);
+            var mt = new MessageTemplate("Logon", new Field[0]);
             AbstractTemplateRegistry registry = new BasicTemplateRegistry();
             registry.Register(1000, mt);
 

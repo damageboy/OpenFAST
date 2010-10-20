@@ -24,7 +24,7 @@ using System;
 namespace OpenFAST.Template
 {
     [Serializable]
-    public class LongValue : NumericValue
+    public sealed class LongValue : NumericValue, IEquatable<LongValue>
     {
         private readonly long _value;
 
@@ -38,25 +38,31 @@ namespace OpenFAST.Template
             get { return _value; }
         }
 
-        public override bool Equals(Object obj)
-        {
-            if (ReferenceEquals(obj, null))
-                return false;
-            if (!(obj is NumericValue))
-                return false;
+        #region Equals (optimized for empty parent class)
 
-            return Equals((ScalarValue) obj);
+        public bool Equals(LongValue other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return other._value == _value;
         }
 
-        private bool Equals(ScalarValue otherValue)
+        public override bool Equals(object obj)
         {
-            return _value == otherValue.ToLong();
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != typeof(LongValue)) return false;
+            return Equals((LongValue) obj);
         }
 
         public override int GetHashCode()
         {
-            return (int) _value;
+            return _value.GetHashCode();
         }
+
+#warning This class used to perform Equals with any NumericValue: _value == otherValue.ToLong(), which is not correct. Should it be equatable to any other NumericValue types?
+
+        #endregion
 
         public override bool EqualsValue(string defaultValue)
         {
@@ -88,14 +94,14 @@ namespace OpenFAST.Template
             return new LongValue(_value + addend.ToLong());
         }
 
-        public virtual string Serialize()
+        public string Serialize()
         {
             return Convert.ToString(_value);
         }
 
-        public override bool Equals(int valueRenamed)
+        public override bool EqualsInt(int value)
         {
-            return valueRenamed == _value;
+            return value == _value;
         }
 
         public override long ToLong()

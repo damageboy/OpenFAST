@@ -26,8 +26,8 @@ namespace OpenFAST
 {
     public sealed class BitVector : IEquatable<BitVector>
     {
-        private const int VALUE_BITS_SET = 0x7F;
-        private const int STOP_BIT = 0x80;
+        private const int ValueBitsSet = 0x7F;
+        private const int StopBit = 0x80;
 
         private readonly byte[] _bytes;
 
@@ -39,7 +39,7 @@ namespace OpenFAST
         {
             if (bytes == null) throw new ArgumentNullException("bytes");
             _bytes = bytes;
-            bytes[bytes.Length - 1] |= STOP_BIT;
+            bytes[bytes.Length - 1] |= StopBit;
         }
 
         public byte[] Bytes
@@ -53,7 +53,7 @@ namespace OpenFAST
             {
                 int index = _bytes.Length - 1;
 
-                for (; index > 0 && (_bytes[index] & VALUE_BITS_SET) == 0; index--)
+                for (; index > 0 && (_bytes[index] & ValueBitsSet) == 0; index--)
                 {
                 }
 
@@ -63,7 +63,7 @@ namespace OpenFAST
                 var truncated = new byte[index + 1];
                 Array.Copy(_bytes, truncated, index + 1);
 
-                truncated[truncated.Length - 1] |= STOP_BIT;
+                truncated[truncated.Length - 1] |= StopBit;
 
                 return truncated;
             }
@@ -76,7 +76,7 @@ namespace OpenFAST
 
         public bool IsOverlong
         {
-            get { return (_bytes.Length > 1) && ((_bytes[_bytes.Length - 1] & VALUE_BITS_SET) == 0); }
+            get { return (_bytes.Length > 1) && ((_bytes[_bytes.Length - 1] & ValueBitsSet) == 0); }
         }
 
         public void Set(int fieldIndex)
@@ -123,7 +123,7 @@ namespace OpenFAST
 
         public override int GetHashCode()
         {
-            return Util.ArrayHashCodeStruct(_bytes);
+            return Util.GetValTypeCollectionHashCode(_bytes);
         }
 
         #endregion

@@ -32,18 +32,21 @@ namespace OpenFAST.Template.Operator
         {
         }
 
-        protected internal override ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue,
-                                                                 ScalarValue defaultValue)
+        public override bool DecodeNewValueNeedsPrevious
         {
-            if ((priorValue == ScalarValue.Undefined) && value.Equals(defaultValue))
-            {
-                return null;
-            }
-
-            return (value.Equals(priorValue)) ? null : value;
+            get { return false; }
         }
 
-        protected internal override ScalarValue GetInitialValue(Scalar field)
+        protected override ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue,
+                                                        ScalarValue defaultValue)
+        {
+            if (ScalarValue.Undefined.Equals(priorValue) && value.Equals(defaultValue))
+                return null;
+
+            return value.Equals(priorValue) ? null : value;
+        }
+
+        protected override ScalarValue GetInitialValue(Scalar field)
         {
             if (!field.DefaultValue.IsUndefined)
                 return field.DefaultValue;
@@ -56,7 +59,7 @@ namespace OpenFAST.Template.Operator
             return null;
         }
 
-        protected internal override ScalarValue GetEmptyValue(ScalarValue priorValue)
+        protected override ScalarValue GetEmptyValue(ScalarValue priorValue)
         {
             return priorValue;
         }
@@ -65,6 +68,8 @@ namespace OpenFAST.Template.Operator
         {
             return newValue;
         }
+
+        #region Equals
 
         public override bool Equals(object obj)
         {
@@ -75,5 +80,7 @@ namespace OpenFAST.Template.Operator
         {
             return base.GetHashCode();
         }
+
+        #endregion
     }
 }

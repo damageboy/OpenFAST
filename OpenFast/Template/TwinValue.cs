@@ -24,29 +24,42 @@ using System;
 namespace OpenFAST.Template
 {
     [Serializable]
-    public class TwinValue : ScalarValue, IEquatable<TwinValue>
+    public sealed class TwinValue : ScalarValue, IEquatable<TwinValue>
     {
-        public ScalarValue First;
-        public ScalarValue Second;
+        private readonly ScalarValue _first;
+        private readonly ScalarValue _second;
 
         public TwinValue(ScalarValue first, ScalarValue second)
         {
-            First = first;
-            Second = second;
+            if (first == null) throw new ArgumentNullException("first");
+            if (second == null) throw new ArgumentNullException("second");
+
+            _first = first;
+            _second = second;
+        }
+
+        public ScalarValue First
+        {
+            get { return _first; }
+        }
+
+        public ScalarValue Second
+        {
+            get { return _second; }
         }
 
         public override string ToString()
         {
-            return First + ", " + Second;
+            return _first + ", " + _second;
         }
 
-        #region Equals
+        #region Equals (optimized for empty parent class)
 
         public bool Equals(TwinValue other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(other.First, First) && Equals(other.Second, Second);
+            return Equals(other._first, _first) && Equals(other._second, _second);
         }
 
         public override bool Equals(Object obj)
@@ -61,7 +74,7 @@ namespace OpenFAST.Template
         {
             unchecked
             {
-                return (First.GetHashCode()*397) ^ Second.GetHashCode();
+                return (_first.GetHashCode()*397) ^ _second.GetHashCode();
             }
         }
 

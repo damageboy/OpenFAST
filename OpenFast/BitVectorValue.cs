@@ -24,7 +24,7 @@ using System;
 namespace OpenFAST
 {
     [Serializable]
-    public class BitVectorValue : ScalarValue, IEquatable<BitVectorValue>
+    public sealed class BitVectorValue : ScalarValue, IEquatable<BitVectorValue>
     {
         private readonly BitVector _value;
 
@@ -39,7 +39,7 @@ namespace OpenFAST
             get { return _value; }
         }
 
-        #region Equals
+        #region Equals (optimized for empty parent class)
 
         public bool Equals(BitVectorValue other)
         {

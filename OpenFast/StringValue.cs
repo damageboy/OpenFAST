@@ -27,7 +27,7 @@ using OpenFAST.Error;
 namespace OpenFAST
 {
     [Serializable]
-    public class StringValue : ScalarValue, IEquatable<StringValue>
+    public sealed class StringValue : ScalarValue, IEquatable<StringValue>
     {
         private readonly string _value;
 
@@ -53,7 +53,7 @@ namespace OpenFAST
             if (i > SByte.MaxValue || i < SByte.MinValue)
             {
                 Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
-                                   "The value \"" + i + "\" is too large to fit into a byte.");
+                                   "The value '" + i + "' is too large to fit into a byte.");
                 return 0;
             }
             return (byte) i;
@@ -65,7 +65,7 @@ namespace OpenFAST
             if (i > Int16.MaxValue || i < Int16.MinValue)
             {
                 Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
-                                   "The value \"" + i + "\" is too large to fit into a short.");
+                                   "The value '" + i + "' is too large to fit into a short.");
                 return 0;
             }
             return (short) i;
@@ -78,7 +78,7 @@ namespace OpenFAST
                 return result;
 
             Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
-                               "The value \"" + _value + "\" is too large to fit into an int.");
+                               "The value '" + _value + "' is too large to fit into an int.");
             return 0;
         }
 
@@ -89,7 +89,7 @@ namespace OpenFAST
                 return result;
 
             Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
-                               "The value \"" + _value + "\" is too large to fit into a long.");
+                               "The value '" + _value + "' is too large to fit into a long.");
             return 0;
         }
 
@@ -100,7 +100,7 @@ namespace OpenFAST
                 return result;
 
             Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
-                               "The value\"" + _value + "\" is too large to fit into a double.");
+                               "The value'" + _value + "' is too large to fit into a double.");
             return 0.0;
         }
 

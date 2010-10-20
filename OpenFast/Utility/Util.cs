@@ -30,7 +30,7 @@ using Type = OpenFAST.Template.Type.FASTType;
 
 namespace OpenFAST.Utility
 {
-    internal class Util
+    internal static class Util
     {
         private static readonly TwinValue NoDiff = new TwinValue(new IntegerValue(0), new StringValue(""));
 
@@ -180,9 +180,9 @@ namespace OpenFAST.Utility
         public static ComposedScalar ComposedDecimal(QName name, Operator exponentOp, ScalarValue exponentVal,
                                                      Operator mantissaOp, ScalarValue mantissaVal, bool optional)
         {
-            var exponentScalar = new Scalar(Global.CreateImplicitName(name), Type.I32, exponentOp, exponentVal, optional);
-            var mantissaScalar = new Scalar(Global.CreateImplicitName(name), Type.I64, mantissaOp, mantissaVal, false);
-            return new ComposedScalar(name, Type.DECIMAL, new[] {exponentScalar, mantissaScalar}, optional,
+            var exponentScalar = new Scalar(Global.CreateImplicitName(name), FASTType.I32, exponentOp, exponentVal, optional);
+            var mantissaScalar = new Scalar(Global.CreateImplicitName(name), FASTType.I64, mantissaOp, mantissaVal, false);
+            return new ComposedScalar(name, FASTType.DECIMAL, new[] {exponentScalar, mantissaScalar}, optional,
                                       new DecimalConverter());
         }
 
@@ -270,7 +270,7 @@ namespace OpenFAST.Utility
         }
 
         public static bool ListEquals<T>(IList<T> arr1, IList<T> arr2)
-            where T : IEquatable<T>
+            where T : class
         {
             if ((arr1 == null) != (arr2 == null)) return false;
             if (arr1 == arr2) return true;
@@ -311,7 +311,7 @@ namespace OpenFAST.Utility
             return true;
         }
 
-        public static int ArrayHashCode<T>(T[] array)
+        public static int GetCollectionHashCode<T>(T[] array)
             where T : class
         {
             if (array == null)
@@ -324,7 +324,20 @@ namespace OpenFAST.Utility
             return result;
         }
 
-        public static int ArrayHashCodeStruct<T>(T[] array)
+        public static int GetCollectionHashCode<T>(IList<T> array)
+            where T : class
+        {
+            if (array == null)
+                return 0;
+
+            int result = 1;
+            for (int i = 0; i < array.Count; i++)
+                result = (result*397) ^ (array[i] == null ? 0 : array[i].GetHashCode());
+
+            return result;
+        }
+
+        public static int GetValTypeCollectionHashCode<T>(T[] array)
             where T : struct
         {
             if (array == null)

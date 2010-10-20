@@ -32,25 +32,35 @@ namespace OpenFAST.Template.Operator
         {
         }
 
+        public override bool DecodeNewValueNeedsPrevious
+        {
+            get { return false; }
+        }
+
+        public override bool  DecodeEmptyValueNeedsPrevious
+        {
+            get { return false; }
+        }
+
         public override ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar field)
         {
             if (value == null)
-            {
                 return ScalarValue.Null;
-            }
 
             return value;
         }
 
-        public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue previousValue, Scalar field)
+        public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue priorValue, Scalar field)
         {
             return newValue;
         }
 
-        public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)
+        public override ScalarValue DecodeEmptyValue(ScalarValue priorValue, Scalar field)
         {
             throw new InvalidOperationException("This method should never be called.");
         }
+
+        #region Equals
 
         public override bool Equals(Object obj)
         {
@@ -61,5 +71,7 @@ namespace OpenFAST.Template.Operator
         {
             return base.GetHashCode();
         }
+
+        #endregion
     }
 }

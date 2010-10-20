@@ -35,17 +35,17 @@ namespace UnitTest.Scenario
         [Test]
         public void TestDictionaryNotInherited()
         {
-            const string templateDef = "<template name=\"OptDeltaDec\" id=\"58\" dictionary=\"template\">" +
-                                       "    <string name=\"desc\"/>" +
-                                       "    <decimal id=\"1\" presence=\"optional\" name=\"Line1\">" +
+            const string templateDef = "<template name='OptDeltaDec' id='58' dictionary='template'>" +
+                                       "    <string name='desc'/>" +
+                                       "    <decimal id='1' presence='optional' name='Line1'>" +
                                        "         <exponent><copy/></exponent>" +
                                        "         <mantissa><copy/></mantissa>" +
                                        "    </decimal>" +
-                                       "    <decimal id=\"1\" presence=\"optional\" name=\"Line2\">" +
+                                       "    <decimal id='1' presence='optional' name='Line2'>" +
                                        "         <exponent><copy/></exponent>" +
                                        "         <mantissa><copy/></mantissa>" +
                                        "    </decimal>    " +
-                                       "    <decimal id=\"1\" presence=\"optional\" name=\"Line3\">" +
+                                       "    <decimal id='1' presence='optional' name='Line3'>" +
                                        "         <exponent><copy/></exponent> " +
                                        "         <mantissa><copy/></mantissa>" +
                                        "    </decimal>" +
@@ -88,10 +88,10 @@ namespace UnitTest.Scenario
         [Test]
         public void TestMantissaIsntPresentWhenExponentIsNull()
         {
-            const string templateXml = "<template name=\"SampleTemplate\">" +
-                                       "  <decimal name=\"bid\" presence=\"optional\">" +
+            const string templateXml = "<template name='SampleTemplate'>" +
+                                       "  <decimal name='bid' presence='optional'>" +
                                        "    <mantissa><copy /></mantissa>" +
-                                       "    <exponent><copy value=\"-2\" /></exponent>" +
+                                       "    <exponent><copy value='-2' /></exponent>" +
                                        "  </decimal>" +
                                        "</template>";
             MessageTemplate template = Template(templateXml);

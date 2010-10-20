@@ -29,16 +29,20 @@ namespace OpenFAST.Template.Operator
     [Serializable]
     internal sealed class DeltaStringOperatorCodec : AlwaysPresentOperatorCodec
     {
-        internal DeltaStringOperatorCodec() : base(Operator.DELTA, new[] {FASTType.ASCII, FASTType.STRING})
+        internal DeltaStringOperatorCodec()
+            : base(Operator.DELTA, new[] {FASTType.ASCII, FASTType.STRING})
         {
+        }
+
+        public override bool DecodeEmptyValueNeedsPrevious
+        {
+            get { return false; }
         }
 
         public override ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar field)
         {
             if (value == null)
-            {
                 return ScalarValue.Null;
-            }
 
             if (priorValue == null)
             {
@@ -51,28 +55,28 @@ namespace OpenFAST.Template.Operator
             return Util.GetDifference((StringValue) value, (StringValue) v);
         }
 
-        public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue previousValue, Scalar field)
+        public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue priorValue, Scalar field)
         {
-            if ((newValue == null) || newValue.IsNull)
-            {
+            if (newValue == null || newValue.IsNull)
                 return null;
-            }
 
             var diffValue = (TwinValue) newValue;
-            ScalarValue v = (previousValue.IsUndefined) ? field.BaseValue : previousValue;
+            ScalarValue v = (priorValue.IsUndefined) ? field.BaseValue : priorValue;
             if (diffValue.First.ToInt() > v.ToString().Length)
             {
                 Global.HandleError(FastConstants.D7_SUBTRCTN_LEN_LONG,
-                                   "The string diff <" + diffValue + "> cannot be applied to the base value \"" +
-                                   v + "\" because the subtraction length is too long.");
+                                   "The string diff <" + diffValue + "> cannot be applied to the base value '" +
+                                   v + "' because the subtraction length is too long.");
             }
             return Util.ApplyDifference((StringValue) v, diffValue);
         }
 
-        public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)
+        public override ScalarValue DecodeEmptyValue(ScalarValue priorValue, Scalar field)
         {
             throw new InvalidOperationException("As of FAST v1.1 Delta values must be present in stream");
         }
+
+        #region Equals
 
         public override bool Equals(Object obj)
         {
@@ -83,5 +87,7 @@ namespace OpenFAST.Template.Operator
         {
             return base.GetHashCode();
         }
+
+        #endregion
     }
 }

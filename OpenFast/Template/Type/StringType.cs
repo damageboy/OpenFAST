@@ -50,9 +50,9 @@ namespace OpenFAST.Template.Type
             return base.GetCodec(op, optional);
         }
 
-        public override bool IsValueOf(ScalarValue previousValue)
+        public override bool IsValueOf(ScalarValue priorValue)
         {
-            return previousValue is StringValue;
+            return priorValue is StringValue;
         }
     }
 }

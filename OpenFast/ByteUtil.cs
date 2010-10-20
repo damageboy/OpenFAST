@@ -25,12 +25,12 @@ using System.Text;
 
 namespace OpenFAST
 {
-    public class ByteUtil
+    public static class ByteUtil
     {
         public static byte[] ConvertBitStringToFastByteArray(string bitString)
         {
             if (bitString.Length == 0)
-                return new byte[0];
+                return EmptyByteArray;
 
             string[] bitStrings = bitString.Split(' ');
             var bytes = new byte[bitStrings.Length];
@@ -46,7 +46,7 @@ namespace OpenFAST
         public static byte[] ConvertHexStringToByteArray(string hexString)
         {
             if (hexString == null)
-                return new byte[0];
+                return EmptyByteArray;
 
             hexString = hexString.Replace(" ", "");
             var bytes = new byte[hexString.Length/2];
@@ -124,5 +124,7 @@ namespace OpenFAST
             Array.Copy(second, secondOffset, result, fLen, sLen);
             return result;
         }
+
+        public static readonly byte[] EmptyByteArray = new byte[0];
     }
 }

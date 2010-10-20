@@ -27,7 +27,7 @@ using OpenFAST.Utility;
 namespace OpenFAST.Template.Type
 {
     [Serializable]
-    public abstract class FASTType : IEquatable<FASTType>
+    public abstract class FASTType
     {
         private static readonly Dictionary<string, FASTType> TypeNameMap = new Dictionary<string, FASTType>();
 
@@ -99,7 +99,7 @@ namespace OpenFAST.Template.Type
 
         public abstract TypeCodec GetCodec(Operator.Operator op, bool optional);
         public abstract ScalarValue GetValue(string value);
-        public abstract bool IsValueOf(ScalarValue previousValue);
+        public abstract bool IsValueOf(ScalarValue priorValue);
 
         public virtual void ValidateValue(ScalarValue value)
         {
@@ -117,18 +117,13 @@ namespace OpenFAST.Template.Type
 
         #region Equals
 
-        public virtual bool Equals(FASTType other)
-        {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            if (other.GetType() != GetType())
-                return false; // if derived class does not implement Equals, it should still work.
-            return Equals(other._name, _name);
-        }
-
         public override bool Equals(object obj)
         {
-            return Equals(obj as FASTType);
+            if (ReferenceEquals(this, obj)) return true;
+            
+            var other = obj as FASTType;
+            if (ReferenceEquals(null, other)) return false;
+            return Equals(other._name, _name);
         }
 
         public override int GetHashCode()

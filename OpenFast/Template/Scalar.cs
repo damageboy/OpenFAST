@@ -32,12 +32,12 @@ namespace OpenFAST.Template
     [Serializable]
     public sealed class Scalar : Field
     {
+        private readonly ScalarValue _defaultValue;
         private readonly ScalarValue _initialValue;
         private readonly Operator.Operator _operator;
         private readonly OperatorCodec _operatorCodec;
         private readonly FASTType _type;
         private readonly TypeCodec _typeCodec;
-        private readonly ScalarValue _defaultValue;
         private string _dictionary;
 
         public Scalar(string name, FASTType type, Operator.Operator op, ScalarValue defaultValue,
@@ -57,7 +57,8 @@ namespace OpenFAST.Template
         {
         }
 
-        private Scalar(QName name, FASTType type, Operator.Operator op, OperatorCodec operatorCodec, ScalarValue defaultValue, bool optional)
+        private Scalar(QName name, FASTType type, Operator.Operator op, OperatorCodec operatorCodec,
+                       ScalarValue defaultValue, bool optional)
             : base(name, optional)
         {
             _operator = op;
@@ -140,7 +141,7 @@ namespace OpenFAST.Template
             }
             if (valueToEncode == null)
             {
-                return new byte[0];
+                return ByteUtil.EmptyByteArray;
             }
             byte[] encoding = _typeCodec.Encode(valueToEncode);
             if (context.TraceEnabled && encoding.Length > 0)
@@ -148,16 +149,6 @@ namespace OpenFAST.Template
                 context.GetEncodeTrace().Field(this, fieldValue, valueToEncode, encoding, presenceMapBuilder.Index);
             }
             return encoding;
-        }
-
-        public ScalarValue DecodeValue(ScalarValue newValue, ScalarValue previousValue)
-        {
-            return _operatorCodec.DecodeValue(newValue, previousValue, this);
-        }
-
-        public ScalarValue Decode(ScalarValue previousValue)
-        {
-            return _operatorCodec.DecodeEmptyValue(previousValue, this);
         }
 
         public override bool UsesPresenceMapBit()
@@ -175,16 +166,9 @@ namespace OpenFAST.Template
         {
             try
             {
-                ScalarValue previousValue = null;
+                ScalarValue priorValue = null;
                 IDictionary dict = null;
                 QName key = Key;
-
-                if (_operator.UsesDictionary)
-                {
-                    dict = context.GetDictionary(Dictionary);
-                    previousValue = context.Lookup(dict, decodeTemplate, key);
-                    ValidateDictionaryTypeAgainstFieldType(previousValue, _type);
-                }
 
                 ScalarValue value;
                 int pmapIndex = presenceMapReader.Index;
@@ -192,28 +176,46 @@ namespace OpenFAST.Template
                 {
                     if (context.TraceEnabled)
                         inStream = new RecordingInputStream(inStream);
-                    
+
                     if (!_operatorCodec.ShouldDecodeType)
                         return _operatorCodec.DecodeValue(null, null, this);
 
+                    if (_operatorCodec.DecodeNewValueNeedsPrevious)
+                    {
+                        dict = context.GetDictionary(Dictionary);
+                        priorValue = context.Lookup(dict, decodeTemplate, key);
+                        ValidateDictionaryTypeAgainstFieldType(priorValue, _type);
+                    }
+
                     ScalarValue decodedValue = _typeCodec.Decode(inStream);
-                    value = DecodeValue(decodedValue, previousValue);
-                    
+                    value = _operatorCodec.DecodeValue(decodedValue, priorValue, this);
+
                     if (context.TraceEnabled)
                         context.DecodeTrace.Field(this, value, decodedValue,
                                                   ((RecordingInputStream) inStream).Buffer, pmapIndex);
                 }
                 else
                 {
-                    value = Decode(previousValue);
+                    if (_operatorCodec.DecodeEmptyValueNeedsPrevious)
+                    {
+                        dict = context.GetDictionary(Dictionary);
+                        priorValue = context.Lookup(dict, decodeTemplate, key);
+                        ValidateDictionaryTypeAgainstFieldType(priorValue, _type);
+                    }
+
+                    value = _operatorCodec.DecodeEmptyValue(priorValue, this);
                 }
 
                 ValidateDecodedValueIsCorrectForType(value, _type);
-                if (Operator != Template.Operator.Operator.DELTA || value != null)
+
+#warning TODO: Review if this previous "if" statement is needed.
+                // if (Operator != Template.Operator.Operator.DELTA || value != null)
+                if (value != null &&
+                    (_operatorCodec.DecodeNewValueNeedsPrevious || _operatorCodec.DecodeEmptyValueNeedsPrevious))
                 {
                     context.Store(dict ?? context.GetDictionary(Dictionary), decodeTemplate, key, value);
-                    return value;
                 }
+
                 return value;
             }
             catch (FastException e)
@@ -229,14 +231,14 @@ namespace OpenFAST.Template
             type.ValidateValue(value);
         }
 
-        private static void ValidateDictionaryTypeAgainstFieldType(ScalarValue previousValue, FASTType type)
+        private static void ValidateDictionaryTypeAgainstFieldType(ScalarValue priorValue, FASTType type)
         {
-            if (previousValue == null || previousValue.IsUndefined)
+            if (priorValue == null || priorValue.IsUndefined)
                 return;
-            if (!type.IsValueOf(previousValue))
+            if (!type.IsValueOf(priorValue))
             {
                 Global.HandleError(FastConstants.D4_INVALID_TYPE,
-                                   "The value \"" + previousValue + "\" is not valid for the type " + type);
+                                   "The value '" + priorValue + "' is not valid for the type " + type);
             }
         }
 
@@ -278,7 +280,7 @@ namespace OpenFAST.Template
             return equals;
         }
 
-        private bool EqualsPrivate(object o, object o2)
+        private static bool EqualsPrivate(object o, object o2)
         {
             if (o == null)
             {

@@ -29,14 +29,14 @@ namespace OpenFAST.Template.Type
     [Serializable]
     public abstract class IntegerType : SimpleType
     {
-        protected internal long MaxValue;
-        protected internal long MinValue;
+        private readonly long _maxValue;
+        private readonly long _minValue;
 
         protected IntegerType(string typeName, long minValue, long maxValue, TypeCodec codec, TypeCodec nullableCodec)
             : base(typeName, codec, nullableCodec)
         {
-            MinValue = minValue;
-            MaxValue = maxValue;
+            _minValue = minValue;
+            _maxValue = maxValue;
         }
 
         public override ScalarValue DefaultValue
@@ -50,7 +50,7 @@ namespace OpenFAST.Template.Type
             if (!Int64.TryParse(value, out longValue))
             {
                 Global.HandleError(FastConstants.S3_INITIAL_VALUE_INCOMP,
-                                   "The value \"" + value + "\" is not compatable with type " + this);
+                                   "The value '" + value + "' is not compatable with type " + this);
                 return null;
             }
 
@@ -60,9 +60,9 @@ namespace OpenFAST.Template.Type
             return new IntegerValue((int) longValue);
         }
 
-        public override bool IsValueOf(ScalarValue previousValue)
+        public override bool IsValueOf(ScalarValue priorValue)
         {
-            return previousValue is IntegerValue || previousValue is LongValue;
+            return priorValue is IntegerValue || priorValue is LongValue;
         }
 
         public override void ValidateValue(ScalarValue value)
@@ -70,11 +70,36 @@ namespace OpenFAST.Template.Type
             if (value == null || value.IsUndefined)
                 return;
 
-            if (value.ToLong() > MaxValue || value.ToLong() < MinValue)
+            if (value.ToLong() > _maxValue || value.ToLong() < _minValue)
             {
                 Global.HandleError(FastConstants.D2_INT_OUT_OF_RANGE,
                                    "The value " + value + " is out of range for type " + this);
             }
         }
+
+        #region Equals
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(this, obj)) return true;
+
+            var other = obj as IntegerType;
+            if (ReferenceEquals(null, other)) return false;
+
+            return base.Equals(other) && other._maxValue == _maxValue && other._minValue == _minValue;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int result = base.GetHashCode();
+                result = (result*397) ^ _maxValue.GetHashCode();
+                result = (result*397) ^ _minValue.GetHashCode();
+                return result;
+            }
+        }
+
+        #endregion
     }
 }

@@ -26,35 +26,36 @@ using System.IO;
 namespace OpenFAST.Template
 {
     [Serializable]
-    public abstract class Field : IEquatable<Field>
+    public abstract class Field
     {
         private readonly bool _isOptional;
         private readonly QName _name;
         private Dictionary<QName, string> _attributes;
         private string _id;
         private QName _key;
-        private MessageTemplate template;
+        private MessageTemplate _template;
 
         protected Field(QName name, bool isOptional)
+            : this(name, name, isOptional, null)
         {
-            _name = name;
-            _key = name;
-            _isOptional = isOptional;
         }
 
 
         protected Field(QName name, QName key, bool isOptional)
+            : this(name, key, isOptional, null)
         {
-            _name = name;
-            _key = key;
-            _isOptional = isOptional;
         }
 
 
         protected Field(string name, string key, bool isOptional, string id)
+            : this(new QName(name), new QName(key), isOptional, id)
         {
-            _name = new QName(name);
-            _key = new QName(key);
+        }
+
+        private Field(QName name, QName key, bool isOptional, string id)
+        {
+            _name = name;
+            _key = key;
             _isOptional = isOptional;
             _id = id;
         }
@@ -89,29 +90,16 @@ namespace OpenFAST.Template
         public abstract System.Type ValueType { get; }
         public abstract string TypeName { get; }
 
-        #region IEquatable<Field> Members
-
-        public bool Equals(Field other)
-        {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return Equals(other._name, _name) && other._isOptional.Equals(_isOptional) &&
-                   Equals(other._attributes, _attributes) && Equals(other.Id, Id) && Equals(other._key, _key);
-        }
-
-        #endregion
-
-        public bool IsIdNull()
-        {
-            return _id == null;
-        }
+        #region Equals
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof (Field)) return false;
-            return Equals((Field) obj);
+            
+            var other = obj as Field;
+            if (ReferenceEquals(null, other)) return false;
+            return Equals(other._name, _name) && other._isOptional.Equals(_isOptional) &&
+                   Equals(other._attributes, _attributes) && Equals(other.Id, Id) && Equals(other._key, _key);
         }
 
         public override int GetHashCode()
@@ -125,6 +113,13 @@ namespace OpenFAST.Template
                 result = (result*397) ^ (_key != null ? _key.GetHashCode() : 0);
                 return result;
             }
+        }
+
+        #endregion
+
+        public bool IsIdNull()
+        {
+            return _id == null;
         }
 
         public virtual bool HasAttribute(QName attributeName)
@@ -150,12 +145,12 @@ namespace OpenFAST.Template
 
         public void SetMessageTemplate(MessageTemplate template)
         {
-            this.template = template;
+            _template = template;
         }
 
         public MessageTemplate GetTemplate()
         {
-            return template;
+            return _template;
         }
 
         protected bool IsPresent(BitVectorReader presenceMapReader)

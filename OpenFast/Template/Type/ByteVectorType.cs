@@ -42,9 +42,9 @@ namespace OpenFAST.Template.Type
             return new ByteVectorValue(Encoding.UTF8.GetBytes(value));
         }
 
-        public override bool IsValueOf(ScalarValue previousValue)
+        public override bool IsValueOf(ScalarValue priorValue)
         {
-            return previousValue is ByteVectorValue;
+            return priorValue is ByteVectorValue;
         }
     }
 }

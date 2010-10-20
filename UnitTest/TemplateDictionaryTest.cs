@@ -62,7 +62,7 @@ namespace UnitTest
             dictionary.Store(template, FastConstants.ANY_TYPE, new QName("exchange"), value);
             dictionary.Store(template, FastConstants.ANY_TYPE, new QName("marketValue"), marketValue);
 
-            Assert.IsFalse(value.Equals(ScalarValue.Undefined));
+            Assert.AreNotEqual(ScalarValue.Undefined, value);
             Assert.AreEqual(value, dictionary.Lookup(template, new QName("exchange"), FastConstants.ANY_TYPE));
             Assert.AreEqual(marketValue, dictionary.Lookup(template, new QName("marketValue"), FastConstants.ANY_TYPE));
         }

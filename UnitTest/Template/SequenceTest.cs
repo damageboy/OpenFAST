@@ -77,7 +77,7 @@ namespace UnitTest.Template
             var lastName = new Scalar("Last Name", FASTType.I32, Operator.COPY, ScalarValue.Undefined, false);
             var sequence1 = new Sequence("Contacts", new Field[] {firstName, lastName}, false);
 
-            var sequenceValue = new SequenceValue(sequence1) {};
+            var sequenceValue = new SequenceValue(sequence1);
             sequenceValue.Add(new IFieldValue[]
                                   {
                                       new IntegerValue(1), new IntegerValue(2)

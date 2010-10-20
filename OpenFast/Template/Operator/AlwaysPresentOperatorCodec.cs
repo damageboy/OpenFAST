@@ -43,6 +43,8 @@ namespace OpenFAST.Template.Operator
             return GetValueToEncode(value, priorValue, scalar);
         }
 
+        #region Equals
+
         public override bool Equals(Object obj)
         {
             return obj != null && obj.GetType() == GetType();
@@ -52,5 +54,7 @@ namespace OpenFAST.Template.Operator
         {
             return base.GetHashCode();
         }
+
+        #endregion
     }
 }

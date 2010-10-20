@@ -52,13 +52,13 @@ namespace UnitTest.Template
 //        {
 //            try
 //            {
-//                Template("<template>" + "  <decimal><copy value=\"10a\"/></decimal>" + "</template>");
+//                Template("<template>" + "  <decimal><copy value='10a'/></decimal>" + "</template>");
 //                Assert.Fail();
 //            }
 //            catch (FastException e)
 //            {
 //                Assert.Equals(FastConstants.S3_INITIAL_VALUE_INCOMP, e.Code);
-//                Assert.Equals("The value \"10a\" is not compatible with type decimal", e.Message);
+//                Assert.Equals("The value '10a' is not compatible with type decimal", e.Message);
 //            }
 //        }
     }

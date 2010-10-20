@@ -59,9 +59,9 @@ namespace OpenFAST.Template.Operator
             return ((NumericValue) value).Subtract((NumericValue) priorValue);
         }
 
-        public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue previousValue, Scalar field)
+        public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue priorValue, Scalar field)
         {
-            if (previousValue == null)
+            if (priorValue == null)
             {
                 Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT,
                                    "The field " + field + " must have a priorValue defined.");
@@ -73,17 +73,17 @@ namespace OpenFAST.Template.Operator
                 return null;
             }
 
-            if (previousValue.IsUndefined)
+            if (priorValue.IsUndefined)
             {
-                previousValue = field.DefaultValue.IsUndefined ? field.BaseValue : field.DefaultValue;
+                priorValue = field.DefaultValue.IsUndefined ? field.BaseValue : field.DefaultValue;
             }
 
-            return ((NumericValue) newValue).Add((NumericValue) previousValue);
+            return ((NumericValue) newValue).Add((NumericValue) priorValue);
         }
 
-        public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)
+        public override ScalarValue DecodeEmptyValue(ScalarValue priorValue, Scalar field)
         {
-            if (previousValue.IsUndefined)
+            if (priorValue.IsUndefined)
             {
                 if (field.DefaultValue.IsUndefined)
                 {
@@ -99,8 +99,10 @@ namespace OpenFAST.Template.Operator
                 }
             }
 
-            return previousValue;
+            return priorValue;
         }
+
+        #region Equals
 
         public override bool Equals(object obj)
         {
@@ -111,5 +113,7 @@ namespace OpenFAST.Template.Operator
         {
             return base.GetHashCode();
         }
+
+        #endregion
     }
 }

@@ -41,7 +41,7 @@ namespace OpenFAST.Template.Loader
                     return new StaticTemplateReference(template);
 
                 context.ErrorHandler.Error(FastConstants.D8_TEMPLATE_NOT_EXIST,
-                                           "The template \"" + templateName + "\" was not found.");
+                                           "The template '" + templateName + "' was not found.");
                 return null;
             }
             return DynamicTemplateReference.INSTANCE;

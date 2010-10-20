@@ -29,32 +29,29 @@ namespace OpenFAST.Session
 {
     public class SessionControlProtocol_1_0 : AbstractSessionControlProtocol
     {
-        internal const int FAST_HELLO_TEMPLATE_ID = 16000;
-        internal const int FAST_ALERT_TEMPLATE_ID = 16001;
-        public static readonly MessageTemplate FAST_ALERT_TEMPLATE;
-        public static readonly MessageTemplate FAST_HELLO_TEMPLATE;
+        private const int FAST_HELLO_TEMPLATE_ID = 16000;
+        private const int FAST_ALERT_TEMPLATE_ID = 16001;
+        private static readonly MessageTemplate FAST_ALERT_TEMPLATE;
+        private static readonly MessageTemplate FAST_HELLO_TEMPLATE;
         private static readonly IMessageHandler RESET_HANDLER;
 
         static SessionControlProtocol_1_0()
         {
-            FAST_ALERT_TEMPLATE = new MessageTemplate("",
-                                                      new Field[]
-                                                          {
-                                                              new Scalar("Severity", Type.U32, Operator.NONE,
-                                                                         ScalarValue.Undefined, false),
-                                                              new Scalar("Code", Type.U32, Operator.NONE,
-                                                                         ScalarValue.Undefined, false),
-                                                              new Scalar("Value", Type.U32, Operator.NONE,
-                                                                         ScalarValue.Undefined, true),
-                                                              new Scalar("Description", Type.ASCII, Operator.NONE,
-                                                                         ScalarValue.Undefined, false)
-                                                          });
-            FAST_HELLO_TEMPLATE = new MessageTemplate("",
-                                                      new Field[]
-                                                          {
-                                                              new Scalar("SenderName", Type.ASCII, Operator.NONE,
-                                                                         ScalarValue.Undefined, false)
-                                                          });
+            FAST_ALERT_TEMPLATE = new MessageTemplate(
+                "",
+                new Field[]
+                    {
+                        new Scalar("Severity", Type.U32, Operator.NONE, ScalarValue.Undefined, false),
+                        new Scalar("Code", Type.U32, Operator.NONE, ScalarValue.Undefined, false),
+                        new Scalar("Value", Type.U32, Operator.NONE, ScalarValue.Undefined, true),
+                        new Scalar("Description", Type.ASCII, Operator.NONE, ScalarValue.Undefined, false)
+                    });
+            FAST_HELLO_TEMPLATE = new MessageTemplate(
+                "",
+                new Field[]
+                    {
+                        new Scalar("SenderName", Type.ASCII, Operator.NONE, ScalarValue.Undefined, false)
+                    });
             RESET_HANDLER = new RESETMessageHandler();
         }
 
@@ -94,15 +91,15 @@ namespace OpenFAST.Session
         {
             registry.Register(FAST_HELLO_TEMPLATE_ID, FAST_HELLO_TEMPLATE);
             registry.Register(FAST_ALERT_TEMPLATE_ID, FAST_ALERT_TEMPLATE);
-            registry.Register(FAST_RESET_TEMPLATE_ID, FAST_RESET_TEMPLATE);
+            registry.Register(FAST_RESET_TEMPLATE_ID, FastResetTemplate);
         }
 
         public override void ConfigureSession(Session session)
         {
             RegisterSessionTemplates(session.MessageInputStream.GetTemplateRegistry());
             RegisterSessionTemplates(session.MessageOutputStream.GetTemplateRegistry());
-            session.MessageInputStream.AddMessageHandler(FAST_RESET_TEMPLATE, RESET_HANDLER);
-            session.MessageOutputStream.AddMessageHandler(FAST_RESET_TEMPLATE, RESET_HANDLER);
+            session.MessageInputStream.AddMessageHandler(FastResetTemplate, RESET_HANDLER);
+            session.MessageOutputStream.AddMessageHandler(FastResetTemplate, RESET_HANDLER);
         }
 
         public static Message CreateFastAlertMessage(ErrorCode code)
@@ -142,7 +139,7 @@ namespace OpenFAST.Session
             if (message == null)
                 return false;
             return (message.Template.Equals(FAST_ALERT_TEMPLATE)) || (message.Template.Equals(FAST_HELLO_TEMPLATE)) ||
-                   (message.Template.Equals(FAST_RESET_TEMPLATE));
+                   (message.Template.Equals(FastResetTemplate));
         }
 
         public override bool SupportsTemplateExchange()

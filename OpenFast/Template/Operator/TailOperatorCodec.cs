@@ -77,31 +77,24 @@ namespace OpenFAST.Template.Operator
             return (ScalarValue) field.CreateValue(Encoding.UTF8.GetString(val, index, val.Length - index));
         }
 
-        public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue previousValue, Scalar field)
+        public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue priorValue, Scalar field)
         {
-            StringValue baseValue;
-
-            if ((previousValue == null) && !field.IsOptional)
+            if (priorValue == null && !field.IsOptional)
             {
                 Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "");
                 return null;
             }
-            if ((previousValue == null) || previousValue.IsUndefined)
-            {
-                baseValue = (StringValue) field.BaseValue;
-            }
-            else
-            {
-                baseValue = (StringValue) previousValue;
-            }
+
+            var baseValue = (StringValue) (priorValue == null || priorValue.IsUndefined
+                                               ? field.BaseValue
+                                               : priorValue);
 
             if (newValue == null || newValue.IsNull)
             {
-                if (field.IsOptional)
-                {
-                    return null;
-                }
-                throw new ArgumentException("");
+                if (!field.IsOptional)
+                    throw new ArgumentException("");
+
+                return null;
             }
 
             string delta = ((StringValue) newValue).Value;
@@ -111,9 +104,9 @@ namespace OpenFAST.Template.Operator
             return new StringValue(root + delta);
         }
 
-        public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)
+        public override ScalarValue DecodeEmptyValue(ScalarValue priorValue, Scalar field)
         {
-            ScalarValue value = previousValue;
+            ScalarValue value = priorValue;
             if (value != null && value.IsUndefined)
                 value = (field.DefaultValue.IsUndefined) ? null : field.DefaultValue;
             if (value == null && !field.IsOptional)
@@ -124,6 +117,8 @@ namespace OpenFAST.Template.Operator
             return value;
         }
 
+        #region Equals
+
         public override bool Equals(object obj) //POINTP
         {
             return obj != null && obj.GetType() == GetType();
@@ -133,5 +128,7 @@ namespace OpenFAST.Template.Operator
         {
             return base.GetHashCode();
         }
+
+        #endregion
     }
 }

@@ -101,7 +101,7 @@ namespace OpenFAST.Template.Loader
                 }
                 _initialContext.ErrorHandler.Error(FastConstants.S1_INVALID_XML,
                                                    "Invalid root node " + root.Name +
-                                                   ", \"template\" or \"templates\" expected.");
+                                                   ", 'template' or 'templates' expected.");
             }
             return new MessageTemplate[] {};
         }

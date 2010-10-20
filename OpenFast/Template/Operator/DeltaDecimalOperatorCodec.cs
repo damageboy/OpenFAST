@@ -45,17 +45,14 @@ namespace OpenFAST.Template.Operator
             if (val == null)
             {
                 if (field.IsOptional)
-                {
                     return ScalarValue.Null;
-                }
+
                 Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "");
                 return null;
             }
 
             if (priorVal.IsUndefined && field.DefaultValue.IsUndefined)
-            {
                 return val;
-            }
 
             DecimalValue priorValue = priorVal.IsUndefined ? (DecimalValue) field.DefaultValue : (DecimalValue) priorVal;
 
@@ -87,22 +84,24 @@ namespace OpenFAST.Template.Operator
                                     v.Exponent + priorValue.Exponent);
         }
 
-        public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)
+        public override ScalarValue DecodeEmptyValue(ScalarValue priorValue, Scalar field)
         {
             if (field.DefaultValue.IsUndefined)
             {
                 if (field.IsOptional)
                     return ScalarValue.Null;
 
-                if (previousValue.IsUndefined)
+                if (priorValue.IsUndefined)
                     throw new ArgumentException(
                         "Mandatory fields without a previous value or default value must be present.",
-                        "previousValue");
+                        "priorValue");
 
-                return previousValue;
+                return priorValue;
             }
             return field.DefaultValue;
         }
+
+        #region Equals
 
         public override bool Equals(Object obj)
         {
@@ -113,5 +112,7 @@ namespace OpenFAST.Template.Operator
         {
             return base.GetHashCode();
         }
+
+        #endregion
     }
 }

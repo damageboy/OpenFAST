@@ -35,7 +35,7 @@ namespace OpenFAST.Session.Multicast
         {
             _socket = socket;
             _buffer = ByteBuffer.Allocate(BufferSize);
-            _buffer.flip(); //SHARIQ
+            _buffer.Flip(); //SHARIQ
         }
 
         public override Boolean CanRead
@@ -69,13 +69,13 @@ namespace OpenFAST.Session.Multicast
         {
             if (!_socket.Client.Connected)
                 return - 1;
-            if (!_buffer.hasRemaining())
+            if (!_buffer.HasRemaining())
             {
-                _buffer.flip(); //SHARIQ
+                _buffer.Flip(); //SHARIQ
 #warning Bug? why allocate DatagramPacket and than pass it in as an out param
-                SupportClass.PacketSupport packet = new DatagramPacket(_buffer.array(), _buffer.array().Length);
+                SupportClass.PacketSupport packet = new DatagramPacket(_buffer.Array(), _buffer.Array().Length);
                 SupportClass.UdpClientSupport.Receive(_socket, out packet);
-                _buffer.limit(packet.Length); //SHARIQ
+                _buffer.Limit(packet.Length); //SHARIQ
             }
             return _buffer.Get(); //SHARIQ
         }

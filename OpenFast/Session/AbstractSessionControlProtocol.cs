@@ -29,13 +29,13 @@ namespace OpenFAST.Session
     {
         internal const int FAST_RESET_TEMPLATE_ID = 120;
 
-        internal static readonly MessageTemplate FAST_RESET_TEMPLATE = new MessageTemplate("Reset", new Field[] {});
+        internal static readonly MessageTemplate FastResetTemplate = new MessageTemplate("Reset", new Field[] {});
 
-        internal static readonly Message RESET;
+        private static readonly Message RESET;
 
         static AbstractSessionControlProtocol()
         {
-            RESET = new RESETMessageBase(FAST_RESET_TEMPLATE);
+            RESET = new ResetMessageBase(FastResetTemplate);
         }
 
         #region ISessionProtocol Members
@@ -63,13 +63,13 @@ namespace OpenFAST.Session
 
         #endregion
 
-        #region Nested type: RESETMessageBase
+        #region Nested type: ResetMessageBase
 
         [Serializable]
-        public class RESETMessageBase : Message
+        private class ResetMessageBase : Message
         {
-            internal RESETMessageBase(MessageTemplate Param1)
-                : base(Param1)
+            internal ResetMessageBase(MessageTemplate template)
+                : base(template)
             {
             }
         }

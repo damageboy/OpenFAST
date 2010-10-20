@@ -27,12 +27,12 @@ using OpenFAST.Template.Type;
 namespace OpenFAST.Template
 {
     [Serializable]
-    public class ComposedScalar : Field
+    public sealed class ComposedScalar : Field
     {
         private const System.Type ScalarValueType = null;
-        private readonly Scalar[] fields;
-        private readonly FASTType type;
-        private readonly IComposedValueConverter valueConverter;
+        private readonly Scalar[] _fields;
+        private readonly FASTType _type;
+        private readonly IComposedValueConverter _valueConverter;
 
         public ComposedScalar(string name, FASTType type, Scalar[] fields, bool optional,
                               IComposedValueConverter valueConverter)
@@ -43,14 +43,14 @@ namespace OpenFAST.Template
         public ComposedScalar(QName name, FASTType type, Scalar[] fields, bool optional,
                               IComposedValueConverter valueConverter) : base(name, optional)
         {
-            this.fields = fields;
-            this.valueConverter = valueConverter;
-            this.type = type;
+            _fields = fields;
+            _valueConverter = valueConverter;
+            _type = type;
         }
 
         public override string TypeName
         {
-            get { return type.Name; }
+            get { return _type.Name; }
         }
 
         public override System.Type ValueType
@@ -58,32 +58,32 @@ namespace OpenFAST.Template
             get { return ScalarValueType; }
         }
 
-        public virtual FASTType Type
+        public FASTType Type
         {
-            get { return type; }
+            get { return _type; }
         }
 
-        public virtual Scalar[] Fields
+        public Scalar[] Fields
         {
-            get { return fields; }
+            get { return _fields; }
         }
 
         public override IFieldValue CreateValue(string value)
         {
-            return type.GetValue(value);
+            return _type.GetValue(value);
         }
 
         public override IFieldValue Decode(Stream inStream, Group decodeTemplate, Context context,
                                            BitVectorReader presenceMapReader)
         {
-            var values = new IFieldValue[fields.Length];
-            for (int i = 0; i < fields.Length; i++)
+            var values = new IFieldValue[_fields.Length];
+            for (int i = 0; i < _fields.Length; i++)
             {
-                values[i] = fields[i].Decode(inStream, decodeTemplate, context, presenceMapReader);
+                values[i] = _fields[i].Decode(inStream, decodeTemplate, context, presenceMapReader);
                 if (i == 0 && values[0] == null)
                     return null;
             }
-            return valueConverter.Compose(values);
+            return _valueConverter.Compose(values);
         }
 
         public override byte[] Encode(IFieldValue value, Group encodeTemplate, Context context,
@@ -92,15 +92,15 @@ namespace OpenFAST.Template
             if (value == null)
             {
                 // Only encode null in the first field.
-                return fields[0].Encode(null, encodeTemplate, context, presenceMapBuilder);
+                return _fields[0].Encode(null, encodeTemplate, context, presenceMapBuilder);
             }
-            var buffer = new MemoryStream(fields.Length*8);
-            IFieldValue[] values = valueConverter.Split(value);
-            for (int i = 0; i < fields.Length; i++)
+            var buffer = new MemoryStream(_fields.Length*8);
+            IFieldValue[] values = _valueConverter.Split(value);
+            for (int i = 0; i < _fields.Length; i++)
             {
                 try
                 {
-                    byte[] tempByteArray = fields[i].Encode(values[i], encodeTemplate, context, presenceMapBuilder);
+                    byte[] tempByteArray = _fields[i].Encode(values[i], encodeTemplate, context, presenceMapBuilder);
                     buffer.Write(tempByteArray, 0, tempByteArray.Length);
                 }
                 catch (IOException e)
@@ -118,11 +118,9 @@ namespace OpenFAST.Template
 
         public override bool UsesPresenceMapBit()
         {
-            for (int i = 0; i < fields.Length; i++)
-            {
-                if (fields[i].UsesPresenceMapBit())
+            for (int i = 0; i < _fields.Length; i++)
+                if (_fields[i].UsesPresenceMapBit())
                     return true;
-            }
             return false;
         }
 
@@ -133,14 +131,14 @@ namespace OpenFAST.Template
             if (obj == null || !obj.GetType().Equals(typeof (ComposedScalar)))
                 return false;
             var other = (ComposedScalar) obj;
-            if (other.fields.Length != fields.Length)
+            if (other._fields.Length != _fields.Length)
                 return false;
             if (!other.Name.Equals(Name))
                 return false;
-            for (int i = 0; i < fields.Length; i++)
+            for (int i = 0; i < _fields.Length; i++)
             {
-                Scalar fld1 = fields[i];
-                Scalar fld2 = other.fields[i];
+                Scalar fld1 = _fields[i];
+                Scalar fld2 = other._fields[i];
 
                 if (!fld2.Type.Equals(fld1.Type))
                     return false;
@@ -170,7 +168,7 @@ namespace OpenFAST.Template
             var builder = new StringBuilder();
             builder.Append("Composed {");
 
-            foreach (Scalar t in fields)
+            foreach (Scalar t in _fields)
             {
                 builder.Append(t).Append(separator);
             }

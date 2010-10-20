@@ -37,6 +37,16 @@ namespace OpenFAST.Template.Operator
             get { return false; }
         }
 
+        public override bool DecodeNewValueNeedsPrevious
+        {
+            get { return false; }
+        }
+
+        public override bool DecodeEmptyValueNeedsPrevious
+        {
+            get { return false; }
+        }
+
         public override ScalarValue GetValueToEncode(ScalarValue value, ScalarValue priorValue, Scalar field,
                                                      BitVectorBuilder presenceMapBuilder)
         {
@@ -45,7 +55,7 @@ namespace OpenFAST.Template.Operator
             return null; // Never encode constant value.
         }
 
-        public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue previousValue, Scalar field)
+        public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue priorValue, Scalar field)
         {
             return field.DefaultValue;
         }
@@ -55,12 +65,11 @@ namespace OpenFAST.Template.Operator
             return fieldValue != null;
         }
 
-        public override ScalarValue DecodeEmptyValue(ScalarValue previousValue, Scalar field)
+        public override ScalarValue DecodeEmptyValue(ScalarValue priorValue, Scalar field)
         {
             if (!field.IsOptional)
-            {
                 return field.DefaultValue;
-            }
+
             return null;
         }
 
@@ -81,6 +90,8 @@ namespace OpenFAST.Template.Operator
             return field.DefaultValue.Equals(value);
         }
 
+        #region Equals
+
         public override bool Equals(Object obj)
         {
             return obj != null && obj.GetType() == GetType();
@@ -90,5 +101,7 @@ namespace OpenFAST.Template.Operator
         {
             return base.GetHashCode();
         }
+
+        #endregion
     }
 }

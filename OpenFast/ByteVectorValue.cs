@@ -59,7 +59,7 @@ namespace OpenFAST
             return builder.ToString();
         }
 
-        #region Equals
+        #region Equals (optimized for empty parent class)
 
         public bool Equals(ByteVectorValue other)
         {
@@ -78,7 +78,7 @@ namespace OpenFAST
 
         public override int GetHashCode()
         {
-            return Util.ArrayHashCodeStruct(_value);
+            return Util.GetValTypeCollectionHashCode(_value);
         }
 
         #endregion

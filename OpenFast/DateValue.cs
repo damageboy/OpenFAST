@@ -48,7 +48,7 @@ namespace OpenFAST
             return _value.ToString("r");
         }
 
-        #region Equals
+        #region Equals (optimized for empty parent class)
 
         public bool Equals(DateValue other)
         {

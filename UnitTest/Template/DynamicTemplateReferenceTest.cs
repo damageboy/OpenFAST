@@ -36,12 +36,12 @@ namespace UnitTest.Template
         protected void SetUp()
         {
             _nameTemplate = Template("<template>" +
-                                     "  <string name=\"name\"/>" +
+                                     "  <string name='name'/>" +
                                      "</template>");
             _template = Template("<template>" +
-                                 "  <uInt32 name=\"quantity\"/>" +
+                                 "  <uInt32 name='quantity'/>" +
                                  "  <templateRef />" +
-                                 "  <decimal name=\"price\"/>" +
+                                 "  <decimal name='price'/>" +
                                  "</template>");
             _message = new Message(_template);
             _message.SetInteger(1, 15);

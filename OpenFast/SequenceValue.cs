@@ -96,7 +96,7 @@ namespace OpenFAST
             return builder.ToString();
         }
 
-        #region Equals
+        #region Equals (optimized for empty parent class)
 
         public bool Equals(SequenceValue other)
         {
@@ -115,7 +115,7 @@ namespace OpenFAST
 
         public override int GetHashCode()
         {
-            return _elements.GetHashCode();
+            return Util.GetCollectionHashCode(_elements);
         }
 
 //public override bool Equals(object other)

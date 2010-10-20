@@ -46,9 +46,9 @@ namespace OpenFAST.Template.Type
             }
         }
 
-        public override bool IsValueOf(ScalarValue previousValue)
+        public override bool IsValueOf(ScalarValue priorValue)
         {
-            return previousValue is DateValue;
+            return priorValue is DateValue;
         }
 
         public override TypeCodec GetCodec(Operator.Operator op, bool optional)
@@ -87,11 +87,6 @@ namespace OpenFAST.Template.Type
                    Equals(other._dateFormatter, _dateFormatter);
         }
 
-        public override bool Equals(FASTType other)
-        {
-            return Equals(other as DateType);
-        }
-
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -104,8 +99,8 @@ namespace OpenFAST.Template.Type
             unchecked
             {
                 int result = base.GetHashCode();
-                result = (result*397) ^ (_dateCodec != null ? _dateCodec.GetHashCode() : 0);
-                result = (result*397) ^ (_dateFormatter != null ? _dateFormatter.GetHashCode() : 0);
+                result = (result*397) ^ _dateCodec.GetHashCode();
+                result = (result*397) ^ _dateFormatter.GetHashCode();
                 return result;
             }
         }

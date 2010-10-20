@@ -34,7 +34,7 @@ namespace OpenFAST
 
         public abstract NumericValue Add(NumericValue addend);
 
-        public abstract bool Equals(int valueRenamed);
+        public abstract bool EqualsInt(int value);
 
         public abstract override long ToLong();
 
