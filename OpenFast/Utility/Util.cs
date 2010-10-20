@@ -32,68 +32,109 @@ namespace OpenFAST.Utility
 {
     internal static class Util
     {
-        private static readonly TwinValue NoDiff = new TwinValue(new IntegerValue(0), new StringValue(""));
+        private static readonly TwinValue NoDiff = new TwinValue(new IntegerValue(0), ByteVectorValue.EMPTY_BYTES);
 
         public static bool IsBiggerThanInt(long value)
         {
             return (value > Int32.MaxValue) || (value < Int32.MinValue);
         }
 
-        public static ScalarValue GetDifference(StringValue newValue, StringValue priorValue)
+        public static ScalarValue GetDifference(byte[] newValue, byte[] priorValue)
         {
-            string value = newValue.Value;
-
-            if ((priorValue == null) || (priorValue.Value.Length == 0))
+            if ((priorValue == null) || (priorValue.Length == 0))
             {
-                return new TwinValue(new IntegerValue(0), newValue);
+                return new TwinValue(new IntegerValue(0), new ByteVectorValue(newValue));
             }
-
             if (priorValue.Equals(newValue))
             {
                 return NoDiff;
             }
-
-            string baseVal = priorValue.Value;
             int appendIndex = 0;
-
-            while ((appendIndex < baseVal.Length) && (appendIndex < value.Length) &&
-                   (value[appendIndex] == baseVal[appendIndex]))
+            while ((appendIndex < priorValue.Length) && (appendIndex < newValue.Length)
+                    && (newValue[appendIndex] == priorValue[appendIndex]))
                 appendIndex++;
-
-            string append = value.Substring(appendIndex);
-
             int prependIndex = 1;
-
-            while ((prependIndex <= value.Length) && (prependIndex <= baseVal.Length) &&
-                   (value[value.Length - prependIndex] ==
-                    baseVal[baseVal.Length - prependIndex]))
+            while ((prependIndex <= newValue.Length) && (prependIndex <= priorValue.Length)
+                    && (newValue[newValue.Length - prependIndex] == priorValue[priorValue.Length - prependIndex]))
                 prependIndex++;
-
-            string prepend = value.Substring(0, (value.Length - prependIndex + 1) - (0));
-
-            if (prepend.Length < append.Length)
+            //        String prepend = newValue.substring(0, value.length() - prependIndex + 1);
+            int prependLength = newValue.Length - prependIndex + 1;
+            int appendLength = newValue.Length - appendIndex;
+            if (prependLength < appendLength)
             {
-                return new TwinValue(new IntegerValue(prependIndex - baseVal.Length - 2), new StringValue(prepend));
+                return new TwinValue(new IntegerValue(prependIndex - priorValue.Length - 2), new ByteVectorValue(newValue, 0, prependLength));
             }
-
-            return new TwinValue(new IntegerValue(baseVal.Length - appendIndex), new StringValue(append));
+            return new TwinValue(new IntegerValue(priorValue.Length - appendIndex), new ByteVectorValue(newValue, appendIndex, appendLength));
         }
 
-        public static StringValue ApplyDifference(StringValue baseValue, TwinValue diffValue)
+        public static byte[] ApplyDifference(ScalarValue baseValue, TwinValue diffValue)
         {
             int subtraction = ((IntegerValue) diffValue.First).Value;
-            string baseVal = baseValue.Value;
-            string diff = ((StringValue) diffValue.Second).Value;
-
+            byte[] baseVal = baseValue.Bytes;
+            byte[] diff = diffValue.Second.Bytes;
             if (subtraction < 0)
             {
-                subtraction = ((-1)*subtraction) - 1;
-
-                return new StringValue(diff + baseVal.Substring(subtraction, (baseVal.Length) - (subtraction)));
+                subtraction = (-1*subtraction) - 1;
+                return ByteUtil.Combine(diff, 0, diff.Length, baseVal, subtraction, baseVal.Length);
             }
-
-            return new StringValue(baseVal.Substring(0, (baseVal.Length - subtraction) - (0)) + diff);
+            return ByteUtil.Combine(baseVal, 0, baseVal.Length - subtraction, diff, 0, diff.Length);
         }
+
+        //public static ScalarValue GetDifference(StringValue newValue, StringValue priorValue)
+        //{
+        //    string value = newValue.Value;
+
+        //    if ((priorValue == null) || (priorValue.Value.Length == 0))
+        //    {
+        //        return new TwinValue(new IntegerValue(0), newValue);
+        //    }
+
+        //    if (priorValue.Equals(newValue))
+        //    {
+        //        return NoDiff;
+        //    }
+
+        //    string baseVal = priorValue.Value;
+        //    int appendIndex = 0;
+
+        //    while ((appendIndex < baseVal.Length) && (appendIndex < value.Length) &&
+        //           (value[appendIndex] == baseVal[appendIndex]))
+        //        appendIndex++;
+
+        //    string append = value.Substring(appendIndex);
+
+        //    int prependIndex = 1;
+
+        //    while ((prependIndex <= value.Length) && (prependIndex <= baseVal.Length) &&
+        //           (value[value.Length - prependIndex] ==
+        //            baseVal[baseVal.Length - prependIndex]))
+        //        prependIndex++;
+
+        //    string prepend = value.Substring(0, (value.Length - prependIndex + 1) - (0));
+
+        //    if (prepend.Length < append.Length)
+        //    {
+        //        return new TwinValue(new IntegerValue(prependIndex - baseVal.Length - 2), new StringValue(prepend));
+        //    }
+
+        //    return new TwinValue(new IntegerValue(baseVal.Length - appendIndex), new StringValue(append));
+        //}
+
+        //public static StringValue ApplyDifference(StringValue baseValue, TwinValue diffValue)
+        //{
+        //    int subtraction = ((IntegerValue) diffValue.First).Value;
+        //    string baseVal = baseValue.Value;
+        //    string diff = ((StringValue) diffValue.Second).Value;
+
+        //    if (subtraction < 0)
+        //    {
+        //        subtraction = ((-1)*subtraction) - 1;
+
+        //        return new StringValue(diff + baseVal.Substring(subtraction, (baseVal.Length) - (subtraction)));
+        //    }
+
+        //    return new StringValue(baseVal.Substring(0, (baseVal.Length - subtraction) - (0)) + diff);
+        //}
 
         public static string CollectionToString(IEnumerable<string> set)
         {

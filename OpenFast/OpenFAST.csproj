@@ -271,6 +271,7 @@
     <Compile Include="Template\Type\StringType.cs" />
     <Compile Include="Template\Type\FASTType.cs" />
     <Compile Include="Template\Type\UnsignedIntegerType.cs" />
+    <Compile Include="UnsupportedOperationException.cs" />
     <Compile Include="Utility\Tuple.cs" />
     <Compile Include="Utility\RecordingInputStream.cs" />
     <Compile Include="Utility\RecordingOutputStream.cs" />

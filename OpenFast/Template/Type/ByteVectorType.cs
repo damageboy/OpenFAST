@@ -46,5 +46,10 @@ namespace OpenFAST.Template.Type
         {
             return priorValue is ByteVectorValue;
         }
+
+        public override ScalarValue GetValue(byte[] bytes)
+        {
+            return new ByteVectorValue(bytes);
+        }
     }
 }

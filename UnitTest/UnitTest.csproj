@@ -69,6 +69,11 @@
     <Compile Include="Template\DynamicTemplateReferenceTest.cs" />
     <Compile Include="Template\GroupTest.cs" />
     <Compile Include="Template\MessageTemplateTest.cs" />
+    <Compile Include="Template\Operator\DefaultOperatorTest.cs" />
+    <Compile Include="Template\Operator\DeltaByteVectorOperatorTest.cs" />
+    <Compile Include="Template\Operator\DeltaDecimalOperatorTest.cs" />
+    <Compile Include="Template\Operator\DeltaStringOperatorTest.cs" />
+    <Compile Include="Template\Operator\OperatorTest.cs" />
     <Compile Include="Template\SequenceTest.cs" />
     <Compile Include="Template\TypeTest.cs" />
     <Compile Include="Test\ObjectMother.cs" />

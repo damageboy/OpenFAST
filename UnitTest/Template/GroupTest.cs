@@ -25,7 +25,6 @@ using OpenFAST;
 using OpenFAST.Codec;
 using OpenFAST.Error;
 using OpenFAST.Template;
-using OpenFAST.Template.Operator;
 using OpenFAST.Template.Type;
 using UnitTest.Test;
 
@@ -51,8 +50,8 @@ namespace UnitTest.Template
         [TestCase]
         public void TestEncode()
         {
-            var firstName = new Scalar("First Name", FASTType.U32, Operator.COPY, ScalarValue.Undefined, true);
-            var lastName = new Scalar("Last Name", FASTType.U32, Operator.NONE, ScalarValue.Undefined, false);
+            var firstName = new Scalar("First Name", FASTType.U32, OpenFAST.Template.Operator.Operator.COPY, ScalarValue.Undefined, true);
+            var lastName = new Scalar("Last Name", FASTType.U32, OpenFAST.Template.Operator.Operator.NONE, ScalarValue.Undefined, false);
             var theGroup = new Group("guy", new Field[] {firstName, lastName}, false);
 
             byte[] actual = theGroup.Encode(
@@ -71,8 +70,8 @@ namespace UnitTest.Template
         {
             const string message = "11000000 10000010 10000010";
             Stream inp = new MemoryStream(ByteUtil.ConvertBitStringToFastByteArray(message));
-            var firstname = new Scalar("firstName", FASTType.U32, Operator.COPY, ScalarValue.Undefined, true);
-            var lastName = new Scalar("lastName", FASTType.U32, Operator.NONE, ScalarValue.Undefined, false);
+            var firstname = new Scalar("firstName", FASTType.U32, OpenFAST.Template.Operator.Operator.COPY, ScalarValue.Undefined, true);
+            var lastName = new Scalar("lastName", FASTType.U32, OpenFAST.Template.Operator.Operator.NONE, ScalarValue.Undefined, false);
 
             // MessageInputStream in = new MessageInputStream(new
             // ByteArrayInputStream(message.getBytes()));

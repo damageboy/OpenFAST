@@ -28,12 +28,21 @@ namespace OpenFAST
     [Serializable]
     public sealed class ByteVectorValue : ScalarValue, IEquatable<ByteVectorValue>
     {
+        public static readonly ScalarValue EMPTY_BYTES = new ByteVectorValue(new byte[] {});
         private readonly byte[] _value;
+        private int offset;
+        private int length;
 
-        public ByteVectorValue(byte[] value)
+        public ByteVectorValue(byte[] value):this(value, 0, value.Length)
+        {
+        }
+
+        public ByteVectorValue(byte[] value, int offset, int length) 
         {
             if (value == null) throw new ArgumentNullException("value");
             _value = value;
+            this.offset = offset;
+            this.length = length;
         }
 
         public override byte[] Bytes
@@ -48,24 +57,36 @@ namespace OpenFAST
 
         public override string ToString()
         {
-            var builder = new StringBuilder(_value.Length*2);
-            foreach (byte t in _value)
-            {
-                string hex = Convert.ToString(t, 16);
-                if (hex.Length == 1)
-                    builder.Append('0');
-                builder.Append(hex);
-            }
-            return builder.ToString();
+            //var builder = new StringBuilder(_value.Length * 2);
+            //byte[] subArray = new byte[length];
+            //Array.Copy(_value, offset, subArray,0, length);
+            //foreach (byte t in subArray)
+            //{
+            //    string hex = Convert.ToString(t, 16);
+            //    if (hex.Length == 1)
+            //        builder.Append('0');
+            //    builder.Append(hex);
+            //}
+            //return builder.ToString();
+            return System.Text.Encoding.ASCII.GetString(_value,offset,length);
         }
 
         #region Equals (optimized for empty parent class)
 
         public bool Equals(ByteVectorValue other)
         {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return Util.ArrayEquals(other._value, _value);
+            //*SM* Removed Util.ArrayEquals() to sync
+
+            if (length != other.length)
+            {
+                return false;
+            }
+            for (int i = 0; i < length; i++)
+                if (_value[offset + i] != other._value[other.offset + i])
+                {
+                    return false;
+                }
+            return true;
         }
 
         public override bool Equals(object obj)

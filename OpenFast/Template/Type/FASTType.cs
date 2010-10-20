@@ -39,9 +39,33 @@ namespace OpenFAST.Template.Type
         public static readonly FASTType I16 = new SignedIntegerType(16, Int16.MinValue, Int16.MaxValue);
         public static readonly FASTType I32 = new SignedIntegerType(32, Int32.MinValue, Int32.MaxValue);
         public static readonly FASTType I64 = new SignedIntegerType(64, Int64.MinValue, Int64.MaxValue);
-        public static readonly FASTType STRING;
-        public static readonly FASTType ASCII;
-        public static readonly FASTType UNICODE;
+        internal sealed class FASTTypeString : StringType
+        {
+            public FASTTypeString(string typeName, TypeCodec codec, TypeCodec nullableCodec)
+                : base(typeName, codec, nullableCodec)
+            {
+            }
+
+            public override ScalarValue GetValue(byte[] bytes)
+            {
+                return new StringValue(System.Text.Encoding.ASCII.GetString(bytes));
+            }
+        }
+        public static readonly FASTType STRING = new FASTTypeString("string", TypeCodec.ASCII, TypeCodec.NULLABLE_ASCII);
+        public static readonly FASTType ASCII = new FASTTypeString("ascii", TypeCodec.ASCII, TypeCodec.NULLABLE_ASCII);
+        internal sealed class FASTUTFTypeString : StringType
+        {
+            public FASTUTFTypeString(string typeName, TypeCodec codec, TypeCodec nullableCodec)
+                : base(typeName, codec, nullableCodec)
+            {
+            }
+
+            public override ScalarValue GetValue(byte[] bytes)
+            {
+                return new StringValue(System.Text.Encoding.UTF8.GetString(bytes));
+            }
+        }
+        public static readonly FASTType UNICODE = new FASTUTFTypeString("unicode", TypeCodec.UNICODE, TypeCodec.NULLABLE_UNICODE);
         public static readonly FASTType BYTE_VECTOR = new ByteVectorType();
         public static readonly FASTType DECIMAL = new DecimalType();
 
@@ -52,9 +76,9 @@ namespace OpenFAST.Template.Type
 
         static FASTType()
         {
-            STRING = new StringType("string", TypeCodec.ASCII, TypeCodec.NULLABLE_ASCII);
-            ASCII = new StringType("ascii", TypeCodec.ASCII, TypeCodec.NULLABLE_ASCII);
-            UNICODE = new StringType("unicode", TypeCodec.UNICODE, TypeCodec.NULLABLE_UNICODE);
+            //STRING = new StringType("string", TypeCodec.ASCII, TypeCodec.NULLABLE_ASCII);
+            //ASCII = new StringType("ascii", TypeCodec.ASCII, TypeCodec.NULLABLE_ASCII);
+            //UNICODE = new StringType("unicode", TypeCodec.UNICODE, TypeCodec.NULLABLE_UNICODE);
         }
 
         protected FASTType(string typeName)
@@ -132,5 +156,10 @@ namespace OpenFAST.Template.Type
         }
 
         #endregion
+
+        public virtual ScalarValue GetValue(byte[] bytes)
+        {
+            throw new UnsupportedOperationException();
+        }
     }
 }

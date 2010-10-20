@@ -66,7 +66,7 @@ namespace UnitTest.Test
 
         protected static void AssertEncodeDecode(ScalarValue value, String bitString, TypeCodec type)
         {
-            Assert.AreEqual(bitString, type.Encode(value ?? ScalarValue.Null));
+            Assert.AreEqual(ByteUtil.ConvertBitStringToFastByteArray(bitString), type.Encode(value ?? ScalarValue.Null));
             Assert.AreEqual(value, type.Decode(ByteUtil.CreateByteStream(bitString)));
         }
 
@@ -124,6 +124,10 @@ namespace UnitTest.Test
         protected static byte[] Byte(String hexString)
         {
             return ByteUtil.ConvertHexStringToByteArray(hexString);
+        }
+        protected ByteVectorValue ByteVector(String hexString)
+        {
+            return Byte(Byte(hexString));
         }
 
         protected static byte[] Bytes(String binaryString)

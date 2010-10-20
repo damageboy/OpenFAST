@@ -99,8 +99,8 @@ namespace OpenFAST.Template.Operator
                 return codec;
 
             Global.HandleError(FastConstants.S2_OPERATOR_TYPE_INCOMP,
-                               "The operator '" + op + "' is not compatible with type '" + type +
-                               "'");
+                               "The operator \"" + op + "\" is not compatible with type \"" + type +
+                               "\"");
             throw new ArgumentOutOfRangeException("op" + ",type", key, "Not found");
         }
 

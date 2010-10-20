@@ -30,7 +30,7 @@ namespace OpenFAST.Template.Operator
     internal sealed class DeltaStringOperatorCodec : AlwaysPresentOperatorCodec
     {
         internal DeltaStringOperatorCodec()
-            : base(Operator.DELTA, new[] {FASTType.ASCII, FASTType.STRING})
+            : base(Operator.DELTA, new[] { FASTType.ASCII, FASTType.STRING, FASTType.UNICODE, FASTType.BYTE_VECTOR })
         {
         }
 
@@ -52,7 +52,8 @@ namespace OpenFAST.Template.Operator
             }
 
             ScalarValue v = (priorValue.IsUndefined) ? field.BaseValue : priorValue;
-            return Util.GetDifference((StringValue) value, (StringValue) v);
+            return Util.GetDifference(value.Bytes, v.Bytes);
+            //return Util.GetDifference((StringValue) value, (StringValue) v);
         }
 
         public override ScalarValue DecodeValue(ScalarValue newValue, ScalarValue priorValue, Scalar field)
@@ -65,10 +66,12 @@ namespace OpenFAST.Template.Operator
             if (diffValue.First.ToInt() > v.ToString().Length)
             {
                 Global.HandleError(FastConstants.D7_SUBTRCTN_LEN_LONG,
-                                   "The string diff <" + diffValue + "> cannot be applied to the base value '" +
-                                   v + "' because the subtraction length is too long.");
+                                   "The string diff <" + diffValue + "> cannot be applied to the base value \"" +
+                                   v + "\" because the subtraction length is too long.");
             }
-            return Util.ApplyDifference((StringValue) v, diffValue);
+            byte[] bytes = Util.ApplyDifference(v, diffValue);
+            return field.Type.GetValue(bytes);
+            //return Util.ApplyDifference((StringValue) v, diffValue);
         }
 
         public override ScalarValue DecodeEmptyValue(ScalarValue priorValue, Scalar field)

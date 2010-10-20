@@ -296,5 +296,9 @@ namespace OpenFAST.Template
             return QName.GetHashCode() + _type.GetHashCode() + _typeCodec.GetHashCode() + _operator.GetHashCode() +
                    _operatorCodec.GetHashCode() + _initialValue.GetHashCode() + _dictionary.GetHashCode();
         }
+        public OperatorCodec GetOperatorCodec()
+        {
+            return _operatorCodec;
+        }
     }
 }

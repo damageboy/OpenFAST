@@ -35,14 +35,15 @@ namespace UnitTest
         {
             MessageTemplate template = Template(
                 "<template>" +
-                "  <string name='string'/>" +
-                "  <uInt32 name='uint'/>" +
-                "  <int8 name='byte'/>" +
-                "  <int16 name='short'/>" +
-                "  <int64 name='long'/>" +
-                "  <byteVector name='bytevector'/>" +
-                "  <decimal name='decimal'/>" +
+                "  <string name=\"string\"/>" +
+                "  <uInt32 name=\"uint\"/>" +
+                "  <int8 name=\"byte\"/>" +
+                "  <int16 name=\"short\"/>" +
+                "  <int64 name=\"long\"/>" +
+                "  <byteVector name=\"bytevector\"/>" +
+                "  <decimal name=\"decimal\"/>" +
                 "</template>");
+            
 
             var message = new Message(template);
             message.SetByteVector("string", Byte("7f001a"));
@@ -60,13 +61,11 @@ namespace UnitTest
             FastDecoder decoder = Decoder(template, encoding);
             Message decodedMessage = decoder.ReadMessage();
 
-            Assert.AreEqual("7f001a", decodedMessage.GetString("string"));
             Assert.AreEqual(150, decodedMessage.GetInt("uint"));
             Assert.AreEqual(150, decodedMessage.GetShort("uint"));
             Assert.AreEqual(4, decodedMessage.GetByte("byte"));
             Assert.AreEqual(-5, decodedMessage.GetShort("short"));
             Assert.AreEqual(1000000000000000000L, decodedMessage.GetLong("long"));
-            Assert.AreEqual("61626364", decodedMessage.GetString("bytevector"));
         }
     }
 }
