@@ -105,9 +105,9 @@ namespace OpenFAST
             return result;
         }
 
-        public static bool IsEmpty(byte[] bytes)
+        public static bool IsEmpty(byte[] bytes, int count)
         {
-            for (int i = 0; i < bytes.Length; i++)
+            for (int i = 0; i < count; i++)
                 if ((bytes[i] & 0x7f) != 0)
                     return false;
             return true;
