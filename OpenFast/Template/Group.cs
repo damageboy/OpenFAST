@@ -170,7 +170,7 @@ namespace OpenFAST.Template
         {
             if (value == null)
             {
-                return new byte[] {};
+                return ByteUtil.EmptyByteArray;
             }
 
             var groupValue = (GroupValue) value;

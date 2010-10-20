@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using NUnit.Framework;
 using OpenFAST;
 using OpenFAST.Codec;
@@ -11,14 +12,37 @@ namespace PerfUnitTest
     [TestFixture]
     internal class PerfUnitTest
     {
-        private static Context CreateContext()
+        public static void Main()
         {
-            var ctx = new Context();
-            
+            var t = new PerfUnitTest();
+            while (true)
+            {
+                try
+                {
+                    t.SetUp();
+                    t.TestPerf();
+                }
+                finally
+                {
+                    t.TearDown();
+                    //Console.WriteLine("Press Enter");
+                    //Console.ReadLine();
+                }
+                break;
+            }
+        }
+
+        #region Setup/Teardown
+
+        [SetUp]
+        protected void SetUp()
+        {
+            _context = new Context();
+
             var zero = new IntegerValue(0);
             var emptyStr = new StringValue("");
 
-            ctx.RegisterTemplate(
+            _context.RegisterTemplate(
                 'Q',
                 new MessageTemplate(
                     "Quote",
@@ -39,7 +63,7 @@ namespace PerfUnitTest
                             new Scalar("ASK_SIZE_Q", FASTType.U32, Operator.COPY, ScalarValue.Undefined, false),
                         }));
 
-            ctx.RegisterTemplate(
+            _context.RegisterTemplate(
                 'T',
                 new MessageTemplate(
                     "Trade",
@@ -57,7 +81,7 @@ namespace PerfUnitTest
                             new Scalar("CONDITION", FASTType.U32, Operator.COPY, ScalarValue.Undefined, false),
                         }));
 
-            ctx.RegisterTemplate(
+            _context.RegisterTemplate(
                 'B',
                 new MessageTemplate(
                     "Bid",
@@ -74,7 +98,7 @@ namespace PerfUnitTest
                             new Scalar("ITEM_TYPE", FASTType.U32, Operator.COPY, ScalarValue.Undefined, false),
                             new Scalar("CONDITION", FASTType.U32, Operator.COPY, ScalarValue.Undefined, false),
                         }));
-            ctx.RegisterTemplate(
+            _context.RegisterTemplate(
                 'A',
                 new MessageTemplate(
                     "Ask",
@@ -91,8 +115,17 @@ namespace PerfUnitTest
                             new Scalar("ITEM_TYPE", FASTType.U32, Operator.COPY, ScalarValue.Undefined, false),
                             new Scalar("CONDITION", FASTType.U32, Operator.COPY, ScalarValue.Undefined, false),
                         }));
-            return ctx;
         }
+
+        [TearDown]
+        protected void TearDown()
+        {
+            _context = null;
+        }
+
+        #endregion
+
+        private Context _context;
 
         private const string LongFile = @"c:\projects\OpenSource\OpenFastNet\PerfUnitTest\test2.fast";
 
@@ -101,7 +134,7 @@ namespace PerfUnitTest
         {
             using (FileStream stream = File.Open(LongFile, FileMode.Open, FileAccess.Read))
             {
-                var decoder = new FastDecoder(CreateContext(), stream);
+                var decoder = new FastDecoder(_context, stream);
 
                 foreach (Message msg in decoder)
                 {

@@ -28,65 +28,42 @@ namespace OpenFAST
     [Serializable]
     public sealed class ByteVectorValue : ScalarValue, IEquatable<ByteVectorValue>
     {
-        public static readonly ScalarValue EMPTY_BYTES = new ByteVectorValue(new byte[] {});
-        private readonly byte[] _value;
-        private int offset;
-        private int length;
+        public static readonly ScalarValue EmptyBytes = new ByteVectorValue(ByteUtil.EmptyByteArray);
 
-        public ByteVectorValue(byte[] value):this(value, 0, value.Length)
+        private readonly ArraySegment<byte> _value;
+
+        public ByteVectorValue(byte[] value)
+            : this(new ArraySegment<byte>(value))
         {
         }
 
-        public ByteVectorValue(byte[] value, int offset, int length) 
+        public ByteVectorValue(ArraySegment<byte> value)
         {
-            if (value == null) throw new ArgumentNullException("value");
             _value = value;
-            this.offset = offset;
-            this.length = length;
         }
 
         public override byte[] Bytes
         {
-            get { return _value; }
+            get { return _value.Array; }
         }
 
         public byte[] Value
         {
-            get { return _value; }
+            get { return _value.Array; }
         }
 
         public override string ToString()
         {
-            //var builder = new StringBuilder(_value.Length * 2);
-            //byte[] subArray = new byte[length];
-            //Array.Copy(_value, offset, subArray,0, length);
-            //foreach (byte t in subArray)
-            //{
-            //    string hex = Convert.ToString(t, 16);
-            //    if (hex.Length == 1)
-            //        builder.Append('0');
-            //    builder.Append(hex);
-            //}
-            //return builder.ToString();
-            return System.Text.Encoding.ASCII.GetString(_value,offset,length);
+            return Encoding.ASCII.GetString(_value.Array, _value.Offset, _value.Count);
         }
 
         #region Equals (optimized for empty parent class)
 
         public bool Equals(ByteVectorValue other)
         {
-            //*SM* Removed Util.ArrayEquals() to sync
-
-            if (length != other.length)
-            {
-                return false;
-            }
-            for (int i = 0; i < length; i++)
-                if (_value[offset + i] != other._value[other.offset + i])
-                {
-                    return false;
-                }
-            return true;
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Util.ArraySegmentEquals(other._value, _value);
         }
 
         public override bool Equals(object obj)

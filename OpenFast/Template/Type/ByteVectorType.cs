@@ -34,7 +34,7 @@ namespace OpenFAST.Template.Type
 
         public override ScalarValue DefaultValue
         {
-            get { return new ByteVectorValue(new byte[] {}); }
+            get { return new ByteVectorValue(ByteUtil.EmptyByteArray); }
         }
 
         public override ScalarValue GetVal(string value)

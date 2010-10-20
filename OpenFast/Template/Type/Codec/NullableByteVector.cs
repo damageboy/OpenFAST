@@ -31,7 +31,7 @@ namespace OpenFAST.Template.Type.Codec
     {
         public static ScalarValue DefaultValue
         {
-            get { return new ByteVectorValue(new byte[] {}); }
+            get { return new ByteVectorValue(ByteUtil.EmptyByteArray); }
         }
 
         public override ScalarValue Decode(Stream inStream)

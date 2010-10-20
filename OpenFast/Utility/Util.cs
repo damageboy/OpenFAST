@@ -32,7 +32,7 @@ namespace OpenFAST.Utility
 {
     internal static class Util
     {
-        private static readonly TwinValue NoDiff = new TwinValue(new IntegerValue(0), ByteVectorValue.EMPTY_BYTES);
+        private static readonly TwinValue NoDiff = new TwinValue(new IntegerValue(0), ByteVectorValue.EmptyBytes);
 
         public static bool IsBiggerThanInt(long value)
         {
@@ -51,20 +51,22 @@ namespace OpenFAST.Utility
             }
             int appendIndex = 0;
             while ((appendIndex < priorValue.Length) && (appendIndex < newValue.Length)
-                    && (newValue[appendIndex] == priorValue[appendIndex]))
+                   && (newValue[appendIndex] == priorValue[appendIndex]))
                 appendIndex++;
             int prependIndex = 1;
             while ((prependIndex <= newValue.Length) && (prependIndex <= priorValue.Length)
-                    && (newValue[newValue.Length - prependIndex] == priorValue[priorValue.Length - prependIndex]))
+                   && (newValue[newValue.Length - prependIndex] == priorValue[priorValue.Length - prependIndex]))
                 prependIndex++;
             //        String prepend = newValue.substring(0, value.length() - prependIndex + 1);
             int prependLength = newValue.Length - prependIndex + 1;
             int appendLength = newValue.Length - appendIndex;
             if (prependLength < appendLength)
             {
-                return new TwinValue(new IntegerValue(prependIndex - priorValue.Length - 2), new ByteVectorValue(newValue, 0, prependLength));
+                return new TwinValue(new IntegerValue(prependIndex - priorValue.Length - 2),
+                                     new ByteVectorValue(new ArraySegment<byte>(newValue, 0, prependLength)));
             }
-            return new TwinValue(new IntegerValue(priorValue.Length - appendIndex), new ByteVectorValue(newValue, appendIndex, appendLength));
+            return new TwinValue(new IntegerValue(priorValue.Length - appendIndex),
+                                 new ByteVectorValue(new ArraySegment<byte>(newValue, appendIndex, appendLength)));
         }
 
         public static byte[] ApplyDifference(ScalarValue baseValue, TwinValue diffValue)
@@ -221,22 +223,10 @@ namespace OpenFAST.Utility
         public static ComposedScalar ComposedDecimal(QName name, Operator exponentOp, ScalarValue exponentVal,
                                                      Operator mantissaOp, ScalarValue mantissaVal, bool optional)
         {
-            var exponentScalar = new Scalar(Global.CreateImplicitName(name), FASTType.I32, exponentOp, exponentVal, optional);
-            var mantissaScalar = new Scalar(Global.CreateImplicitName(name), FASTType.I64, mantissaOp, mantissaVal, false);
-            return new ComposedScalar(name, FASTType.DECIMAL, new[] {exponentScalar, mantissaScalar}, optional,
+            var exponentScalar = new Scalar(Global.CreateImplicitName(name), Type.I32, exponentOp, exponentVal, optional);
+            var mantissaScalar = new Scalar(Global.CreateImplicitName(name), Type.I64, mantissaOp, mantissaVal, false);
+            return new ComposedScalar(name, Type.DECIMAL, new[] {exponentScalar, mantissaScalar}, optional,
                                       new DecimalConverter());
-        }
-
-        public static int ToInt(string attribute)
-        {
-            try
-            {
-                return Int32.Parse(attribute);
-            }
-            catch (FormatException)
-            {
-                return 0;
-            }
         }
 
         public static T[] ToArray<T>(ICollection<T> c)
@@ -292,6 +282,26 @@ namespace OpenFAST.Utility
                         return false;
                 }
             }
+
+            return true;
+        }
+
+        public static bool ArraySegmentEquals(ArraySegment<byte> seg1, ArraySegment<byte> seg2)
+        {
+            // TODO: unsafe code would produce better results in the byte array comparison, maybe will add it later
+            
+            if (seg1 == seg2) return true;
+            if (seg1.Count != seg2.Count) return false;
+
+            byte[] arr1 = seg1.Array;
+            byte[] arr2 = seg2.Array;
+            if (arr1 == null || arr2 == null) return false;
+            
+            var len1 = seg1.Offset + seg1.Count;
+
+            for (int i1 = seg1.Offset, i2 = seg2.Offset; i1 < len1; i1++, i2++)
+                if (arr1[i1] != arr2[i2])
+                    return false;
 
             return true;
         }
@@ -381,11 +391,24 @@ namespace OpenFAST.Utility
         public static int GetValTypeCollectionHashCode<T>(T[] array)
             where T : struct
         {
-            if (array == null)
-                return 0;
+            if(array == null) return 0;
+            return GetValTypeCollectionHashCode(array, 0, array.Length);
+        }
 
+        public static int GetValTypeCollectionHashCode<T>(ArraySegment<T> array)
+            where T : struct
+        {
+            if(array.Array == null) return 0; // default(ArraySegment)
+            return GetValTypeCollectionHashCode(array.Array, array.Offset, array.Count);
+        }
+
+        /// Does not perform parameter validation - hence private
+        private static int GetValTypeCollectionHashCode<T>(T[] array, int offset, int count)
+            where T : struct
+        {
             int result = 1;
-            for (int i = 0; i < array.Length; i++)
+            var last = offset + count;
+            for (int i = offset; i < last; i++)
                 result = (result*397) ^ array[i].GetHashCode();
 
             return result;
