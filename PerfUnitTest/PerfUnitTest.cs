@@ -134,7 +134,7 @@ namespace PerfUnitTest
         {
             using (FileStream stream = File.Open(LongFile, FileMode.Open, FileAccess.Read))
             {
-                var decoder = new FastDecoder(_context, stream);
+                var decoder = new FastDecoder(_context,new BufferedStream(stream,65535));
 
                 foreach (Message msg in decoder)
                 {
