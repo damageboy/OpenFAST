@@ -35,13 +35,13 @@ namespace UnitTest
         {
             MessageTemplate template = Template(
                 "<template>" +
-                "  <string name=\"string\"/>" +
-                "  <uInt32 name=\"uint\"/>" +
-                "  <int8 name=\"byte\"/>" +
-                "  <int16 name=\"short\"/>" +
-                "  <int64 name=\"long\"/>" +
-                "  <byteVector name=\"bytevector\"/>" +
-                "  <decimal name=\"decimal\"/>" +
+                "  <string name='string'/>" +
+                "  <uInt32 name='uint'/>" +
+                "  <int8 name='byte'/>" +
+                "  <int16 name='short'/>" +
+                "  <int64 name='long'/>" +
+                "  <byteVector name='bytevector'/>" +
+                "  <decimal name='decimal'/>" +
                 "</template>");
             
 

@@ -46,7 +46,7 @@ namespace UnitTest.Template.Operator
             {
                 Assert.AreEqual(FastConstants.D7_SUBTRCTN_LEN_LONG, e.Code);
                 Assert.AreEqual(
-                        "The string diff <5, abc> cannot be applied to the base value \"def\" because the subtraction length is too long.",
+                        "The string diff <5, abc> cannot be applied to the base value 'def' because the subtraction length is too long.",
                         e.Message);
             }
         }

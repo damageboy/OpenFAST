@@ -15,7 +15,8 @@ namespace PerfUnitTest
         public static void Main()
         {
             var t = new PerfUnitTest();
-            while (true)
+
+            //while (true)
             {
                 try
                 {
@@ -28,7 +29,6 @@ namespace PerfUnitTest
                     //Console.WriteLine("Press Enter");
                     //Console.ReadLine();
                 }
-                break;
             }
         }
 

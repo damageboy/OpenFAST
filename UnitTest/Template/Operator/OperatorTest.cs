@@ -158,7 +158,7 @@ namespace UnitTest.Template.Operator
             catch (FastException e)
             {
                 Assert.AreEqual(FastConstants.S2_OPERATOR_TYPE_INCOMP, e.Code);
-                Assert.AreEqual("The operator \"increment\" is not compatible with type \"string\"", e.Message);
+                Assert.AreEqual("The operator 'increment' is not compatible with type 'string'", e.Message);
             }
         }
     }

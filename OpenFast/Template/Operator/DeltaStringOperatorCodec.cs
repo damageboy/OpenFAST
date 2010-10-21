@@ -66,8 +66,8 @@ namespace OpenFAST.Template.Operator
             if (diffValue.First.ToInt() > v.ToString().Length)
             {
                 Global.HandleError(FastConstants.D7_SUBTRCTN_LEN_LONG,
-                                   "The string diff <" + diffValue + "> cannot be applied to the base value \"" +
-                                   v + "\" because the subtraction length is too long.");
+                                   "The string diff <" + diffValue + "> cannot be applied to the base value '" +
+                                   v + "' because the subtraction length is too long.");
             }
             byte[] bytes = Util.ApplyDifference(v, diffValue);
             return field.Type.GetValue(bytes);
