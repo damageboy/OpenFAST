@@ -34,7 +34,12 @@ namespace OpenFAST.Codec
 
         public FastDecoder(Context context, Stream inStream)
         {
-            _inStream = inStream;
+            // FileStream optimization
+            if (inStream is FileStream)
+                _inStream = new BufferedStream(inStream, 65535);
+            else
+                _inStream = inStream;
+
             _context = context;
         }
 
