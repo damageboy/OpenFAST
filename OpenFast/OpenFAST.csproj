@@ -172,8 +172,8 @@
     <Compile Include="Session\RecordingEndpoint.cs" />
     <Compile Include="Session\Session.cs" />
     <Compile Include="Session\SessionConstants.cs" />
-    <Compile Include="Session\SessionControlProtocol_1_0.cs" />
-    <Compile Include="Session\SessionControlProtocol_1_1.cs" />
+    <Compile Include="Session\SessionControlProtocol10.cs" />
+    <Compile Include="Session\SessionControlProtocol11.cs" />
     <Compile Include="Session\SessionFactory.cs" />
     <Compile Include="Session\SessionHandler.cs" />
     <Compile Include="Session\SessionListener.cs" />

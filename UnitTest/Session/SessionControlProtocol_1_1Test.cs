@@ -30,12 +30,12 @@ namespace UnitTest.Session
     [TestFixture]
     public class SessionControlProtocol_1_1Test : OpenFastTestCase
     {
-        private SessionControlProtocol_1_1 SCP_1_1;
+        private SessionControlProtocol11 SCP_1_1;
 
         [SetUp]
         protected void SetUp()
         {
-            SCP_1_1 = (SessionControlProtocol_1_1)SessionConstants.Scp11;
+            SCP_1_1 = (SessionControlProtocol11)SessionConstants.Scp11;
         }
 
         [Test]
@@ -79,7 +79,7 @@ namespace UnitTest.Session
         {
             Message templateDef = SCP_1_1.CreateTemplateDefinitionMessage(ObjectMother.BatchTemplate());
             Assert.AreEqual("Header", templateDef.GetSequence("Instructions")[0].GetGroup(0).GetString("Name"));
-            Assert.AreEqual(SessionControlProtocol_1_1.DYN_TEMP_REF_MESSAGE, templateDef.GetSequence("Instructions")[1].GetGroup(0)
+            Assert.AreEqual(SessionControlProtocol11.DynTempRefMessage, templateDef.GetSequence("Instructions")[1].GetGroup(0)
                     .GetSequence("Instructions")[0].GetGroup(0));
             BasicTemplateRegistry registry = new BasicTemplateRegistry();
             registry.Register(24, ObjectMother.HeaderTemplate());

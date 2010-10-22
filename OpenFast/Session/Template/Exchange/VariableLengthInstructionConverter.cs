@@ -29,7 +29,7 @@ namespace OpenFAST.Session.Template.Exchange
     {
         public override Group[] TemplateExchangeTemplates
         {
-            get { return new[] {SessionControlProtocol_1_1.ByteVectorInstr, SessionControlProtocol_1_1.UnicodeInstr}; }
+            get { return new[] {SessionControlProtocol11.ByteVectorInstr, SessionControlProtocol11.UnicodeInstr}; }
         }
 
         public override Field Convert(GroupValue fieldDef, ITemplateRegistry templateRegistry, ConversionContext context)

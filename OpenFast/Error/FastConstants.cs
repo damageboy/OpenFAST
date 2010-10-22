@@ -74,6 +74,7 @@ namespace OpenFAST.Error
             S5NoInitvalMndtryDfalt = new ErrorCode(
                 ErrorType.Static, 5, Severity.Error, "ERR S5",
                 "No initial value for mandatory field with default operator");
+            
             D1FieldAppIncomp = new ErrorCode(
                 ErrorType.Dynamic, 1, Severity.Error, "ERR D1", "Field cannot be converted to type of application field");
             D2IntOutOfRange = new ErrorCode(
@@ -95,6 +96,7 @@ namespace OpenFAST.Error
                 ErrorType.Dynamic, 8, Severity.Error, "ERR D8", "The referenced template does not exist.");
             D9TemplateNotRegistered = new ErrorCode(
                 ErrorType.Dynamic, 9, Severity.Error, "ERR D9", "The template has not been registered.");
+            
             R1LargeDecimal = new ErrorCode(
                 ErrorType.Reportable, 1, Severity.Warn, "ERR R1", "Decimal exponent does not fit into range -63...63");
             R4NumericValueTooLarge = new ErrorCode(
@@ -108,6 +110,7 @@ namespace OpenFAST.Error
                 ErrorType.Reportable, 8, Severity.Warn, "ERR R8", "The presence map has too many bits.");
             R9StringOverlong = new ErrorCode(
                 ErrorType.Reportable, 9, Severity.Error, "ERR R9", "The string is overlong.");
+            
             GeneralError = new ErrorCode(
                 ErrorType.Dynamic, 100, Severity.Error, "GENERAL", "An error has occurred.");
             ImpossibleException = new ErrorCode(

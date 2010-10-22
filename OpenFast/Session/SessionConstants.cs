@@ -34,6 +34,7 @@ namespace OpenFAST.Session
         public static readonly ErrorCode ProtcolError;
         public static readonly ErrorCode Close;
         public static readonly ErrorCode Undefined;
+
         public static readonly ISessionProtocol Scp10;
         public static readonly ISessionProtocol Scp11;
 
@@ -52,8 +53,8 @@ namespace OpenFAST.Session
             Undefined = new ErrorCode(
                 ErrorType.Session, -1, Severity.Error, "UNDEFINED", "Undefined Alert Code");
 
-            Scp10 = new SessionControlProtocol_1_0();
-            Scp11 = new SessionControlProtocol_1_1();
+            Scp10 = new SessionControlProtocol10();
+            Scp11 = new SessionControlProtocol11();
         }
     }
 }

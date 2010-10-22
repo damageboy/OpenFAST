@@ -28,7 +28,7 @@ namespace OpenFAST.Session.Template.Exchange
     {
         public override Group[] TemplateExchangeTemplates
         {
-            get { return new Group[] {SessionControlProtocol_1_1.STAT_TEMP_REF_INSTR}; }
+            get { return new Group[] {SessionControlProtocol11.StatTempRefInstr}; }
         }
 
         public override Field Convert(GroupValue fieldDef, ITemplateRegistry templateRegistry, ConversionContext context)
@@ -43,7 +43,7 @@ namespace OpenFAST.Session.Template.Exchange
 
         public override GroupValue Convert(Field field, ConversionContext context)
         {
-            var strDef = new Message(SessionControlProtocol_1_1.STAT_TEMP_REF_INSTR);
+            var strDef = new Message(SessionControlProtocol11.StatTempRefInstr);
             SetNameAndId(field, strDef);
             return strDef;
         }

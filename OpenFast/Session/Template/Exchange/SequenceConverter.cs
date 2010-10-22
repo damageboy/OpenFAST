@@ -30,7 +30,7 @@ namespace OpenFAST.Session.Template.Exchange
     {
         public override Group[] TemplateExchangeTemplates
         {
-            get { return new Group[] {SessionControlProtocol_1_1.SequenceInstr}; }
+            get { return new Group[] {SessionControlProtocol11.SequenceInstr}; }
         }
 
         public override Field Convert(GroupValue fieldDef, ITemplateRegistry templateRegistry, ConversionContext context)
@@ -83,13 +83,13 @@ namespace OpenFAST.Session.Template.Exchange
             var sequence = (Sequence) field;
             Message seqDef = GroupConverter.Convert(
                 sequence.Group,
-                new Message(SessionControlProtocol_1_1.SequenceInstr),
+                new Message(SessionControlProtocol11.SequenceInstr),
                 context);
 
             seqDef.SetBool("Optional", sequence.IsOptional);
             if (!sequence.ImplicitLength)
             {
-                Group lengthGroup = SessionControlProtocol_1_1.SequenceInstr.GetGroup("Length");
+                Group lengthGroup = SessionControlProtocol11.SequenceInstr.GetGroup("Length");
                 var lengthDef = new GroupValue(lengthGroup);
                 Scalar length = sequence.Length;
                 var nameDef = new GroupValue(lengthGroup.GetGroup("Name"));
@@ -115,8 +115,8 @@ namespace OpenFAST.Session.Template.Exchange
                 var typeRef =
                     new GroupValue(
                         (Group)
-                        SessionControlProtocol_1_1.TypeRef.GetField(new QName("TypeRef",
-                                                                              SessionControlProtocol_1_1.Namespace)));
+                        SessionControlProtocol11.TypeRef.GetField(new QName("TypeRef",
+                                                                              SessionControlProtocol11.Namespace)));
                 SetName(typeRef, sequence.TypeReference);
                 seqDef.SetFieldValue("TypeRef", typeRef);
             }

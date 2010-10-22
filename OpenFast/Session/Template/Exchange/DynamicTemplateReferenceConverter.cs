@@ -29,7 +29,7 @@ namespace OpenFAST.Session.Template.Exchange
 
         public virtual Group[] TemplateExchangeTemplates
         {
-            get { return new Group[] {SessionControlProtocol_1_1.DYN_TEMP_REF_INSTR}; }
+            get { return new Group[] {SessionControlProtocol11.DynTempRefInstr}; }
         }
 
         public virtual Field Convert(GroupValue groupValue, ITemplateRegistry templateRegistry,
@@ -40,7 +40,7 @@ namespace OpenFAST.Session.Template.Exchange
 
         public virtual GroupValue Convert(Field field, ConversionContext context)
         {
-            return SessionControlProtocol_1_1.DYN_TEMP_REF_MESSAGE;
+            return SessionControlProtocol11.DynTempRefMessage;
         }
 
         public virtual bool ShouldConvert(Field field)

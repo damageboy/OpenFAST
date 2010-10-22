@@ -32,14 +32,14 @@ namespace OpenFAST.Session.Template.Exchange
         private readonly Dictionary<Group, FASTType> _templateTypeMap
             = new Dictionary<Group, FASTType>
                   {
-                      {SessionControlProtocol_1_1.Int32Instr, FASTType.I32},
-                      {SessionControlProtocol_1_1.Uint32Instr, FASTType.U32},
-                      {SessionControlProtocol_1_1.Int64Instr, FASTType.I64},
-                      {SessionControlProtocol_1_1.Uint64Instr, FASTType.U64},
-                      {SessionControlProtocol_1_1.DecimalInstr, FASTType.Decimal},
-                      {SessionControlProtocol_1_1.UnicodeInstr, FASTType.Unicode},
-                      {SessionControlProtocol_1_1.AsciiInstr, FASTType.Ascii},
-                      {SessionControlProtocol_1_1.ByteVectorInstr, FASTType.ByteVector},
+                      {SessionControlProtocol11.Int32Instr, FASTType.I32},
+                      {SessionControlProtocol11.Uint32Instr, FASTType.U32},
+                      {SessionControlProtocol11.Int64Instr, FASTType.I64},
+                      {SessionControlProtocol11.Uint64Instr, FASTType.U64},
+                      {SessionControlProtocol11.DecimalInstr, FASTType.Decimal},
+                      {SessionControlProtocol11.UnicodeInstr, FASTType.Unicode},
+                      {SessionControlProtocol11.AsciiInstr, FASTType.Ascii},
+                      {SessionControlProtocol11.ByteVectorInstr, FASTType.ByteVector},
                   };
 
         private readonly Dictionary<FASTType, Group> _typeTemplateMap;
@@ -47,7 +47,7 @@ namespace OpenFAST.Session.Template.Exchange
         public ScalarConverter()
         {
             _typeTemplateMap = Util.ReverseDictionary(_templateTypeMap);
-            _typeTemplateMap[FASTType.String] = SessionControlProtocol_1_1.AsciiInstr;
+            _typeTemplateMap[FASTType.String] = SessionControlProtocol11.AsciiInstr;
         }
 
         public override Group[] TemplateExchangeTemplates

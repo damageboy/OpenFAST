@@ -36,7 +36,7 @@ namespace OpenFAST.Error
 
         public ErrorCode(ErrorType type, int code, Severity severity, string shortName, string description)
         {
-            // BUG? explain why duplicate codes are allowed and replace the older ones
+#warning Why do duplicate codes are allowed and replace the older ones? Various error codes overlap
             AlertCodes[code] = this;
 
             _type = type;

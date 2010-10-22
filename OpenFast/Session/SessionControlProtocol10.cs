@@ -27,7 +27,7 @@ using Type = OpenFAST.Template.Type.FASTType;
 
 namespace OpenFAST.Session
 {
-    public class SessionControlProtocol_1_0 : AbstractSessionControlProtocol
+    public class SessionControlProtocol10 : AbstractSessionControlProtocol
     {
         private const int ResetTemplateId = 120;
         private const int HelloTemplateId = 16000;
@@ -37,7 +37,7 @@ namespace OpenFAST.Session
         private static readonly MessageTemplate HelloTemplate;
         private static readonly IMessageHandler ResetHandler;
 
-        static SessionControlProtocol_1_0()
+        static SessionControlProtocol10()
         {
             AlertTemplate = new MessageTemplate(
                 "",

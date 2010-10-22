@@ -31,7 +31,7 @@ using Type = OpenFAST.Template.Type.FASTType;
 
 namespace OpenFAST.Session
 {
-    public class SessionControlProtocol_1_1 : AbstractSessionControlProtocol
+    public class SessionControlProtocol11 : AbstractSessionControlProtocol
     {
         public const string Namespace = "http://www.fixprotocol.org/ns/fast/scp/1.1";
 
@@ -126,7 +126,7 @@ namespace OpenFAST.Session
 
         private readonly ConversionContext _initialContext = CreateInitialContext();
 
-        static SessionControlProtocol_1_1()
+        static SessionControlProtocol11()
         {
             FASTAlertTemplate = new MessageTemplate(
                 "Alert",
@@ -152,44 +152,44 @@ namespace OpenFAST.Session
             AlertHandler = new AlertSessionMessageHandler();
             Attribute = new MessageTemplate(
                 new QName("Attribute", Namespace),
-                new[] {dict("Ns", true, DictionaryFields.Template), unicode("Name"), unicode("Value")});
+                new[] {Dict("Ns", true, DictionaryFields.Template), Unicode("Name"), Unicode("Value")});
             Element = new MessageTemplate(
                 new QName("Element", Namespace),
                 new[]
                     {
-                        dict("Ns", true, DictionaryFields.Template), unicode("Name"),
+                        Dict("Ns", true, DictionaryFields.Template), Unicode("Name"),
                         new Sequence(
-                            qualify("Attributes"), new Field[] {new StaticTemplateReference(Attribute)}, false),
+                            Qualify("Attributes"), new Field[] {new StaticTemplateReference(Attribute)}, false),
                         new Sequence(
-                            qualify("Content"), new Field[] {DynamicTemplateReference.INSTANCE}, false)
+                            Qualify("Content"), new Field[] {DynamicTemplateReference.INSTANCE}, false)
                     });
             TemplateName = new MessageTemplate(
                 new QName("TemplateName", Namespace),
                 new Field[]
                     {
-                        new Scalar(qualify("Ns"), Type.Unicode, Operator.Copy, null, false),
-                        new Scalar(qualify("Name"), Type.Unicode, Operator.None, null, false)
+                        new Scalar(Qualify("Ns"), Type.Unicode, Operator.Copy, null, false),
+                        new Scalar(Qualify("Name"), Type.Unicode, Operator.None, null, false)
                     });
             NsName = new MessageTemplate(
                 new QName("NsName", Namespace),
                 new[]
                     {
-                        dict("Ns", false, DictionaryFields.Template),
-                        new Scalar(qualify("Name"), Type.Unicode, Operator.None, null, false)
+                        Dict("Ns", false, DictionaryFields.Template),
+                        new Scalar(Qualify("Name"), Type.Unicode, Operator.None, null, false)
                     });
             NsNameWithAuxId = new MessageTemplate(
                 new QName("NsNameWithAuxId", Namespace),
                 new Field[]
                     {
                         new StaticTemplateReference(NsName),
-                        new Scalar(qualify("AuxId"), Type.Unicode, Operator.None, null, true)
+                        new Scalar(Qualify("AuxId"), Type.Unicode, Operator.None, null, true)
                     });
             FieldBase = new MessageTemplate(
                 new QName("PrimFieldBase", Namespace),
                 new Field[]
                     {
                         new StaticTemplateReference(NsNameWithAuxId),
-                        new Scalar(qualify("Optional"), Type.U32, Operator.None, null, false),
+                        new Scalar(Qualify("Optional"), Type.U32, Operator.None, null, false),
                         new StaticTemplateReference(Other)
                     });
             PrimFieldBase = new MessageTemplate(
@@ -197,73 +197,73 @@ namespace OpenFAST.Session
                 new Field[]
                     {
                         new StaticTemplateReference(FieldBase),
-                        new Group(qualify("Operator"), new Field[] {DynamicTemplateReference.INSTANCE}, true)
+                        new Group(Qualify("Operator"), new Field[] {DynamicTemplateReference.INSTANCE}, true)
                     });
             Int32Instr = new MessageTemplate(
                 new QName("Int32Instr", Namespace),
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBase),
-                        new Scalar(qualify("InitialValue"), Type.I32, Operator.None, null, true)
+                        new Scalar(Qualify("InitialValue"), Type.I32, Operator.None, null, true)
                     });
             Uint32Instr = new MessageTemplate(
                 new QName("UInt32Instr", Namespace),
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBase),
-                        new Scalar(qualify("InitialValue"), Type.U32, Operator.None, null, true)
+                        new Scalar(Qualify("InitialValue"), Type.U32, Operator.None, null, true)
                     });
             Int64Instr = new MessageTemplate(
                 new QName("Int64Instr", Namespace),
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBase),
-                        new Scalar(qualify("InitialValue"), Type.I64, Operator.None, null, true)
+                        new Scalar(Qualify("InitialValue"), Type.I64, Operator.None, null, true)
                     });
             Uint64Instr = new MessageTemplate(
                 new QName("UInt64Instr", Namespace),
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBase),
-                        new Scalar(qualify("InitialValue"), Type.U64, Operator.None, null, true)
+                        new Scalar(Qualify("InitialValue"), Type.U64, Operator.None, null, true)
                     });
             DecimalInstr = new MessageTemplate(
                 new QName("DecimalInstr", Namespace),
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBase),
-                        new Scalar(qualify("InitialValue"), Type.Decimal, Operator.None, null, true)
+                        new Scalar(Qualify("InitialValue"), Type.Decimal, Operator.None, null, true)
                     });
             UnicodeInstr = new MessageTemplate(
                 new QName("UnicodeInstr", Namespace),
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBaseWithLength),
-                        new Scalar(qualify("InitialValue"), Type.Unicode, Operator.None, null, true)
+                        new Scalar(Qualify("InitialValue"), Type.Unicode, Operator.None, null, true)
                     });
             AsciiInstr = new MessageTemplate(
                 new QName("AsciiInstr", Namespace),
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBase),
-                        new Scalar(qualify("InitialValue"), Type.Ascii, Operator.None, null, true)
+                        new Scalar(Qualify("InitialValue"), Type.Ascii, Operator.None, null, true)
                     });
             ByteVectorInstr = new MessageTemplate(
                 new QName("ByteVectorInstr", Namespace),
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBaseWithLength),
-                        new Scalar(qualify("InitialValue"), Type.ByteVector, Operator.None, null, true)
+                        new Scalar(Qualify("InitialValue"), Type.ByteVector, Operator.None, null, true)
                     });
             TemplateDefinition = new MessageTemplate(
                 new QName("TemplateDef", Namespace),
                 new[]
                     {
                         new StaticTemplateReference(TemplateName),
-                        unicodeopt("AuxId"), u32opt("TemplateId"),
-                        new StaticTemplateReference(TypeRef), u32("Reset"),
+                        Unicodeopt("AuxId"), U32Opt("TemplateId"),
+                        new StaticTemplateReference(TypeRef), U32("Reset"),
                         new StaticTemplateReference(Other),
-                        new Sequence(qualify("Instructions"), new Field[] {DynamicTemplateReference.INSTANCE}, false)
+                        new Sequence(Qualify("Instructions"), new Field[] {DynamicTemplateReference.INSTANCE}, false)
                     });
             GroupInstr = new MessageTemplate(
                 new QName("GroupInstr", Namespace),
@@ -271,7 +271,7 @@ namespace OpenFAST.Session
                     {
                         new StaticTemplateReference(FieldBase),
                         new StaticTemplateReference(TypeRef),
-                        new Sequence(qualify("Instructions"),
+                        new Sequence(Qualify("Instructions"),
                                      new Field[] {DynamicTemplateReference.INSTANCE},
                                      false)
                     });
@@ -282,48 +282,48 @@ namespace OpenFAST.Session
                         new StaticTemplateReference(FieldBase),
                         new StaticTemplateReference(TypeRef),
                         new Group(
-                            qualify("Length"),
+                            Qualify("Length"),
                             new Field[]
                                 {
-                                    new Group(qualify("Name"),
+                                    new Group(Qualify("Name"),
                                               new Field[] {new StaticTemplateReference(NsNameWithAuxId)}, true),
-                                    new Group(qualify("Operator"),
+                                    new Group(Qualify("Operator"),
                                               new Field[] {DynamicTemplateReference.INSTANCE}, true),
-                                    new Scalar(qualify("InitialValue"), Type.U32, Operator.None, null, true),
+                                    new Scalar(Qualify("InitialValue"), Type.U32, Operator.None, null, true),
                                     new StaticTemplateReference(Other)
                                 }, true),
-                        new Sequence(qualify("Instructions"), new Field[] {DynamicTemplateReference.INSTANCE}, false)
+                        new Sequence(Qualify("Instructions"), new Field[] {DynamicTemplateReference.INSTANCE}, false)
                     });
             Text = new MessageTemplate(
-                qualify("Text"),
+                Qualify("Text"),
                 new Field[]
                     {
-                        new Scalar(qualify("Value"), Type.Unicode, Operator.None, ScalarValue.Undefined, false)
+                        new Scalar(Qualify("Value"), Type.Unicode, Operator.None, ScalarValue.Undefined, false)
                     });
             CompDecimalInstr = new MessageTemplate(
-                qualify("CompositeDecimalInstr"),
+                Qualify("CompositeDecimalInstr"),
                 new Field[]
                     {
                         new StaticTemplateReference(FieldBase),
                         new Group(
-                            qualify("Exponent"),
+                            Qualify("Exponent"),
                             new Field[]
                                 {
                                     new Group(
-                                        qualify("Operator"), new Field[] {DynamicTemplateReference.INSTANCE}, false),
+                                        Qualify("Operator"), new Field[] {DynamicTemplateReference.INSTANCE}, false),
                                     new Scalar(
-                                        qualify("InitialValue"), Type.I32, Operator.None, ScalarValue.Undefined, true),
+                                        Qualify("InitialValue"), Type.I32, Operator.None, ScalarValue.Undefined, true),
                                     new StaticTemplateReference(Other)
                                 }, true),
                         new Group(
-                            qualify("Mantissa"),
+                            Qualify("Mantissa"),
                             new Field[]
                                 {
                                     new Group(
-                                        qualify("Operator"),
+                                        Qualify("Operator"),
                                         new Field[] {DynamicTemplateReference.INSTANCE}, false),
                                     new Scalar(
-                                        qualify("InitialValue"), Type.I32, Operator.None, ScalarValue.Undefined, true),
+                                        Qualify("InitialValue"), Type.I32, Operator.None, ScalarValue.Undefined, true),
                                     new StaticTemplateReference(Other)
                                 }, true)
                     });
@@ -342,17 +342,17 @@ namespace OpenFAST.Session
                 TemplateRegistry.Register(AsciiInstrId, AsciiInstr);
                 TemplateRegistry.Register(UnicodeInstrId, UnicodeInstr);
                 TemplateRegistry.Register(ByteVectorInstrId, ByteVectorInstr);
-                TemplateRegistry.Register(StatTempRefInstrId, STAT_TEMP_REF_INSTR);
-                TemplateRegistry.Register(DynTempRefInstrId, DYN_TEMP_REF_INSTR);
+                TemplateRegistry.Register(StatTempRefInstrId, StatTempRefInstr);
+                TemplateRegistry.Register(DynTempRefInstrId, DynTempRefInstr);
                 TemplateRegistry.Register(SequenceInstrId, SequenceInstr);
                 TemplateRegistry.Register(GroupInstrId, GroupInstr);
                 TemplateRegistry.Register(ConstantOpId, ConstantOp);
-                TemplateRegistry.Register(DefaultOpId, DEFAULT_OP);
-                TemplateRegistry.Register(CopyOpId, COPY_OP);
-                TemplateRegistry.Register(IncrementOpId, INCREMENT_OP);
-                TemplateRegistry.Register(DeltaOpId, DELTA_OP);
-                TemplateRegistry.Register(TailOpId, TAIL_OP);
-                TemplateRegistry.Register(ForeignInstrId, FOREIGN_INSTR);
+                TemplateRegistry.Register(DefaultOpId, DefaultOp);
+                TemplateRegistry.Register(CopyOpId, CopyOp);
+                TemplateRegistry.Register(IncrementOpId, IncrementOp);
+                TemplateRegistry.Register(DeltaOpId, DeltaOp);
+                TemplateRegistry.Register(TailOpId, TailOp);
+                TemplateRegistry.Register(ForeignInstrId, ForeignInstr);
                 TemplateRegistry.Register(ElementId, Element);
                 TemplateRegistry.Register(TextId, Text);
 
@@ -361,7 +361,7 @@ namespace OpenFAST.Session
             }
         }
 
-        public SessionControlProtocol_1_1()
+        public SessionControlProtocol11()
         {
             MessageHandlers[FASTAlertTemplate] = AlertHandler;
             MessageHandlers[TemplateDefinition] = new ProtocolDefinationSessionMessageHandler(this);
@@ -370,7 +370,7 @@ namespace OpenFAST.Session
 
         public override Message CloseMessage
         {
-            get { return CLOSE; }
+            get { return Close; }
         }
 
         private static MessageTemplate Other
@@ -384,14 +384,14 @@ namespace OpenFAST.Session
                             new Field[]
                                 {
                                     new Group(
-                                        qualify("Other"),
+                                        Qualify("Other"),
                                         new Field[]
                                             {
                                                 new Sequence(
-                                                    qualify("ForeignAttributes"),
+                                                    Qualify("ForeignAttributes"),
                                                     new Field[] {new StaticTemplateReference(Attribute)}, true),
                                                 new Sequence(
-                                                    qualify("ForeignElements"),
+                                                    Qualify("ForeignElements"),
                                                     new Field[] {new StaticTemplateReference(Element)}, true)
                                             }, true)
                                 }));
@@ -425,7 +425,7 @@ namespace OpenFAST.Session
                             new Field[]
                                 {
                                     new StaticTemplateReference(PrimFieldBase),
-                                    new Group(qualify("Length"),
+                                    new Group(Qualify("Length"),
                                               new Field[] {new StaticTemplateReference(LengthPreamble)}, true)
                                 }));
             }
@@ -441,7 +441,7 @@ namespace OpenFAST.Session
                                              new Field[]
                                                  {
                                                      new Group(
-                                                         qualify("TypeRef"),
+                                                         Qualify("TypeRef"),
                                                          new Field[]
                                                              {
                                                                  new StaticTemplateReference(NsName),
@@ -462,7 +462,7 @@ namespace OpenFAST.Session
                             new QName("TemplateDecl", Namespace),
                             new[]
                                 {
-                                    new StaticTemplateReference(TemplateName), u32("TemplateId")
+                                    new StaticTemplateReference(TemplateName), U32("TemplateId")
                                 }));
             }
         }
@@ -477,8 +477,8 @@ namespace OpenFAST.Session
                             new QName("OpBase", Namespace),
                             new[]
                                 {
-                                    unicodeopt("Dictionary"),
-                                    new Group(qualify("Key"), new Field[] {new StaticTemplateReference(NsName)}, true),
+                                    Unicodeopt("Dictionary"),
+                                    new Group(Qualify("Key"), new Field[] {new StaticTemplateReference(NsName)}, true),
                                     new StaticTemplateReference(Other)
                                 }));
             }
@@ -495,7 +495,7 @@ namespace OpenFAST.Session
             }
         }
 
-        public static MessageTemplate DEFAULT_OP
+        public static MessageTemplate DefaultOp
         {
             get
             {
@@ -506,7 +506,7 @@ namespace OpenFAST.Session
             }
         }
 
-        public static MessageTemplate COPY_OP
+        public static MessageTemplate CopyOp
         {
             get
             {
@@ -517,7 +517,7 @@ namespace OpenFAST.Session
             }
         }
 
-        public static MessageTemplate INCREMENT_OP
+        public static MessageTemplate IncrementOp
         {
             get
             {
@@ -528,7 +528,7 @@ namespace OpenFAST.Session
             }
         }
 
-        public static MessageTemplate DELTA_OP
+        public static MessageTemplate DeltaOp
         {
             get
             {
@@ -539,7 +539,7 @@ namespace OpenFAST.Session
             }
         }
 
-        public static MessageTemplate TAIL_OP
+        public static MessageTemplate TailOp
         {
             get
             {
@@ -550,7 +550,7 @@ namespace OpenFAST.Session
             }
         }
 
-        public static MessageTemplate STAT_TEMP_REF_INSTR
+        public static MessageTemplate StatTempRefInstr
         {
             get
             {
@@ -566,7 +566,7 @@ namespace OpenFAST.Session
             }
         }
 
-        public static MessageTemplate DYN_TEMP_REF_INSTR
+        public static MessageTemplate DynTempRefInstr
         {
             get
             {
@@ -577,27 +577,27 @@ namespace OpenFAST.Session
             }
         }
 
-        public static MessageTemplate FOREIGN_INSTR
+        public static MessageTemplate ForeignInstr
         {
             get
             {
                 return _staticForeignInstr
                        ?? (_staticForeignInstr = new MessageTemplate(
-                                                     qualify("ForeignInstr"),
+                                                     Qualify("ForeignInstr"),
                                                      new Field[] {new StaticTemplateReference(Element)}));
             }
         }
 
-        public static Message DYN_TEMP_REF_MESSAGE
+        public static Message DynTempRefMessage
         {
             get
             {
                 return _staticDynTempRefMessage
-                       ?? (_staticDynTempRefMessage = new Message(DYN_TEMP_REF_INSTR));
+                       ?? (_staticDynTempRefMessage = new Message(DynTempRefInstr));
             }
         }
 
-        private static Message CLOSE
+        private static Message Close
         {
             get
             {
@@ -768,36 +768,36 @@ namespace OpenFAST.Session
             return group;
         }
 
-        private static Field u32(string name)
+        private static Field U32(string name)
         {
-            return new Scalar(qualify(name), Type.U32, Operator.None, null, false);
+            return new Scalar(Qualify(name), Type.U32, Operator.None, null, false);
         }
 
-        private static Field dict(string name, bool optional, string dictionary)
+        private static Field Dict(string name, bool optional, string dictionary)
         {
-            var scalar = new Scalar(qualify(name), Type.Unicode, Operator.Copy, null, optional)
+            var scalar = new Scalar(Qualify(name), Type.Unicode, Operator.Copy, null, optional)
                              {Dictionary = dictionary};
             return scalar;
         }
 
-        private static QName qualify(string name)
+        private static QName Qualify(string name)
         {
             return new QName(name, Namespace);
         }
 
-        private static Field unicodeopt(string name)
+        private static Field Unicodeopt(string name)
         {
-            return new Scalar(qualify(name), Type.Unicode, Operator.None, null, true);
+            return new Scalar(Qualify(name), Type.Unicode, Operator.None, null, true);
         }
 
-        private static Field unicode(string name)
+        private static Field Unicode(string name)
         {
-            return new Scalar(qualify(name), Type.Unicode, Operator.None, null, false);
+            return new Scalar(Qualify(name), Type.Unicode, Operator.None, null, false);
         }
 
-        private static Field u32opt(string name)
+        private static Field U32Opt(string name)
         {
-            return new Scalar(qualify(name), Type.U32, Operator.None, null, true);
+            return new Scalar(Qualify(name), Type.U32, Operator.None, null, true);
         }
 
         #region Nested type: AlertSessionMessageHandler
@@ -828,9 +828,9 @@ namespace OpenFAST.Session
 
         private sealed class ProtocolDeclarationSessionMessageHandler : ISessionMessageHandler
         {
-            private SessionControlProtocol_1_1 _enclosingInstance;
+            private SessionControlProtocol11 _enclosingInstance;
 
-            public ProtocolDeclarationSessionMessageHandler(SessionControlProtocol_1_1 enclosingInstance)
+            public ProtocolDeclarationSessionMessageHandler(SessionControlProtocol11 enclosingInstance)
             {
                 InitBlock(enclosingInstance);
             }
@@ -844,7 +844,7 @@ namespace OpenFAST.Session
 
             #endregion
 
-            private void InitBlock(SessionControlProtocol_1_1 internalInstance)
+            private void InitBlock(SessionControlProtocol11 internalInstance)
             {
                 _enclosingInstance = internalInstance;
             }
@@ -856,9 +856,9 @@ namespace OpenFAST.Session
 
         private sealed class ProtocolDefinationSessionMessageHandler : ISessionMessageHandler
         {
-            private SessionControlProtocol_1_1 _enclosingInstance;
+            private SessionControlProtocol11 _enclosingInstance;
 
-            public ProtocolDefinationSessionMessageHandler(SessionControlProtocol_1_1 enclosingInstance)
+            public ProtocolDefinationSessionMessageHandler(SessionControlProtocol11 enclosingInstance)
             {
                 InitBlock(enclosingInstance);
             }
@@ -876,7 +876,7 @@ namespace OpenFAST.Session
 
             #endregion
 
-            private void InitBlock(SessionControlProtocol_1_1 internalInstance)
+            private void InitBlock(SessionControlProtocol11 internalInstance)
             {
                 _enclosingInstance = internalInstance;
             }
