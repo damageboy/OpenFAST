@@ -308,8 +308,8 @@ namespace OpenFAST.Utility
 
         public static bool ArrayEquals(byte[] arr1, byte[] arr2)
         {
-            if ((arr1 == null) != (arr2 == null)) return false;
-            if (arr1 == arr2) return true;
+            //if ((arr1 == null) != (arr2 == null)) return false;
+            //if (arr1 == arr2) return true;
             if (arr1.Length != arr2.Length) return false;
 
             // TODO: unsafe code would produce better results in the byte array comparison, maybe will add it later
@@ -351,8 +351,8 @@ namespace OpenFAST.Utility
         /// </summary>
         public static bool ArrayEqualsSlow<T>(T[] arr1, T[] arr2, int startFrom)
         {
-            if ((arr1 == null) != (arr2 == null)) return false;
-            if (arr1 == arr2) return true;
+            //if ((arr1 == null) != (arr2 == null)) return false;
+            //if (arr1 == arr2) return true;
             if (arr1.Length != arr2.Length) return false;
 
             for (int i = startFrom; i < arr1.Length; i++)

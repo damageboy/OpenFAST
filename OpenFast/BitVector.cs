@@ -117,8 +117,9 @@ namespace OpenFAST
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof (BitVector)) return false;
-            return Equals((BitVector) obj);
+            BitVector t = obj as BitVector;
+            if ( t == null ) return false;
+            return Util.ArrayEquals(t._bytes, _bytes);
         }
 
         public override int GetHashCode()

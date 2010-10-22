@@ -132,8 +132,9 @@ namespace OpenFAST
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof (StringValue)) return false;
-            return Equals((StringValue) obj);
+            StringValue t = obj as StringValue;
+            if (t==null) return false;
+            return t._value.Equals(_value);
         }
 
         public override int GetHashCode()

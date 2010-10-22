@@ -61,8 +61,9 @@ namespace OpenFAST
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof (DateValue)) return false;
-            return Equals((DateValue) obj);
+            DateValue t = obj as DateValue;
+            if (t==null) return false;
+            return t._value.Equals(_value);
         }
 
         public override int GetHashCode()

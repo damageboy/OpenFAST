@@ -89,8 +89,9 @@ namespace OpenFAST
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof (QName)) return false;
-            return Equals((QName) obj);
+            QName t = obj as QName;
+            if ( t == null) return false;
+            return Equals(t._name, _name) && Equals(t._namespace, _namespace);
         }
 
         #endregion

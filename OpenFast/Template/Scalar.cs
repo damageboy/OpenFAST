@@ -262,9 +262,10 @@ namespace OpenFAST.Template
         {
             if (ReferenceEquals(other, this))
                 return true;
-            if (ReferenceEquals(other, null) || !(other is Scalar))
+            Scalar t = other as Scalar;
+            if (t==null)
                 return false;
-            return Equals((Scalar) other);
+            return Equals(t);
         }
 
         internal bool Equals(Scalar other)

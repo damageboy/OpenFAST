@@ -164,8 +164,9 @@ namespace OpenFAST
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof (DecimalValue)) return false;
-            return Equals((DecimalValue) obj);
+            DecimalValue t = obj as DecimalValue;
+            if (t == null) return false;
+            return t.Exponent == Exponent && t.Mantissa == Mantissa;
         }
 
         public override int GetHashCode()

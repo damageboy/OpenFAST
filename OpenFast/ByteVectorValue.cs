@@ -70,8 +70,9 @@ namespace OpenFAST
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof (ByteVectorValue)) return false;
-            return Equals((ByteVectorValue) obj);
+            ByteVectorValue t = obj as ByteVectorValue;
+            if (t==null) return false;
+            return Util.ArraySegmentEquals(t._value,_value);
         }
 
         public override int GetHashCode()

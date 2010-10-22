@@ -93,9 +93,12 @@ namespace OpenFAST.Template.Operator
         {
             if (ReferenceEquals(other, this))
                 return true;
-            if (ReferenceEquals(other, null) || !(other is Operator))
+            if (ReferenceEquals(other, null))
+                    return false;
+            Operator t = other as Operator;
+            if (t == null)
                 return false;
-            return Equals((Operator) other);
+            return t.Equals(_name);
         }
 
         internal bool Equals(Operator other)

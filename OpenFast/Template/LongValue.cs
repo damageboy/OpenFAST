@@ -51,8 +51,9 @@ namespace OpenFAST.Template
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != typeof(LongValue)) return false;
-            return Equals((LongValue) obj);
+            LongValue t = obj as LongValue;
+            if (t==null) return false;
+            return t._value == _value;
         }
 
         public override int GetHashCode()

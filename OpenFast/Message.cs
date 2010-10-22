@@ -74,7 +74,7 @@ namespace OpenFAST
             if (ReferenceEquals(null, other)) return false;
             
 #warning bug: ?? Ignore base, because we ignore the first field
-            return Util.ArrayEqualsSlow(Values, other.Values, 1) && Equals(other._template, _template);
+            return Equals(other._template, _template) && Util.ArrayEqualsSlow(Values, other.Values, 1);
         }
 
         public override int GetHashCode()
