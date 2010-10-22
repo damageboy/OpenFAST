@@ -21,6 +21,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System;
 using OpenFAST.Error;
+using OpenFAST.Utility;
 
 namespace OpenFAST
 {
@@ -40,8 +41,8 @@ namespace OpenFAST
             }
 
             var decimalValue = (Decimal) value;
-            int exp = SupportClass.BigDecimalScale(decimalValue);
-            long mant = SupportClass.BigDecimalUnScaledValue(decimalValue);
+            int exp = Util.BigDecimalScale(decimalValue);
+            long mant = Util.BigDecimalUnScaledValue(decimalValue);
 
             while (((mant%10) == 0) && (mant != 0))
             {
@@ -61,8 +62,8 @@ namespace OpenFAST
 
         public DecimalValue(Decimal bigDecimal)
         {
-            Mantissa = SupportClass.BigDecimalUnScaledValue(bigDecimal);
-            Exponent = SupportClass.BigDecimalScale(bigDecimal);
+            Mantissa = Util.BigDecimalUnScaledValue(bigDecimal);
+            Exponent = Util.BigDecimalScale(bigDecimal);
         }
 
         public override bool IsNull

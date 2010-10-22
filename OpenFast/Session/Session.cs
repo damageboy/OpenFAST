@@ -35,7 +35,7 @@ namespace OpenFAST.Session
         private IErrorHandler _errorHandler = ErrorHandlerFields.Default;
         private MessageInputStream _inStream;
         private bool _listening;
-        private SupportClass.ThreadClass _listeningThread;
+        private Thread _listeningThread;
         private IMessageListener _messageListener;
         private MessageOutputStream _outStream;
         private ISessionListener _sessionListener = SessionListenerFields.Null;
@@ -170,12 +170,62 @@ namespace OpenFAST.Session
         {
             if (_listeningThread == null)
             {
-                IThreadRunnable messageReader = new SessionThread(this);
-                _listeningThread = new SupportClass.ThreadClass(new ThreadStart(messageReader.Run),
-                                                                "FAST Session Message Reader");
+                _listeningThread = new Thread(
+                    () =>
+                        {
+                            while (_listening)
+                            {
+                                try
+                                {
+                                    Message message = MessageInputStream.ReadMessage();
+
+                                    if (message == null)
+                                    {
+                                        _listening = false;
+                                        break;
+                                    }
+                                    if (_protocol.IsProtocolMessage(message))
+                                    {
+                                        _protocol.HandleMessage(this, message);
+                                    }
+                                    else if (_messageListener != null)
+                                    {
+                                        _messageListener.OnMessage(this, message);
+                                    }
+                                    else
+                                    {
+                                        throw new InvalidOperationException(
+                                            "Received non-protocol message without a message listener.");
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    Exception cause = e.InnerException;
+
+                                    if (cause != null && cause.GetType().Equals(typeof (SocketException)) &&
+                                        cause.Message.Equals("Socket closed"))
+                                    {
+                                        _listening = false;
+                                    }
+                                    else if (e is FastException)
+                                    {
+                                        var fastException = ((FastException) e);
+                                        _errorHandler.Error(fastException.Code, fastException.Message,
+                                                            e);
+                                    }
+                                    else
+                                    {
+                                        _errorHandler.Error(FastConstants.GENERAL_ERROR, e.Message,
+                                                            e);
+                                    }
+                                }
+                            }
+                        }) {Name = "FAST Session Message Reader"};
             }
+
             if (_listeningThread.IsAlive)
                 return;
+
             _listeningThread.Start();
         }
 
@@ -216,83 +266,5 @@ namespace OpenFAST.Session
                 throw new ArgumentOutOfRangeException("templateName", templateName,
                                                       "Template is not defined in the output stream.");
         }
-
-        #region Nested type: SessionThread
-
-        private class SessionThread : IThreadRunnable
-        {
-            private Session enclosingInstance;
-
-            public SessionThread(Session enclosingInstance)
-            {
-                InitBlock(enclosingInstance);
-            }
-
-            public Session Enclosing_Instance
-            {
-                get { return enclosingInstance; }
-            }
-
-            #region IThreadRunnable Members
-
-            public virtual void Run()
-            {
-                while (Enclosing_Instance._listening)
-                {
-                    try
-                    {
-                        Message message = Enclosing_Instance.MessageInputStream.ReadMessage();
-
-                        if (message == null)
-                        {
-                            Enclosing_Instance._listening = false;
-                            break;
-                        }
-                        if (Enclosing_Instance._protocol.IsProtocolMessage(message))
-                        {
-                            Enclosing_Instance._protocol.HandleMessage(Enclosing_Instance, message);
-                        }
-                        else if (Enclosing_Instance._messageListener != null)
-                        {
-                            Enclosing_Instance._messageListener.OnMessage(enclosingInstance, message);
-                        }
-                        else
-                        {
-                            throw new InvalidOperationException(
-                                "Received non-protocol message without a message listener.");
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Exception cause = e.InnerException;
-
-                        if (cause != null && cause.GetType().Equals(typeof (SocketException)) &&
-                            cause.Message.Equals("Socket closed"))
-                        {
-                            Enclosing_Instance._listening = false;
-                        }
-                        else if (e is FastException)
-                        {
-                            var fastException = ((FastException) e);
-                            Enclosing_Instance._errorHandler.Error(fastException.Code, fastException.Message, e);
-                        }
-                        else
-                        {
-                            Enclosing_Instance._errorHandler.Error(FastConstants.GENERAL_ERROR, e.Message,
-                                                                   e);
-                        }
-                    }
-                }
-            }
-
-            #endregion
-
-            private void InitBlock(Session internalInstance)
-            {
-                enclosingInstance = internalInstance;
-            }
-        }
-
-        #endregion
     }
 }

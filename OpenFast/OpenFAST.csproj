@@ -123,7 +123,6 @@
     <Compile Include="Codec\FastDecoder.cs" />
     <Compile Include="Codec\FastEncoder.cs" />
     <Compile Include="Context.cs" />
-    <Compile Include="DatagramPacket.cs" />
     <Compile Include="DateValue.cs" />
     <Compile Include="Debug\BasicDecodeTrace.cs" />
     <Compile Include="Debug\BasicEncodeTrace.cs" />
@@ -193,7 +192,6 @@
     <Compile Include="Session\Template\Exchange\StaticTemplateReferenceConverter.cs" />
     <Compile Include="Session\Template\Exchange\VariableLengthInstructionConverter.cs" />
     <Compile Include="StringValue.cs" />
-    <Compile Include="SupportClass.cs" />
     <Compile Include="TemplateDictionary.cs" />
     <Compile Include="Template\AbstractTemplateRegistry.cs" />
     <Compile Include="Template\BasicTemplateRegistry.cs" />

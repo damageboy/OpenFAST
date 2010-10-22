@@ -21,7 +21,6 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Text;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
@@ -158,41 +157,14 @@ namespace OpenFAST.Utility
             return str.ToString();
         }
 
-        public static int MillisecondsSinceMidnight(DateTime date)
-        {
-            Calendar cal = new GregorianCalendar();
-            SupportClass.CalendarManager.Manager.SetDateTime(cal, date);
-            return SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.HOUR_OF_DAY)*3600000 +
-                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.MINUTE)*60000 +
-                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.SECOND)*1000 +
-                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.MILLISECOND);
-        }
-
-
-        public static DateTime Date(int year, int month, int day)
-        {
-            Calendar cal = new GregorianCalendar();
-            SupportClass.CalendarManager.Manager.Set(cal, year - 1900, month - 1, day);
-            return SupportClass.CalendarManager.Manager.GetDateTime(cal);
-        }
-
         public static int DateToInt(DateTime date)
         {
-            Calendar cal = new GregorianCalendar();
-            SupportClass.CalendarManager.Manager.SetDateTime(cal, date);
-            return SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.YEAR)*10000 +
-                   (SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.MONTH) + 1)*100 +
-                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.DATE);
+            return date.Year*10000 + date.Month*100 + date.Day;
         }
 
         public static int TimeToInt(DateTime date)
         {
-            Calendar cal = new GregorianCalendar();
-            SupportClass.CalendarManager.Manager.SetDateTime(cal, date);
-            return SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.HOUR_OF_DAY)*10000000 +
-                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.MINUTE)*100000 +
-                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.SECOND)*1000 +
-                   SupportClass.CalendarManager.Manager.Get(cal, SupportClass.CalendarManager.MILLISECOND);
+            return date.Hour*10000000 + date.Minute*100000 + date.Second*1000 + date.Millisecond;
         }
 
         public static int TimestampToInt(DateTime date)
@@ -202,7 +174,6 @@ namespace OpenFAST.Utility
 
         public static DateTime ToTimestamp(long value)
         {
-            Calendar cal = new GregorianCalendar();
             var year = (int) (value/10000000000000L);
             value %= 10000000000000L;
             var month = (int) (value/100000000000L);
@@ -215,9 +186,7 @@ namespace OpenFAST.Utility
             value %= 100000;
             var sec = (int) (value/1000);
             var ms = (int) (value%1000);
-            SupportClass.CalendarManager.Manager.Set(cal, year, month - 1, day, hour, min, sec);
-            SupportClass.CalendarManager.Manager.Set(cal, SupportClass.CalendarManager.MILLISECOND, ms);
-            return SupportClass.CalendarManager.Manager.GetDateTime(cal);
+            return new DateTime(year, month, day, hour, min, sec, ms);
         }
 
         public static ComposedScalar ComposedDecimal(QName name, Operator exponentOp, ScalarValue exponentVal,
@@ -289,15 +258,15 @@ namespace OpenFAST.Utility
         public static bool ArraySegmentEquals(ArraySegment<byte> seg1, ArraySegment<byte> seg2)
         {
             // TODO: unsafe code would produce better results in the byte array comparison, maybe will add it later
-            
+
             if (seg1 == seg2) return true;
             if (seg1.Count != seg2.Count) return false;
 
             byte[] arr1 = seg1.Array;
             byte[] arr2 = seg2.Array;
             if (arr1 == null || arr2 == null) return false;
-            
-            var len1 = seg1.Offset + seg1.Count;
+
+            int len1 = seg1.Offset + seg1.Count;
 
             for (int i1 = seg1.Offset, i2 = seg2.Offset; i1 < len1; i1++, i2++)
                 if (arr1[i1] != arr2[i2])
@@ -391,14 +360,14 @@ namespace OpenFAST.Utility
         public static int GetValTypeCollectionHashCode<T>(T[] array)
             where T : struct
         {
-            if(array == null) return 0;
+            if (array == null) return 0;
             return GetValTypeCollectionHashCode(array, 0, array.Length);
         }
 
         public static int GetValTypeCollectionHashCode<T>(ArraySegment<T> array)
             where T : struct
         {
-            if(array.Array == null) return 0; // default(ArraySegment)
+            if (array.Array == null) return 0; // default(ArraySegment)
             return GetValTypeCollectionHashCode(array.Array, array.Offset, array.Count);
         }
 
@@ -407,11 +376,34 @@ namespace OpenFAST.Utility
             where T : struct
         {
             int result = 1;
-            var last = offset + count;
+            int last = offset + count;
             for (int i = offset; i < last; i++)
                 result = (result*397) ^ array[i].GetHashCode();
 
             return result;
+        }
+
+        public static int BigDecimalScale(decimal d)
+        {
+            int val = 0;
+            while (Math.Truncate(d) != d)
+            {
+                d = d*10;
+                val++;
+            }
+            return val;
+        }
+
+        public static long BigDecimalUnScaledValue(decimal d)
+        {
+            decimal tr = Math.Truncate(d);
+            while (tr != d)
+            {
+                d = d*10;
+                tr = Math.Truncate(d);
+            }
+
+            return (long) tr;
         }
     }
 }

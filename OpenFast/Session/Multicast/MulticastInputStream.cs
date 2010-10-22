@@ -21,6 +21,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System;
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
 
 namespace OpenFAST.Session.Multicast
@@ -61,7 +62,6 @@ namespace OpenFAST.Session.Multicast
         public override Int64 Position
         {
             get { return 0; }
-
             set { }
         }
 
@@ -72,10 +72,11 @@ namespace OpenFAST.Session.Multicast
             if (!_buffer.HasRemaining())
             {
                 _buffer.Flip(); //SHARIQ
-#warning Bug? why allocate DatagramPacket and than pass it in as an out param
-                SupportClass.PacketSupport packet = new DatagramPacket(_buffer.Array(), _buffer.Array().Length);
-                SupportClass.UdpClientSupport.Receive(_socket, out packet);
-                _buffer.Limit(packet.Length); //SHARIQ
+
+                // TODO: not implemented - _buffer is not used
+                var remoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
+                byte[] dataIn = _socket.Receive(ref remoteIpEndPoint);
+                _buffer.Limit(dataIn.Length); //SHARIQ
             }
             return _buffer.Get(); //SHARIQ
         }

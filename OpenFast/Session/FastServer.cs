@@ -32,7 +32,7 @@ namespace OpenFAST.Session
         private readonly ISessionProtocol _sessionProtocol;
         private IErrorHandler _errorHandler = ErrorHandlerFields.Default;
         private bool _listening;
-        private SupportClass.ThreadClass _serverThread;
+        private Thread _serverThread;
         private ISessionHandler _sessionHandler = SessionHandlerFields.Null;
 
         public FastServer(string serverName, ISessionProtocol sessionProtocol, IEndpoint endpoint)
@@ -66,8 +66,28 @@ namespace OpenFAST.Session
             _listening = true;
             if (_serverThread == null)
             {
-                IThreadRunnable runnable = new FastServerThread(this);
-                _serverThread = new SupportClass.ThreadClass(new ThreadStart(runnable.Run), "FastServer");
+                _serverThread = new Thread(
+                    () =>
+                        {
+                            while (_listening)
+                            {
+                                try
+                                {
+                                    _endpoint.Accept();
+                                }
+                                catch (FastConnectionException e)
+                                {
+                                    _errorHandler.Error(null, null, e);
+                                }
+                                try
+                                {
+                                    Thread.Sleep(new TimeSpan((Int64) 10000*20));
+                                }
+                                catch (ThreadInterruptedException)
+                                {
+                                }
+                            }
+                        }) {Name = "FastServer"};
             }
             _serverThread.Start();
         }
@@ -83,55 +103,5 @@ namespace OpenFAST.Session
             Session session = _sessionProtocol.OnNewConnection(_serverName, connection);
             _sessionHandler.NewSession(session);
         }
-
-        #region Nested type: FastServerThread
-
-        private class FastServerThread : IThreadRunnable
-        {
-            private FastServer enclosingInstance;
-
-            public FastServerThread(FastServer enclosingInstance)
-            {
-                InitBlock(enclosingInstance);
-            }
-
-            public FastServer Enclosing_Instance
-            {
-                get { return enclosingInstance; }
-            }
-
-            #region IThreadRunnable Members
-
-            public virtual void Run()
-            {
-                while (Enclosing_Instance._listening)
-                {
-                    try
-                    {
-                        Enclosing_Instance._endpoint.Accept();
-                    }
-                    catch (FastConnectionException e)
-                    {
-                        Enclosing_Instance._errorHandler.Error(null, null, e);
-                    }
-                    try
-                    {
-                        Thread.Sleep(new TimeSpan((Int64) 10000*20));
-                    }
-                    catch (ThreadInterruptedException)
-                    {
-                    }
-                }
-            }
-
-            #endregion
-
-            private void InitBlock(FastServer internalInstance)
-            {
-                enclosingInstance = internalInstance;
-            }
-        }
-
-        #endregion
     }
 }

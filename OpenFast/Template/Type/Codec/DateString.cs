@@ -29,32 +29,35 @@ namespace OpenFAST.Template.Type.Codec
     [Serializable]
     public sealed class DateString : TypeCodec
     {
-        private readonly DateTimeFormatInfo formatter;
+        private readonly string _format;
+        private readonly DateTimeFormatInfo _formatter;
 
         public DateString(string format)
         {
-            formatter = new DateTimeFormatInfo();
+            _format = format;
+            _formatter = new DateTimeFormatInfo();
         }
 
         public override ScalarValue Decode(Stream inStream)
         {
-            try
-            {
-                DateTime tempAux = DateTime.Parse(ASCII.Decode(inStream).ToString(), formatter);
-                return new DateValue(tempAux);
-            }
-            catch (FormatException e)
-            {
-                Global.HandleError(FastConstants.PARSE_ERROR, "", e);
-                return null;
-            }
+            string str = ASCII.Decode(inStream).ToString();
+
+            DateTime result;
+            if (DateTime.TryParseExact(str, _format, _formatter, DateTimeStyles.None, out result))
+                return new DateValue(result);
+
+            Global.HandleError(FastConstants.PARSE_ERROR,
+                               string.Format("'{0}' could not be parsed as DateTime with '{1}' format", str, _format));
+            return null;
         }
 
         public override byte[] EncodeValue(ScalarValue value)
         {
+#warning BUG? This used to format all values using "d-MMM-yy h:mm:ss tt" format, and now it uses constructor parameter instead
             return
                 ASCII.Encode(
-                    new StringValue(SupportClass.FormatDateTime(formatter, ((DateValue) value).Value)));
+                    new StringValue(
+                        (((DateValue) value).Value).ToString(_format, _formatter)));
         }
 
         public override bool Equals(Object obj)

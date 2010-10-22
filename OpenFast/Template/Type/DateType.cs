@@ -29,11 +29,14 @@ namespace OpenFAST.Template.Type
     public sealed class DateType : FASTType, IEquatable<DateType>
     {
         private readonly TypeCodec _dateCodec;
-        private readonly DateTimeFormatInfo _dateFormatter;
+        private readonly string _format;
+        private readonly DateTimeFormatInfo _formatProvider;
 
-        public DateType(DateTimeFormatInfo dateFormat, TypeCodec dateCodec) : base("date")
+        public DateType(string format, DateTimeFormatInfo formatProvider, TypeCodec dateCodec) : base("date")
         {
-            _dateFormatter = dateFormat;
+            if (format == null) throw new ArgumentNullException("format");
+            _format = format;
+            _formatProvider = formatProvider;
             _dateCodec = dateCodec;
         }
 
@@ -63,7 +66,7 @@ namespace OpenFAST.Template.Type
 
             try
             {
-                DateTime tempAux = DateTime.Parse(value, _dateFormatter);
+                DateTime tempAux = DateTime.Parse(value, _formatProvider);
                 return new DateValue(tempAux);
             }
             catch (FormatException e)
@@ -74,7 +77,7 @@ namespace OpenFAST.Template.Type
 
         public override string Serialize(ScalarValue value)
         {
-            return SupportClass.FormatDateTime(_dateFormatter, ((DateValue) value).Value);
+            return (((DateValue) value).Value).ToString(_format, _formatProvider);
         }
 
         #region Equals
@@ -83,8 +86,8 @@ namespace OpenFAST.Template.Type
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return base.Equals(other) && Equals(other._dateCodec, _dateCodec) &&
-                   Equals(other._dateFormatter, _dateFormatter);
+            return base.Equals(other) && Equals(other._dateCodec, _dateCodec) && other._format.Equals(_format) &&
+                   Equals(other._formatProvider, _formatProvider);
         }
 
         public override bool Equals(object obj)
@@ -99,8 +102,9 @@ namespace OpenFAST.Template.Type
             unchecked
             {
                 int result = base.GetHashCode();
-                result = (result*397) ^ _dateCodec.GetHashCode();
-                result = (result*397) ^ _dateFormatter.GetHashCode();
+                result = (result*397) ^ (_dateCodec != null ? _dateCodec.GetHashCode() : 0);
+                result = (result*397) ^ _format.GetHashCode();
+                result = (result*397) ^ (_formatProvider != null ? _formatProvider.GetHashCode() : 0);
                 return result;
             }
         }

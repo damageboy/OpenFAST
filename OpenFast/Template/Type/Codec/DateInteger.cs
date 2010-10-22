@@ -34,8 +34,7 @@ namespace OpenFAST.Template.Type.Codec
             var year = (int) (longValue/10000);
             var month = (int) ((longValue - (year*10000))/100);
             var day = (int) (longValue%100);
-            DateTime tempAux = Util.Date(year, month, day);
-            return new DateValue(tempAux);
+            return new DateValue(new DateTime(year, month, day));
         }
 
         public override byte[] EncodeValue(ScalarValue value)

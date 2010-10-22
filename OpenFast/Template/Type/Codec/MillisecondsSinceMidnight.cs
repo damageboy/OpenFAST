@@ -20,9 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System;
-using System.Globalization;
 using System.IO;
-using OpenFAST.Utility;
 
 namespace OpenFAST.Template.Type.Codec
 {
@@ -32,27 +30,13 @@ namespace OpenFAST.Template.Type.Codec
         public override ScalarValue Decode(Stream inStream)
         {
             int millisecondsSinceMidnight = INTEGER.Decode(inStream).ToInt();
-
-            Calendar cal = new GregorianCalendar();
-            int hour = millisecondsSinceMidnight/3600000;
-            millisecondsSinceMidnight -= hour*3600000;
-            SupportClass.CalendarManager.Manager.Set(cal, SupportClass.CalendarManager.HOUR_OF_DAY, hour);
-            int minute = millisecondsSinceMidnight/60000;
-            millisecondsSinceMidnight -= minute*60000;
-            SupportClass.CalendarManager.Manager.Set(cal, SupportClass.CalendarManager.MINUTE, minute);
-            int second = millisecondsSinceMidnight/1000;
-            millisecondsSinceMidnight -= second*1000;
-            SupportClass.CalendarManager.Manager.Set(cal, SupportClass.CalendarManager.SECOND, second);
-            int millisecond = millisecondsSinceMidnight;
-            SupportClass.CalendarManager.Manager.Set(cal, SupportClass.CalendarManager.MILLISECOND, millisecond);
-            DateTime tempAux = SupportClass.CalendarManager.Manager.GetDateTime(cal);
-            return new DateValue(tempAux);
+            return new DateValue(new DateTime(millisecondsSinceMidnight*TimeSpan.TicksPerMillisecond));
         }
 
         public override byte[] EncodeValue(ScalarValue value)
         {
             DateTime date = ((DateValue) value).Value;
-            int millisecondsSinceMidnight = Util.MillisecondsSinceMidnight(date);
+            var millisecondsSinceMidnight = (int) date.TimeOfDay.TotalMilliseconds;
             return INTEGER.EncodeValue(new IntegerValue(millisecondsSinceMidnight));
         }
 

@@ -67,7 +67,6 @@ namespace OpenFAST.Template
         [Obsolete]
         int GetId(QName templateName);
 
-        [Obsolete]
         int GetId(MessageTemplate template);
 
         [Obsolete]
@@ -85,7 +84,6 @@ namespace OpenFAST.Template
         [Obsolete]
         bool IsRegistered(int id);
 
-        [Obsolete]
         bool IsRegistered(MessageTemplate template);
 
         bool TryGetTemplate(int id, out MessageTemplate template);
