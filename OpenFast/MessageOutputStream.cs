@@ -69,7 +69,7 @@ namespace OpenFAST
             }
             catch (IOException e)
             {
-                Global.HandleError(FastConstants.IO_ERROR, "An error occurred while closing output stream.", e);
+                Global.HandleError(FastConstants.IoError, "An error occurred while closing output stream.", e);
             }
         }
 
@@ -126,7 +126,7 @@ namespace OpenFAST
             catch (IOException e)
             {
                 Global.HandleError(
-                    FastConstants.IO_ERROR, "An IO error occurred while writing message " + message, e);
+                    FastConstants.IoError, "An IO error occurred while writing message " + message, e);
             }
         }
 

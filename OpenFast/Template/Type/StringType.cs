@@ -44,8 +44,8 @@ namespace OpenFAST.Template.Type
 
         public override TypeCodec GetCodec(Operator.Operator op, bool optional)
         {
-            if (op == Operator.Operator.DELTA)
-                return optional ? TypeCodec.NULLABLE_STRING_DELTA : TypeCodec.STRING_DELTA;
+            if (op == Operator.Operator.Delta)
+                return optional ? TypeCodec.NullableStringDelta : TypeCodec.StringDelta;
 
             return base.GetCodec(op, optional);
         }

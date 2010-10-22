@@ -34,7 +34,7 @@ namespace UnitTest.Template.Operator
         [Test]
         public void TestDefaultOperator()
         {
-            var field = new Scalar("operatorName", FASTType.U32, OpenFAST.Template.Operator.Operator.DEFAULT, new IntegerValue(1), false);
+            var field = new Scalar("operatorName", FASTType.U32, OpenFAST.Template.Operator.Operator.Default, new IntegerValue(1), false);
             Assert.AreEqual(null, field.OperatorCodec.GetValueToEncode(new IntegerValue(1), null, field));
             //		newly added implementation
             Assert.AreEqual(new IntegerValue(2), field.OperatorCodec.GetValueToEncode(new IntegerValue(2), null, field));
@@ -42,8 +42,8 @@ namespace UnitTest.Template.Operator
         [Test]
         public void TestCopyOperator()
         {
-            var field = new Scalar("", FASTType.U32, OpenFAST.Template.Operator.Operator.COPY, ScalarValue.Undefined, true);
-            OperatorCodec copy = OpenFAST.Template.Operator.Operator.COPY.GetCodec(FASTType.U32);
+            var field = new Scalar("", FASTType.U32, OpenFAST.Template.Operator.Operator.Copy, ScalarValue.Undefined, true);
+            OperatorCodec copy = OpenFAST.Template.Operator.Operator.Copy.GetCodec(FASTType.U32);
             Assert.AreEqual(new IntegerValue(1), copy.GetValueToEncode(new IntegerValue(1), null, field));
             Assert.AreEqual(new IntegerValue(2), copy.GetValueToEncode(new IntegerValue(2), new IntegerValue(1), field));
             //newly added implementation
@@ -62,19 +62,19 @@ namespace UnitTest.Template.Operator
         [Test]
         public void TestIncrementOperatorWithNoDefaultValue()
         {
-            var field = new Scalar("", FASTType.U32, OpenFAST.Template.Operator.Operator.INCREMENT, ScalarValue.Undefined, false);
-            Assert.AreEqual(new IntegerValue(1), OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.INCREMENT, FASTType.I32).GetValueToEncode(new IntegerValue(1), null, field));
-            Assert.AreEqual(null, OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.INCREMENT, FASTType.I32).GetValueToEncode(new IntegerValue(2), new IntegerValue(1), field));
+            var field = new Scalar("", FASTType.U32, OpenFAST.Template.Operator.Operator.Increment, ScalarValue.Undefined, false);
+            Assert.AreEqual(new IntegerValue(1), OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Increment, FASTType.I32).GetValueToEncode(new IntegerValue(1), null, field));
+            Assert.AreEqual(null, OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Increment, FASTType.I32).GetValueToEncode(new IntegerValue(2), new IntegerValue(1), field));
         }
 
         [Test]
         public void TestIncrementOperatorWithDefaultValue()
         {
-            var field = new Scalar("", FASTType.U32, OpenFAST.Template.Operator.Operator.INCREMENT, new IntegerValue(1), false);
-            Assert.AreEqual(null, OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.INCREMENT, FASTType.I32).GetValueToEncode(new IntegerValue(1), ScalarValue.Undefined, field));
-            Assert.AreEqual(null, OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.INCREMENT, FASTType.I32).GetValueToEncode(new IntegerValue(2), new IntegerValue(1), field));
-            Assert.AreEqual(new IntegerValue(3), OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.INCREMENT, FASTType.I32).GetValueToEncode(new IntegerValue(3), new IntegerValue(1), field));
-            Assert.AreEqual(new IntegerValue(3), OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.INCREMENT, FASTType.I32).GetValueToEncode(new IntegerValue(3), null, field));
+            var field = new Scalar("", FASTType.U32, OpenFAST.Template.Operator.Operator.Increment, new IntegerValue(1), false);
+            Assert.AreEqual(null, OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Increment, FASTType.I32).GetValueToEncode(new IntegerValue(1), ScalarValue.Undefined, field));
+            Assert.AreEqual(null, OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Increment, FASTType.I32).GetValueToEncode(new IntegerValue(2), new IntegerValue(1), field));
+            Assert.AreEqual(new IntegerValue(3), OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Increment, FASTType.I32).GetValueToEncode(new IntegerValue(3), new IntegerValue(1), field));
+            Assert.AreEqual(new IntegerValue(3), OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Increment, FASTType.I32).GetValueToEncode(new IntegerValue(3), null, field));
         }
         //[Test]
         //public void TestConstantValueOperator()
@@ -90,37 +90,37 @@ namespace UnitTest.Template.Operator
         [Test]
         public void TestDeltaValueOperatorForEncodingIntegerValue()
         {
-            var field = new Scalar("", FASTType.I32, OpenFAST.Template.Operator.Operator.DELTA, ScalarValue.Undefined, false);
+            var field = new Scalar("", FASTType.I32, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, false);
             Assert.AreEqual(new IntegerValue(15), field.GetOperatorCodec().GetValueToEncode(new IntegerValue(45), new IntegerValue(30), field));
             Assert.AreEqual(new IntegerValue(-15), field.GetOperatorCodec().GetValueToEncode(new IntegerValue(30), new IntegerValue(45), field));
-            field = new Scalar("", FASTType.I32, OpenFAST.Template.Operator.Operator.DELTA, new IntegerValue(25), false);
+            field = new Scalar("", FASTType.I32, OpenFAST.Template.Operator.Operator.Delta, new IntegerValue(25), false);
             Assert.AreEqual(new IntegerValue(5), field.GetOperatorCodec().GetValueToEncode(new IntegerValue(30), ScalarValue.Undefined, field));
         }
         [Test]
         public void TestDeltaValueOperatorForDecodingIntegerValue()
         {
-            Assert.AreEqual(new IntegerValue(45), OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.DELTA, FASTType.I32).DecodeValue(new IntegerValue(15), new IntegerValue(30), null));
-            Assert.AreEqual(new IntegerValue(30), OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.DELTA, FASTType.I32).DecodeValue(new IntegerValue(-15), new IntegerValue(45), null));
-            var field = new Scalar("", FASTType.I32, OpenFAST.Template.Operator.Operator.DELTA, new IntegerValue(25), false);
-            Assert.AreEqual(new IntegerValue(30), OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.DELTA, FASTType.I32).DecodeValue(new IntegerValue(5), ScalarValue.Undefined, field));
-            var field2 = new Scalar("", FASTType.I32, OpenFAST.Template.Operator.Operator.DELTA, new IntegerValue(25), false);
-            Assert.AreEqual(new IntegerValue(25), OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.DELTA, FASTType.I32).DecodeEmptyValue(ScalarValue.Undefined, field2));
-            Assert.AreEqual(new IntegerValue(5), OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.DELTA, FASTType.I32).DecodeEmptyValue(new IntegerValue(5), field));
-            var field1 = new Scalar("", FASTType.I32, OpenFAST.Template.Operator.Operator.DELTA, ScalarValue.Undefined, true);
-            Assert.AreEqual(ScalarValue.Undefined, OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.DELTA, FASTType.I32).DecodeEmptyValue(ScalarValue.Undefined, field1));
+            Assert.AreEqual(new IntegerValue(45), OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Delta, FASTType.I32).DecodeValue(new IntegerValue(15), new IntegerValue(30), null));
+            Assert.AreEqual(new IntegerValue(30), OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Delta, FASTType.I32).DecodeValue(new IntegerValue(-15), new IntegerValue(45), null));
+            var field = new Scalar("", FASTType.I32, OpenFAST.Template.Operator.Operator.Delta, new IntegerValue(25), false);
+            Assert.AreEqual(new IntegerValue(30), OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Delta, FASTType.I32).DecodeValue(new IntegerValue(5), ScalarValue.Undefined, field));
+            var field2 = new Scalar("", FASTType.I32, OpenFAST.Template.Operator.Operator.Delta, new IntegerValue(25), false);
+            Assert.AreEqual(new IntegerValue(25), OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Delta, FASTType.I32).DecodeEmptyValue(ScalarValue.Undefined, field2));
+            Assert.AreEqual(new IntegerValue(5), OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Delta, FASTType.I32).DecodeEmptyValue(new IntegerValue(5), field));
+            var field1 = new Scalar("", FASTType.I32, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, true);
+            Assert.AreEqual(ScalarValue.Undefined, OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Delta, FASTType.I32).DecodeEmptyValue(ScalarValue.Undefined, field1));
         }
         [Test]
         public void TestDeltaValueOperatorForEncodingIntegerValueWithEmptyPriorValue()
         {
             try
             {
-                var field = new Scalar("", FASTType.I32, OpenFAST.Template.Operator.Operator.DELTA, new IntegerValue(25), false);
+                var field = new Scalar("", FASTType.I32, OpenFAST.Template.Operator.Operator.Delta, new IntegerValue(25), false);
                 field.GetOperatorCodec().GetValueToEncode(new IntegerValue(30), null, field);
                 Assert.Fail();
             }
             catch (FastException e)
             {
-                Assert.AreEqual(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, e.Code);
+                Assert.AreEqual(FastConstants.D6MndtryFieldNotPresent, e.Code);
             }
         }
         [Test]
@@ -128,22 +128,22 @@ namespace UnitTest.Template.Operator
         {
             try
             {
-                var field = new Scalar("", FASTType.U32, OpenFAST.Template.Operator.Operator.DELTA, new IntegerValue(25), false);
-                OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.DELTA, FASTType.I32).DecodeValue(new IntegerValue(30), null, field);
+                var field = new Scalar("", FASTType.U32, OpenFAST.Template.Operator.Operator.Delta, new IntegerValue(25), false);
+                OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Delta, FASTType.I32).DecodeValue(new IntegerValue(30), null, field);
                 //newly added implementation
-                var field1 = new Scalar("", FASTType.U32, OpenFAST.Template.Operator.Operator.DELTA, ScalarValue.Undefined, false);
-                Assert.AreEqual(ScalarValue.Undefined, OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.DELTA, FASTType.I32).DecodeEmptyValue(ScalarValue.Undefined, field1));
+                var field1 = new Scalar("", FASTType.U32, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, false);
+                Assert.AreEqual(ScalarValue.Undefined, OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Delta, FASTType.I32).DecodeEmptyValue(ScalarValue.Undefined, field1));
                 Assert.Fail();
             }
             catch (FastException e)
             {
-                Assert.AreEqual(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, e.Code);
+                Assert.AreEqual(FastConstants.D6MndtryFieldNotPresent, e.Code);
             }
         }
         [Test]
         public void TestDeltaOperatorForOptionalUnsignedInteger()
         {
-            var field = new Scalar("", FASTType.U32, OpenFAST.Template.Operator.Operator.DELTA, ScalarValue.Undefined, true);
+            var field = new Scalar("", FASTType.U32, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, true);
             OperatorCodec delta = field.GetOperatorCodec();
             Assert.AreEqual(ScalarValue.Null, delta.GetValueToEncode(null, ScalarValue.Undefined, field));
         }
@@ -152,12 +152,12 @@ namespace UnitTest.Template.Operator
         {
             try
             {
-                OpenFAST.Template.Operator.Operator.INCREMENT.GetCodec(FASTType.STRING);
+                OpenFAST.Template.Operator.Operator.Increment.GetCodec(FASTType.String);
                 Assert.Fail();
             }
             catch (FastException e)
             {
-                Assert.AreEqual(FastConstants.S2_OPERATOR_TYPE_INCOMP, e.Code);
+                Assert.AreEqual(FastConstants.S2OperatorTypeIncomp, e.Code);
                 Assert.AreEqual("The operator 'increment' is not compatible with type 'string'", e.Message);
             }
         }

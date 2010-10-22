@@ -71,7 +71,7 @@ namespace UnitTest.Scenario
             var nestedSequence = new Sequence("nested",
                                               new Field[]
                                                   {
-                                                      new Scalar("string", FASTType.ASCII, Operator.COPY,
+                                                      new Scalar("string", FASTType.Ascii, Operator.Copy,
                                                                  ScalarValue.Undefined, false)
                                                   }, true);
             var group = new Group("group", new Field[] {nestedSequence}, true);

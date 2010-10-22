@@ -36,7 +36,7 @@ namespace OpenFAST.Template.Type.Codec
 
         public override ScalarValue Decode(Stream inStream)
         {
-            ScalarValue decode = NULLABLE_UNSIGNED_INTEGER.Decode(inStream);
+            ScalarValue decode = NullableUnsignedInteger.Decode(inStream);
             if (decode == null)
                 return null;
             int length = decode.ToInt();
@@ -50,7 +50,7 @@ namespace OpenFAST.Template.Type.Codec
                 }
                 catch (IOException e)
                 {
-                    Global.HandleError(FastConstants.IO_ERROR,
+                    Global.HandleError(FastConstants.IoError,
                                        "An error occurred while decoding a nullable byte vector.", e);
                     // BUG? Continue processing on IO exception???
                 }
@@ -62,11 +62,11 @@ namespace OpenFAST.Template.Type.Codec
         public override byte[] EncodeValue(ScalarValue value)
         {
             if (value.IsNull)
-                return NULLABLE_UNSIGNED_INTEGER.EncodeValue(ScalarValue.Null);
+                return NullableUnsignedInteger.EncodeValue(ScalarValue.Null);
             var byteVectorValue = (ByteVectorValue) value;
             int lengthSize = IntegerCodec.GetUnsignedIntegerSize(byteVectorValue.Value.Length);
             var encoding = new byte[byteVectorValue.Value.Length + lengthSize];
-            byte[] length = NULLABLE_UNSIGNED_INTEGER.Encode(new IntegerValue(byteVectorValue.Value.Length));
+            byte[] length = NullableUnsignedInteger.Encode(new IntegerValue(byteVectorValue.Value.Length));
             Array.Copy(length, 0, encoding, 0, lengthSize);
             Array.Copy(byteVectorValue.Value, 0, encoding, lengthSize, byteVectorValue.Value.Length);
             return encoding;

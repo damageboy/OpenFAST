@@ -142,7 +142,7 @@ namespace OpenFAST.Template
                 if (s != null)
                 {
                     string attr;
-                    if (t.TryGetAttribute(FastConstants.LENGTH_FIELD, out attr))
+                    if (t.TryGetAttribute(FastConstants.LengthField, out attr))
                         map[attr] = s;
                 }
             }
@@ -189,7 +189,7 @@ namespace OpenFAST.Template
                     Field field = _fields[fieldIndex];
                     if (!field.IsOptional && fieldValue == null)
                     {
-                        Global.HandleError(FastConstants.GENERAL_ERROR, "Mandatory field " + field + " is null");
+                        Global.HandleError(FastConstants.GeneralError, "Mandatory field " + field + " is null");
                         // BUG? error is ignored?
                     }
                     byte[] encoding = field.Encode(fieldValue, template, context, presenceMapBuilder);
@@ -256,12 +256,12 @@ namespace OpenFAST.Template
             {
                 return DecodeFieldValues(inStream, template, BitVectorReader.Null, context);
             }
-            BitVector pmap = ((BitVectorValue) TypeCodec.BIT_VECTOR.Decode(inStream)).Value;
+            BitVector pmap = ((BitVectorValue) TypeCodec.BitVector.Decode(inStream)).Value;
             if (context.TraceEnabled)
                 context.DecodeTrace.Pmap(pmap.Bytes);
             if (pmap.IsOverlong)
             {
-                Global.HandleError(FastConstants.R7_PMAP_OVERLONG,
+                Global.HandleError(FastConstants.R7PmapOverlong,
                                    "The presence map " + pmap + " for the group " + this + " is overlong.");
             }
             return DecodeFieldValues(inStream, template, new BitVectorReader(pmap), context);
@@ -280,7 +280,7 @@ namespace OpenFAST.Template
 
             if (pmapReader.HasMoreBitsSet())
             {
-                Global.HandleError(FastConstants.R8_PMAP_TOO_MANY_BITS,
+                Global.HandleError(FastConstants.R8PmapTooManyBits,
                                    "The presence map " + pmapReader + " has too many bits for the group " + this);
             }
 

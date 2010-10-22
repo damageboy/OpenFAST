@@ -54,7 +54,7 @@ namespace OpenFAST.Template.Loader
 
             if (lengthElements.Count == 0)
             {
-                var implicitLength = new Scalar(Global.CreateImplicitName(name), FASTType.U32, Operator.Operator.NONE,
+                var implicitLength = new Scalar(Global.CreateImplicitName(name), FASTType.U32, Operator.Operator.None,
                                                 ScalarValue.Undefined, optional)
                                          {Dictionary = parent.Dictionary};
                 return implicitLength;

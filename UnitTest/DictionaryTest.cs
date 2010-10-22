@@ -41,7 +41,7 @@ namespace UnitTest
             _output = new StreamWriter(new MemoryStream());
             _connection = new MyConnection(_output.BaseStream);
             _session = new OpenFAST.Session.Session(_connection,
-                                   SessionConstants.SCP_1_0,
+                                   SessionConstants.Scp10,
                                    TemplateRegistryFields.Null, TemplateRegistryFields.Null);
         }
 
@@ -93,12 +93,12 @@ namespace UnitTest
         [Test]
         public void TestMultipleDictionaryTypes()
         {
-            var bid = new Scalar("bid", FASTType.DECIMAL, Operator.COPY, ScalarValue.Undefined, false)
+            var bid = new Scalar("bid", FASTType.Decimal, Operator.Copy, ScalarValue.Undefined, false)
                           {Dictionary = DictionaryFields.Template};
 
             var quote = new MessageTemplate("quote", new Field[] {bid});
 
-            var bidR = new Scalar("bid", FASTType.DECIMAL, Operator.COPY, ScalarValue.Undefined, false);
+            var bidR = new Scalar("bid", FASTType.Decimal, Operator.Copy, ScalarValue.Undefined, false);
             var request = new MessageTemplate("request",
                                               new Field[] {bidR});
 

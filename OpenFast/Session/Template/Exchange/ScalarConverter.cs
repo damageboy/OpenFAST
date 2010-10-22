@@ -32,14 +32,14 @@ namespace OpenFAST.Session.Template.Exchange
         private readonly Dictionary<Group, FASTType> _templateTypeMap
             = new Dictionary<Group, FASTType>
                   {
-                      {SessionControlProtocol_1_1.INT32_INSTR, FASTType.I32},
-                      {SessionControlProtocol_1_1.UINT32_INSTR, FASTType.U32},
-                      {SessionControlProtocol_1_1.INT64_INSTR, FASTType.I64},
-                      {SessionControlProtocol_1_1.UINT64_INSTR, FASTType.U64},
-                      {SessionControlProtocol_1_1.DECIMAL_INSTR, FASTType.DECIMAL},
-                      {SessionControlProtocol_1_1.UNICODE_INSTR, FASTType.UNICODE},
-                      {SessionControlProtocol_1_1.ASCII_INSTR, FASTType.ASCII},
-                      {SessionControlProtocol_1_1.BYTE_VECTOR_INSTR, FASTType.BYTE_VECTOR},
+                      {SessionControlProtocol_1_1.Int32Instr, FASTType.I32},
+                      {SessionControlProtocol_1_1.Uint32Instr, FASTType.U32},
+                      {SessionControlProtocol_1_1.Int64Instr, FASTType.I64},
+                      {SessionControlProtocol_1_1.Uint64Instr, FASTType.U64},
+                      {SessionControlProtocol_1_1.DecimalInstr, FASTType.Decimal},
+                      {SessionControlProtocol_1_1.UnicodeInstr, FASTType.Unicode},
+                      {SessionControlProtocol_1_1.AsciiInstr, FASTType.Ascii},
+                      {SessionControlProtocol_1_1.ByteVectorInstr, FASTType.ByteVector},
                   };
 
         private readonly Dictionary<FASTType, Group> _typeTemplateMap;
@@ -47,7 +47,7 @@ namespace OpenFAST.Session.Template.Exchange
         public ScalarConverter()
         {
             _typeTemplateMap = Util.ReverseDictionary(_templateTypeMap);
-            _typeTemplateMap[FASTType.STRING] = SessionControlProtocol_1_1.ASCII_INSTR;
+            _typeTemplateMap[FASTType.String] = SessionControlProtocol_1_1.AsciiInstr;
         }
 
         public override Group[] TemplateExchangeTemplates
@@ -84,7 +84,7 @@ namespace OpenFAST.Session.Template.Exchange
             }
             else
             {
-                scalar = new Scalar(qname, type, Operator.NONE, initialValue, optional);
+                scalar = new Scalar(qname, type, Operator.None, initialValue, optional);
             }
             if (fieldDef.IsDefined("AuxId"))
             {
@@ -101,7 +101,7 @@ namespace OpenFAST.Session.Template.Exchange
             SetNameAndId(scalar, scalarMsg);
             scalarMsg.SetInteger("Optional", scalar.IsOptional ? 1 : 0);
 
-            if (!scalar.Operator.Equals(Operator.NONE))
+            if (!scalar.Operator.Equals(Operator.None))
                 scalarMsg.SetFieldValue(
                     "Operator",
                     new GroupValue(scalarTemplate.GetGroup("Operator"), new IFieldValue[] {CreateOperator(scalar)}));

@@ -39,23 +39,23 @@ namespace UnitTest
                 "Company",
                 new Field[]
                     {
-                        new Scalar("Name", FASTType.STRING, Operator.NONE, ScalarValue.Undefined, false),
-                        new Scalar("Id", FASTType.U32, Operator.INCREMENT, ScalarValue.Undefined, false),
+                        new Scalar("Name", FASTType.String, Operator.None, ScalarValue.Undefined, false),
+                        new Scalar("Id", FASTType.U32, Operator.Increment, ScalarValue.Undefined, false),
                         new Sequence(
                             "Employees",
                             new Field[]
                                 {
-                                    new Scalar("First Name", FASTType.STRING, Operator.COPY, ScalarValue.Undefined,
+                                    new Scalar("First Name", FASTType.String, Operator.Copy, ScalarValue.Undefined,
                                                false),
-                                    new Scalar("Last Name", FASTType.STRING, Operator.COPY, ScalarValue.Undefined, false)
+                                    new Scalar("Last Name", FASTType.String, Operator.Copy, ScalarValue.Undefined, false)
                                     ,
-                                    new Scalar("Age", FASTType.U32, Operator.DELTA, ScalarValue.Undefined, false)
+                                    new Scalar("Age", FASTType.U32, Operator.Delta, ScalarValue.Undefined, false)
                                 }, false),
                         new Group(
                             "Tax Information",
                             new Field[]
                                 {
-                                    new Scalar("EIN", FASTType.STRING, Operator.NONE, ScalarValue.Undefined, false)
+                                    new Scalar("EIN", FASTType.String, Operator.None, ScalarValue.Undefined, false)
                                 }, false)
                     });
 

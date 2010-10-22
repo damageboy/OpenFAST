@@ -29,13 +29,13 @@ namespace OpenFAST.Template.Type.Codec
     {
         public override ScalarValue Decode(Stream inStream)
         {
-            var tempAux = new DateTime(INTEGER.Decode(inStream).ToLong());
+            var tempAux = new DateTime(Integer.Decode(inStream).ToLong());
             return new DateValue(tempAux);
         }
 
         public override byte[] EncodeValue(ScalarValue value)
         {
-            return INTEGER.EncodeValue(new LongValue(value.ToLong()));
+            return Integer.EncodeValue(new LongValue(value.ToLong()));
         }
 
         public override bool Equals(Object obj)

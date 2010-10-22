@@ -80,7 +80,7 @@ namespace UnitTest
         [Test]
         public void TestConstantOperatorWithMandatoryField()
         {
-            var field = new Scalar("", FASTType.U32, Operator.CONSTANT, new IntegerValue(16), false);
+            var field = new Scalar("", FASTType.U32, Operator.Constant, new IntegerValue(16), false);
             MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
@@ -104,7 +104,7 @@ namespace UnitTest
         [Test]
         public void TestConstantOperatorWithOptionalField()
         {
-            var field = new Scalar("", FASTType.U32, Operator.CONSTANT, new IntegerValue(16), true);
+            var field = new Scalar("", FASTType.U32, Operator.Constant, new IntegerValue(16), true);
             MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
@@ -125,7 +125,7 @@ namespace UnitTest
         [Test]
         public void TestCopyOperatorWithMandatoryField()
         {
-            var field = new Scalar("", FASTType.U32, Operator.COPY,
+            var field = new Scalar("", FASTType.U32, Operator.Copy,
                                    new IntegerValue(16), false);
             MessageTemplate template = RegisterTemplate(field);
 
@@ -155,7 +155,7 @@ namespace UnitTest
         [Test]
         public void TestCopyOperatorWithOptionalField()
         {
-            var field = new Scalar("", FASTType.U32, Operator.COPY,
+            var field = new Scalar("", FASTType.U32, Operator.Copy,
                                    new IntegerValue(16), true);
             MessageTemplate template = RegisterTemplate(field);
 
@@ -191,7 +191,7 @@ namespace UnitTest
         [Test]
         public void TestDefaultOperatorWithMandatoryField()
         {
-            var field = new Scalar("", FASTType.U32, Operator.DEFAULT,
+            var field = new Scalar("", FASTType.U32, Operator.Default,
                                    new IntegerValue(16), false);
             MessageTemplate template = RegisterTemplate(field);
 
@@ -214,7 +214,7 @@ namespace UnitTest
         [Test]
         public void TestDefaultOperatorWithOptionalField()
         {
-            var field = new Scalar("", FASTType.U32, Operator.DEFAULT,
+            var field = new Scalar("", FASTType.U32, Operator.Default,
                                    new IntegerValue(16), true);
             MessageTemplate template = RegisterTemplate(field);
 
@@ -244,7 +244,7 @@ namespace UnitTest
         public void TestDeltaOperatorWithMandatoryField()
         {
             var field = new Scalar("", FASTType.U32,
-                                   Operator.INCREMENT, new IntegerValue(16), false);
+                                   Operator.Increment, new IntegerValue(16), false);
             MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
@@ -273,7 +273,7 @@ namespace UnitTest
         [Test]
         public void TestDeltaOperatorWithOptionalField()
         {
-            var field = new Scalar("", FASTType.U32, Operator.DELTA,
+            var field = new Scalar("", FASTType.U32, Operator.Delta,
                                    new IntegerValue(16), true);
             MessageTemplate template = RegisterTemplate(field);
 
@@ -309,7 +309,7 @@ namespace UnitTest
         [Test]
         public void TestEmptyOperatorWithMandatoryField()
         {
-            var field = new Scalar("", FASTType.U32, Operator.NONE,
+            var field = new Scalar("", FASTType.U32, Operator.None,
                                    ScalarValue.Undefined, false);
             MessageTemplate template = RegisterTemplate(field);
 
@@ -338,7 +338,7 @@ namespace UnitTest
         [Test]
         public void TestEmptyOperatorWithOptionalField()
         {
-            var field = new Scalar("", FASTType.U32, Operator.NONE,
+            var field = new Scalar("", FASTType.U32, Operator.None,
                                    ScalarValue.Undefined, true);
             MessageTemplate template = RegisterTemplate(field);
 
@@ -358,7 +358,7 @@ namespace UnitTest
         [Test]
         public void TestEmptyOperatorWithOptionalFieldOnNullValue()
         {
-            var field = new Scalar("", FASTType.U32, Operator.NONE,
+            var field = new Scalar("", FASTType.U32, Operator.None,
                                    ScalarValue.Undefined, true);
             MessageTemplate template = RegisterTemplate(field);
 
@@ -377,7 +377,7 @@ namespace UnitTest
         [Test]
         public void TestEmptyOperatorWithSequenceOfMessages()
         {
-            var field = new Scalar("", FASTType.U32, Operator.NONE,
+            var field = new Scalar("", FASTType.U32, Operator.None,
                                    ScalarValue.Undefined, true);
             MessageTemplate template = RegisterTemplate(field);
 
@@ -406,7 +406,7 @@ namespace UnitTest
         public void TestIncrementOperatorWithMandatoryField()
         {
             var field = new Scalar("", FASTType.U32,
-                                   Operator.INCREMENT, new IntegerValue(16), false);
+                                   Operator.Increment, new IntegerValue(16), false);
             MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
@@ -436,7 +436,7 @@ namespace UnitTest
         public void TestIncrementOperatorWithOptionalField()
         {
             var field = new Scalar("", FASTType.U32,
-                                   Operator.INCREMENT, new IntegerValue(16), true);
+                                   Operator.Increment, new IntegerValue(16), true);
             MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
@@ -471,7 +471,7 @@ namespace UnitTest
         [Test]
         public void TestTailOperatorWithMandatoryField()
         {
-            var field = new Scalar("", FASTType.STRING, Operator.TAIL,
+            var field = new Scalar("", FASTType.String, Operator.Tail,
                                    new StringValue("abc"), false);
             MessageTemplate template = RegisterTemplate(field);
 
@@ -509,7 +509,7 @@ namespace UnitTest
         [Test]
         public void TestTailOperatorWithOptionalField()
         {
-            var field = new Scalar("", FASTType.STRING, Operator.TAIL,
+            var field = new Scalar("", FASTType.String, Operator.Tail,
                                    new StringValue("abc"), true);
             MessageTemplate template = RegisterTemplate(field);
 

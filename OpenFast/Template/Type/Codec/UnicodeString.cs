@@ -36,13 +36,13 @@ namespace OpenFAST.Template.Type.Codec
         public override byte[] EncodeValue(ScalarValue value)
         {
             byte[] utf8encoding = Encoding.UTF8.GetBytes(((StringValue) value).Value);
-            return BYTE_VECTOR.Encode(new ByteVectorValue(utf8encoding));
+            return ByteVector.Encode(new ByteVectorValue(utf8encoding));
         }
 
 
         public override ScalarValue Decode(Stream inStream)
         {
-            var value = (ByteVectorValue) BYTE_VECTOR.Decode(inStream);
+            var value = (ByteVectorValue) ByteVector.Decode(inStream);
             return new StringValue(Encoding.UTF8.GetString(value.Value));
         }
 

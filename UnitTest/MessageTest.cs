@@ -37,7 +37,7 @@ namespace UnitTest
                 "",
                 new Field[]
                     {
-                        new Scalar("1", FASTType.U32, Operator.COPY, ScalarValue.Undefined, false)
+                        new Scalar("1", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false)
                     });
             GroupValue message = new Message(template);
             message.SetInteger(1, 1);
@@ -56,7 +56,7 @@ namespace UnitTest
                 "",
                 new Field[]
                     {
-                        new Scalar("1", FASTType.U32, Operator.COPY, ScalarValue.Undefined, false)
+                        new Scalar("1", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false)
                     });
             var message = new Message(template);
             var other = new Message(template);

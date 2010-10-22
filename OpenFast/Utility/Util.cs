@@ -194,7 +194,7 @@ namespace OpenFAST.Utility
         {
             var exponentScalar = new Scalar(Global.CreateImplicitName(name), Type.I32, exponentOp, exponentVal, optional);
             var mantissaScalar = new Scalar(Global.CreateImplicitName(name), Type.I64, mantissaOp, mantissaVal, false);
-            return new ComposedScalar(name, Type.DECIMAL, new[] {exponentScalar, mantissaScalar}, optional,
+            return new ComposedScalar(name, Type.Decimal, new[] {exponentScalar, mantissaScalar}, optional,
                                       new DecimalConverter());
         }
 

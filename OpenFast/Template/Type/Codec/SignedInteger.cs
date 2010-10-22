@@ -66,7 +66,7 @@ namespace OpenFAST.Template.Type.Codec
 
                 value = (value << 7) | (byt & 0x7f);
 
-                while ((byt & STOP_BIT) == 0)
+                while ((byt & StopBit) == 0)
                 {
                     byt = (uint) inStream.ReadByte();
                     value = (value << 7) | (byt & 0x7f);

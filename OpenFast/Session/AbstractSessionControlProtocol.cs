@@ -27,22 +27,14 @@ namespace OpenFAST.Session
 {
     public abstract class AbstractSessionControlProtocol : ISessionProtocol
     {
-        internal const int FAST_RESET_TEMPLATE_ID = 120;
-
         internal static readonly MessageTemplate FastResetTemplate = new MessageTemplate("Reset", new Field[] {});
-
-        private static readonly Message RESET;
-
-        static AbstractSessionControlProtocol()
-        {
-            RESET = new ResetMessageBase(FastResetTemplate);
-        }
+        private static readonly Message Reset = new ResetMessageObj(FastResetTemplate);
 
         #region ISessionProtocol Members
 
         public virtual Message ResetMessage
         {
-            get { return RESET; }
+            get { return Reset; }
         }
 
         public abstract Message CloseMessage { get; }
@@ -63,12 +55,12 @@ namespace OpenFAST.Session
 
         #endregion
 
-        #region Nested type: ResetMessageBase
+        #region Nested type: ResetMessageObj
 
         [Serializable]
-        private class ResetMessageBase : Message
+        private class ResetMessageObj : Message
         {
-            internal ResetMessageBase(MessageTemplate template)
+            internal ResetMessageObj(MessageTemplate template)
                 : base(template)
             {
             }

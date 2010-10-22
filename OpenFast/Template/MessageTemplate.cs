@@ -79,7 +79,7 @@ namespace OpenFAST.Template
         private static Field[] AddTemplateIdField(Field[] fields)
         {
             var newFields = new Field[fields.Length + 1];
-            newFields[0] = new Scalar("templateId", FASTType.U32, Operator.Operator.COPY, ScalarValue.Undefined, false);
+            newFields[0] = new Scalar("templateId", FASTType.U32, Operator.Operator.Copy, ScalarValue.Undefined, false);
             Array.Copy(fields, 0, newFields, 1, fields.Length);
             return newFields;
         }
@@ -95,7 +95,7 @@ namespace OpenFAST.Template
 
             throw new FastException(
                 "Cannot encode message: The template " + message.Template + " has not been registered.",
-                FastConstants.D9_TEMPLATE_NOT_REGISTERED);
+                FastConstants.D9TemplateNotRegistered);
         }
 
         public Message Decode(Stream inStream, int templateId, BitVectorReader presenceMapReader, Context context)

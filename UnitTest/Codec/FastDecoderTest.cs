@@ -56,12 +56,12 @@ namespace UnitTest.Codec
                 "",
                 new Field[]
                     {
-                        new Scalar("1", FASTType.ASCII, Operator.COPY, ScalarValue.Undefined, false),
-                        new Scalar("2", FASTType.BYTE_VECTOR, Operator.COPY, ScalarValue.Undefined, false),
-                        new Scalar("3", FASTType.DECIMAL, Operator.COPY, ScalarValue.Undefined, false),
-                        new Scalar("4", FASTType.I32, Operator.COPY, ScalarValue.Undefined, false),
-                        new Scalar("5", FASTType.ASCII, Operator.COPY, ScalarValue.Undefined, false),
-                        new Scalar("6", FASTType.U32, Operator.COPY, ScalarValue.Undefined, false),
+                        new Scalar("1", FASTType.Ascii, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("2", FASTType.ByteVector, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("3", FASTType.Decimal, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("4", FASTType.I32, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("5", FASTType.Ascii, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("6", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
                     });
             var context = new Context();
             context.RegisterTemplate(113, template);
@@ -83,13 +83,13 @@ namespace UnitTest.Codec
                 "",
                 new Field[]
                     {
-                        new Scalar("1", FASTType.I32, Operator.COPY, ScalarValue.Undefined, false),
-                        new Scalar("2", FASTType.I32, Operator.DELTA, ScalarValue.Undefined, false),
-                        new Scalar("3", FASTType.I32, Operator.INCREMENT, new IntegerValue(10), false),
-                        new Scalar("4", FASTType.I32, Operator.INCREMENT, ScalarValue.Undefined, false),
-                        new Scalar("5", FASTType.I32, Operator.CONSTANT, new IntegerValue(1), false),
+                        new Scalar("1", FASTType.I32, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("2", FASTType.I32, Operator.Delta, ScalarValue.Undefined, false),
+                        new Scalar("3", FASTType.I32, Operator.Increment, new IntegerValue(10), false),
+                        new Scalar("4", FASTType.I32, Operator.Increment, ScalarValue.Undefined, false),
+                        new Scalar("5", FASTType.I32, Operator.Constant, new IntegerValue(1), false),
                         /* NON-TRANSFERRABLE */
-                        new Scalar("6", FASTType.I32, Operator.DEFAULT, new IntegerValue(2), false)
+                        new Scalar("6", FASTType.I32, Operator.Default, new IntegerValue(2), false)
                     });
 
             GroupValue message = new Message(template);
@@ -143,11 +143,11 @@ namespace UnitTest.Codec
                 "",
                 new Field[]
                     {
-                        new Scalar("1", FASTType.ASCII, Operator.COPY, ScalarValue.Undefined, false),
-                        new Scalar("2", FASTType.ASCII, Operator.DELTA, ScalarValue.Undefined, false),
-                        new Scalar("3", FASTType.ASCII, Operator.CONSTANT, new StringValue("e"), false),
+                        new Scalar("1", FASTType.Ascii, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("2", FASTType.Ascii, Operator.Delta, ScalarValue.Undefined, false),
+                        new Scalar("3", FASTType.Ascii, Operator.Constant, new StringValue("e"), false),
                         /* NON-TRANSFERRABLE */
-                        new Scalar("4", FASTType.ASCII, Operator.DEFAULT, new StringValue("long"), false)
+                        new Scalar("4", FASTType.Ascii, Operator.Default, new StringValue("long"), false)
                     });
 
             var message = new Message(template);
@@ -186,13 +186,13 @@ namespace UnitTest.Codec
                 "",
                 new Field[]
                     {
-                        new Scalar("1", FASTType.U32, Operator.COPY, ScalarValue.Undefined, false),
-                        new Scalar("2", FASTType.U32, Operator.DELTA, ScalarValue.Undefined, false),
-                        new Scalar("3", FASTType.U32, Operator.INCREMENT, new IntegerValue(10), false),
-                        new Scalar("4", FASTType.U32, Operator.INCREMENT, ScalarValue.Undefined, false),
-                        new Scalar("5", FASTType.U32, Operator.CONSTANT, new IntegerValue(1), false),
+                        new Scalar("1", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("2", FASTType.U32, Operator.Delta, ScalarValue.Undefined, false),
+                        new Scalar("3", FASTType.U32, Operator.Increment, new IntegerValue(10), false),
+                        new Scalar("4", FASTType.U32, Operator.Increment, ScalarValue.Undefined, false),
+                        new Scalar("5", FASTType.U32, Operator.Constant, new IntegerValue(1), false),
                         /* NON-TRANSFERRABLE */
-                        new Scalar("6", FASTType.U32, Operator.DEFAULT, new IntegerValue(2), false)
+                        new Scalar("6", FASTType.U32, Operator.Default, new IntegerValue(2), false)
                     });
 
             GroupValue message = new Message(template);
@@ -261,7 +261,7 @@ namespace UnitTest.Codec
                 "",
                 new Field[]
                     {
-                        new Scalar("1", FASTType.U32, Operator.COPY, ScalarValue.Undefined, false)
+                        new Scalar("1", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false)
                     });
             Stream input = ByteUtil.CreateByteStream("11100000 11110001 10000001");
             var context = new Context();

@@ -28,7 +28,7 @@ namespace OpenFAST.Template.Operator
     [Serializable]
     public sealed class CopyOperatorCodec : OptionallyPresentOperatorCodec
     {
-        internal CopyOperatorCodec() : base(Operator.COPY, FASTType.AllTypes())
+        internal CopyOperatorCodec() : base(Operator.Copy, FASTType.AllTypes())
         {
         }
 
@@ -54,7 +54,7 @@ namespace OpenFAST.Template.Operator
             if (field.IsOptional)
                 return null;
 
-            Global.HandleError(FastConstants.D5_NO_DEFAULT_VALUE, "No default value for " + field);
+            Global.HandleError(FastConstants.D5NoDefaultValue, "No default value for " + field);
 
             return null;
         }

@@ -29,7 +29,7 @@ namespace OpenFAST.Session.Template.Exchange
     {
         public override Group[] TemplateExchangeTemplates
         {
-            get { return new Group[] {SessionControlProtocol_1_1.GROUP_INSTR}; }
+            get { return new Group[] {SessionControlProtocol_1_1.GroupInstr}; }
         }
 
         public override Field Convert(GroupValue fieldDef, ITemplateRegistry templateRegistry, ConversionContext context)
@@ -60,7 +60,7 @@ namespace OpenFAST.Session.Template.Exchange
         public override GroupValue Convert(Field field, ConversionContext context)
         {
             var group = (Group) field;
-            Message groupMsg = Convert(group, new Message(SessionControlProtocol_1_1.GROUP_INSTR), context);
+            Message groupMsg = Convert(group, new Message(SessionControlProtocol_1_1.GroupInstr), context);
             groupMsg.SetBool("Optional", field.IsOptional);
             return groupMsg;
         }
@@ -73,27 +73,27 @@ namespace OpenFAST.Session.Template.Exchange
         public static Message Convert(Group group, Message groupMsg, ConversionContext context)
         {
             SetNameAndId(group, groupMsg);
-            if (group.TypeReference != null && !FastConstants.ANY_TYPE.Equals(group.TypeReference))
+            if (group.TypeReference != null && !FastConstants.AnyType.Equals(group.TypeReference))
             {
                 var typeRef =
                     new GroupValue(
                         (Group)
                         SessionControlProtocol_1_1.TypeRef.GetField(new QName("TypeRef",
-                                                                              SessionControlProtocol_1_1.NAMESPACE)));
+                                                                              SessionControlProtocol_1_1.Namespace)));
                 SetName(typeRef, group.TypeReference);
                 groupMsg.SetFieldValue("TypeRef", typeRef);
             }
 
             var instructions = new SequenceValue(
-                SessionControlProtocol_1_1.TEMPLATE_DEFINITION.GetSequence("Instructions"));
+                SessionControlProtocol_1_1.TemplateDefinition.GetSequence("Instructions"));
 
-            if (group.TypeReference != null && !FastConstants.ANY_TYPE.Equals(group.TypeReference))
+            if (group.TypeReference != null && !FastConstants.AnyType.Equals(group.TypeReference))
             {
                 var typeRef =
                     new GroupValue(
                         (Group)
                         SessionControlProtocol_1_1.TypeRef.GetField(new QName("TypeRef",
-                                                                              SessionControlProtocol_1_1.NAMESPACE)));
+                                                                              SessionControlProtocol_1_1.Namespace)));
                 SetName(typeRef, group.TypeReference);
                 groupMsg.SetFieldValue("TypeRef", typeRef);
             }

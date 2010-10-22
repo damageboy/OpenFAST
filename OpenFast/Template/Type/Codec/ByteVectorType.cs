@@ -33,7 +33,7 @@ namespace OpenFAST.Template.Type.Codec
             byte[] bytes = value.Bytes;
             int lengthSize = IntegerCodec.GetUnsignedIntegerSize(bytes.Length);
             var encoding = new byte[bytes.Length + lengthSize];
-            byte[] length = UINT.Encode(new IntegerValue(bytes.Length));
+            byte[] length = Uint.Encode(new IntegerValue(bytes.Length));
             Array.Copy(length, 0, encoding, 0, lengthSize);
             Array.Copy(bytes, 0, encoding, lengthSize, bytes.Length);
             return encoding;
@@ -43,7 +43,7 @@ namespace OpenFAST.Template.Type.Codec
         {
             try
             {
-                int length = ((IntegerValue) UINT.Decode(inStream)).Value;
+                int length = ((IntegerValue) Uint.Decode(inStream)).Value;
                 var encoding = new byte[length];
                 for (int i = 0; i < length; i++)
                     encoding[i] = (byte) inStream.ReadByte();

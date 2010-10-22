@@ -29,14 +29,14 @@ namespace OpenFAST.Session.Template.Exchange
     {
         public override Group[] TemplateExchangeTemplates
         {
-            get { return new[] {SessionControlProtocol_1_1.BYTE_VECTOR_INSTR, SessionControlProtocol_1_1.UNICODE_INSTR}; }
+            get { return new[] {SessionControlProtocol_1_1.ByteVectorInstr, SessionControlProtocol_1_1.UnicodeInstr}; }
         }
 
         public override Field Convert(GroupValue fieldDef, ITemplateRegistry templateRegistry, ConversionContext context)
         {
             var scalar = (Scalar) base.Convert(fieldDef, templateRegistry, context);
             if (fieldDef.IsDefined("Length"))
-                scalar.AddAttribute(FastConstants.LENGTH_FIELD, fieldDef.GetGroup("Length").GetString("Name"));
+                scalar.AddAttribute(FastConstants.LengthField, fieldDef.GetGroup("Length").GetString("Name"));
             return scalar;
         }
 
@@ -45,7 +45,7 @@ namespace OpenFAST.Session.Template.Exchange
             var scalar = (Scalar) field;
             GroupValue fieldDef = base.Convert(field, context);
             string value;
-            if (scalar.TryGetAttribute(FastConstants.LENGTH_FIELD, out value))
+            if (scalar.TryGetAttribute(FastConstants.LengthField, out value))
             {
                 var lengthDef = new GroupValue(fieldDef.GetGroup().GetGroup("Length"));
                 lengthDef.SetString("Name", value);
@@ -59,7 +59,7 @@ namespace OpenFAST.Session.Template.Exchange
             if (!field.GetType().Equals(typeof (Scalar)))
                 return false;
             Type type = ((Scalar) field).Type;
-            return type.Equals(Type.BYTE_VECTOR) || type.Equals(Type.UNICODE);
+            return type.Equals(Type.ByteVector) || type.Equals(Type.Unicode);
         }
     }
 }

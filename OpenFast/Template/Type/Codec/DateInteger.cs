@@ -30,7 +30,7 @@ namespace OpenFAST.Template.Type.Codec
     {
         public override ScalarValue Decode(Stream inStream)
         {
-            long longValue = UINT.Decode(inStream).ToLong();
+            long longValue = Uint.Decode(inStream).ToLong();
             var year = (int) (longValue/10000);
             var month = (int) ((longValue - (year*10000))/100);
             var day = (int) (longValue%100);
@@ -41,7 +41,7 @@ namespace OpenFAST.Template.Type.Codec
         {
             DateTime date = ((DateValue) value).Value;
             int intValue = Util.DateToInt(date);
-            return UINT.Encode(new IntegerValue(intValue));
+            return Uint.Encode(new IntegerValue(intValue));
         }
 
         public override bool Equals(Object obj)

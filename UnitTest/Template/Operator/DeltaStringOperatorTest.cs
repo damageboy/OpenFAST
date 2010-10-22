@@ -36,7 +36,7 @@ namespace UnitTest.Template.Operator
         [Test]
         public void TestDecodeSubtractionLengthError()
         {
-            _field = new Scalar("", FASTType.ASCII, OpenFAST.Template.Operator.Operator.DELTA, ScalarValue.Undefined, false);
+            _field = new Scalar("", FASTType.Ascii, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, false);
             try
             {
                 Decode(Twin(Int(5), new StringValue("abc")), new StringValue("def"));
@@ -44,7 +44,7 @@ namespace UnitTest.Template.Operator
             }
             catch (FastException e)
             {
-                Assert.AreEqual(FastConstants.D7_SUBTRCTN_LEN_LONG, e.Code);
+                Assert.AreEqual(FastConstants.D7SubtrctnLenLong, e.Code);
                 Assert.AreEqual(
                         "The string diff <5, abc> cannot be applied to the base value 'def' because the subtraction length is too long.",
                         e.Message);
@@ -54,7 +54,7 @@ namespace UnitTest.Template.Operator
         [Test]
         public void TestGetValueToEncodeMandatory()
         {
-            _field = new Scalar("", FASTType.ASCII, OpenFAST.Template.Operator.Operator.DELTA, ScalarValue.Undefined, false);
+            _field = new Scalar("", FASTType.Ascii, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, false);
             Assert.AreEqual(Tv(0, "ABCD"), Encode("ABCD", ScalarValue.Undefined));
             Assert.AreEqual(Tv(1, "E"), Encode("ABCE", new StringValue("ABCD")));
             Assert.AreEqual(Tv(-2, "Z"), Encode("ZBCE", new StringValue("ABCE")));
@@ -65,7 +65,7 @@ namespace UnitTest.Template.Operator
         [Test]
         public void TestDecodeValueMandatory()
         {
-            _field = new Scalar("", FASTType.ASCII, OpenFAST.Template.Operator.Operator.DELTA, ScalarValue.Undefined, false);
+            _field = new Scalar("", FASTType.Ascii, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, false);
             Assert.AreEqual(new StringValue("ABCD"), Decode(Tv(0, "ABCD"), ScalarValue.Undefined));
             Assert.AreEqual(new StringValue("ABCE"), Decode(Tv(1, "E"), new StringValue("ABCD")));
             Assert.AreEqual(new StringValue("ZBCE"), Decode(Tv(-2, "Z"), new StringValue("ABCE")));
@@ -76,7 +76,7 @@ namespace UnitTest.Template.Operator
         [Test]
         public void TestGetValueToEncodeOptional()
         {
-            _field = new Scalar("", FASTType.ASCII, OpenFAST.Template.Operator.Operator.DELTA, ScalarValue.Undefined, true);
+            _field = new Scalar("", FASTType.Ascii, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, true);
             Assert.AreEqual(Tv(0, "ABCD"), Encode("ABCD", ScalarValue.Undefined));
             Assert.AreEqual(Tv(1, "E"), Encode("ABCE", new StringValue("ABCD")));
             Assert.AreEqual(Tv(-2, "Z"), Encode("ZBCE", new StringValue("ABCE")));
@@ -88,7 +88,7 @@ namespace UnitTest.Template.Operator
         [Test]
         public void TestDecodeValueOptional()
         {
-            _field = new Scalar("", FASTType.ASCII, OpenFAST.Template.Operator.Operator.DELTA, ScalarValue.Undefined, true);
+            _field = new Scalar("", FASTType.Ascii, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, true);
             Assert.AreEqual(new StringValue("ABCD"), Decode(Tv(0, "ABCD"), ScalarValue.Undefined));
             Assert.AreEqual(new StringValue("ABCE"), Decode(Tv(1, "E"), new StringValue("ABCD")));
             Assert.AreEqual(new StringValue("ZBCE"), Decode(Tv(-2, "Z"), new StringValue("ABCE")));
@@ -101,14 +101,14 @@ namespace UnitTest.Template.Operator
         {
             if (value == null)
             {
-                return OpenFAST.Template.Operator.OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.DELTA, FASTType.STRING).GetValueToEncode(null, priorValue, _field);
+                return OpenFAST.Template.Operator.OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Delta, FASTType.String).GetValueToEncode(null, priorValue, _field);
             }
-            return OpenFAST.Template.Operator.OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.DELTA, FASTType.STRING).GetValueToEncode(new StringValue(value), priorValue, _field);
+            return OpenFAST.Template.Operator.OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Delta, FASTType.String).GetValueToEncode(new StringValue(value), priorValue, _field);
         }
 
         private ScalarValue Decode(ScalarValue diff, ScalarValue priorValue)
         {
-            return OpenFAST.Template.Operator.OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.DELTA, FASTType.STRING).DecodeValue(diff, priorValue, _field);
+            return OpenFAST.Template.Operator.OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Delta, FASTType.String).DecodeValue(diff, priorValue, _field);
         }
 
         private static TwinValue Tv(int subtraction, string diff)

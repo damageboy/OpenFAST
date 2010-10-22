@@ -19,17 +19,13 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
-using System;
-using OpenFAST.Template.Type.Codec;
-
-namespace OpenFAST.Template.Type
+namespace OpenFAST.Error
 {
-    [Serializable]
-    public sealed class SignedIntegerType : IntegerType
+    public enum Severity
     {
-        public SignedIntegerType(int numberBits, long min, long max)
-            : base("int" + numberBits, min, max, TypeCodec.Integer, TypeCodec.NullableInteger)
-        {
-        }
+        Fatal = 1,
+        Error = 2,
+        Warn = 3,
+        Info = 4,
     }
 }

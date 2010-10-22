@@ -36,7 +36,7 @@ namespace UnitTest.Template.Operator
         [Test]
         public void TestGetValueToEncodeForMandatory()
         {
-            var field = new Scalar("", FASTType.DECIMAL, OpenFAST.Template.Operator.Operator.DELTA, ScalarValue.Undefined, false);
+            var field = new Scalar("", FASTType.Decimal, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, false);
             OperatorCodec operatortemp = field.GetOperatorCodec();
 
             var value = (DecimalValue)operatortemp.GetValueToEncode(Decimal(9427.55), ScalarValue.Undefined, field);
@@ -57,7 +57,7 @@ namespace UnitTest.Template.Operator
         [Test]
         public void TestGetValueToEncodeForOptional()
         {
-            var field = new Scalar("", FASTType.DECIMAL, OpenFAST.Template.Operator.Operator.DELTA, ScalarValue.Undefined, true);
+            var field = new Scalar("", FASTType.Decimal, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, true);
             OperatorCodec operatortemp = field.GetOperatorCodec();
 
             var value = (DecimalValue)operatortemp.GetValueToEncode(Decimal(9427.55),
@@ -84,7 +84,7 @@ namespace UnitTest.Template.Operator
         [Test]
         public void TestGetValueToEncodeForMandatoryFieldAndDefaultValue()
         {
-            var field = new Scalar("", FASTType.DECIMAL, OpenFAST.Template.Operator.Operator.DELTA, Decimal(12000),
+            var field = new Scalar("", FASTType.Decimal, OpenFAST.Template.Operator.Operator.Delta, Decimal(12000),
                     false);
             var value = (DecimalValue)field.GetOperatorCodec()
                                                      .GetValueToEncode(Decimal(12000),
@@ -110,37 +110,37 @@ namespace UnitTest.Template.Operator
         [Test]
         public void TestDecodeForMandatoryFieldAndDefaultValue()
         {
-            var field = new Scalar("", FASTType.DECIMAL, OpenFAST.Template.Operator.Operator.DELTA, Decimal(12000),
+            var field = new Scalar("", FASTType.Decimal, OpenFAST.Template.Operator.Operator.Delta, Decimal(12000),
                     false);
             Assert.AreEqual(Decimal(12000),
-                OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.DELTA, FASTType.DECIMAL).DecodeEmptyValue(ScalarValue.Undefined, field));
+                OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Delta, FASTType.Decimal).DecodeEmptyValue(ScalarValue.Undefined, field));
             Assert.AreEqual(Decimal(12100),
-                OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.DELTA, FASTType.DECIMAL).DecodeValue(Decimal(109, -1), Decimal(12000), field));
+                OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Delta, FASTType.Decimal).DecodeValue(Decimal(109, -1), Decimal(12000), field));
             Assert.AreEqual(Decimal(12150),
-                OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.DELTA, FASTType.DECIMAL).DecodeValue(Decimal(1094, -1), Decimal(12100), field));
+                OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Delta, FASTType.Decimal).DecodeValue(Decimal(1094, -1), Decimal(12100), field));
             Assert.AreEqual(Decimal(12200),
-                OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.DELTA, FASTType.DECIMAL).DecodeValue(Decimal(-1093, 1), Decimal(12150), field));
+                OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Delta, FASTType.Decimal).DecodeValue(Decimal(-1093, 1), Decimal(12150), field));
         }
         [Test]
         public void TestEncodeDecimalValueWithEmptyPriorValue()
         {
             try
             {
-                var field = new Scalar("", FASTType.DECIMAL, OpenFAST.Template.Operator.Operator.DELTA, ScalarValue.Undefined, false);
+                var field = new Scalar("", FASTType.Decimal, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, false);
                 field.GetOperatorCodec()
                      .GetValueToEncode(null, ScalarValue.Undefined, field);
                 Assert.Fail();
             }
             catch (FastException e)
             {
-                Assert.AreEqual(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, e.Code);
+                Assert.AreEqual(FastConstants.D6MndtryFieldNotPresent, e.Code);
             }
         }
 
         [Test]
         public void TestEncodeDecimalValueWithOptionalField()
         {
-            AssertEncodeDecode(Decimal(-37.0), "10000001 11011011", TypeCodec.NULLABLE_SF_SCALED_NUMBER);
+            AssertEncodeDecode(Decimal(-37.0), "10000001 11011011", TypeCodec.NullableSfScaledNumber);
         }
     }
 }

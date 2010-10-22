@@ -51,7 +51,7 @@ namespace UnitTest
             }
             catch (FastException e)
             {
-                Assert.AreEqual(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE, e.Code);
+                Assert.AreEqual(FastConstants.R4NumericValueTooLarge, e.Code);
             }
         }
 
@@ -89,7 +89,7 @@ namespace UnitTest
             }
             catch (FastException e)
             {
-                Assert.AreEqual(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE, e.Code);
+                Assert.AreEqual(FastConstants.R4NumericValueTooLarge, e.Code);
             }
         }
 

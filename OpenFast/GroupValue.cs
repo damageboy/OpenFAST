@@ -46,7 +46,7 @@ namespace OpenFAST
             for (int i = 0; i < flds.Length; i++)
             {
                 var scalar = flds[i] as Scalar;
-                if (scalar != null && scalar.Operator.Equals(Operator.CONSTANT) && !scalar.IsOptional)
+                if (scalar != null && scalar.Operator.Equals(Operator.Constant) && !scalar.IsOptional)
                 {
                     values[i] = scalar.DefaultValue;
                 }
@@ -94,12 +94,12 @@ namespace OpenFAST
                 Scalar scalar;
                 if (_group.TryGetIntrospectiveField(fieldName, out scalar))
                 {
-                    if (scalar.Type.Equals(Type.UNICODE) ||
-                        scalar.Type.Equals(Type.STRING) ||
-                        scalar.Type.Equals(Type.ASCII))
+                    if (scalar.Type.Equals(Type.Unicode) ||
+                        scalar.Type.Equals(Type.String) ||
+                        scalar.Type.Equals(Type.Ascii))
                         return GetString(scalar.Name).Length;
 
-                    if (scalar.Type.Equals(Type.BYTE_VECTOR))
+                    if (scalar.Type.Equals(Type.ByteVector))
                         return GetBytes(scalar.Name).Length;
                 }
             }

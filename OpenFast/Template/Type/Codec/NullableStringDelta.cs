@@ -39,11 +39,11 @@ namespace OpenFAST.Template.Type.Codec
 
         public override ScalarValue Decode(Stream inStream)
         {
-            ScalarValue subtractionLength = NULLABLE_INTEGER.Decode(inStream);
+            ScalarValue subtractionLength = NullableInteger.Decode(inStream);
             if (subtractionLength == null)
                 return null;
 
-            ScalarValue difference = ASCII.Decode(inStream);
+            ScalarValue difference = Ascii.Decode(inStream);
 
             return new TwinValue(subtractionLength, difference);
         }
@@ -51,11 +51,11 @@ namespace OpenFAST.Template.Type.Codec
         public override byte[] EncodeValue(ScalarValue value)
         {
             if (value.IsNull)
-                return NULL_VALUE_ENCODING;
+                return NullValueEncoding;
 
             var diff = (TwinValue) value;
-            byte[] subtractionLength = NULLABLE_INTEGER.Encode(diff.First);
-            byte[] difference = ASCII.Encode(diff.Second);
+            byte[] subtractionLength = NullableInteger.Encode(diff.First);
+            byte[] difference = Ascii.Encode(diff.Second);
             var encoded = new byte[subtractionLength.Length + difference.Length];
             Array.Copy(subtractionLength, 0, encoded, 0, subtractionLength.Length);
             Array.Copy(difference, 0, encoded, subtractionLength.Length, difference.Length);

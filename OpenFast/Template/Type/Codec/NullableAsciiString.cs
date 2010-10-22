@@ -48,7 +48,7 @@ namespace OpenFAST.Template.Type.Codec
         {
             if (value.IsNull)
             {
-                return NULL_VALUE_ENCODING;
+                return NullValueEncoding;
             }
 
             string str = ((StringValue) value).Value;
@@ -78,7 +78,7 @@ namespace OpenFAST.Template.Type.Codec
                 {
                     var b = (byte) inStream.ReadByte();
 
-                    if ((b & STOP_BIT) == 0)
+                    if ((b & StopBit) == 0)
                     {
                         buf[ind++] = b;
                         if (ind >= buf.Length)
@@ -98,7 +98,7 @@ namespace OpenFAST.Template.Type.Codec
                 if (buf[0] == 0)
                 {
                     if (!ByteUtil.IsEmpty(buf, ind))
-                        Global.HandleError(FastConstants.R9_STRING_OVERLONG, null);
+                        Global.HandleError(FastConstants.R9StringOverlong, null);
 
                     if (ind == 1)
                         return null;

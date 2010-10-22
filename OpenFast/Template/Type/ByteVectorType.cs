@@ -28,7 +28,7 @@ namespace OpenFAST.Template.Type
     [Serializable]
     internal sealed class ByteVectorType : SimpleType
     {
-        internal ByteVectorType() : base("byteVector", TypeCodec.BYTE_VECTOR, TypeCodec.NULLABLE_BYTE_VECTOR_TYPE)
+        internal ByteVectorType() : base("byteVector", TypeCodec.ByteVector, TypeCodec.NullableByteVectorType)
         {
         }
 

@@ -109,7 +109,7 @@ namespace OpenFAST
         public override long ToLong()
         {
             if (Exponent < 0)
-                Global.HandleError(FastConstants.R5_DECIMAL_CANT_CONVERT_TO_INT, "");
+                Global.HandleError(FastConstants.R5DecimalCantConvertToInt, "");
             return Value;
         }
 
@@ -117,7 +117,7 @@ namespace OpenFAST
         {
             long v = Value;
             if (Exponent < 0 || v > Int32.MaxValue)
-                Global.HandleError(FastConstants.R5_DECIMAL_CANT_CONVERT_TO_INT, "");
+                Global.HandleError(FastConstants.R5DecimalCantConvertToInt, "");
             return (int) v;
         }
 
@@ -125,7 +125,7 @@ namespace OpenFAST
         {
             long v = Value;
             if (Exponent < 0 || v > Int16.MaxValue)
-                Global.HandleError(FastConstants.R5_DECIMAL_CANT_CONVERT_TO_INT, "");
+                Global.HandleError(FastConstants.R5DecimalCantConvertToInt, "");
             return (short) v;
         }
 
@@ -133,7 +133,7 @@ namespace OpenFAST
         {
             long v = Value;
             if (Exponent < 0 || v > (byte) SByte.MaxValue)
-                Global.HandleError(FastConstants.R5_DECIMAL_CANT_CONVERT_TO_INT, "");
+                Global.HandleError(FastConstants.R5DecimalCantConvertToInt, "");
             return (byte) v;
         }
 

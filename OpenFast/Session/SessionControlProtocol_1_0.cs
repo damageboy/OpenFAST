@@ -29,35 +29,37 @@ namespace OpenFAST.Session
 {
     public class SessionControlProtocol_1_0 : AbstractSessionControlProtocol
     {
-        private const int FAST_HELLO_TEMPLATE_ID = 16000;
-        private const int FAST_ALERT_TEMPLATE_ID = 16001;
-        private static readonly MessageTemplate FAST_ALERT_TEMPLATE;
-        private static readonly MessageTemplate FAST_HELLO_TEMPLATE;
-        private static readonly IMessageHandler RESET_HANDLER;
+        private const int ResetTemplateId = 120;
+        private const int HelloTemplateId = 16000;
+        private const int AlertTemplateId = 16001;
+
+        private static readonly MessageTemplate AlertTemplate;
+        private static readonly MessageTemplate HelloTemplate;
+        private static readonly IMessageHandler ResetHandler;
 
         static SessionControlProtocol_1_0()
         {
-            FAST_ALERT_TEMPLATE = new MessageTemplate(
+            AlertTemplate = new MessageTemplate(
                 "",
                 new Field[]
                     {
-                        new Scalar("Severity", Type.U32, Operator.NONE, ScalarValue.Undefined, false),
-                        new Scalar("Code", Type.U32, Operator.NONE, ScalarValue.Undefined, false),
-                        new Scalar("Value", Type.U32, Operator.NONE, ScalarValue.Undefined, true),
-                        new Scalar("Description", Type.ASCII, Operator.NONE, ScalarValue.Undefined, false)
+                        new Scalar("Severity", Type.U32, Operator.None, ScalarValue.Undefined, false),
+                        new Scalar("Code", Type.U32, Operator.None, ScalarValue.Undefined, false),
+                        new Scalar("Value", Type.U32, Operator.None, ScalarValue.Undefined, true),
+                        new Scalar("Description", Type.Ascii, Operator.None, ScalarValue.Undefined, false)
                     });
-            FAST_HELLO_TEMPLATE = new MessageTemplate(
+            HelloTemplate = new MessageTemplate(
                 "",
                 new Field[]
                     {
-                        new Scalar("SenderName", Type.ASCII, Operator.NONE, ScalarValue.Undefined, false)
+                        new Scalar("SenderName", Type.Ascii, Operator.None, ScalarValue.Undefined, false)
                     });
-            RESET_HANDLER = new RESETMessageHandler();
+            ResetHandler = new ResetMessageHandler();
         }
 
         public override Message CloseMessage
         {
-            get { return CreateFastAlertMessage(SessionConstants.CLOSE); }
+            get { return CreateFastAlertMessage(SessionConstants.Close); }
         }
 
         public override Session OnNewConnection(string serverName, IConnection connection)
@@ -89,23 +91,23 @@ namespace OpenFAST.Session
 
         public virtual void RegisterSessionTemplates(ITemplateRegistry registry)
         {
-            registry.Register(FAST_HELLO_TEMPLATE_ID, FAST_HELLO_TEMPLATE);
-            registry.Register(FAST_ALERT_TEMPLATE_ID, FAST_ALERT_TEMPLATE);
-            registry.Register(FAST_RESET_TEMPLATE_ID, FastResetTemplate);
+            registry.Register(HelloTemplateId, HelloTemplate);
+            registry.Register(AlertTemplateId, AlertTemplate);
+            registry.Register(ResetTemplateId, FastResetTemplate);
         }
 
         public override void ConfigureSession(Session session)
         {
             RegisterSessionTemplates(session.MessageInputStream.GetTemplateRegistry());
             RegisterSessionTemplates(session.MessageOutputStream.GetTemplateRegistry());
-            session.MessageInputStream.AddMessageHandler(FastResetTemplate, RESET_HANDLER);
-            session.MessageOutputStream.AddMessageHandler(FastResetTemplate, RESET_HANDLER);
+            session.MessageInputStream.AddMessageHandler(FastResetTemplate, ResetHandler);
+            session.MessageOutputStream.AddMessageHandler(FastResetTemplate, ResetHandler);
         }
 
         public static Message CreateFastAlertMessage(ErrorCode code)
         {
-            var alert = new Message(FAST_ALERT_TEMPLATE);
-            alert.SetInteger(1, code.Severity.Code);
+            var alert = new Message(AlertTemplate);
+            alert.SetInteger(1, (int) code.Severity);
             alert.SetInteger(2, code.Code);
             alert.SetString(4, code.Description);
             return alert;
@@ -113,17 +115,17 @@ namespace OpenFAST.Session
 
         public static Message CreateHelloMessage(string name)
         {
-            var message = new Message(FAST_HELLO_TEMPLATE);
+            var message = new Message(HelloTemplate);
             message.SetString(1, name);
             return message;
         }
 
         public override void HandleMessage(Session session, Message message)
         {
-            if (message.Template.Equals(FAST_ALERT_TEMPLATE))
+            if (message.Template.Equals(AlertTemplate))
             {
                 ErrorCode alertCode = ErrorCode.GetAlertCode(message);
-                if (alertCode.Equals(SessionConstants.CLOSE))
+                if (alertCode.Equals(SessionConstants.Close))
                 {
                     session.Close(alertCode);
                 }
@@ -138,7 +140,7 @@ namespace OpenFAST.Session
         {
             if (message == null)
                 return false;
-            return (message.Template.Equals(FAST_ALERT_TEMPLATE)) || (message.Template.Equals(FAST_HELLO_TEMPLATE)) ||
+            return (message.Template.Equals(AlertTemplate)) || (message.Template.Equals(HelloTemplate)) ||
                    (message.Template.Equals(FastResetTemplate));
         }
 
@@ -159,7 +161,7 @@ namespace OpenFAST.Session
 
         #region Nested type: RESETMessageHandler
 
-        public class RESETMessageHandler : IMessageHandler
+        public class ResetMessageHandler : IMessageHandler
         {
             #region IMessageHandler Members
 

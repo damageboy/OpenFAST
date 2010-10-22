@@ -55,7 +55,7 @@ namespace OpenFAST.Template.Operator
             }
             else
             {
-                Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT,
+                Global.HandleError(FastConstants.D6MndtryFieldNotPresent,
                                    "The field '" + field + " is not present.");
             }
 

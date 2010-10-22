@@ -132,7 +132,7 @@
     <Compile Include="Error\ErrorCode.cs" />
     <Compile Include="Error\ErrorHandler.cs" />
     <Compile Include="Error\ErrorType.cs" />
-    <Compile Include="Error\FastAlertSeverity.cs" />
+    <Compile Include="Error\Severity.cs" />
     <Compile Include="Error\FastConstants.cs" />
     <Compile Include="Error\FastDynamicError.cs" />
     <Compile Include="Error\FastException.cs" />

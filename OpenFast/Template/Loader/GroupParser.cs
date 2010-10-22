@@ -63,7 +63,7 @@ namespace OpenFAST.Template.Loader
                     var element = (XmlElement) item;
                     IFieldParser fieldParser = context.GetFieldParser(element);
                     if (fieldParser == null)
-                        context.ErrorHandler.Error(FastConstants.PARSE_ERROR,
+                        context.ErrorHandler.Error(FastConstants.ParseError,
                                                    "No parser registered for " + element.Name);
                     if (fieldParser != null) fields.Add(fieldParser.Parse(element, context));
                 }
@@ -85,7 +85,7 @@ namespace OpenFAST.Template.Loader
                     typeRefNs = messageRef.GetAttribute("ns");
                 return new QName(typeReference, typeRefNs);
             }
-            return FastConstants.ANY_TYPE;
+            return FastConstants.AnyType;
         }
     }
 }

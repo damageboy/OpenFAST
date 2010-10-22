@@ -21,17 +21,17 @@ namespace TCPServer
             var template = new MessageTemplate("Arbitry",
                                                new Field[]
                                                    {
-                                                       new Scalar("1", FASTType.I32, Operator.COPY,
+                                                       new Scalar("1", FASTType.I32, Operator.Copy,
                                                                   ScalarValue.Undefined, false),
-                                                       new Scalar("2", FASTType.I32, Operator.DELTA,
+                                                       new Scalar("2", FASTType.I32, Operator.Delta,
                                                                   ScalarValue.Undefined, false),
-                                                       new Scalar("3", FASTType.I32, Operator.INCREMENT,
+                                                       new Scalar("3", FASTType.I32, Operator.Increment,
                                                                   new IntegerValue(10), false),
-                                                       new Scalar("4", FASTType.I32, Operator.INCREMENT,
+                                                       new Scalar("4", FASTType.I32, Operator.Increment,
                                                                   ScalarValue.Undefined, false),
-                                                       new Scalar("5", FASTType.I32, Operator.CONSTANT,
+                                                       new Scalar("5", FASTType.I32, Operator.Constant,
                                                                   new IntegerValue(1), false), /* NON-TRANSFERRABLE */
-                                                       new Scalar("6", FASTType.I32, Operator.DEFAULT,
+                                                       new Scalar("6", FASTType.I32, Operator.Default,
                                                                   new IntegerValue(2), false)
                                                    });
             registry.Register(24, template);

@@ -34,22 +34,22 @@ namespace OpenFAST.Template.Operator
             new Dictionary<Tuple<Operator, FASTType>, OperatorCodec>();
 
         protected internal static readonly OperatorCodec NoneAll =
-            new NoneOperatorCodec(Operator.NONE, FASTType.AllTypes());
+            new NoneOperatorCodec(Operator.None, FASTType.AllTypes());
 
         protected internal static readonly OperatorCodec ConstantAll
-            = new ConstantOperatorCodec(Operator.CONSTANT, FASTType.AllTypes());
+            = new ConstantOperatorCodec(Operator.Constant, FASTType.AllTypes());
 
         protected internal static readonly OperatorCodec DefaultAll
-            = new DefaultOperatorCodec(Operator.DEFAULT, FASTType.AllTypes());
+            = new DefaultOperatorCodec(Operator.Default, FASTType.AllTypes());
 
         protected internal static readonly OperatorCodec CopyAll
             = new CopyOperatorCodec();
 
         protected internal static readonly OperatorCodec IncrementInteger
-            = new IncrementIntegerOperatorCodec(Operator.INCREMENT, FASTType.INTEGER_TYPES);
+            = new IncrementIntegerOperatorCodec(Operator.Increment, FASTType.IntegerTypes);
 
         protected internal static readonly OperatorCodec DeltaInteger
-            = new DeltaIntegerOperatorCodec(Operator.DELTA, FASTType.INTEGER_TYPES);
+            = new DeltaIntegerOperatorCodec(Operator.Delta, FASTType.IntegerTypes);
 
         protected internal static readonly OperatorCodec DeltaString
             = new DeltaStringOperatorCodec();
@@ -59,7 +59,7 @@ namespace OpenFAST.Template.Operator
 
         protected internal static readonly OperatorCodec Tail =
             new TailOperatorCodec(
-                Operator.TAIL, new[] {FASTType.ASCII, FASTType.STRING, FASTType.UNICODE, FASTType.BYTE_VECTOR});
+                Operator.Tail, new[] {FASTType.Ascii, FASTType.String, FASTType.Unicode, FASTType.ByteVector});
 
         private readonly Operator _operator;
 
@@ -98,7 +98,7 @@ namespace OpenFAST.Template.Operator
             if (OperatorMap.TryGetValue(key, out codec))
                 return codec;
 
-            Global.HandleError(FastConstants.S2_OPERATOR_TYPE_INCOMP,
+            Global.HandleError(FastConstants.S2OperatorTypeIncomp,
                                "The operator '" + op + "' is not compatible with type '" + type +
                                "'");
             throw new ArgumentOutOfRangeException("op" + ",type", key, "Not found");

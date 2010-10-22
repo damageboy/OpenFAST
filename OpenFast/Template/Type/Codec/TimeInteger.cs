@@ -30,7 +30,7 @@ namespace OpenFAST.Template.Type.Codec
     {
         public override ScalarValue Decode(Stream inStream)
         {
-            int intValue = ((IntegerValue) UINT.Decode(inStream)).Value;
+            int intValue = ((IntegerValue) Uint.Decode(inStream)).Value;
             int hour = intValue/10000000;
             intValue -= hour*10000000;
             int minute = intValue/100000;
@@ -46,7 +46,7 @@ namespace OpenFAST.Template.Type.Codec
         {
             DateTime date = ((DateValue) value).Value;
             int intValue = Util.TimeToInt(date);
-            return UINT.Encode(new IntegerValue(intValue));
+            return Uint.Encode(new IntegerValue(intValue));
         }
 
         public override bool Equals(Object obj)

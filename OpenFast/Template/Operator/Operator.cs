@@ -31,23 +31,23 @@ namespace OpenFAST.Template.Operator
     {
         private static readonly Dictionary<string, Operator> OperatorNameMap = new Dictionary<string, Operator>();
 
-        public static readonly Operator NONE;
-        public static readonly Operator CONSTANT;
-        public static readonly Operator DEFAULT;
-        public static readonly Operator COPY;
-        public static readonly Operator INCREMENT = new Operator("increment");
-        public static readonly Operator DELTA;
-        public static readonly Operator TAIL = new Operator("tail");
+        public static readonly Operator None;
+        public static readonly Operator Constant;
+        public static readonly Operator Default;
+        public static readonly Operator Copy;
+        public static readonly Operator Increment = new Operator("increment");
+        public static readonly Operator Delta;
+        public static readonly Operator Tail = new Operator("tail");
 
         private readonly string _name;
 
         static Operator()
         {
-            NONE = new NoneOperator("none");
-            CONSTANT = new ConstantOperator("constant");
-            DEFAULT = new DefaultOperator("default");
-            COPY = new CopyOperator("copy");
-            DELTA = new DeltaOperator("delta");
+            None = new NoneOperator("none");
+            Constant = new ConstantOperator("constant");
+            Default = new DefaultOperator("default");
+            Copy = new CopyOperator("copy");
+            Delta = new DeltaOperator("delta");
         }
 
         public Operator(string name)
@@ -124,7 +124,7 @@ namespace OpenFAST.Template.Operator
             {
                 if (scalar.DefaultValue.IsUndefined)
                 {
-                    Global.HandleError(FastConstants.S4_NO_INITIAL_VALUE_FOR_CONST,
+                    Global.HandleError(FastConstants.S4NoInitialValueForConst,
                                        "The field " + scalar + " must have a default value defined.");
                 }
             }
@@ -167,7 +167,7 @@ namespace OpenFAST.Template.Operator
             {
                 if (!scalar.IsOptional && scalar.DefaultValue.IsUndefined)
                 {
-                    Global.HandleError(FastConstants.S5_NO_INITVAL_MNDTRY_DFALT,
+                    Global.HandleError(FastConstants.S5NoInitvalMndtryDfalt,
                                        "The field " + scalar + " must have a default value defined.");
                 }
             }

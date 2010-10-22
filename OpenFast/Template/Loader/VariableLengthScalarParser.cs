@@ -37,7 +37,7 @@ namespace OpenFAST.Template.Loader
             if (element != null && element.Name.Equals("length"))
             {
                 string length = element.GetAttribute("name");
-                scalar.AddAttribute(FastConstants.LENGTH_FIELD, length);
+                scalar.AddAttribute(FastConstants.LengthField, length);
             }
             return scalar;
         }

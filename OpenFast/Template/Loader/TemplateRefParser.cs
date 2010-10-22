@@ -40,7 +40,7 @@ namespace OpenFAST.Template.Loader
                 if (context.TemplateRegistry.TryGetTemplate(templateName, out template))
                     return new StaticTemplateReference(template);
 
-                context.ErrorHandler.Error(FastConstants.D8_TEMPLATE_NOT_EXIST,
+                context.ErrorHandler.Error(FastConstants.D8TemplateNotExist,
                                            "The template '" + templateName + "' was not found.");
                 return null;
             }

@@ -31,12 +31,12 @@ namespace OpenFAST.Session.Template.Exchange
         private static readonly Dictionary<Operator, MessageTemplate> OperatorTemplateMap =
             new Dictionary<Operator, MessageTemplate>
                 {
-                    {Operator.CONSTANT, SessionControlProtocol_1_1.ConstantOp},
-                    {Operator.DEFAULT, SessionControlProtocol_1_1.DEFAULT_OP},
-                    {Operator.COPY, SessionControlProtocol_1_1.COPY_OP},
-                    {Operator.INCREMENT, SessionControlProtocol_1_1.INCREMENT_OP},
-                    {Operator.DELTA, SessionControlProtocol_1_1.DELTA_OP},
-                    {Operator.TAIL, SessionControlProtocol_1_1.TAIL_OP},
+                    {Operator.Constant, SessionControlProtocol_1_1.ConstantOp},
+                    {Operator.Default, SessionControlProtocol_1_1.DEFAULT_OP},
+                    {Operator.Copy, SessionControlProtocol_1_1.COPY_OP},
+                    {Operator.Increment, SessionControlProtocol_1_1.INCREMENT_OP},
+                    {Operator.Delta, SessionControlProtocol_1_1.DELTA_OP},
+                    {Operator.Tail, SessionControlProtocol_1_1.TAIL_OP},
                 };
 
         private static readonly Dictionary<MessageTemplate, Operator> TemplateOperatorMap;

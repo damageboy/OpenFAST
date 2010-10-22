@@ -29,7 +29,7 @@ namespace OpenFAST.Session.Template.Exchange
     {
         public override Group[] TemplateExchangeTemplates
         {
-            get { return new Group[] {SessionControlProtocol_1_1.COMP_DECIMAL_INSTR}; }
+            get { return new Group[] {SessionControlProtocol_1_1.CompDecimalInstr}; }
         }
 
         public override Field Convert(GroupValue fieldDef, ITemplateRegistry templateRegistry, ConversionContext context)
@@ -60,7 +60,7 @@ namespace OpenFAST.Session.Template.Exchange
         public override GroupValue Convert(Field field, ConversionContext context)
         {
             var composedScalar = (ComposedScalar) field;
-            var message = new Message(SessionControlProtocol_1_1.COMP_DECIMAL_INSTR);
+            var message = new Message(SessionControlProtocol_1_1.CompDecimalInstr);
             SetNameAndId(field, message);
             message.SetInteger("Optional", field.IsOptional ? 1 : 0);
             GroupValue exponentDef = CreateComponent(composedScalar.Fields[0], "Exponent");
@@ -72,7 +72,7 @@ namespace OpenFAST.Session.Template.Exchange
 
         private static GroupValue CreateComponent(Scalar component, string componentName)
         {
-            Group componentGroup = SessionControlProtocol_1_1.COMP_DECIMAL_INSTR.GetGroup(componentName);
+            Group componentGroup = SessionControlProtocol_1_1.CompDecimalInstr.GetGroup(componentName);
             var componentDef = new GroupValue(componentGroup);
             GroupValue componentOperatorDef = CreateOperator(component);
             var componentOperatorGroup = new GroupValue(componentGroup.GetGroup("Operator"));

@@ -27,36 +27,36 @@ namespace OpenFAST.Template.Type.Codec
     [Serializable]
     public abstract class TypeCodec
     {
-        protected internal static byte STOP_BIT = 0x80;
-        internal static readonly byte[] NULL_VALUE_ENCODING = new[] {STOP_BIT};
+        protected const byte StopBit = 0x80;
+        internal static readonly byte[] NullValueEncoding = new[] {StopBit};
 
         // Codec Definitions
-        public static readonly TypeCodec UINT = new UnsignedInteger();
-        public static readonly TypeCodec INTEGER = new SignedInteger();
-        public static readonly TypeCodec ASCII = new AsciiString();
-        public static readonly TypeCodec UNICODE = new UnicodeString();
-        public static readonly TypeCodec BIT_VECTOR = new BitVectorType();
-        public static readonly TypeCodec BYTE_VECTOR = new ByteVectorType();
-        public static readonly TypeCodec SF_SCALED_NUMBER = new SingleFieldDecimal();
-        public static readonly TypeCodec STRING_DELTA = new StringDelta();
+        public static readonly TypeCodec Uint = new UnsignedInteger();
+        public static readonly TypeCodec Integer = new SignedInteger();
+        public static readonly TypeCodec Ascii = new AsciiString();
+        public static readonly TypeCodec Unicode = new UnicodeString();
+        public static readonly TypeCodec BitVector = new BitVectorType();
+        public static readonly TypeCodec ByteVector = new ByteVectorType();
+        public static readonly TypeCodec SfScaledNumber = new SingleFieldDecimal();
+        public static readonly TypeCodec StringDelta = new StringDelta();
 
-        public static readonly TypeCodec NULLABLE_UNSIGNED_INTEGER = new NullableUnsignedInteger();
-        public static readonly TypeCodec NULLABLE_INTEGER = new NullableSignedInteger();
-        public static readonly TypeCodec NULLABLE_ASCII = new NullableAsciiString();
-        public static readonly TypeCodec NULLABLE_UNICODE = new NullableUnicodeString();
-        public static readonly TypeCodec NULLABLE_BYTE_VECTOR_TYPE = new NullableByteVector();
-        public static readonly TypeCodec NULLABLE_SF_SCALED_NUMBER = new NullableSingleFieldDecimal();
-        public static readonly TypeCodec NULLABLE_STRING_DELTA = new NullableStringDelta();
+        public static readonly TypeCodec NullableUnsignedInteger = new NullableUnsignedInteger();
+        public static readonly TypeCodec NullableInteger = new NullableSignedInteger();
+        public static readonly TypeCodec NullableAscii = new NullableAsciiString();
+        public static readonly TypeCodec NullableUnicode = new NullableUnicodeString();
+        public static readonly TypeCodec NullableByteVectorType = new NullableByteVector();
+        public static readonly TypeCodec NullableSfScaledNumber = new NullableSingleFieldDecimal();
+        public static readonly TypeCodec NullableStringDelta = new NullableStringDelta();
 
         // DATE CODECS
-        public static readonly TypeCodec DATE_STRING = new DateString("yyyyMMdd");
-        public static readonly TypeCodec DATE_INTEGER = new DateInteger();
-        public static readonly TypeCodec TIMESTAMP_STRING = new DateString("yyyyMMddhhmmssSSS");
-        public static readonly TypeCodec TIMESTAMP_INTEGER = new TimestampInteger();
-        public static readonly TypeCodec EPOCH_TIMESTAMP = new EpochTimestamp();
-        public static readonly TypeCodec TIME_STRING = new DateString("hhmmssSSS");
-        public static readonly TypeCodec TIME_INTEGER = new TimeInteger();
-        public static readonly TypeCodec TIME_IN_MS = new MillisecondsSinceMidnight();
+        public static readonly TypeCodec DateString = new DateString("yyyyMMdd");
+        public static readonly TypeCodec DateInteger = new DateInteger();
+        public static readonly TypeCodec TimestampString = new DateString("yyyyMMddhhmmssSSS");
+        public static readonly TypeCodec TimestampInteger = new TimestampInteger();
+        public static readonly TypeCodec EpochTimestamp = new EpochTimestamp();
+        public static readonly TypeCodec TimeString = new DateString("hhmmssSSS");
+        public static readonly TypeCodec TimeInteger = new TimeInteger();
+        public static readonly TypeCodec TimeInMs = new MillisecondsSinceMidnight();
 
         public virtual bool IsNullable
         {
@@ -69,7 +69,7 @@ namespace OpenFAST.Template.Type.Codec
         public virtual byte[] Encode(ScalarValue value)
         {
             byte[] encoding = EncodeValue(value);
-            encoding[encoding.Length - 1] |= STOP_BIT; // add stop bit;
+            encoding[encoding.Length - 1] |= StopBit; // add stop bit;
             return encoding;
         }
     }

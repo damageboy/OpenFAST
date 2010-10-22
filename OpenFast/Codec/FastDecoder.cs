@@ -66,7 +66,7 @@ namespace OpenFAST.Codec
 
         public Message ReadMessage()
         {
-            var bitVectorValue = (BitVectorValue) TypeCodec.BIT_VECTOR.Decode(_inStream);
+            var bitVectorValue = (BitVectorValue) TypeCodec.BitVector.Decode(_inStream);
 
             if (bitVectorValue == null)
                 return null; // Must have reached end of stream;
@@ -76,7 +76,7 @@ namespace OpenFAST.Codec
 
             // if template id is not present, use previous, else decode template id
             int templateId = (presenceMapReader.Read())
-                                 ? ((IntegerValue) TypeCodec.UINT.Decode(_inStream)).Value
+                                 ? ((IntegerValue) TypeCodec.Uint.Decode(_inStream)).Value
                                  : _context.LastTemplateId;
             MessageTemplate template = _context.GetTemplate(templateId);
 

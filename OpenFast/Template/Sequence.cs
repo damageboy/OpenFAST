@@ -110,7 +110,7 @@ namespace OpenFAST.Template
 
         private static Scalar CreateLength(QName name, bool optional)
         {
-            return new Scalar(Global.CreateImplicitName(name), FASTType.U32, Operator.Operator.NONE,
+            return new Scalar(Global.CreateImplicitName(name), FASTType.U32, Operator.Operator.None,
                               ScalarValue.Undefined, optional);
         }
 
@@ -149,7 +149,7 @@ namespace OpenFAST.Template
             }
             catch (IOException e)
             {
-                Global.HandleError(FastConstants.IO_ERROR, "An IO error occurred while encoding " + this, e);
+                Global.HandleError(FastConstants.IoError, "An IO error occurred while encoding " + this, e);
             }
 
             return buffer.ToArray();

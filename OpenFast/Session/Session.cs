@@ -124,9 +124,9 @@ namespace OpenFAST.Session
 
         public virtual void Error(ErrorCode code, string message)
         {
-            if (code.Equals(FastConstants.D9_TEMPLATE_NOT_REGISTERED))
+            if (code.Equals(FastConstants.D9TemplateNotRegistered))
             {
-                code = SessionConstants.TEMPLATE_NOT_SUPPORTED;
+                code = SessionConstants.TemplateNotSupported;
                 message = "Template Not Supported";
             }
             _protocol.OnError(this, code, message);
@@ -215,7 +215,7 @@ namespace OpenFAST.Session
                                     }
                                     else
                                     {
-                                        _errorHandler.Error(FastConstants.GENERAL_ERROR, e.Message,
+                                        _errorHandler.Error(FastConstants.GeneralError, e.Message,
                                                             e);
                                     }
                                 }

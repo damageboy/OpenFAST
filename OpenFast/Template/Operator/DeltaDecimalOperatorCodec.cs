@@ -29,7 +29,7 @@ namespace OpenFAST.Template.Operator
     public sealed class DeltaDecimalOperatorCodec : AlwaysPresentOperatorCodec
     {
         internal DeltaDecimalOperatorCodec()
-            : base(Operator.DELTA, new[] {FASTType.DECIMAL})
+            : base(Operator.Delta, new[] {FASTType.Decimal})
         {
         }
 
@@ -37,7 +37,7 @@ namespace OpenFAST.Template.Operator
         {
             if (priorVal == null)
             {
-                Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT,
+                Global.HandleError(FastConstants.D6MndtryFieldNotPresent,
                                    "The field " + field + " must have a priorValue defined.");
                 return null;
             }
@@ -47,7 +47,7 @@ namespace OpenFAST.Template.Operator
                 if (field.IsOptional)
                     return ScalarValue.Null;
 
-                Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT, "");
+                Global.HandleError(FastConstants.D6MndtryFieldNotPresent, "");
                 return null;
             }
 
@@ -65,7 +65,7 @@ namespace OpenFAST.Template.Operator
         {
             if (priorVal == null)
             {
-                Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT,
+                Global.HandleError(FastConstants.D6MndtryFieldNotPresent,
                                    "The field " + field + " must have a priorValue defined.");
                 return null;
             }

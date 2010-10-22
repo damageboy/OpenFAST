@@ -37,7 +37,7 @@ namespace OpenFAST.Template.Type.Codec
         {
             if (v == ScalarValue.Null)
             {
-                return NULL_VALUE_ENCODING;
+                return NullValueEncoding;
             }
 
             var buffer = new MemoryStream();
@@ -47,14 +47,14 @@ namespace OpenFAST.Template.Type.Codec
             {
                 if (Math.Abs(value.Exponent) > 63)
                 {
-                    Global.HandleError(FastConstants.R1_LARGE_DECIMAL,
+                    Global.HandleError(FastConstants.R1LargeDecimal,
                                        "Encountered exponent of size " + value.Exponent);
                 }
 
-                byte[] tmp = INTEGER.Encode(new IntegerValue(value.Exponent));
+                byte[] tmp = Integer.Encode(new IntegerValue(value.Exponent));
                 buffer.Write(tmp, 0, tmp.Length);
 
-                tmp = INTEGER.Encode(new LongValue(value.Mantissa));
+                tmp = Integer.Encode(new LongValue(value.Mantissa));
                 buffer.Write(tmp, 0, tmp.Length);
             }
             catch (IOException e)
@@ -67,14 +67,14 @@ namespace OpenFAST.Template.Type.Codec
 
         public override ScalarValue Decode(Stream inStream)
         {
-            int exponent = ((IntegerValue) INTEGER.Decode(inStream)).Value;
+            int exponent = ((IntegerValue) Integer.Decode(inStream)).Value;
 
             if (Math.Abs(exponent) > 63)
             {
-                Global.HandleError(FastConstants.R1_LARGE_DECIMAL, "Encountered exponent of size " + exponent);
+                Global.HandleError(FastConstants.R1LargeDecimal, "Encountered exponent of size " + exponent);
             }
 
-            long mantissa = INTEGER.Decode(inStream).ToLong();
+            long mantissa = Integer.Decode(inStream).ToLong();
             var decimalValue = new DecimalValue(mantissa, exponent);
 
             return decimalValue;

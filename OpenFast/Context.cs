@@ -74,7 +74,7 @@ namespace OpenFAST
             if (_templateRegistry.TryGetId(template, out id))
                 return id;
 
-            _errorHandler.Error(FastConstants.D9_TEMPLATE_NOT_REGISTERED,
+            _errorHandler.Error(FastConstants.D9TemplateNotRegistered,
                                 "The template " + template + " has not been registered.");
             return 0;
         }
@@ -85,7 +85,7 @@ namespace OpenFAST
             if (_templateRegistry.TryGetTemplate(templateId, out template))
                 return template;
 
-            _errorHandler.Error(FastConstants.D9_TEMPLATE_NOT_REGISTERED,
+            _errorHandler.Error(FastConstants.D9TemplateNotRegistered,
                                 "The template with id " + templateId + " has not been registered.");
             return null;
         }
@@ -141,7 +141,7 @@ namespace OpenFAST
         {
             _currentApplicationType = (template.HasTypeReference)
                                           ? template.TypeReference
-                                          : FastConstants.ANY_TYPE;
+                                          : FastConstants.AnyType;
         }
 
         public void StartTrace()

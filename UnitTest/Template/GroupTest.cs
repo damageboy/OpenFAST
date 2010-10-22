@@ -50,8 +50,8 @@ namespace UnitTest.Template
         [TestCase]
         public void TestEncode()
         {
-            var firstName = new Scalar("First Name", FASTType.U32, OpenFAST.Template.Operator.Operator.COPY, ScalarValue.Undefined, true);
-            var lastName = new Scalar("Last Name", FASTType.U32, OpenFAST.Template.Operator.Operator.NONE, ScalarValue.Undefined, false);
+            var firstName = new Scalar("First Name", FASTType.U32, OpenFAST.Template.Operator.Operator.Copy, ScalarValue.Undefined, true);
+            var lastName = new Scalar("Last Name", FASTType.U32, OpenFAST.Template.Operator.Operator.None, ScalarValue.Undefined, false);
             var theGroup = new Group("guy", new Field[] {firstName, lastName}, false);
 
             byte[] actual = theGroup.Encode(
@@ -70,8 +70,8 @@ namespace UnitTest.Template
         {
             const string message = "11000000 10000010 10000010";
             Stream inp = new MemoryStream(ByteUtil.ConvertBitStringToFastByteArray(message));
-            var firstname = new Scalar("firstName", FASTType.U32, OpenFAST.Template.Operator.Operator.COPY, ScalarValue.Undefined, true);
-            var lastName = new Scalar("lastName", FASTType.U32, OpenFAST.Template.Operator.Operator.NONE, ScalarValue.Undefined, false);
+            var firstname = new Scalar("firstName", FASTType.U32, OpenFAST.Template.Operator.Operator.Copy, ScalarValue.Undefined, true);
+            var lastName = new Scalar("lastName", FASTType.U32, OpenFAST.Template.Operator.Operator.None, ScalarValue.Undefined, false);
 
             // MessageInputStream in = new MessageInputStream(new
             // ByteArrayInputStream(message.getBytes()));
@@ -115,7 +115,7 @@ namespace UnitTest.Template
             }
             catch (FastException e)
             {
-                Assert.AreEqual(FastConstants.R7_PMAP_OVERLONG, e.Code);
+                Assert.AreEqual(FastConstants.R7PmapOverlong, e.Code);
             }
         }
 
@@ -134,7 +134,7 @@ namespace UnitTest.Template
             }
             catch (FastException e)
             {
-                Assert.AreEqual(FastConstants.R8_PMAP_TOO_MANY_BITS, e.Code);
+                Assert.AreEqual(FastConstants.R8PmapTooManyBits, e.Code);
             }
         }
     }

@@ -47,7 +47,7 @@ namespace OpenFAST.Template.Type.Codec
             {
                 if (str.Length == 0)
                 {
-                    return NULL_VALUE_ENCODING;
+                    return NullValueEncoding;
                 }
                 if (str.StartsWith(ZeroTerminator))
                 {
@@ -56,7 +56,7 @@ namespace OpenFAST.Template.Type.Codec
                 return Encoding.UTF8.GetBytes(str);
             }
 
-            return NULL_VALUE_ENCODING;
+            return NullValueEncoding;
         }
 
         public override ScalarValue Decode(Stream inStream)
@@ -74,7 +74,7 @@ namespace OpenFAST.Template.Type.Codec
                 {
                     var b = (byte) inStream.ReadByte();
 
-                    if ((b & STOP_BIT) == 0)
+                    if ((b & StopBit) == 0)
                     {
                         buf[ind++] = b;
                         if (ind >= buf.Length)
@@ -95,7 +95,7 @@ namespace OpenFAST.Template.Type.Codec
                 {
                     // BUG? optimize with "else if"?
                     if (!ByteUtil.IsEmpty(buf, ind))
-                        Global.HandleError(FastConstants.R9_STRING_OVERLONG, null);
+                        Global.HandleError(FastConstants.R9StringOverlong, null);
                     if (ind > 1 && buf[1] == 0)
                         return new StringValue("\u0000");
                     return new StringValue("");

@@ -130,7 +130,7 @@ namespace OpenFAST
         public override byte ToByte()
         {
             if (_value > SByte.MaxValue || _value < SByte.MinValue)
-                Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
+                Global.HandleError(FastConstants.R4NumericValueTooLarge,
                                    "The value '" + _value + "' is too large for a byte.");
             return (byte) _value;
         }
@@ -138,7 +138,7 @@ namespace OpenFAST
         public override short ToShort()
         {
             if (_value > Int16.MaxValue || _value < Int16.MinValue)
-                Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
+                Global.HandleError(FastConstants.R4NumericValueTooLarge,
                                    "The value '" + _value + "' is too large for a short.");
             return (short) _value;
         }

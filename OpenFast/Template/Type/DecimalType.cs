@@ -29,7 +29,7 @@ namespace OpenFAST.Template.Type
     internal sealed class DecimalType : SimpleType
     {
         internal DecimalType()
-            : base("decimal", TypeCodec.SF_SCALED_NUMBER, TypeCodec.NULLABLE_SF_SCALED_NUMBER)
+            : base("decimal", TypeCodec.SfScaledNumber, TypeCodec.NullableSfScaledNumber)
         {
         }
 
@@ -44,7 +44,7 @@ namespace OpenFAST.Template.Type
             if (Double.TryParse(value, out dbl))
                 return new DecimalValue(dbl);
 
-            Global.HandleError(FastConstants.S3_INITIAL_VALUE_INCOMP,
+            Global.HandleError(FastConstants.S3InitialValueIncomp,
                                "The value '" + value + "' is not compatible with type " + this);
             return null;
         }

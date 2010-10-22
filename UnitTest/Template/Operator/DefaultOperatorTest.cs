@@ -34,7 +34,7 @@ namespace UnitTest.Template.Operator
         [Test]
         public void TestNullsNoInitialValue()
         {
-            var field = new Scalar(new QName("mostlyNull"), FASTType.I32, OpenFAST.Template.Operator.Operator.DEFAULT, ScalarValue.Undefined, true);
+            var field = new Scalar(new QName("mostlyNull"), FASTType.I32, OpenFAST.Template.Operator.Operator.Default, ScalarValue.Undefined, true);
             MessageTemplate template = Template(field);
             FastEncoder encoder = Encoder(template);
 
@@ -45,7 +45,7 @@ namespace UnitTest.Template.Operator
         [Test]
         public void TestNullsWithInitialValue()
         {
-            var field = new Scalar(new QName("sometimesNull"), FASTType.I32, OpenFAST.Template.Operator.Operator.DEFAULT, new IntegerValue(10), true);
+            var field = new Scalar(new QName("sometimesNull"), FASTType.I32, OpenFAST.Template.Operator.Operator.Default, new IntegerValue(10), true);
             MessageTemplate template = Template(field);
             FastEncoder encoder = Encoder(template);
 
@@ -58,8 +58,8 @@ namespace UnitTest.Template.Operator
         [Test]
         public void TestNullValueDoesntAlterDictionary()
         {
-            var copyField = new Scalar(new QName("value"), FASTType.I32, OpenFAST.Template.Operator.Operator.COPY, new IntegerValue(10), true);
-            var field = new Scalar(new QName("value"), FASTType.I32, OpenFAST.Template.Operator.Operator.DEFAULT, new IntegerValue(10), true);
+            var copyField = new Scalar(new QName("value"), FASTType.I32, OpenFAST.Template.Operator.Operator.Copy, new IntegerValue(10), true);
+            var field = new Scalar(new QName("value"), FASTType.I32, OpenFAST.Template.Operator.Operator.Default, new IntegerValue(10), true);
             MessageTemplate copyTemplate = Template(copyField);
             MessageTemplate template = Template(field);
             var context = new Context();

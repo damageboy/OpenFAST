@@ -14,7 +14,7 @@ namespace TCPClient
 
         public FASTClient(string host, int port)
         {
-            _fc = new FastClient("client", SessionConstants.SCP_1_1, new TcpEndpoint(host, port));
+            _fc = new FastClient("client", SessionConstants.Scp11, new TcpEndpoint(host, port));
         }
 
         public void Connect()

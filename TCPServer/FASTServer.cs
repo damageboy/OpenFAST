@@ -8,7 +8,7 @@ namespace TCPServer
 {
     public class FASTServer
     {
-        public ISessionProtocol ScpSessionProtocol = SessionConstants.SCP_1_1;
+        public ISessionProtocol ScpSessionProtocol = SessionConstants.Scp11;
         public FASTSessionHandler SessionHandler;
 
         public FASTServer()

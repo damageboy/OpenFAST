@@ -154,7 +154,7 @@ namespace UnitTest
             }
             catch (FastException e)
             {
-                Assert.AreEqual(FastConstants.IO_ERROR, e.Code);
+                Assert.AreEqual(FastConstants.IoError, e.Code);
             }
         }
 
@@ -171,7 +171,7 @@ namespace UnitTest
             }
             catch (FastException e)
             {
-                Assert.AreEqual(FastConstants.IO_ERROR, e.Code);
+                Assert.AreEqual(FastConstants.IoError, e.Code);
             }
         }
 
@@ -187,7 +187,7 @@ namespace UnitTest
             }
             catch (FastException e)
             {
-                Assert.AreEqual(FastConstants.D9_TEMPLATE_NOT_REGISTERED, e.Code);
+                Assert.AreEqual(FastConstants.D9TemplateNotRegistered, e.Code);
             }
         }
     }

@@ -30,13 +30,15 @@ namespace OpenFAST.Error
 
         private readonly int _code;
         private readonly string _description;
-        private readonly FastAlertSeverity _severity;
+        private readonly Severity _severity;
         private readonly string _shortName;
         private readonly ErrorType _type;
 
-        public ErrorCode(ErrorType type, int code, string shortName, string description, FastAlertSeverity severity)
+        public ErrorCode(ErrorType type, int code, Severity severity, string shortName, string description)
         {
+            // BUG? explain why duplicate codes are allowed and replace the older ones
             AlertCodes[code] = this;
+
             _type = type;
             _code = code;
             _shortName = shortName;
@@ -59,7 +61,7 @@ namespace OpenFAST.Error
             get { return _shortName; }
         }
 
-        public FastAlertSeverity Severity
+        public Severity Severity
         {
             get { return _severity; }
         }

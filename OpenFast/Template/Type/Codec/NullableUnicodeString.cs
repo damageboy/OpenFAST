@@ -40,15 +40,15 @@ namespace OpenFAST.Template.Type.Codec
         public override byte[] EncodeValue(ScalarValue value)
         {
             if (value.IsNull)
-                return NULLABLE_BYTE_VECTOR_TYPE.EncodeValue(ScalarValue.Null);
+                return NullableByteVectorType.EncodeValue(ScalarValue.Null);
 
             byte[] utf8encoding = Encoding.UTF8.GetBytes(((StringValue) value).Value);
-            return NULLABLE_BYTE_VECTOR_TYPE.Encode(new ByteVectorValue(utf8encoding));
+            return NullableByteVectorType.Encode(new ByteVectorValue(utf8encoding));
         }
 
         public override ScalarValue Decode(Stream inStream)
         {
-            ScalarValue decodedValue = NULLABLE_BYTE_VECTOR_TYPE.Decode(inStream);
+            ScalarValue decodedValue = NullableByteVectorType.Decode(inStream);
             if (decodedValue == null)
                 return null;
             var value = (ByteVectorValue) decodedValue;

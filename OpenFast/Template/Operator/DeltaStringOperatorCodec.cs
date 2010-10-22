@@ -30,7 +30,7 @@ namespace OpenFAST.Template.Operator
     internal sealed class DeltaStringOperatorCodec : AlwaysPresentOperatorCodec
     {
         internal DeltaStringOperatorCodec()
-            : base(Operator.DELTA, new[] { FASTType.ASCII, FASTType.STRING, FASTType.UNICODE, FASTType.BYTE_VECTOR })
+            : base(Operator.Delta, new[] { FASTType.Ascii, FASTType.String, FASTType.Unicode, FASTType.ByteVector })
         {
         }
 
@@ -46,7 +46,7 @@ namespace OpenFAST.Template.Operator
 
             if (priorValue == null)
             {
-                Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT,
+                Global.HandleError(FastConstants.D6MndtryFieldNotPresent,
                                    "The field " + field + " must have a priorValue defined.");
                 return null;
             }
@@ -65,7 +65,7 @@ namespace OpenFAST.Template.Operator
             ScalarValue v = (priorValue.IsUndefined) ? field.BaseValue : priorValue;
             if (diffValue.First.ToInt() > v.ToString().Length)
             {
-                Global.HandleError(FastConstants.D7_SUBTRCTN_LEN_LONG,
+                Global.HandleError(FastConstants.D7SubtrctnLenLong,
                                    "The string diff <" + diffValue + "> cannot be applied to the base value '" +
                                    v + "' because the subtraction length is too long.");
             }

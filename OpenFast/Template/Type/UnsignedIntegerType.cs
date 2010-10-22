@@ -28,14 +28,14 @@ namespace OpenFAST.Template.Type
     public sealed class UnsignedIntegerType : IntegerType
     {
         public UnsignedIntegerType(int numberBits, long maxValue)
-            : base("uInt" + numberBits, 0, maxValue, TypeCodec.UINT, TypeCodec.NULLABLE_UNSIGNED_INTEGER)
+            : base("uInt" + numberBits, 0, maxValue, TypeCodec.Uint, TypeCodec.NullableUnsignedInteger)
         {
         }
 
         public override TypeCodec GetCodec(Operator.Operator op, bool optional)
         {
-            if (op.Equals(Operator.Operator.DELTA))
-                return optional ? TypeCodec.NULLABLE_INTEGER : TypeCodec.INTEGER;
+            if (op.Equals(Operator.Operator.Delta))
+                return optional ? TypeCodec.NullableInteger : TypeCodec.Integer;
 
             return base.GetCodec(op, optional);
         }

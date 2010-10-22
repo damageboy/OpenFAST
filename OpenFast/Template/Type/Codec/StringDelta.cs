@@ -34,8 +34,8 @@ namespace OpenFAST.Template.Type.Codec
 
         public override ScalarValue Decode(Stream inStream)
         {
-            ScalarValue subtractionLength = INTEGER.Decode(inStream);
-            ScalarValue difference = ASCII.Decode(inStream);
+            ScalarValue subtractionLength = Integer.Decode(inStream);
+            ScalarValue difference = Ascii.Decode(inStream);
 
             return new TwinValue(subtractionLength, difference);
         }
@@ -46,8 +46,8 @@ namespace OpenFAST.Template.Type.Codec
                 throw new ArgumentNullException("value", "Cannot have null values for non-nullable string delta");
 
             var diff = (TwinValue) value;
-            byte[] subtractionLength = INTEGER.Encode(diff.First);
-            byte[] difference = ASCII.Encode(diff.Second);
+            byte[] subtractionLength = Integer.Encode(diff.First);
+            byte[] difference = Ascii.Encode(diff.Second);
             var encoded = new byte[subtractionLength.Length + difference.Length];
             Array.Copy(subtractionLength, 0, encoded, 0, subtractionLength.Length);
             Array.Copy(difference, 0, encoded, subtractionLength.Length, difference.Length);

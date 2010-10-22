@@ -21,18 +21,11 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST.Error
 {
-    public sealed class ErrorType
+    public enum ErrorType
     {
-        private readonly string _name;
-
-        public ErrorType(string name)
-        {
-            _name = name;
-        }
-
-        public string Name
-        {
-            get { return _name; }
-        }
+        Static,
+        Dynamic,
+        Reportable,
+        Session,
     }
 }

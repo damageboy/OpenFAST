@@ -71,7 +71,7 @@ namespace UnitTest
             }
             catch (FastException e)
             {
-                Assert.AreEqual(FastConstants.R5_DECIMAL_CANT_CONVERT_TO_INT, e.Code);
+                Assert.AreEqual(FastConstants.R5DecimalCantConvertToInt, e.Code);
             }
         }
 
@@ -97,7 +97,7 @@ namespace UnitTest
             }
             catch (FastException e)
             {
-                Assert.AreEqual(FastConstants.R5_DECIMAL_CANT_CONVERT_TO_INT, e.Code);
+                Assert.AreEqual(FastConstants.R5DecimalCantConvertToInt, e.Code);
             }
         }
 
@@ -117,7 +117,7 @@ namespace UnitTest
             }
             catch (FastException e)
             {
-                Assert.AreEqual(FastConstants.R5_DECIMAL_CANT_CONVERT_TO_INT, e.Code);
+                Assert.AreEqual(FastConstants.R5DecimalCantConvertToInt, e.Code);
             }
         }
 
@@ -137,7 +137,7 @@ namespace UnitTest
             }
             catch (FastException e)
             {
-                Assert.AreEqual(FastConstants.R5_DECIMAL_CANT_CONVERT_TO_INT, e.Code);
+                Assert.AreEqual(FastConstants.R5DecimalCantConvertToInt, e.Code);
             }
         }
     }

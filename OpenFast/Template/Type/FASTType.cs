@@ -21,6 +21,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System;
 using System.Collections.Generic;
+using System.Text;
 using OpenFAST.Template.Type.Codec;
 using OpenFAST.Utility;
 
@@ -39,47 +40,20 @@ namespace OpenFAST.Template.Type
         public static readonly FASTType I16 = new SignedIntegerType(16, Int16.MinValue, Int16.MaxValue);
         public static readonly FASTType I32 = new SignedIntegerType(32, Int32.MinValue, Int32.MaxValue);
         public static readonly FASTType I64 = new SignedIntegerType(64, Int64.MinValue, Int64.MaxValue);
-        internal sealed class FASTTypeString : StringType
-        {
-            public FASTTypeString(string typeName, TypeCodec codec, TypeCodec nullableCodec)
-                : base(typeName, codec, nullableCodec)
-            {
-            }
+        public static readonly FASTType String = new FASTTypeString("string", TypeCodec.Ascii, TypeCodec.NullableAscii);
+        public static readonly FASTType Ascii = new FASTTypeString("ascii", TypeCodec.Ascii, TypeCodec.NullableAscii);
 
-            public override ScalarValue GetValue(byte[] bytes)
-            {
-                return new StringValue(System.Text.Encoding.ASCII.GetString(bytes));
-            }
-        }
-        public static readonly FASTType STRING = new FASTTypeString("string", TypeCodec.ASCII, TypeCodec.NULLABLE_ASCII);
-        public static readonly FASTType ASCII = new FASTTypeString("ascii", TypeCodec.ASCII, TypeCodec.NULLABLE_ASCII);
-        internal sealed class FASTUTFTypeString : StringType
-        {
-            public FASTUTFTypeString(string typeName, TypeCodec codec, TypeCodec nullableCodec)
-                : base(typeName, codec, nullableCodec)
-            {
-            }
+        public static readonly FASTType Unicode = new FASTUTFTypeString("unicode", TypeCodec.Unicode,
+                                                                        TypeCodec.NullableUnicode);
 
-            public override ScalarValue GetValue(byte[] bytes)
-            {
-                return new StringValue(System.Text.Encoding.UTF8.GetString(bytes));
-            }
-        }
-        public static readonly FASTType UNICODE = new FASTUTFTypeString("unicode", TypeCodec.UNICODE, TypeCodec.NULLABLE_UNICODE);
-        public static readonly FASTType BYTE_VECTOR = new ByteVectorType();
-        public static readonly FASTType DECIMAL = new DecimalType();
+        public static readonly FASTType ByteVector = new ByteVectorType();
+        public static readonly FASTType Decimal = new DecimalType();
+
+        public static readonly FASTType[] IntegerTypes = new[] {U8, U16, U32, U64, I8, I16, I32, I64};
 
         private static FASTType[] _staticAllTypes;
-        public static readonly FASTType[] INTEGER_TYPES = new[] {U8, U16, U32, U64, I8, I16, I32, I64};
 
         private readonly string _name;
-
-        static FASTType()
-        {
-            //STRING = new StringType("string", TypeCodec.ASCII, TypeCodec.NULLABLE_ASCII);
-            //ASCII = new StringType("ascii", TypeCodec.ASCII, TypeCodec.NULLABLE_ASCII);
-            //UNICODE = new StringType("unicode", TypeCodec.UNICODE, TypeCodec.NULLABLE_UNICODE);
-        }
 
         protected FASTType(string typeName)
         {
@@ -134,9 +108,14 @@ namespace OpenFAST.Template.Type
             return _staticAllTypes ??
                    (_staticAllTypes = new[]
                                           {
-                                              U8, U16, U32, U64, I8, I16, I32, I64, STRING, ASCII,
-                                              UNICODE, BYTE_VECTOR, DECIMAL
+                                              U8, U16, U32, U64, I8, I16, I32, I64, String, Ascii,
+                                              Unicode, ByteVector, Decimal
                                           });
+        }
+
+        public virtual ScalarValue GetValue(byte[] bytes)
+        {
+            throw new UnsupportedOperationException();
         }
 
         #region Equals
@@ -144,7 +123,7 @@ namespace OpenFAST.Template.Type
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(this, obj)) return true;
-            
+
             var other = obj as FASTType;
             if (ReferenceEquals(null, other)) return false;
             return Equals(other._name, _name);
@@ -157,9 +136,38 @@ namespace OpenFAST.Template.Type
 
         #endregion
 
-        public virtual ScalarValue GetValue(byte[] bytes)
+        #region Nested type: FASTTypeString
+
+        private sealed class FASTTypeString : StringType
         {
-            throw new UnsupportedOperationException();
+            public FASTTypeString(string typeName, TypeCodec codec, TypeCodec nullableCodec)
+                : base(typeName, codec, nullableCodec)
+            {
+            }
+
+            public override ScalarValue GetValue(byte[] bytes)
+            {
+                return new StringValue(Encoding.ASCII.GetString(bytes));
+            }
         }
+
+        #endregion
+
+        #region Nested type: FASTUTFTypeString
+
+        private sealed class FASTUTFTypeString : StringType
+        {
+            public FASTUTFTypeString(string typeName, TypeCodec codec, TypeCodec nullableCodec)
+                : base(typeName, codec, nullableCodec)
+            {
+            }
+
+            public override ScalarValue GetValue(byte[] bytes)
+            {
+                return new StringValue(Encoding.UTF8.GetString(bytes));
+            }
+        }
+
+        #endregion
     }
 }

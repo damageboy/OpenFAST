@@ -33,9 +33,7 @@ namespace OpenFAST.Template.Loader
         internal const string TemplateDefinitionNs = "http://www.fixprotocol.org/ns/fast/td/1.1";
 
         internal static readonly ErrorCode IoError;
-
         internal static readonly ErrorCode XmlParsingError;
-
         internal static readonly ErrorCode InvalidType;
 
         private readonly ParsingContext _initialContext;
@@ -44,11 +42,12 @@ namespace OpenFAST.Template.Loader
 
         static XmlMessageTemplateLoader()
         {
-            IoError = new ErrorCode(FastConstants.STATIC, - 1, "IOERROR", "IO Error", FastAlertSeverity.ERROR);
-            XmlParsingError = new ErrorCode(FastConstants.STATIC, - 1, "XMLPARSEERR", "XML Parsing Error",
-                                            FastAlertSeverity.ERROR);
-            InvalidType = new ErrorCode(FastConstants.STATIC, - 1, "INVALIDTYPE", "Invalid Type",
-                                        FastAlertSeverity.ERROR);
+            IoError = new ErrorCode(
+                ErrorType.Static, -1, Severity.Error, "IOERROR", "IO Error");
+            XmlParsingError = new ErrorCode(
+                ErrorType.Static, -1, Severity.Error, "XMLPARSEERR", "XML Parsing Error");
+            InvalidType = new ErrorCode(
+                ErrorType.Static, -1, Severity.Error, "INVALIDTYPE", "Invalid Type");
         }
 
         public XmlMessageTemplateLoader()
@@ -99,7 +98,7 @@ namespace OpenFAST.Template.Loader
                     }
                     return templates;
                 }
-                _initialContext.ErrorHandler.Error(FastConstants.S1_INVALID_XML,
+                _initialContext.ErrorHandler.Error(FastConstants.S1InvalidXml,
                                                    "Invalid root node " + root.Name +
                                                    ", 'template' or 'templates' expected.");
             }

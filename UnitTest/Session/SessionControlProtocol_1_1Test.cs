@@ -35,7 +35,7 @@ namespace UnitTest.Session
         [SetUp]
         protected void SetUp()
         {
-            SCP_1_1 = (SessionControlProtocol_1_1)SessionConstants.SCP_1_1;
+            SCP_1_1 = (SessionControlProtocol_1_1)SessionConstants.Scp11;
         }
 
         [Test]

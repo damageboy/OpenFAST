@@ -36,7 +36,7 @@ namespace UnitTest.Template.Operator
         [Test]
         public void TestDecodeSubtractionLengthError()
         {
-            _field = new Scalar("", FASTType.BYTE_VECTOR, OpenFAST.Template.Operator.Operator.DELTA, ScalarValue.Undefined, false);
+            _field = new Scalar("", FASTType.ByteVector, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, false);
             try
             {
                 Decode(Twin(Int(5), Byte(Byte("c0afcd"))), Byte(Byte("123456")));
@@ -44,13 +44,13 @@ namespace UnitTest.Template.Operator
             }
             catch (FastException e)
             {
-                Assert.AreEqual(FastConstants.D7_SUBTRCTN_LEN_LONG, e.Code);
+                Assert.AreEqual(FastConstants.D7SubtrctnLenLong, e.Code);
             }
         }
         [Test]
         public void TestGetValueToEncodeMandatory()
         {
-            _field = new Scalar("", FASTType.BYTE_VECTOR, OpenFAST.Template.Operator.Operator.DELTA, ScalarValue.Undefined, false);
+            _field = new Scalar("", FASTType.ByteVector, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, false);
             Assert.AreEqual(Tv(0, Byte("aabbccdd")), Encode("aabbccdd", ScalarValue.Undefined));
             Assert.AreEqual(Tv(1, Byte("ee")), Encode("aabbccee", ByteVector("aabbccdd")));
             Assert.AreEqual(Tv(-2, Byte("ff")), Encode("ffbbccee", ByteVector("aabbccee")));
@@ -60,7 +60,7 @@ namespace UnitTest.Template.Operator
         [Test]
         public void TestDecodeValueMandatory()
         {
-            _field = new Scalar("", FASTType.BYTE_VECTOR, OpenFAST.Template.Operator.Operator.DELTA, ScalarValue.Undefined, false);
+            _field = new Scalar("", FASTType.ByteVector, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, false);
             Assert.AreEqual(ByteVector("aabbccdd"), Decode(Tv(0, Byte("aabbccdd")), ScalarValue.Undefined));
             Assert.AreEqual(ByteVector("aabbccee"), Decode(Tv(1, Byte("ee")), ByteVector("aabbccdd")));
             Assert.AreEqual(ByteVector("ffbbccee"), Decode(Tv(-2, Byte("ff")), ByteVector("aabbccee")));
@@ -70,7 +70,7 @@ namespace UnitTest.Template.Operator
         [Test]
         public void TestGetValueToEncodeOptional()
         {
-            _field = new Scalar("", FASTType.BYTE_VECTOR, OpenFAST.Template.Operator.Operator.DELTA, ScalarValue.Undefined, true);
+            _field = new Scalar("", FASTType.ByteVector, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, true);
             Assert.AreEqual(Tv(0, Byte("aabbccdd")), Encode("aabbccdd", ScalarValue.Undefined));
             Assert.AreEqual(Tv(1, Byte("ee")), Encode("aabbccee", ByteVector("aabbccdd")));
             Assert.AreEqual(Tv(-2, Byte("ff")), Encode("ffbbccee", ByteVector("aabbccee")));
@@ -81,7 +81,7 @@ namespace UnitTest.Template.Operator
         [Test]
         public void TestDecodeValueOptional()
         {
-            _field = new Scalar("", FASTType.BYTE_VECTOR, OpenFAST.Template.Operator.Operator.DELTA, ScalarValue.Undefined, true);
+            _field = new Scalar("", FASTType.ByteVector, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, true);
             Assert.AreEqual(ByteVector("aabbccdd"), Decode(Tv(0, Byte("aabbccdd")), ScalarValue.Undefined));
             Assert.AreEqual(ByteVector("aabbccee"), Decode(Tv(1, Byte("ee")), ByteVector("aabbccdd")));
             Assert.AreEqual(ByteVector("ffbbccee"), Decode(Tv(-2, Byte("ff")), ByteVector("aabbccee")));
@@ -94,14 +94,14 @@ namespace UnitTest.Template.Operator
         {
             if (value == null)
             {
-                return OpenFAST.Template.Operator.OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.DELTA, FASTType.STRING).GetValueToEncode(null, priorValue, _field);
+                return OpenFAST.Template.Operator.OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Delta, FASTType.String).GetValueToEncode(null, priorValue, _field);
             }
-            return OpenFAST.Template.Operator.OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.DELTA, FASTType.STRING).GetValueToEncode(ByteVector(value), priorValue, _field);
+            return OpenFAST.Template.Operator.OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Delta, FASTType.String).GetValueToEncode(ByteVector(value), priorValue, _field);
         }
 
         private ScalarValue Decode(ScalarValue diff, ScalarValue priorValue)
         {
-            return OpenFAST.Template.Operator.OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.DELTA, FASTType.STRING).DecodeValue(diff, priorValue, _field);
+            return OpenFAST.Template.Operator.OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Delta, FASTType.String).DecodeValue(diff, priorValue, _field);
         }
 
         private static TwinValue Tv(int subtraction, byte[] bytes)

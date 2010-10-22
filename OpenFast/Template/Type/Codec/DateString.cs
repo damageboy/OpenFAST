@@ -40,13 +40,13 @@ namespace OpenFAST.Template.Type.Codec
 
         public override ScalarValue Decode(Stream inStream)
         {
-            string str = ASCII.Decode(inStream).ToString();
+            string str = Ascii.Decode(inStream).ToString();
 
             DateTime result;
             if (DateTime.TryParseExact(str, _format, _formatter, DateTimeStyles.None, out result))
                 return new DateValue(result);
 
-            Global.HandleError(FastConstants.PARSE_ERROR,
+            Global.HandleError(FastConstants.ParseError,
                                string.Format("'{0}' could not be parsed as DateTime with '{1}' format", str, _format));
             return null;
         }
@@ -55,7 +55,7 @@ namespace OpenFAST.Template.Type.Codec
         {
 #warning BUG? This used to format all values using "d-MMM-yy h:mm:ss tt" format, and now it uses constructor parameter instead
             return
-                ASCII.Encode(
+                Ascii.Encode(
                     new StringValue(
                         (((DateValue) value).Value).ToString(_format, _formatter)));
         }

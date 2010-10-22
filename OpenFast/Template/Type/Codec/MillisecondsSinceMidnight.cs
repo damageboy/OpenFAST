@@ -29,7 +29,7 @@ namespace OpenFAST.Template.Type.Codec
     {
         public override ScalarValue Decode(Stream inStream)
         {
-            int millisecondsSinceMidnight = INTEGER.Decode(inStream).ToInt();
+            int millisecondsSinceMidnight = Integer.Decode(inStream).ToInt();
             return new DateValue(new DateTime(millisecondsSinceMidnight*TimeSpan.TicksPerMillisecond));
         }
 
@@ -37,7 +37,7 @@ namespace OpenFAST.Template.Type.Codec
         {
             DateTime date = ((DateValue) value).Value;
             var millisecondsSinceMidnight = (int) date.TimeOfDay.TotalMilliseconds;
-            return INTEGER.EncodeValue(new IntegerValue(millisecondsSinceMidnight));
+            return Integer.EncodeValue(new IntegerValue(millisecondsSinceMidnight));
         }
 
         public override bool Equals(Object obj)

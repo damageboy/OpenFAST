@@ -40,21 +40,21 @@ namespace OpenFAST.Template.Type.Codec
         {
             if (value.IsNull)
             {
-                return NULL_VALUE_ENCODING;
+                return NullValueEncoding;
             }
 
             var intValue = (NumericValue) value;
 
             if (intValue.ToLong() >= 0)
             {
-                return INTEGER.EncodeValue(intValue.Increment());
+                return Integer.EncodeValue(intValue.Increment());
             }
-            return INTEGER.EncodeValue(intValue);
+            return Integer.EncodeValue(intValue);
         }
 
         public override ScalarValue Decode(Stream inStream)
         {
-            var numericValue = (NumericValue) INTEGER.Decode(inStream);
+            var numericValue = (NumericValue) Integer.Decode(inStream);
 
             long value = numericValue.ToLong();
             if (value == 0)

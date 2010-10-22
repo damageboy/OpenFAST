@@ -52,7 +52,7 @@ namespace OpenFAST
             int i = ToInt();
             if (i > SByte.MaxValue || i < SByte.MinValue)
             {
-                Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
+                Global.HandleError(FastConstants.R4NumericValueTooLarge,
                                    "The value '" + i + "' is too large to fit into a byte.");
                 return 0;
             }
@@ -64,7 +64,7 @@ namespace OpenFAST
             int i = ToInt();
             if (i > Int16.MaxValue || i < Int16.MinValue)
             {
-                Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
+                Global.HandleError(FastConstants.R4NumericValueTooLarge,
                                    "The value '" + i + "' is too large to fit into a short.");
                 return 0;
             }
@@ -77,7 +77,7 @@ namespace OpenFAST
             if (Int32.TryParse(_value, out result))
                 return result;
 
-            Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
+            Global.HandleError(FastConstants.R4NumericValueTooLarge,
                                "The value '" + _value + "' is too large to fit into an int.");
             return 0;
         }
@@ -88,7 +88,7 @@ namespace OpenFAST
             if (Int64.TryParse(_value, out result))
                 return result;
 
-            Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
+            Global.HandleError(FastConstants.R4NumericValueTooLarge,
                                "The value '" + _value + "' is too large to fit into a long.");
             return 0;
         }
@@ -99,7 +99,7 @@ namespace OpenFAST
             if (Double.TryParse(_value, out result))
                 return result;
 
-            Global.HandleError(FastConstants.R4_NUMERIC_VALUE_TOO_LARGE,
+            Global.HandleError(FastConstants.R4NumericValueTooLarge,
                                "The value'" + _value + "' is too large to fit into a double.");
             return 0.0;
         }

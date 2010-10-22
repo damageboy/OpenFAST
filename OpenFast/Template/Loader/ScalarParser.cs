@@ -46,7 +46,7 @@ namespace OpenFAST.Template.Loader
 
         public override Field Parse(XmlElement fieldNode, bool optional, ParsingContext context)
         {
-            Operator.Operator op = Operator.Operator.NONE;
+            Operator.Operator op = Operator.Operator.None;
             string defaultValue = null;
             string key = null;
             string ns = "";

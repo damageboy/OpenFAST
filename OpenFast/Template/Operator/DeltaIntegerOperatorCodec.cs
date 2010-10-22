@@ -37,7 +37,7 @@ namespace OpenFAST.Template.Operator
         {
             if (priorValue == null)
             {
-                Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT,
+                Global.HandleError(FastConstants.D6MndtryFieldNotPresent,
                                    "The field " + field + " must have a priorValue defined.");
                 return null;
             }
@@ -63,7 +63,7 @@ namespace OpenFAST.Template.Operator
         {
             if (priorValue == null)
             {
-                Global.HandleError(FastConstants.D6_MNDTRY_FIELD_NOT_PRESENT,
+                Global.HandleError(FastConstants.D6MndtryFieldNotPresent,
                                    "The field " + field + " must have a priorValue defined.");
                 return null;
             }
@@ -91,7 +91,7 @@ namespace OpenFAST.Template.Operator
                     {
                         return ScalarValue.Undefined;
                     }
-                    Global.HandleError(FastConstants.D5_NO_DEFAULT_VALUE, "");
+                    Global.HandleError(FastConstants.D5NoDefaultValue, "");
                 }
                 else
                 {
