@@ -38,7 +38,7 @@ namespace OpenFAST.Error
         {
 #warning Why do duplicate codes are allowed and replace the older ones? Various error codes overlap
             AlertCodes[code] = this;
-
+            
             _type = type;
             _code = code;
             _shortName = shortName;
@@ -89,9 +89,9 @@ namespace OpenFAST.Error
             throw new FastException(message, this);
         }
 
-        public static ErrorCode GetAlertCode(Message alertMsg)
+        public static ErrorCode GetAlertCode(int code)
         {
-            return AlertCodes[alertMsg.GetInt(2)];
+            return AlertCodes[code];
         }
 
         public override string ToString()

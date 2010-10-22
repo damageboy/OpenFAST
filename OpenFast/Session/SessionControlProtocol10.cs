@@ -124,7 +124,7 @@ namespace OpenFAST.Session
         {
             if (message.Template.Equals(AlertTemplate))
             {
-                ErrorCode alertCode = ErrorCode.GetAlertCode(message);
+                ErrorCode alertCode = ErrorCode.GetAlertCode(message.GetInt(2));
                 if (alertCode.Equals(SessionConstants.Close))
                 {
                     session.Close(alertCode);
