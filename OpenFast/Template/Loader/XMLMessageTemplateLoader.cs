@@ -89,7 +89,7 @@ namespace OpenFAST.Template.Loader
                     return templates;
                 }
                 _initialContext.ErrorHandler.OnError(
-                    null, StaticError.S1InvalidXml, "Invalid root node {0}, 'template' or 'templates' expected.",
+                    null, StaticError.InvalidXml, "Invalid root node {0}, 'template' or 'templates' expected.",
                     root.Name);
             }
             return new MessageTemplate[] {};

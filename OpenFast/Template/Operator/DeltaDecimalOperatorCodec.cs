@@ -37,7 +37,7 @@ namespace OpenFAST.Template.Operator
         {
             if (priorVal == null)
             {
-                Global.ErrorHandler.OnError(null, DynError.D6MndtryFieldNotPresent,
+                Global.ErrorHandler.OnError(null, DynError.MandatoryFieldNotPresent,
                                             "The field {0} must have a priorValue defined.", field);
                 return null;
             }
@@ -47,7 +47,7 @@ namespace OpenFAST.Template.Operator
                 if (field.IsOptional)
                     return ScalarValue.Null;
 
-                Global.ErrorHandler.OnError(null, DynError.D6MndtryFieldNotPresent, "");
+                Global.ErrorHandler.OnError(null, DynError.MandatoryFieldNotPresent, "");
                 return null;
             }
 
@@ -65,7 +65,7 @@ namespace OpenFAST.Template.Operator
         {
             if (priorVal == null)
             {
-                Global.ErrorHandler.OnError(null, DynError.D6MndtryFieldNotPresent,
+                Global.ErrorHandler.OnError(null, DynError.MandatoryFieldNotPresent,
                                             "The field {0} must have a priorValue defined.", field);
                 return null;
             }

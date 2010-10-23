@@ -51,7 +51,7 @@ namespace UnitTest
             }
             catch (RepErrorException e)
             {
-                Assert.AreEqual(RepError.R4NumericValueTooLarge, e.Error);
+                Assert.AreEqual(RepError.NumericValueTooLarge, e.Error);
             }
         }
 
@@ -89,7 +89,7 @@ namespace UnitTest
             }
             catch (RepErrorException e)
             {
-                Assert.AreEqual(RepError.R4NumericValueTooLarge, e.Error);
+                Assert.AreEqual(RepError.NumericValueTooLarge, e.Error);
             }
         }
 

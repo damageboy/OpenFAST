@@ -130,7 +130,7 @@ namespace OpenFAST.Template
             var value = (ScalarValue) fieldValue;
             if (!_operatorCodec.CanEncode(value, this))
             {
-                Global.ErrorHandler.OnError(null, DynError.D3CantEncodeValue,
+                Global.ErrorHandler.OnError(null, DynError.CantEncodeValue,
                                             "The scalar {0} cannot encode the value {1}", this, value);
             }
             ScalarValue valueToEncode = _operatorCodec.GetValueToEncode(value, priorValue, this,
@@ -237,7 +237,7 @@ namespace OpenFAST.Template
                 return;
             if (!type.IsValueOf(priorValue))
             {
-                Global.ErrorHandler.OnError(null, DynError.D4InvalidType,
+                Global.ErrorHandler.OnError(null, DynError.InvalidType,
                                             "The value '{0}' is not valid for the type {1}", priorValue, type);
             }
         }

@@ -64,7 +64,7 @@ namespace OpenFAST.Template.Operator
                 return value;
             if (val.Length < prior.Length)
             {
-                Global.ErrorHandler.OnError(null, DynError.D3CantEncodeValue,
+                Global.ErrorHandler.OnError(null, DynError.CantEncodeValue,
                                             "The value {0} cannot be encoded by a tail operator with previous value {1}",
                                             val, priorValue);
             }
@@ -81,7 +81,7 @@ namespace OpenFAST.Template.Operator
         {
             if (priorValue == null && !field.IsOptional)
             {
-                Global.ErrorHandler.OnError(null, DynError.D6MndtryFieldNotPresent, "");
+                Global.ErrorHandler.OnError(null, DynError.MandatoryFieldNotPresent, "");
                 return null;
             }
 
@@ -111,7 +111,7 @@ namespace OpenFAST.Template.Operator
                 value = (field.DefaultValue.IsUndefined) ? null : field.DefaultValue;
             if (value == null && !field.IsOptional)
             {
-                Global.ErrorHandler.OnError(null, DynError.D6MndtryFieldNotPresent, "The field {0} was not present.",
+                Global.ErrorHandler.OnError(null, DynError.MandatoryFieldNotPresent, "The field {0} was not present.",
                                             field);
             }
             return value;

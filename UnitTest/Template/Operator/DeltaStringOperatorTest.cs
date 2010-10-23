@@ -44,7 +44,7 @@ namespace UnitTest.Template.Operator
             }
             catch (DynErrorException e)
             {
-                Assert.AreEqual(DynError.D7SubtrctnLenLong, e.Error);
+                Assert.AreEqual(DynError.SubtrctnLenLong, e.Error);
                 Assert.AreEqual(
                         "The string diff <5, abc> cannot be applied to the base value 'def' because the subtraction length is too long.",
                         e.Message);

@@ -52,7 +52,7 @@ namespace OpenFAST.Template.Type.Codec
             {
                 if (Math.Abs(value.Exponent) > 63)
                 {
-                    Global.ErrorHandler.OnError(null, RepError.R1LargeDecimal, "");
+                    Global.ErrorHandler.OnError(null, RepError.LargeDecimal, "");
                 }
 
                 byte[] tmp = NullableInteger.Encode(new IntegerValue(value.Exponent));

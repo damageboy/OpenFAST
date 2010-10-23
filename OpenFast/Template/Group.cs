@@ -261,7 +261,7 @@ namespace OpenFAST.Template
                 context.DecodeTrace.Pmap(pmap.Bytes);
             if (pmap.IsOverlong)
             {
-                Global.ErrorHandler.OnError(null, RepError.R7PmapOverlong,
+                Global.ErrorHandler.OnError(null, RepError.PmapOverlong,
                                             "The presence map {0} for the group {1} is overlong.", pmap, this);
             }
             return DecodeFieldValues(inStream, template, new BitVectorReader(pmap), context);
@@ -280,7 +280,7 @@ namespace OpenFAST.Template
 
             if (pmapReader.HasMoreBitsSet())
             {
-                Global.ErrorHandler.OnError(null, RepError.R8PmapTooManyBits,
+                Global.ErrorHandler.OnError(null, RepError.PmapTooManyBits,
                                             "The presence map {0} has too many bits for the group {1}", pmapReader, this);
             }
 

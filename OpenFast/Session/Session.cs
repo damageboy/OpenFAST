@@ -129,7 +129,7 @@ namespace OpenFAST.Session
 
         public void OnError(Exception exception, DynError error, string format, params object[] args)
         {
-            if (error == DynError.D9TemplateNotRegistered)
+            if (error == DynError.TemplateNotRegistered)
             {
                 error = DynError.TemplateNotSupported;
                 format = "Template Not Supported";

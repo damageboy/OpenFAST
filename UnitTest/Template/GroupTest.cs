@@ -115,7 +115,7 @@ namespace UnitTest.Template
             }
             catch (RepErrorException e)
             {
-                Assert.AreEqual(RepError.R7PmapOverlong, e.Error);
+                Assert.AreEqual(RepError.PmapOverlong, e.Error);
             }
         }
 
@@ -134,7 +134,7 @@ namespace UnitTest.Template
             }
             catch (RepErrorException e)
             {
-                Assert.AreEqual(RepError.R8PmapTooManyBits, e.Error);
+                Assert.AreEqual(RepError.PmapTooManyBits, e.Error);
             }
         }
     }

@@ -99,7 +99,7 @@ namespace OpenFAST.Template.Type.Codec
                 {
                     if (!ByteUtil.IsEmpty(buf, ind))
                     {
-                        Global.ErrorHandler.OnError(null, RepError.R9StringOverlong, null);
+                        Global.ErrorHandler.OnError(null, RepError.StringOverlong, null);
                     }
 
                     if (ind == 1)

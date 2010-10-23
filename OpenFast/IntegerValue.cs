@@ -131,7 +131,7 @@ namespace OpenFAST
         {
             if (_value > SByte.MaxValue || _value < SByte.MinValue)
             {
-                Global.ErrorHandler.OnError(null, RepError.R4NumericValueTooLarge,
+                Global.ErrorHandler.OnError(null, RepError.NumericValueTooLarge,
                                             "The value '{0}' is too large for a byte.", _value);
             }
             return (byte) _value;
@@ -141,7 +141,7 @@ namespace OpenFAST
         {
             if (_value > Int16.MaxValue || _value < Int16.MinValue)
             {
-                Global.ErrorHandler.OnError(null, RepError.R4NumericValueTooLarge,
+                Global.ErrorHandler.OnError(null, RepError.NumericValueTooLarge,
                                             "The value '{0}' is too large for a short.", _value);
             }
             return (short) _value;

@@ -46,7 +46,7 @@ namespace OpenFAST.Template.Operator
 
             if (priorValue == null)
             {
-                Global.ErrorHandler.OnError(null, DynError.D6MndtryFieldNotPresent,
+                Global.ErrorHandler.OnError(null, DynError.MandatoryFieldNotPresent,
                                             "The field {0} must have a priorValue defined.", field);
                 return null;
             }
@@ -65,7 +65,7 @@ namespace OpenFAST.Template.Operator
             ScalarValue v = (priorValue.IsUndefined) ? field.BaseValue : priorValue;
             if (diffValue.First.ToInt() > v.ToString().Length)
             {
-                Global.ErrorHandler.OnError(null, DynError.D7SubtrctnLenLong,
+                Global.ErrorHandler.OnError(null, DynError.SubtrctnLenLong,
                                             "The string diff <{0}> cannot be applied to the base value '{1}' because the subtraction length is too long.",
                                             diffValue, v);
             }

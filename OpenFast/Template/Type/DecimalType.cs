@@ -45,7 +45,7 @@ namespace OpenFAST.Template.Type
             if (Double.TryParse(value, out dbl))
                 return new DecimalValue(dbl);
 
-            Global.ErrorHandler.OnError(null, StaticError.S3InitialValueIncomp,
+            Global.ErrorHandler.OnError(null, StaticError.InitialValueIncomp,
                                         "The value '{0}' is not compatible with type {1}", value, this);
             return null;
         }

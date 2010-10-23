@@ -698,7 +698,7 @@ namespace OpenFAST.Session
 
         public static Message CreateFastAlertMessage(DynError code)
         {
-            ErrorInfoAttribute attr = code.GetErrorAttr();
+            ErrorInfoAttribute attr = code.GetErrorInfo();
             var alert = new Message(AlertTemplate);
             alert.SetInteger(1, (int) attr.Severity);
             alert.SetInteger(2, (int) code);

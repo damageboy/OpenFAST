@@ -43,15 +43,15 @@ namespace OpenFAST.Error
     public enum StaticError
     {
         [ErrorInfo(ErrorType.Static, Severity.Error, "ERR S1", "Invalid XML")]
-        S1InvalidXml = 1,
+        InvalidXml = 1,
         [ErrorInfo(ErrorType.Static, Severity.Error, "ERR S2", "Incompatible operator and type")]
-        S2OperatorTypeIncomp = 2,
+        OperatorTypeIncomp = 2,
         [ErrorInfo(ErrorType.Static, Severity.Error, "ERR S3", "Incompatible initial value")]
-        S3InitialValueIncomp = 3,
+        InitialValueIncomp = 3,
         [ErrorInfo(ErrorType.Static, Severity.Error, "ERR S4", "Fields with constant operators must have a default value defined.")]
-        S4NoInitialValueForConst = 4,
+        NoInitialValueForConst = 4,
         [ErrorInfo(ErrorType.Static, Severity.Error, "ERR S5", "No initial value for mandatory field with default operator")]
-        S5NoInitvalMndtryDfalt = 5,
+        NoInitvalMndtryDfalt = 5,
 
         [ErrorInfo(ErrorType.Static, Severity.Error, "IOERROR", "IO Error")]
         IoError = 10000,
@@ -64,17 +64,17 @@ namespace OpenFAST.Error
     public enum RepError
     {
         [ErrorInfo(ErrorType.Reportable, Severity.Warn, "ERR R1", "Decimal exponent does not fit into range -63...63")]
-        R1LargeDecimal = 1,
+        LargeDecimal = 1,
         [ErrorInfo(ErrorType.Reportable, Severity.Warn, "ERR R4", "The value is too large.")]
-        R4NumericValueTooLarge = 4,
+        NumericValueTooLarge = 4,
         [ErrorInfo(ErrorType.Reportable, Severity.Warn, "ERR R5", "The decimal value cannot convert to an integer because of trailing decimal part.")]
-        R5DecimalCantConvertToInt = 5,
+        DecimalCantConvertToInt = 5,
         [ErrorInfo(ErrorType.Reportable, Severity.Warn, "ERR R7", "The presence map is overlong.")]
-        R7PmapOverlong = 7,
+        PmapOverlong = 7,
         [ErrorInfo(ErrorType.Reportable, Severity.Warn, "ERR R8", "The presence map has too many bits.")]
-        R8PmapTooManyBits = 8,
+        PmapTooManyBits = 8,
         [ErrorInfo(ErrorType.Reportable, Severity.Error, "ERR R9", "The string is overlong.")]
-        R9StringOverlong = 9,
+        StringOverlong = 9,
     }
 
     public enum DynError
@@ -83,23 +83,23 @@ namespace OpenFAST.Error
         Undefined = -1,
 
         [ErrorInfo(ErrorType.Dynamic, Severity.Error, "ERR D1", "Field cannot be converted to type of application field")]
-        D1FieldAppIncomp = 1,
+        FieldAppIncomp = 1,
         [ErrorInfo(ErrorType.Dynamic, Severity.Warn, "ERR D2", "The integer value is out of range for the specified integer type.")]
-        D2IntOutOfRange = 2,
+        IntOutOfRange = 2,
         [ErrorInfo(ErrorType.Dynamic, Severity.Error, "ERR D3", "The value cannot be encoded for the given operator.")]
-        D3CantEncodeValue = 3,
+        CantEncodeValue = 3,
         [ErrorInfo(ErrorType.Dynamic, Severity.Error, "ERR D4", "The previous value is not the same type as the type of the current field.")]
-        D4InvalidType = 4,
+        InvalidType = 4,
         [ErrorInfo(ErrorType.Dynamic, Severity.Error, "ERR D5", "If no prior value is set and the field is not present, there must be a default value or the optional flag must be set.")]
-        D5NoDefaultValue = 5,
+        NoDefaultValue = 5,
         [ErrorInfo(ErrorType.Dynamic, Severity.Error, "ERR D6", "A mandatory field must have a value")]
-        D6MndtryFieldNotPresent = 6,
+        MandatoryFieldNotPresent = 6,
         [ErrorInfo(ErrorType.Dynamic, Severity.Error, "ERR D7", "The subtraction length is longer than the base value.")]
-        D7SubtrctnLenLong = 7,
+        SubtrctnLenLong = 7,
         [ErrorInfo(ErrorType.Dynamic, Severity.Error, "ERR D8", "The referenced template does not exist.")]
-        D8TemplateNotExist = 8,
+        TemplateNotExist = 8,
         [ErrorInfo(ErrorType.Dynamic, Severity.Error, "ERR D9", "The template has not been registered.")]
-        D9TemplateNotRegistered = 9,
+        TemplateNotRegistered = 9,
 
         // These were defined in SessionConstants, but it appears they should be part of the dynamic enum.
         // TODO: verify?
@@ -129,17 +129,17 @@ namespace OpenFAST.Error
 
     public static class ErrorExt
     {
-        public static ErrorInfoAttribute GetErrorAttr(this DynError error)
+        public static ErrorInfoAttribute GetErrorInfo(this DynError error)
         {
             return Util.GetEnumSingleAttribute<ErrorInfoAttribute, DynError>(error);
         }
 
-        public static ErrorInfoAttribute GetErrorAttr(this RepError error)
+        public static ErrorInfoAttribute GetErrorInfo(this RepError error)
         {
             return Util.GetEnumSingleAttribute<ErrorInfoAttribute, RepError>(error);
         }
 
-        public static ErrorInfoAttribute GetErrorAttr(this StaticError error)
+        public static ErrorInfoAttribute GetErrorInfo(this StaticError error)
         {
             return Util.GetEnumSingleAttribute<ErrorInfoAttribute, StaticError>(error);
         }

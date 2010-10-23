@@ -133,7 +133,7 @@ namespace UnitTest.Template.Operator
             }
             catch (DynErrorException e)
             {
-                Assert.AreEqual(DynError.D6MndtryFieldNotPresent, e.Error);
+                Assert.AreEqual(DynError.MandatoryFieldNotPresent, e.Error);
             }
         }
 

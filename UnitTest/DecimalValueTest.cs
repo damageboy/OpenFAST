@@ -71,7 +71,7 @@ namespace UnitTest
             }
             catch (RepErrorException e)
             {
-                Assert.AreEqual(RepError.R5DecimalCantConvertToInt, e.Error);
+                Assert.AreEqual(RepError.DecimalCantConvertToInt, e.Error);
             }
         }
 
@@ -97,7 +97,7 @@ namespace UnitTest
             }
             catch (RepErrorException e)
             {
-                Assert.AreEqual(RepError.R5DecimalCantConvertToInt, e.Error);
+                Assert.AreEqual(RepError.DecimalCantConvertToInt, e.Error);
             }
         }
 
@@ -117,7 +117,7 @@ namespace UnitTest
             }
             catch (RepErrorException e)
             {
-                Assert.AreEqual(RepError.R5DecimalCantConvertToInt, e.Error);
+                Assert.AreEqual(RepError.DecimalCantConvertToInt, e.Error);
             }
         }
 
@@ -137,7 +137,7 @@ namespace UnitTest
             }
             catch (RepErrorException e)
             {
-                Assert.AreEqual(RepError.R5DecimalCantConvertToInt, e.Error);
+                Assert.AreEqual(RepError.DecimalCantConvertToInt, e.Error);
             }
         }
     }

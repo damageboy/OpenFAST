@@ -93,7 +93,7 @@ namespace OpenFAST.Template
                 return Encode(message, this, context);
             }
 
-            throw new DynErrorException(DynError.D9TemplateNotRegistered,
+            throw new DynErrorException(DynError.TemplateNotRegistered,
                                         "Cannot encode message: The template {0} has not been registered.",
                                         message.Template);
         }

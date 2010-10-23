@@ -40,7 +40,7 @@ namespace UnitTest
             }
             catch (DynErrorException e)
             {
-                Assert.AreEqual(DynError.D9TemplateNotRegistered, e.Error);
+                Assert.AreEqual(DynError.TemplateNotRegistered, e.Error);
             }
         }
     }

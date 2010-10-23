@@ -49,7 +49,7 @@ namespace OpenFAST.Template.Type
             long longValue;
             if (!Int64.TryParse(value, out longValue))
             {
-                Global.ErrorHandler.OnError(null, StaticError.S3InitialValueIncomp,
+                Global.ErrorHandler.OnError(null, StaticError.InitialValueIncomp,
                                             "The value '{0}' is not compatable with type {1}", value, this);
                 return null;
             }
@@ -72,7 +72,7 @@ namespace OpenFAST.Template.Type
 
             if (value.ToLong() > _maxValue || value.ToLong() < _minValue)
             {
-                Global.ErrorHandler.OnError(null, DynError.D2IntOutOfRange, "The value {0} is out of range for type {1}",
+                Global.ErrorHandler.OnError(null, DynError.IntOutOfRange, "The value {0} is out of range for type {1}",
                                             value, this);
             }
         }

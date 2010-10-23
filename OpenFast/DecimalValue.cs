@@ -110,7 +110,7 @@ namespace OpenFAST
         {
             if (Exponent < 0)
             {
-                Global.ErrorHandler.OnError(null, RepError.R5DecimalCantConvertToInt, "");
+                Global.ErrorHandler.OnError(null, RepError.DecimalCantConvertToInt, "");
             }
             return Value;
         }
@@ -120,7 +120,7 @@ namespace OpenFAST
             long v = Value;
             if (Exponent < 0 || v > Int32.MaxValue)
             {
-                Global.ErrorHandler.OnError(null, RepError.R5DecimalCantConvertToInt, "");
+                Global.ErrorHandler.OnError(null, RepError.DecimalCantConvertToInt, "");
             }
             return (int) v;
         }
@@ -130,7 +130,7 @@ namespace OpenFAST
             long v = Value;
             if (Exponent < 0 || v > Int16.MaxValue)
             {
-                Global.ErrorHandler.OnError(null, RepError.R5DecimalCantConvertToInt, "");
+                Global.ErrorHandler.OnError(null, RepError.DecimalCantConvertToInt, "");
             }
             return (short) v;
         }
@@ -140,7 +140,7 @@ namespace OpenFAST
             long v = Value;
             if (Exponent < 0 || v > (byte) SByte.MaxValue)
             {
-                Global.ErrorHandler.OnError(null, RepError.R5DecimalCantConvertToInt, "");
+                Global.ErrorHandler.OnError(null, RepError.DecimalCantConvertToInt, "");
             }
             return (byte) v;
         }

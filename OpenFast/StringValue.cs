@@ -52,7 +52,7 @@ namespace OpenFAST
             int i = ToInt();
             if (i > SByte.MaxValue || i < SByte.MinValue)
             {
-                Global.ErrorHandler.OnError(null, RepError.R4NumericValueTooLarge,
+                Global.ErrorHandler.OnError(null, RepError.NumericValueTooLarge,
                                             "The value '{0}' is too large to fit into a byte.", i);
                 return 0;
             }
@@ -64,7 +64,7 @@ namespace OpenFAST
             int i = ToInt();
             if (i > Int16.MaxValue || i < Int16.MinValue)
             {
-                Global.ErrorHandler.OnError(null, RepError.R4NumericValueTooLarge,
+                Global.ErrorHandler.OnError(null, RepError.NumericValueTooLarge,
                                             "The value '{0}' is too large to fit into a short.", i);
                 return 0;
             }
@@ -77,7 +77,7 @@ namespace OpenFAST
             if (Int32.TryParse(_value, out result))
                 return result;
 
-            Global.ErrorHandler.OnError(null, RepError.R4NumericValueTooLarge,
+            Global.ErrorHandler.OnError(null, RepError.NumericValueTooLarge,
                                         "The value '{0}' is too large to fit into an int.", _value);
             return 0;
         }
@@ -88,7 +88,7 @@ namespace OpenFAST
             if (Int64.TryParse(_value, out result))
                 return result;
 
-            Global.ErrorHandler.OnError(null, RepError.R4NumericValueTooLarge,
+            Global.ErrorHandler.OnError(null, RepError.NumericValueTooLarge,
                                         "The value '{0}' is too large to fit into a long.", _value);
             return 0;
         }
@@ -99,7 +99,7 @@ namespace OpenFAST
             if (Double.TryParse(_value, out result))
                 return result;
 
-            Global.ErrorHandler.OnError(null, RepError.R4NumericValueTooLarge,
+            Global.ErrorHandler.OnError(null, RepError.NumericValueTooLarge,
                                         "The value'{0}' is too large to fit into a double.", _value);
             return 0.0;
         }

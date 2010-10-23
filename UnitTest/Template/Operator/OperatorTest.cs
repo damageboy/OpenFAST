@@ -120,7 +120,7 @@ namespace UnitTest.Template.Operator
             }
             catch (DynErrorException e)
             {
-                Assert.AreEqual(DynError.D6MndtryFieldNotPresent, e.Error);
+                Assert.AreEqual(DynError.MandatoryFieldNotPresent, e.Error);
             }
         }
         [Test]
@@ -137,7 +137,7 @@ namespace UnitTest.Template.Operator
             }
             catch (DynErrorException e)
             {
-                Assert.AreEqual(DynError.D6MndtryFieldNotPresent, e.Error);
+                Assert.AreEqual(DynError.MandatoryFieldNotPresent, e.Error);
             }
         }
         [Test]
@@ -157,7 +157,7 @@ namespace UnitTest.Template.Operator
             }
             catch (StatErrorException e)
             {
-                Assert.AreEqual(StaticError.S2OperatorTypeIncomp, e.Error);
+                Assert.AreEqual(StaticError.OperatorTypeIncomp, e.Error);
                 Assert.AreEqual("The operator 'increment' is not compatible with type 'string'", e.Message);
             }
         }

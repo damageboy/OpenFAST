@@ -44,7 +44,7 @@ namespace UnitTest.Template.Operator
             }
             catch (DynErrorException e)
             {
-                Assert.AreEqual(DynError.D7SubtrctnLenLong, e.Error);
+                Assert.AreEqual(DynError.SubtrctnLenLong, e.Error);
             }
         }
         [Test]
