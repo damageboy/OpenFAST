@@ -28,7 +28,7 @@ namespace OpenFAST.Template.Loader
 {
     public class ParsingContext
     {
-        private static readonly ParsingContext Null = new ParsingContext();
+        public static readonly ParsingContext Null = new ParsingContext();
         private readonly QName _name;
 
         private readonly ParsingContext _parent;

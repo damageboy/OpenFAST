@@ -29,6 +29,7 @@ using OpenFAST.Codec;
 using OpenFAST.Template;
 using OpenFAST.Template.Loader;
 using OpenFAST.Template.Operator;
+using OpenFAST.Template.Type;
 using OpenFAST.Template.Type.Codec;
 
 namespace UnitTest.Test
@@ -184,7 +185,7 @@ namespace UnitTest.Test
             Assert.AreEqual(mantissaValue, fields[1].DefaultValue);
         }
 
-        protected static void AssertComposedScalarField(ComposedScalar field, Type type, String name,
+        protected static void AssertComposedScalarField(ComposedScalar field, FASTType type, String name,
                                                         Operator exponentOp,
                                                         ScalarValue exponentValue, Operator mantissaOp,
                                                         ScalarValue mantissaValue)
@@ -247,14 +248,14 @@ namespace UnitTest.Test
             return doc;
         }
 
-        protected static void AssertScalarField(Scalar scalar, Type type, String name, String id, String ns,
+        protected static void AssertScalarField(Scalar scalar, FASTType type, String name, String id, String ns,
                                                 String dictionary, String key, Operator op,
                                                 ScalarValue defaultVal, bool optional)
         {
             AssertScalarField(scalar, type, name, id, ns, dictionary, key, ns, op, defaultVal, optional);
         }
 
-        protected static void AssertScalarField(Scalar scalar, Type type, String name, String id, String ns,
+        protected static void AssertScalarField(Scalar scalar, FASTType type, String name, String id, String ns,
                                                 String dictionary, String key, String keyNamespace, Operator op,
                                                 ScalarValue defaultVal, bool optional)
         {
@@ -264,7 +265,14 @@ namespace UnitTest.Test
             Assert.AreEqual(qname, scalar.QName);
             var keyName = new QName(key, keyNamespace);
             Assert.AreEqual(keyName, scalar.Key);
-            Assert.AreEqual(id, scalar.Id);
+            if (id == null)
+            {
+                Assert.True(scalar.IsIdNull());
+            }
+            else
+            {
+                Assert.AreEqual(id, scalar.Id);
+            }
             Assert.AreEqual(dictionary, scalar.Dictionary);
             Assert.AreEqual(defaultVal, scalar.DefaultValue);
             Assert.AreEqual(optional, scalar.IsOptional);
