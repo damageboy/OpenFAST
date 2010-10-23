@@ -31,21 +31,12 @@ namespace OpenFAST
 
         public static IErrorHandler ErrorHandler
         {
+            get { return _errorHandler; }
             set
             {
                 if (value == null) throw new ArgumentNullException("value");
                 _errorHandler = value;
             }
-        }
-
-        public static void HandleError(ErrorCode error, string message)
-        {
-            _errorHandler.Error(error, message);
-        }
-
-        public static void HandleError(ErrorCode error, string message, Exception source)
-        {
-            _errorHandler.Error(error, message, source);
         }
 
         public static QName CreateImplicitName(QName name)

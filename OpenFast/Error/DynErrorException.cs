@@ -19,13 +19,33 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
+using System;
+using JetBrains.Annotations;
+
 namespace OpenFAST.Error
 {
-    public enum Severity
+    [Serializable]
+    public class DynErrorException : FastException
     {
-        Fatal = 1,
-        Error = 2,
-        Warn = 3,
-        Info = 4,
+        private readonly DynError _error;
+
+        [StringFormatMethod("format")]
+        public DynErrorException(DynError error, string format, params object[] args)
+            : base(format, args)
+        {
+            _error = error;
+        }
+
+        [StringFormatMethod("format")]
+        public DynErrorException(Exception inner, DynError error, string format, params object[] args)
+            : base(inner, format, args)
+        {
+            _error = error;
+        }
+
+        public DynError Error
+        {
+            get { return _error; }
+        }
     }
 }

@@ -52,8 +52,8 @@ namespace OpenFAST
             int i = ToInt();
             if (i > SByte.MaxValue || i < SByte.MinValue)
             {
-                Global.HandleError(FastConstants.R4NumericValueTooLarge,
-                                   "The value '" + i + "' is too large to fit into a byte.");
+                Global.ErrorHandler.OnError(null, RepError.R4NumericValueTooLarge,
+                                            "The value '{0}' is too large to fit into a byte.", i);
                 return 0;
             }
             return (byte) i;
@@ -64,8 +64,8 @@ namespace OpenFAST
             int i = ToInt();
             if (i > Int16.MaxValue || i < Int16.MinValue)
             {
-                Global.HandleError(FastConstants.R4NumericValueTooLarge,
-                                   "The value '" + i + "' is too large to fit into a short.");
+                Global.ErrorHandler.OnError(null, RepError.R4NumericValueTooLarge,
+                                            "The value '{0}' is too large to fit into a short.", i);
                 return 0;
             }
             return (short) i;
@@ -77,8 +77,8 @@ namespace OpenFAST
             if (Int32.TryParse(_value, out result))
                 return result;
 
-            Global.HandleError(FastConstants.R4NumericValueTooLarge,
-                               "The value '" + _value + "' is too large to fit into an int.");
+            Global.ErrorHandler.OnError(null, RepError.R4NumericValueTooLarge,
+                                        "The value '{0}' is too large to fit into an int.", _value);
             return 0;
         }
 
@@ -88,8 +88,8 @@ namespace OpenFAST
             if (Int64.TryParse(_value, out result))
                 return result;
 
-            Global.HandleError(FastConstants.R4NumericValueTooLarge,
-                               "The value '" + _value + "' is too large to fit into a long.");
+            Global.ErrorHandler.OnError(null, RepError.R4NumericValueTooLarge,
+                                        "The value '{0}' is too large to fit into a long.", _value);
             return 0;
         }
 
@@ -99,8 +99,8 @@ namespace OpenFAST
             if (Double.TryParse(_value, out result))
                 return result;
 
-            Global.HandleError(FastConstants.R4NumericValueTooLarge,
-                               "The value'" + _value + "' is too large to fit into a double.");
+            Global.ErrorHandler.OnError(null, RepError.R4NumericValueTooLarge,
+                                        "The value'{0}' is too large to fit into a double.", _value);
             return 0.0;
         }
 
@@ -132,8 +132,8 @@ namespace OpenFAST
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            StringValue t = obj as StringValue;
-            if (t==null) return false;
+            var t = obj as StringValue;
+            if (t == null) return false;
             return t._value.Equals(_value);
         }
 

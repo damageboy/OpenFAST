@@ -58,7 +58,7 @@ namespace OpenFAST.Session
             }
             catch (IOException e)
             {
-                _errorHandler.Error(null, "Error occurred in connection.", e);
+                _errorHandler.OnError(e, DynError.Undefined, "Error occurred in connection.");
                 throw new IllegalStateException(e);
             }
 
@@ -122,21 +122,25 @@ namespace OpenFAST.Session
 
         #region IErrorHandler Members
 
-        public virtual void Error(ErrorCode code, string message)
+        public void OnError(Exception exception, StaticError error, string format, params object[] args)
         {
-            if (code.Equals(FastConstants.D9TemplateNotRegistered))
-            {
-                code = SessionConstants.TemplateNotSupported;
-                message = "Template Not Supported";
-            }
-            _protocol.OnError(this, code, message);
-            _errorHandler.Error(code, message);
+            throw new NotSupportedException();
         }
 
-        public virtual void Error(ErrorCode code, string message, Exception t)
+        public void OnError(Exception exception, DynError error, string format, params object[] args)
         {
-            _protocol.OnError(this, code, message);
-            _errorHandler.Error(code, message, t);
+            if (error == DynError.D9TemplateNotRegistered)
+            {
+                error = DynError.TemplateNotSupported;
+                format = "Template Not Supported";
+            }
+            _protocol.OnError(this, error, string.Format(format, args));
+            _errorHandler.OnError(exception, error, format, args);
+        }
+
+        public void OnError(Exception exception, RepError error, string format, params object[] args)
+        {
+            throw new NotSupportedException();
         }
 
         #endregion
@@ -151,7 +155,7 @@ namespace OpenFAST.Session
         }
 
         // RESPONDER
-        public virtual void Close(ErrorCode alertCode)
+        public virtual void Close(DynError error)
         {
             _listening = false;
             _inStream.Close();
@@ -207,16 +211,14 @@ namespace OpenFAST.Session
                                     {
                                         _listening = false;
                                     }
-                                    else if (e is FastException)
+                                    else if (e is DynErrorException)
                                     {
-                                        var fastException = ((FastException) e);
-                                        _errorHandler.Error(fastException.Code, fastException.Message,
-                                                            e);
+                                        var fastException = ((DynErrorException) e);
+                                        _errorHandler.OnError(e, fastException.Error, fastException.Message);
                                     }
                                     else
                                     {
-                                        _errorHandler.Error(FastConstants.GeneralError, e.Message,
-                                                            e);
+                                        _errorHandler.OnError(e, DynError.GeneralError, e.Message);
                                     }
                                 }
                             }

@@ -21,7 +21,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST.Session
 {
-    public struct SessionListenerFields
+    public static class SessionListenerFields
     {
         public static readonly ISessionListener Null;
 

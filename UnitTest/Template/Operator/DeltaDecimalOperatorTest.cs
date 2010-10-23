@@ -131,9 +131,9 @@ namespace UnitTest.Template.Operator
                      .GetValueToEncode(null, ScalarValue.Undefined, field);
                 Assert.Fail();
             }
-            catch (FastException e)
+            catch (DynErrorException e)
             {
-                Assert.AreEqual(FastConstants.D6MndtryFieldNotPresent, e.Code);
+                Assert.AreEqual(DynError.D6MndtryFieldNotPresent, e.Error);
             }
         }
 

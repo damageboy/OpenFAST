@@ -98,7 +98,9 @@ namespace OpenFAST.Template.Type.Codec
                 if (buf[0] == 0)
                 {
                     if (!ByteUtil.IsEmpty(buf, ind))
-                        Global.HandleError(FastConstants.R9StringOverlong, null);
+                    {
+                        Global.ErrorHandler.OnError(null, RepError.R9StringOverlong, null);
+                    }
 
                     if (ind == 1)
                         return null;

@@ -50,8 +50,7 @@ namespace OpenFAST.Template.Type.Codec
                 }
                 catch (IOException e)
                 {
-                    Global.HandleError(FastConstants.IoError,
-                                       "An error occurred while decoding a nullable byte vector.", e);
+                    Global.ErrorHandler.OnError(e, DynError.IoError, "An error occurred while decoding a nullable byte vector.");
                     // BUG? Continue processing on IO exception???
                 }
             }

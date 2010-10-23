@@ -39,19 +39,20 @@ namespace TCPClient
 
         private class ClientErrorHandler : IErrorHandler
         {
-            #region IErrorHandler Members
-
-            public void Error(ErrorCode code, string message)
+            public void OnError(Exception exception, StaticError error, string format, params object[] args)
             {
-                Console.WriteLine(message);
+                Console.WriteLine(format, args);
             }
 
-            public void Error(ErrorCode code, string message, Exception t)
+            public void OnError(Exception exception, DynError error, string format, params object[] args)
             {
-                Console.WriteLine(message);
+                Console.WriteLine(format, args);
             }
 
-            #endregion
+            public void OnError(Exception exception, RepError error, string format, params object[] args)
+            {
+                Console.WriteLine(format, args);
+            }
         }
 
         #endregion

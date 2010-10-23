@@ -69,9 +69,9 @@ namespace UnitTest
                 Decimal(100.1).ToByte();
                 Assert.Fail();
             }
-            catch (FastException e)
+            catch (RepErrorException e)
             {
-                Assert.AreEqual(FastConstants.R5DecimalCantConvertToInt, e.Code);
+                Assert.AreEqual(RepError.R5DecimalCantConvertToInt, e.Error);
             }
         }
 
@@ -95,9 +95,9 @@ namespace UnitTest
                 Decimal(100.1).ToInt();
                 Assert.Fail();
             }
-            catch (FastException e)
+            catch (RepErrorException e)
             {
-                Assert.AreEqual(FastConstants.R5DecimalCantConvertToInt, e.Code);
+                Assert.AreEqual(RepError.R5DecimalCantConvertToInt, e.Error);
             }
         }
 
@@ -115,9 +115,9 @@ namespace UnitTest
                 Decimal(100.1).ToLong();
                 Assert.Fail();
             }
-            catch (FastException e)
+            catch (RepErrorException e)
             {
-                Assert.AreEqual(FastConstants.R5DecimalCantConvertToInt, e.Code);
+                Assert.AreEqual(RepError.R5DecimalCantConvertToInt, e.Error);
             }
         }
 
@@ -135,9 +135,9 @@ namespace UnitTest
                 Decimal(100.1).ToShort();
                 Assert.Fail();
             }
-            catch (FastException e)
+            catch (RepErrorException e)
             {
-                Assert.AreEqual(FastConstants.R5DecimalCantConvertToInt, e.Code);
+                Assert.AreEqual(RepError.R5DecimalCantConvertToInt, e.Error);
             }
         }
     }

@@ -20,11 +20,12 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System;
+using OpenFAST.Error;
 
 namespace OpenFAST.Session
 {
     [Serializable]
-    public class FastConnectionException : Exception
+    public class FastConnectionException : FastException
     {
         public FastConnectionException(Exception t) : base(t.ToString())
         {

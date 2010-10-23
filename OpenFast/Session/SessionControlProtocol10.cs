@@ -23,6 +23,7 @@ using OpenFAST.Codec;
 using OpenFAST.Error;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
+using OpenFAST.Utility;
 using Type = OpenFAST.Template.Type.FASTType;
 
 namespace OpenFAST.Session
@@ -59,7 +60,7 @@ namespace OpenFAST.Session
 
         public override Message CloseMessage
         {
-            get { return CreateFastAlertMessage(SessionConstants.Close); }
+            get { return CreateFastAlertMessage(DynError.Close); }
         }
 
         public override Session OnNewConnection(string serverName, IConnection connection)
@@ -84,7 +85,7 @@ namespace OpenFAST.Session
             return session;
         }
 
-        public override void OnError(Session session, ErrorCode code, string message)
+        public override void OnError(Session session, DynError code, string message)
         {
             session.MessageOutputStream.WriteMessage(CreateFastAlertMessage(code));
         }
@@ -104,12 +105,13 @@ namespace OpenFAST.Session
             session.MessageOutputStream.AddMessageHandler(FastResetTemplate, ResetHandler);
         }
 
-        public static Message CreateFastAlertMessage(ErrorCode code)
+        public static Message CreateFastAlertMessage(DynError code)
         {
+            ErrorInfoAttribute attr = code.GetErrorAttr();
             var alert = new Message(AlertTemplate);
-            alert.SetInteger(1, (int) code.Severity);
-            alert.SetInteger(2, code.Code);
-            alert.SetString(4, code.Description);
+            alert.SetInteger(1, (int) attr.Severity);
+            alert.SetInteger(2, (int) code);
+            alert.SetString(4, attr.Description);
             return alert;
         }
 
@@ -124,14 +126,15 @@ namespace OpenFAST.Session
         {
             if (message.Template.Equals(AlertTemplate))
             {
-                ErrorCode alertCode = ErrorCode.GetAlertCode(message.GetInt(2));
-                if (alertCode.Equals(SessionConstants.Close))
+                var error = (DynError) message.GetInt(2);
+
+                if (error == DynError.Close)
                 {
-                    session.Close(alertCode);
+                    session.Close(error);
                 }
                 else
                 {
-                    session.ErrorHandler.Error(alertCode, message.GetString(4));
+                    session.ErrorHandler.OnError(null, error, message.GetString(4));
                 }
             }
         }
@@ -159,7 +162,7 @@ namespace OpenFAST.Session
             return null;
         }
 
-        #region Nested type: RESETMessageHandler
+        #region Nested type: ResetMessageHandler
 
         public class ResetMessageHandler : IMessageHandler
         {

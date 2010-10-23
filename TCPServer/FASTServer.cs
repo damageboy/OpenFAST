@@ -8,19 +8,19 @@ namespace TCPServer
 {
     public class FASTServer
     {
-        public ISessionProtocol ScpSessionProtocol = SessionConstants.Scp11;
-        public FASTSessionHandler SessionHandler;
+        private readonly ISessionProtocol _scpSessionProtocol = SessionConstants.Scp11;
+        private readonly FASTSessionHandler _sessionHandler;
 
         public FASTServer()
         {
             var endpoint = new TcpEndpoint(16121);
 
-            SessionHandler = new FASTSessionHandler();
+            _sessionHandler = new FASTSessionHandler();
 
-            var fs = new FastServer("test", ScpSessionProtocol, endpoint);
+            var fs = new FastServer("test", _scpSessionProtocol, endpoint);
 
             Global.ErrorHandler = new ServerErrorHandler();
-            fs.SessionHandler = SessionHandler;
+            fs.SessionHandler = _sessionHandler;
 
             fs.Listen();
         }
@@ -29,19 +29,20 @@ namespace TCPServer
 
         public class ServerErrorHandler : IErrorHandler
         {
-            #region ErrorHandler Members
-
-            public void Error(ErrorCode code, string message)
+            public void OnError(Exception exception, StaticError error, string format, params object[] args)
             {
-                Console.WriteLine(message);
+                Console.WriteLine(format, args);
             }
 
-            public void Error(ErrorCode code, string message, Exception t)
+            public void OnError(Exception exception, DynError error, string format, params object[] args)
             {
-                Console.WriteLine(message);
+                Console.WriteLine(format, args);
             }
 
-            #endregion
+            public void OnError(Exception exception, RepError error, string format, params object[] args)
+            {
+                Console.WriteLine(format, args);
+            }
         }
 
         #endregion

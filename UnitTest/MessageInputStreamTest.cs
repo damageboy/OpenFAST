@@ -38,9 +38,9 @@ namespace UnitTest
                 input.ReadMessage();
                 Assert.Fail();
             }
-            catch (FastException e)
+            catch (DynErrorException e)
             {
-                Assert.AreEqual(FastConstants.D9TemplateNotRegistered, e.Code);
+                Assert.AreEqual(DynError.D9TemplateNotRegistered, e.Error);
             }
         }
     }

@@ -74,8 +74,8 @@ namespace OpenFAST
             if (_templateRegistry.TryGetId(template, out id))
                 return id;
 
-            _errorHandler.Error(FastConstants.D9TemplateNotRegistered,
-                                "The template " + template + " has not been registered.");
+            _errorHandler.OnError(null, DynError.D9TemplateNotRegistered, "The template {0} has not been registered.",
+                                  template);
             return 0;
         }
 
@@ -84,9 +84,7 @@ namespace OpenFAST
             MessageTemplate template;
             if (_templateRegistry.TryGetTemplate(templateId, out template))
                 return template;
-
-            _errorHandler.Error(FastConstants.D9TemplateNotRegistered,
-                                "The template with id " + templateId + " has not been registered.");
+            _errorHandler.OnError(null, DynError.D9TemplateNotRegistered, "The template with id {0} has not been registered.", templateId);
             return null;
         }
 

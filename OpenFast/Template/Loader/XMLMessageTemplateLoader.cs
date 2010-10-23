@@ -32,23 +32,13 @@ namespace OpenFAST.Template.Loader
     {
         internal const string TemplateDefinitionNs = "http://www.fixprotocol.org/ns/fast/td/1.1";
 
-        internal static readonly ErrorCode IoError;
-        internal static readonly ErrorCode XmlParsingError;
-        internal static readonly ErrorCode InvalidType;
+        internal static readonly StaticError IoError = StaticError.IoError;
+        internal static readonly StaticError XmlParsingError = StaticError.XmlParsingError;
+        internal static readonly StaticError InvalidType = StaticError.InvalidType;
 
         private readonly ParsingContext _initialContext;
 
         private bool _loadTemplateIdFromAuxId;
-
-        static XmlMessageTemplateLoader()
-        {
-            IoError = new ErrorCode(
-                ErrorType.Static, -1, Severity.Error, "IOERROR", "IO Error");
-            XmlParsingError = new ErrorCode(
-                ErrorType.Static, -1, Severity.Error, "XMLPARSEERR", "XML Parsing Error");
-            InvalidType = new ErrorCode(
-                ErrorType.Static, -1, Severity.Error, "INVALIDTYPE", "Invalid Type");
-        }
 
         public XmlMessageTemplateLoader()
         {
@@ -98,9 +88,9 @@ namespace OpenFAST.Template.Loader
                     }
                     return templates;
                 }
-                _initialContext.ErrorHandler.Error(FastConstants.S1InvalidXml,
-                                                   "Invalid root node " + root.Name +
-                                                   ", 'template' or 'templates' expected.");
+                _initialContext.ErrorHandler.OnError(
+                    null, StaticError.S1InvalidXml, "Invalid root node {0}, 'template' or 'templates' expected.",
+                    root.Name);
             }
             return new MessageTemplate[] {};
         }
@@ -151,13 +141,13 @@ namespace OpenFAST.Template.Loader
             }
             catch (IOException e)
             {
-                _initialContext.ErrorHandler.Error(
-                    IoError, "Error occurred while trying to read xml template: " + e.Message, e);
+                _initialContext.ErrorHandler.OnError(e, IoError, "Error occurred while trying to read xml template: {0}",
+                                                     e.Message);
             }
             catch (Exception e)
             {
-                _initialContext.ErrorHandler.Error(
-                    XmlParsingError, "Error occurred while parsing xml template: " + e.Message, e);
+                _initialContext.ErrorHandler.OnError(e, XmlParsingError,
+                                                     "Error occurred while parsing xml template: {0}", e.Message);
             }
 
             return null;

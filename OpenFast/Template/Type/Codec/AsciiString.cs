@@ -95,7 +95,9 @@ namespace OpenFAST.Template.Type.Codec
                 {
                     // BUG? optimize with "else if"?
                     if (!ByteUtil.IsEmpty(buf, ind))
-                        Global.HandleError(FastConstants.R9StringOverlong, null);
+                    {
+                        Global.ErrorHandler.OnError(null, RepError.R9StringOverlong, null);
+                    }
                     if (ind > 1 && buf[1] == 0)
                         return new StringValue("\u0000");
                     return new StringValue("");

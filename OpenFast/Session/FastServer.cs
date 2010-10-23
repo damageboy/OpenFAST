@@ -77,7 +77,7 @@ namespace OpenFAST.Session
                                 }
                                 catch (FastConnectionException e)
                                 {
-                                    _errorHandler.Error(null, null, e);
+                                    _errorHandler.OnError(e, DynError.Undefined, null);
                                 }
                                 try
                                 {

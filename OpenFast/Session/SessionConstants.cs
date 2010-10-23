@@ -19,42 +19,13 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
-using OpenFAST.Error;
-
 namespace OpenFAST.Session
 {
-    public struct SessionConstants
+    public static class SessionConstants
     {
         public const string VendorId = "http://OpenFAST.org/OpenFAST/1.1";
 
-        // Session Control Protocol (SCP) Errors
-        public static readonly ErrorCode TemplateNotSupported;
-        public static readonly ErrorCode TemplateUnknown;
-        public static readonly ErrorCode Unauthorized;
-        public static readonly ErrorCode ProtcolError;
-        public static readonly ErrorCode Close;
-        public static readonly ErrorCode Undefined;
-
-        public static readonly ISessionProtocol Scp10;
-        public static readonly ISessionProtocol Scp11;
-
-        static SessionConstants()
-        {
-            TemplateNotSupported = new ErrorCode(
-                ErrorType.Session, 11, Severity.Error, "TNOTSUPP", "Template not supported");
-            TemplateUnknown = new ErrorCode(
-                ErrorType.Session, 12, Severity.Error, "TUNKNOWN", "Template unknown");
-            Unauthorized = new ErrorCode(
-                ErrorType.Session, 13, Severity.Fatal, "EAUTH", "Unauthorized");
-            ProtcolError = new ErrorCode(
-                ErrorType.Session, 14, Severity.Error, "EPROTO", "Protocol Error");
-            Close = new ErrorCode(
-                ErrorType.Session, 15, Severity.Info, "CLOSE", "Session Closed");
-            Undefined = new ErrorCode(
-                ErrorType.Session, -1, Severity.Error, "UNDEFINED", "Undefined Alert Code");
-
-            Scp10 = new SessionControlProtocol10();
-            Scp11 = new SessionControlProtocol11();
-        }
+        public static readonly ISessionProtocol Scp10 = new SessionControlProtocol10();
+        public static readonly ISessionProtocol Scp11 = new SessionControlProtocol11();
     }
 }

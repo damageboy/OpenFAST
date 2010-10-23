@@ -20,10 +20,11 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System;
+using JetBrains.Annotations;
 
 namespace OpenFAST.Error
 {
-    public struct ErrorHandlerFields
+    public static class ErrorHandlerFields
     {
         public static readonly IErrorHandler Default = new DefaultErrorHandler();
         public static readonly IErrorHandler Null = new NullErrorHandler();
@@ -33,28 +34,37 @@ namespace OpenFAST.Error
     {
         #region IErrorHandler Members
 
-        public virtual void Error(ErrorCode code, string message)
+        public void OnError(Exception exception, StaticError error, string format, params object[] args)
         {
-            code.ThrowException(message);
+            throw new StatErrorException(exception, error, format, args);
         }
 
-        public virtual void Error(ErrorCode code, string message, Exception t)
+        public void OnError(Exception exception, DynError error, string format, params object[] args)
         {
-            throw new FastException(message, code, t);
+            throw new DynErrorException(exception, error, format, args);
+        }
+
+        public void OnError(Exception exception, RepError error, string format, params object[] args)
+        {
+            throw new RepErrorException(exception, error, format, args);
         }
 
         #endregion
     }
 
-    public class NullErrorHandler : IErrorHandler
+    public sealed class NullErrorHandler : IErrorHandler
     {
         #region IErrorHandler Members
 
-        public virtual void Error(ErrorCode code, string message)
+        public void OnError(Exception exception, StaticError error, string format, params object[] args)
         {
         }
 
-        public virtual void Error(ErrorCode code, string message, Exception t)
+        public void OnError(Exception exception, DynError error, string format, params object[] args)
+        {
+        }
+
+        public void OnError(Exception exception, RepError error, string format, params object[] args)
         {
         }
 
@@ -63,7 +73,13 @@ namespace OpenFAST.Error
 
     public interface IErrorHandler
     {
-        void Error(ErrorCode code, string message);
-        void Error(ErrorCode code, string message, Exception t);
+        [StringFormatMethod("format")]
+        void OnError(Exception exception, StaticError error, string format, params object[] args);
+
+        [StringFormatMethod("format")]
+        void OnError(Exception exception, DynError error, string format, params object[] args);
+
+        [StringFormatMethod("format")]
+        void OnError(Exception exception, RepError error, string format, params object[] args);
     }
 }

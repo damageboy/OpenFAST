@@ -63,8 +63,8 @@ namespace OpenFAST.Template.Loader
                     var element = (XmlElement) item;
                     IFieldParser fieldParser = context.GetFieldParser(element);
                     if (fieldParser == null)
-                        context.ErrorHandler.Error(FastConstants.ParseError,
-                                                   "No parser registered for " + element.Name);
+                        context.ErrorHandler.OnError(null, DynError.ParseError, "No parser registered for {0}",
+                                                     element.Name);
                     if (fieldParser != null) fields.Add(fieldParser.Parse(element, context));
                 }
             }

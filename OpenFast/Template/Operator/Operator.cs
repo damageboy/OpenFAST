@@ -124,8 +124,8 @@ namespace OpenFAST.Template.Operator
             {
                 if (scalar.DefaultValue.IsUndefined)
                 {
-                    Global.HandleError(FastConstants.S4NoInitialValueForConst,
-                                       "The field " + scalar + " must have a default value defined.");
+                    Global.ErrorHandler.OnError(null, StaticError.S4NoInitialValueForConst,
+                                                "The field {0} must have a default value defined.", scalar);
                 }
             }
 
@@ -167,8 +167,8 @@ namespace OpenFAST.Template.Operator
             {
                 if (!scalar.IsOptional && scalar.DefaultValue.IsUndefined)
                 {
-                    Global.HandleError(FastConstants.S5NoInitvalMndtryDfalt,
-                                       "The field " + scalar + " must have a default value defined.");
+                    Global.ErrorHandler.OnError(null, StaticError.S5NoInitvalMndtryDfalt,
+                                                "The field {0} must have a default value defined.", scalar);
                 }
             }
 

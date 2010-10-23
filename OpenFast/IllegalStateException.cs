@@ -20,10 +20,12 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System;
+using OpenFAST.Error;
 
 namespace OpenFAST
 {
-    public class IllegalStateException : Exception
+    [Obsolete("Only one strange usage of this exception, should probably change to either default or something else")]
+    public class IllegalStateException : FastException
     {
         private readonly Exception e;
 

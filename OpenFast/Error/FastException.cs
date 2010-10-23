@@ -1,48 +1,106 @@
-/*
-
-The contents of this file are subject to the Mozilla Public License
-Version 1.1 (the "License"); you may not use this file except in
-compliance with the License. You may obtain a copy of the License at
-http://www.mozilla.org/MPL/
-
-Software distributed under the License is distributed on an "AS IS"
-basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-License for the specific language governing rights and limitations
-under the License.
-
-The Original Code is OpenFAST.
-
-The Initial Developer of the Original Code is The LaSalle Technology
-Group, LLC.  Portions created by Shariq Muhammad
-are Copyright (C) Shariq Muhammad. All Rights Reserved.
-
-Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
-                Yuri Astrakhan <FirstName><LastName>@gmail.com
-*/
-using System;
+﻿using System;
+using System.Runtime.Serialization;
+using System.Text;
+using JetBrains.Annotations;
 
 namespace OpenFAST.Error
 {
+    /// <summary>
+    /// Generic exception capable of delayed message formatting.
+    /// Inherit for more specific exceptions.
+    /// </summary>
     [Serializable]
     public class FastException : Exception
     {
-        private readonly ErrorCode _code;
+        private readonly object[] _arguments;
+        private readonly string _formatStr;
+        private readonly bool _useFormat;
 
-        public FastException(string message, ErrorCode code)
-            : base(message)
+        [StringFormatMethod("format")]
+        private FastException(bool useFormat, Exception inner, string message, params object[] args)
+            : base(message, inner)
         {
-            _code = code;
+            _useFormat = useFormat;
+            _formatStr = message;
+            _arguments = args;
         }
 
-        public FastException(string message, ErrorCode code, Exception cause)
-            : base(message, cause)
+        public FastException()
+            : this(false, null, null, null)
         {
-            _code = code;
         }
 
-        public virtual ErrorCode Code
+        public FastException(string format)
+            : this(false, null, format, null)
         {
-            get { return _code; }
         }
+
+        [StringFormatMethod("format")]
+        public FastException(string format, params object[] args)
+            : this(true, null, format, args)
+        {
+        }
+
+        public FastException(Exception inner, string format)
+            : this(false, inner, format, null)
+        {
+        }
+
+        [StringFormatMethod("format")]
+        public FastException(Exception inner, string format, params object[] args)
+            : this(true, inner, format, args)
+        {
+        }
+
+        public override string Message
+        {
+            get
+            {
+                if (!_useFormat)
+                    return _formatStr;
+
+                try
+                {
+                    return string.Format(_formatStr, _arguments);
+                }
+                catch (Exception ex)
+                {
+                    var sb = new StringBuilder();
+
+                    sb.Append(_formatStr);
+                    sb.Append("\nFormatting error: ");
+                    sb.Append(ex.Message);
+                    if (_arguments != null && _arguments.Length > 0)
+                    {
+                        sb.Append("\nArguments: ");
+                        sb.Append(_arguments[0]);
+                        for (int i = 1; i < _arguments.Length; i++)
+                            sb.Append(", ").Append(_arguments[i]);
+                    }
+
+                    return sb.ToString();
+                }
+            }
+        }
+
+        #region Serialization
+
+        private const string SerializationField = "FormatString";
+
+        protected FastException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            _formatStr = (string) info.GetValue(SerializationField, typeof (string));
+            // Leave other values at their default
+        }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+            // To avoid any serialization issues with param objects, format message now
+            info.AddValue(SerializationField, Message, typeof (string));
+        }
+
+        #endregion
     }
 }

@@ -42,9 +42,9 @@ namespace UnitTest.Template.Operator
                 Decode(Twin(Int(5), Byte(Byte("c0afcd"))), Byte(Byte("123456")));
                 Assert.Fail();
             }
-            catch (FastException e)
+            catch (DynErrorException e)
             {
-                Assert.AreEqual(FastConstants.D7SubtrctnLenLong, e.Code);
+                Assert.AreEqual(DynError.D7SubtrctnLenLong, e.Error);
             }
         }
         [Test]

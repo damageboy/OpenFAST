@@ -42,9 +42,9 @@ namespace UnitTest.Template.Operator
                 Decode(Twin(Int(5), new StringValue("abc")), new StringValue("def"));
                 Assert.Fail();
             }
-            catch (FastException e)
+            catch (DynErrorException e)
             {
-                Assert.AreEqual(FastConstants.D7SubtrctnLenLong, e.Code);
+                Assert.AreEqual(DynError.D7SubtrctnLenLong, e.Error);
                 Assert.AreEqual(
                         "The string diff <5, abc> cannot be applied to the base value 'def' because the subtraction length is too long.",
                         e.Message);

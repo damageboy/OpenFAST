@@ -152,9 +152,9 @@ namespace UnitTest
                 output.WriteMessage(message);
                 Assert.Fail();
             }
-            catch (FastException e)
+            catch (DynErrorException e)
             {
-                Assert.AreEqual(FastConstants.IoError, e.Code);
+                Assert.AreEqual(DynError.IoError, e.Error);
             }
         }
 
@@ -169,9 +169,9 @@ namespace UnitTest
                 output.WriteMessage(message);
                 Assert.Fail();
             }
-            catch (FastException e)
+            catch (DynErrorException e)
             {
-                Assert.AreEqual(FastConstants.IoError, e.Code);
+                Assert.AreEqual(DynError.IoError, e.Error);
             }
         }
 
@@ -185,9 +185,9 @@ namespace UnitTest
                 output.WriteMessage(new Message(ObjectMother.AllocationInstruction()));
                 Assert.Fail();
             }
-            catch (FastException e)
+            catch (DynErrorException e)
             {
-                Assert.AreEqual(FastConstants.D9TemplateNotRegistered, e.Code);
+                Assert.AreEqual(DynError.D9TemplateNotRegistered, e.Error);
             }
         }
     }

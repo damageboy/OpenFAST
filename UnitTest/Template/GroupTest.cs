@@ -113,9 +113,9 @@ namespace UnitTest.Template
                     BitVectorReader.InfiniteTrue);
                 Assert.Fail();
             }
-            catch (FastException e)
+            catch (RepErrorException e)
             {
-                Assert.AreEqual(FastConstants.R7PmapOverlong, e.Code);
+                Assert.AreEqual(RepError.R7PmapOverlong, e.Error);
             }
         }
 
@@ -132,9 +132,9 @@ namespace UnitTest.Template
                         ByteUtil.ConvertBitStringToFastByteArray("11111000 10000001 10000000 10000110 10000000 10000110")),
                     g, c, BitVectorReader.InfiniteTrue);
             }
-            catch (FastException e)
+            catch (RepErrorException e)
             {
-                Assert.AreEqual(FastConstants.R8PmapTooManyBits, e.Code);
+                Assert.AreEqual(RepError.R8PmapTooManyBits, e.Error);
             }
         }
     }

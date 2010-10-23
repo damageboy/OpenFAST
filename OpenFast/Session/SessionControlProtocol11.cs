@@ -27,6 +27,7 @@ using OpenFAST.Error;
 using OpenFAST.Session.Template.Exchange;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
+using OpenFAST.Utility;
 using Type = OpenFAST.Template.Type.FASTType;
 
 namespace OpenFAST.Session
@@ -68,7 +69,7 @@ namespace OpenFAST.Session
         private static readonly Dictionary<MessageTemplate, ISessionMessageHandler> MessageHandlers =
             new Dictionary<MessageTemplate, ISessionMessageHandler>();
 
-        private static readonly MessageTemplate FASTAlertTemplate;
+        private static readonly MessageTemplate AlertTemplate;
         private static readonly MessageTemplate FASTHelloTemplate;
 #warning usage?
         private static readonly Message RESET;
@@ -128,7 +129,7 @@ namespace OpenFAST.Session
 
         static SessionControlProtocol11()
         {
-            FASTAlertTemplate = new MessageTemplate(
+            AlertTemplate = new MessageTemplate(
                 "Alert",
                 new Field[]
                     {
@@ -329,7 +330,7 @@ namespace OpenFAST.Session
                     });
             {
                 TemplateRegistry.Register(HelloTemplateId, FASTHelloTemplate);
-                TemplateRegistry.Register(AlertTemplateId, FASTAlertTemplate);
+                TemplateRegistry.Register(AlertTemplateId, AlertTemplate);
                 TemplateRegistry.Register(ResetTemplateId, FastResetTemplate);
                 TemplateRegistry.Register(TemplateDeclId, TemplateDeclaration);
                 TemplateRegistry.Register(TemplateDefId, TemplateDefinition);
@@ -363,8 +364,8 @@ namespace OpenFAST.Session
 
         public SessionControlProtocol11()
         {
-            MessageHandlers[FASTAlertTemplate] = AlertHandler;
-            MessageHandlers[TemplateDefinition] = new ProtocolDefinationSessionMessageHandler(this);
+            MessageHandlers[AlertTemplate] = AlertHandler;
+            MessageHandlers[TemplateDefinition] = new ProtocolDefinitionSessionMessageHandler(this);
             MessageHandlers[TemplateDeclaration] = new ProtocolDeclarationSessionMessageHandler(this);
         }
 
@@ -602,7 +603,7 @@ namespace OpenFAST.Session
             get
             {
                 return _staticClose ??
-                       (_staticClose = CreateFastAlertMessage(SessionConstants.Close));
+                       (_staticClose = CreateFastAlertMessage(DynError.Close));
             }
         }
 
@@ -671,7 +672,7 @@ namespace OpenFAST.Session
             return session;
         }
 
-        public override void OnError(Session session, ErrorCode code, string message)
+        public override void OnError(Session session, DynError code, string message)
         {
             session.MessageOutputStream.WriteMessage(CreateFastAlertMessage(code));
         }
@@ -695,12 +696,13 @@ namespace OpenFAST.Session
             return message;
         }
 
-        public static Message CreateFastAlertMessage(ErrorCode code)
+        public static Message CreateFastAlertMessage(DynError code)
         {
-            var alert = new Message(FASTAlertTemplate);
-            alert.SetInteger(1, (int) code.Severity);
-            alert.SetInteger(2, code.Code);
-            alert.SetString(4, code.Description);
+            ErrorInfoAttribute attr = code.GetErrorAttr();
+            var alert = new Message(AlertTemplate);
+            alert.SetInteger(1, (int) attr.Severity);
+            alert.SetInteger(2, (int) code);
+            alert.SetString(4, attr.Description);
             return alert;
         }
 
@@ -802,20 +804,20 @@ namespace OpenFAST.Session
 
         #region Nested type: AlertSessionMessageHandler
 
-        public class AlertSessionMessageHandler : ISessionMessageHandler
+        public sealed class AlertSessionMessageHandler : ISessionMessageHandler
         {
             #region ISessionMessageHandler Members
 
-            public virtual void HandleMessage(Session session, Message message)
+            public void HandleMessage(Session session, Message message)
             {
-                ErrorCode alertCode = ErrorCode.GetAlertCode(message.GetInt(2));
-                if (alertCode.Equals(SessionConstants.Close))
+                var alertCode = (DynError) message.GetInt(2);
+                if (alertCode == DynError.Close)
                 {
                     session.Close(alertCode);
                 }
                 else
                 {
-                    session.ErrorHandler.Error(alertCode, message.GetString(4));
+                    session.ErrorHandler.OnError(null, alertCode, message.GetString(4));
                 }
             }
 
@@ -852,13 +854,13 @@ namespace OpenFAST.Session
 
         #endregion
 
-        #region Nested type: ProtocolDefinationSessionMessageHandler
+        #region Nested type: ProtocolDefinitionSessionMessageHandler
 
-        private sealed class ProtocolDefinationSessionMessageHandler : ISessionMessageHandler
+        private sealed class ProtocolDefinitionSessionMessageHandler : ISessionMessageHandler
         {
             private SessionControlProtocol11 _enclosingInstance;
 
-            public ProtocolDefinationSessionMessageHandler(SessionControlProtocol11 enclosingInstance)
+            public ProtocolDefinitionSessionMessageHandler(SessionControlProtocol11 enclosingInstance)
             {
                 InitBlock(enclosingInstance);
             }

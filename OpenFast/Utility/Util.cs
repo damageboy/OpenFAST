@@ -21,7 +21,9 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
+using OpenFAST.Error;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
 using OpenFAST.Template.Type;
@@ -404,6 +406,77 @@ namespace OpenFAST.Utility
             }
 
             return (long) tr;
+        }
+
+        /// <summary>
+        /// Get an attribute of a given type attached to an Enum value.
+        /// Throws an exception if more than one attribute of a given type was found.
+        /// </summary>
+        /// <typeparam name="TAttr">Type of the attribute to get</typeparam>
+        /// <typeparam name="TEnum">Type of the Enum value</typeparam>
+        /// <param name="value">Enum value</param>
+        /// <returns>An attribute object or null if not found</returns>
+        public static TAttr GetEnumSingleAttribute<TAttr, TEnum>(TEnum value)
+            where TAttr : Attribute
+        {
+            var enumType = typeof(TEnum);
+            string name = Enum.GetName(enumType, value);
+            return enumType.GetField(name).ExtractSingleAttribute<TAttr>();
+        }
+
+        /// <summary>
+        /// Get a single attribute (or null) of a given type attached to a value.
+        /// The value might be a <see cref="Type"/> object or Property/Method/... info acquired through reflection.
+        /// An exception is thrown if more than one attribute of a given type was found.
+        /// </summary>
+        /// <typeparam name="TAttr">Type of the attribute to get</typeparam>
+        /// <param name="customAttrProvider">Enum value</param>
+        /// <returns>An attribute object or null if not found</returns>
+        public static TAttr ExtractSingleAttribute<TAttr>(this ICustomAttributeProvider customAttrProvider)
+            where TAttr : Attribute
+        {
+            object[] attributes = customAttrProvider.GetCustomAttributes(typeof(TAttr), true);
+            if (attributes.Length > 0)
+            {
+                if (attributes.Length > 1)
+                    throw new ArgumentException(
+                        String.Format("Found {0} (>1) attributes {1} detected for {2}", attributes.Length,
+                                      typeof(TAttr).Name, customAttrProvider));
+                return (TAttr)attributes[0];
+            }
+            return null;
+        }
+
+    }
+}
+
+namespace JetBrains.Annotations
+{
+    /// <summary>
+    /// Indicates that marked method builds string by format pattern and (optional) arguments. 
+    /// Parameter, which contains format string, should be given in constructor.
+    /// The format string should be in <see cref="string.Format(IFormatProvider,string,object[])"/> -like form
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Constructor | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    internal sealed class StringFormatMethodAttribute : Attribute
+    {
+        private readonly string _myFormatParameterName;
+
+        /// <summary>
+        /// Initializes new instance of StringFormatMethodAttribute
+        /// </summary>
+        /// <param name="formatParameterName">Specifies which parameter of an annotated method should be treated as format-string</param>
+        public StringFormatMethodAttribute(string formatParameterName)
+        {
+            _myFormatParameterName = formatParameterName;
+        }
+
+        /// <summary>
+        /// Gets format parameter name
+        /// </summary>
+        public string FormatParameterName
+        {
+            get { return _myFormatParameterName; }
         }
     }
 }

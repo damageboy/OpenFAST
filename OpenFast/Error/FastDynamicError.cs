@@ -23,20 +23,20 @@ using System;
 
 namespace OpenFAST.Error
 {
-    [Serializable]
-    public class FastDynamicError : Exception
-    {
-        private readonly ErrorCode _error;
+    //[Serializable]
+    //public class FastDynamicError : FastException
+    //{
+    //    private readonly ErrorCode _error;
 
-        public FastDynamicError(ErrorCode error)
-            : base(error.ShortName + ": " + error.Description)
-        {
-            _error = error;
-        }
+    //    public FastDynamicError(ErrorCode error)
+    //        : base(error.ShortName + ": " + error.Description)
+    //    {
+    //        _error = error;
+    //    }
 
-        public virtual ErrorCode Error
-        {
-            get { return _error; }
-        }
-    }
+    //    public virtual ErrorCode Error
+    //    {
+    //        get { return _error; }
+    //    }
+    //}
 }

@@ -149,7 +149,7 @@ namespace OpenFAST.Template
             }
             catch (IOException e)
             {
-                Global.HandleError(FastConstants.IoError, "An IO error occurred while encoding " + this, e);
+                Global.ErrorHandler.OnError(e, DynError.IoError, "An IO error occurred while encoding {0}", this);
             }
 
             return buffer.ToArray();

@@ -43,7 +43,7 @@ namespace UnitTest
                 "  <byteVector name='bytevector'/>" +
                 "  <decimal name='decimal'/>" +
                 "</template>");
-            
+
 
             var message = new Message(template);
             message.SetByteVector("string", Byte("7f001a"));

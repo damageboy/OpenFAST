@@ -47,8 +47,7 @@ namespace OpenFAST.Template.Type.Codec
             {
                 if (Math.Abs(value.Exponent) > 63)
                 {
-                    Global.HandleError(FastConstants.R1LargeDecimal,
-                                       "Encountered exponent of size " + value.Exponent);
+                    Global.ErrorHandler.OnError(null, RepError.R1LargeDecimal, "Encountered exponent of size {0}", value.Exponent);
                 }
 
                 byte[] tmp = Integer.Encode(new IntegerValue(value.Exponent));
@@ -71,7 +70,7 @@ namespace OpenFAST.Template.Type.Codec
 
             if (Math.Abs(exponent) > 63)
             {
-                Global.HandleError(FastConstants.R1LargeDecimal, "Encountered exponent of size " + exponent);
+                Global.ErrorHandler.OnError(null, RepError.R1LargeDecimal, "Encountered exponent of size {0}", exponent);
             }
 
             long mantissa = Integer.Decode(inStream).ToLong();

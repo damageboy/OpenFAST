@@ -21,7 +21,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST.Session
 {
-    public struct MessageListenerFields
+    public static class MessageListenerFields
     {
         public static readonly IMessageListener Null = new NullMessageListener();
     }

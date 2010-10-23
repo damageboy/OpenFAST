@@ -20,10 +20,11 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System;
+using OpenFAST.Error;
 
 namespace OpenFAST
 {
-    public class RuntimeException : Exception
+    public class RuntimeException : FastException
     {
         private readonly Exception e;
 

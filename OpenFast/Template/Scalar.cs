@@ -130,8 +130,8 @@ namespace OpenFAST.Template
             var value = (ScalarValue) fieldValue;
             if (!_operatorCodec.CanEncode(value, this))
             {
-                Global.HandleError(FastConstants.D3CantEncodeValue,
-                                   "The scalar " + this + " cannot encode the value " + value);
+                Global.ErrorHandler.OnError(null, DynError.D3CantEncodeValue,
+                                            "The scalar {0} cannot encode the value {1}", this, value);
             }
             ScalarValue valueToEncode = _operatorCodec.GetValueToEncode(value, priorValue, this,
                                                                         presenceMapBuilder);
@@ -218,9 +218,9 @@ namespace OpenFAST.Template
 
                 return value;
             }
-            catch (FastException e)
+            catch (DynErrorException e)
             {
-                throw new FastException("Error occurred while decoding " + this, e.Code, e);
+                throw new DynErrorException(e, e.Error, "Error occurred while decoding {0}", this);
             }
         }
 
@@ -237,15 +237,15 @@ namespace OpenFAST.Template
                 return;
             if (!type.IsValueOf(priorValue))
             {
-                Global.HandleError(FastConstants.D4InvalidType,
-                                   "The value '" + priorValue + "' is not valid for the type " + type);
+                Global.ErrorHandler.OnError(null, DynError.D4InvalidType,
+                                            "The value '{0}' is not valid for the type {1}", priorValue, type);
             }
         }
 
         public override string ToString()
         {
-            return "Scalar [name=" + Name + ", operator=" + _operator + ", type=" + _type + ", dictionary=" +
-                   _dictionary + "]";
+            return string.Format("Scalar [name={0}, operator={1}, type={2}, dictionary={3}]", Name, _operator, _type,
+                                 _dictionary);
         }
 
         public override IFieldValue CreateValue(string value)

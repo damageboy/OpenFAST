@@ -93,9 +93,9 @@ namespace OpenFAST.Template
                 return Encode(message, this, context);
             }
 
-            throw new FastException(
-                "Cannot encode message: The template " + message.Template + " has not been registered.",
-                FastConstants.D9TemplateNotRegistered);
+            throw new DynErrorException(DynError.D9TemplateNotRegistered,
+                                        "Cannot encode message: The template {0} has not been registered.",
+                                        message.Template);
         }
 
         public Message Decode(Stream inStream, int templateId, BitVectorReader presenceMapReader, Context context)
@@ -111,9 +111,9 @@ namespace OpenFAST.Template
                     context.DecodeTrace.GroupEnd();
                 return message;
             }
-            catch (FastException e)
+            catch (DynErrorException e)
             {
-                throw new FastException("An error occurred while decoding " + this, e.Code, e);
+                throw new DynErrorException(e, e.Error, "An error occurred while decoding {0}", this);
             }
         }
 

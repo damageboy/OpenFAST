@@ -24,7 +24,7 @@ using System.Collections.Generic;
 
 namespace OpenFAST.Template
 {
-    public struct TemplateRegistryFields
+    public static class TemplateRegistryFields
     {
         public static readonly ITemplateRegistry Null;
 

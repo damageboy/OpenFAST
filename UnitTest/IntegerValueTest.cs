@@ -49,9 +49,9 @@ namespace UnitTest
                 Int(128).ToByte();
                 Assert.Fail();
             }
-            catch (FastException e)
+            catch (RepErrorException e)
             {
-                Assert.AreEqual(FastConstants.R4NumericValueTooLarge, e.Code);
+                Assert.AreEqual(RepError.R4NumericValueTooLarge, e.Error);
             }
         }
 
@@ -87,9 +87,9 @@ namespace UnitTest
                 Int(32768).ToByte();
                 Assert.Fail();
             }
-            catch (FastException e)
+            catch (RepErrorException e)
             {
-                Assert.AreEqual(FastConstants.R4NumericValueTooLarge, e.Code);
+                Assert.AreEqual(RepError.R4NumericValueTooLarge, e.Error);
             }
         }
 

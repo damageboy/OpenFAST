@@ -98,9 +98,8 @@ namespace OpenFAST.Template.Operator
             if (OperatorMap.TryGetValue(key, out codec))
                 return codec;
 
-            Global.HandleError(FastConstants.S2OperatorTypeIncomp,
-                               "The operator '" + op + "' is not compatible with type '" + type +
-                               "'");
+            Global.ErrorHandler.OnError(null, StaticError.S2OperatorTypeIncomp,
+                                        "The operator '{0}' is not compatible with type '{1}'", op, type);
             throw new ArgumentOutOfRangeException("op" + ",type", key, "Not found");
         }
 

@@ -23,7 +23,7 @@ using System.IO;
 
 namespace OpenFAST
 {
-    public struct MessageBlockReaderFields
+    public static class MessageBlockReaderFields
     {
         public static readonly IMessageBlockReader Null = new NullMessageBlockReader();
     }

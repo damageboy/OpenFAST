@@ -54,7 +54,7 @@ namespace OpenFAST.Template.Operator
             if (field.IsOptional)
                 return null;
 
-            Global.HandleError(FastConstants.D5NoDefaultValue, "No default value for " + field);
+            Global.ErrorHandler.OnError(null, DynError.D5NoDefaultValue, "No default value for {0}", field);
 
             return null;
         }

@@ -189,7 +189,7 @@ namespace OpenFAST.Template
                     Field field = _fields[fieldIndex];
                     if (!field.IsOptional && fieldValue == null)
                     {
-                        Global.HandleError(FastConstants.GeneralError, "Mandatory field " + field + " is null");
+                        Global.ErrorHandler.OnError(null, DynError.GeneralError, "Mandatory field {0} is null", field);
                         // BUG? error is ignored?
                     }
                     byte[] encoding = field.Encode(fieldValue, template, context, presenceMapBuilder);
@@ -242,9 +242,9 @@ namespace OpenFAST.Template
                 }
                 return null;
             }
-            catch (FastException e)
+            catch (DynErrorException e)
             {
-                throw new FastException("Error occurred while decoding " + this, e.Code, e);
+                throw new DynErrorException(e, e.Error, "Error occurred while decoding {0}", this);
             }
         }
 
@@ -261,8 +261,8 @@ namespace OpenFAST.Template
                 context.DecodeTrace.Pmap(pmap.Bytes);
             if (pmap.IsOverlong)
             {
-                Global.HandleError(FastConstants.R7PmapOverlong,
-                                   "The presence map " + pmap + " for the group " + this + " is overlong.");
+                Global.ErrorHandler.OnError(null, RepError.R7PmapOverlong,
+                                            "The presence map {0} for the group {1} is overlong.", pmap, this);
             }
             return DecodeFieldValues(inStream, template, new BitVectorReader(pmap), context);
         }
@@ -280,8 +280,8 @@ namespace OpenFAST.Template
 
             if (pmapReader.HasMoreBitsSet())
             {
-                Global.HandleError(FastConstants.R8PmapTooManyBits,
-                                   "The presence map " + pmapReader + " has too many bits for the group " + this);
+                Global.ErrorHandler.OnError(null, RepError.R8PmapTooManyBits,
+                                            "The presence map {0} has too many bits for the group {1}", pmapReader, this);
             }
 
             return values;

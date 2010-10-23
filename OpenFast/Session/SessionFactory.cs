@@ -21,7 +21,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 namespace OpenFAST.Session
 {
-    public struct SessionFactoryFields
+    public static class SessionFactoryFields
     {
         public static readonly ISessionFactory Null;
 

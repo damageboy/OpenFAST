@@ -46,8 +46,8 @@ namespace OpenFAST.Template.Type.Codec
             if (DateTime.TryParseExact(str, _format, _formatter, DateTimeStyles.None, out result))
                 return new DateValue(result);
 
-            Global.HandleError(FastConstants.ParseError,
-                               string.Format("'{0}' could not be parsed as DateTime with '{1}' format", str, _format));
+            Global.ErrorHandler.OnError(null, DynError.ParseError,
+                                        "'{0}' could not be parsed as DateTime with '{1}' format", str, _format);
             return null;
         }
 

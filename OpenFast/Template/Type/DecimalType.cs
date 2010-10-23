@@ -20,6 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System;
+using JetBrains.Annotations;
 using OpenFAST.Error;
 using OpenFAST.Template.Type.Codec;
 
@@ -44,8 +45,8 @@ namespace OpenFAST.Template.Type
             if (Double.TryParse(value, out dbl))
                 return new DecimalValue(dbl);
 
-            Global.HandleError(FastConstants.S3InitialValueIncomp,
-                               "The value '" + value + "' is not compatible with type " + this);
+            Global.ErrorHandler.OnError(null, StaticError.S3InitialValueIncomp,
+                                        "The value '{0}' is not compatible with type {1}", value, this);
             return null;
         }
 

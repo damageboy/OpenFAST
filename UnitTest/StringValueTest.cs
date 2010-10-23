@@ -39,9 +39,9 @@ namespace UnitTest
                 value.ToLong();
                 Assert.Fail();
             }
-            catch (FastException e)
+            catch (RepErrorException e)
             {
-                Assert.AreEqual(FastConstants.R4NumericValueTooLarge, e.Code);
+                Assert.AreEqual(RepError.R4NumericValueTooLarge, e.Error);
             }
         }
 
@@ -88,9 +88,9 @@ namespace UnitTest
                 value.ToByte();
                 Assert.Fail();
             }
-            catch (FastException e)
+            catch (RepErrorException e)
             {
-                Assert.AreEqual(FastConstants.R4NumericValueTooLarge, e.Code);
+                Assert.AreEqual(RepError.R4NumericValueTooLarge, e.Error);
             }
         }
 
@@ -110,9 +110,9 @@ namespace UnitTest
                 value.ToInt();
                 Assert.Fail();
             }
-            catch (FastException e)
+            catch (RepErrorException e)
             {
-                Assert.AreEqual(FastConstants.R4NumericValueTooLarge, e.Code);
+                Assert.AreEqual(RepError.R4NumericValueTooLarge, e.Error);
             }
         }
 
@@ -139,9 +139,9 @@ namespace UnitTest
                 value.ToShort();
                 Assert.Fail();
             }
-            catch (FastException e)
+            catch (RepErrorException e)
             {
-                Assert.AreEqual(FastConstants.R4NumericValueTooLarge, e.Code);
+                Assert.AreEqual(RepError.R4NumericValueTooLarge, e.Error);
             }
         }
     }

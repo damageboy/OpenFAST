@@ -118,9 +118,9 @@ namespace UnitTest.Template.Operator
                 field.GetOperatorCodec().GetValueToEncode(new IntegerValue(30), null, field);
                 Assert.Fail();
             }
-            catch (FastException e)
+            catch (DynErrorException e)
             {
-                Assert.AreEqual(FastConstants.D6MndtryFieldNotPresent, e.Code);
+                Assert.AreEqual(DynError.D6MndtryFieldNotPresent, e.Error);
             }
         }
         [Test]
@@ -135,9 +135,9 @@ namespace UnitTest.Template.Operator
                 Assert.AreEqual(ScalarValue.Undefined, OperatorCodec.GetCodec(OpenFAST.Template.Operator.Operator.Delta, FASTType.I32).DecodeEmptyValue(ScalarValue.Undefined, field1));
                 Assert.Fail();
             }
-            catch (FastException e)
+            catch (DynErrorException e)
             {
-                Assert.AreEqual(FastConstants.D6MndtryFieldNotPresent, e.Code);
+                Assert.AreEqual(DynError.D6MndtryFieldNotPresent, e.Error);
             }
         }
         [Test]
@@ -155,9 +155,9 @@ namespace UnitTest.Template.Operator
                 OpenFAST.Template.Operator.Operator.Increment.GetCodec(FASTType.String);
                 Assert.Fail();
             }
-            catch (FastException e)
+            catch (StatErrorException e)
             {
-                Assert.AreEqual(FastConstants.S2OperatorTypeIncomp, e.Code);
+                Assert.AreEqual(StaticError.S2OperatorTypeIncomp, e.Error);
                 Assert.AreEqual("The operator 'increment' is not compatible with type 'string'", e.Message);
             }
         }

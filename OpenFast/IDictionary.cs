@@ -23,10 +23,10 @@ using OpenFAST.Template;
 
 namespace OpenFAST
 {
-    public struct DictionaryFields
+    public static class DictionaryFields
     {
-        public static readonly string Template = "template";
-        public static readonly string Global = "global";
+        public const string Template = "template";
+        public const string Global = "global";
     }
 
     public interface IDictionary

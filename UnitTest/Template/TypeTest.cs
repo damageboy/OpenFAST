@@ -57,7 +57,7 @@ namespace UnitTest.Template
 //            }
 //            catch (FastException e)
 //            {
-//                Assert.Equals(FastConstants.S3_INITIAL_VALUE_INCOMP, e.Code);
+//                Assert.Equals(StaticError.S3_INITIAL_VALUE_INCOMP, e.Code);
 //                Assert.Equals("The value '10a' is not compatible with type decimal", e.Message);
 //            }
 //        }

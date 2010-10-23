@@ -35,7 +35,7 @@ namespace OpenFAST.Session
                         ISessionListener sessionListener);
 
         Session OnNewConnection(string serverName, IConnection connection);
-        void OnError(Session session, ErrorCode code, string message);
+        void OnError(Session session, DynError code, string message);
         bool IsProtocolMessage(Message message);
         void HandleMessage(Session session, Message message);
 
