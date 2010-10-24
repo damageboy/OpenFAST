@@ -56,7 +56,7 @@ namespace OpenFAST.Template
 
         #region IFieldSet Members
 
-        Field IFieldSet.GetField(int index)
+        public Field GetField(int index)
         {
             return Fields[index];
         }

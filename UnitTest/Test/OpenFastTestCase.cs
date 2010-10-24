@@ -158,7 +158,7 @@ namespace UnitTest.Test
             return new MessageTemplate("Doesn't matter", new[] {field});
         }
 
-        protected static void AssertScalarField(IFieldSet fieldSet, int fieldIndex, Type type, String name,
+        protected static void AssertScalarField(IFieldSet fieldSet, int fieldIndex, FASTType type, String name,
                                                 OperatorCodec operatorCodec,
                                                 ScalarValue defaultValue)
         {
@@ -168,7 +168,7 @@ namespace UnitTest.Test
             Assert.AreEqual(defaultValue, field.DefaultValue);
         }
 
-        protected static void AssertComposedScalarField(IFieldSet fieldSet, int fieldIndex, Type type, String name,
+        protected static void AssertComposedScalarField(IFieldSet fieldSet, int fieldIndex, FASTType type, String name,
                                                         Operator exponentOp,
                                                         ScalarValue exponentValue, Operator mantissaOp,
                                                         ScalarValue mantissaValue)
@@ -200,14 +200,14 @@ namespace UnitTest.Test
             Assert.AreEqual(mantissaValue, fields[1].DefaultValue);
         }
 
-        protected static void AssertScalarField(IFieldSet fieldSet, int fieldIndex, Type type, String name, Operator op)
+        protected static void AssertScalarField(IFieldSet fieldSet, int fieldIndex, FASTType type, String name, Operator op)
         {
             var field = (Scalar) fieldSet.GetField(fieldIndex);
             AssertScalarField(field, type, name);
             Assert.AreEqual(op, field.Operator);
         }
 
-        protected static void AssertSequenceLengthField(Sequence sequence, String name, Type type, Operator op)
+        protected static void AssertSequenceLengthField(Sequence sequence, String name, FASTType type, Operator op)
         {
             Assert.AreEqual(type, sequence.Length.Type);
             Assert.AreEqual(name, sequence.Length.Name);
@@ -226,7 +226,7 @@ namespace UnitTest.Test
             Assert.AreEqual(name, currentGroup.Name);
         }
 
-        protected static void AssertOptionalScalarField(IFieldSet fieldSet, int fieldIndex, Type type, String name,
+        protected static void AssertOptionalScalarField(IFieldSet fieldSet, int fieldIndex, FASTType type, String name,
                                                         Operator op)
         {
             var field = (Scalar) fieldSet.GetField(fieldIndex);
@@ -235,7 +235,7 @@ namespace UnitTest.Test
             Assert.IsTrue(field.IsOptional);
         }
 
-        private static void AssertScalarField(Scalar field, Type type, String name)
+        private static void AssertScalarField(Scalar field, FASTType type, string name)
         {
             Assert.AreEqual(name, field.Name);
             Assert.AreEqual(type, field.Type);

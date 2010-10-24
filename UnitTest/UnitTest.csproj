@@ -88,9 +88,18 @@
     <Compile Include="Template\BasicTemplateRegistryTest.cs" />
     <Compile Include="Template\DynamicTemplateReferenceTest.cs" />
     <Compile Include="Template\GroupTest.cs" />
-    <Compile Include="Template\Loader\ComposedDecimalParserTest.cs" />
-    <Compile Include="Template\Loader\ScalarParserTest.cs" />
-    <Compile Include="Template\Loader\SequenceParserTest.cs" />
+    <Compile Include="Template\Loader\ComposedDecimalParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Template\Loader\ScalarParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Template\Loader\SequenceParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Template\Loader\StringParserTest.cs" />
+    <Compile Include="Template\Loader\TemplateRefParserTest.cs" />
+    <Compile Include="Template\Loader\XmlMessageTemplateLoaderTest .cs" />
     <Compile Include="Template\MessageTemplateTest.cs" />
     <Compile Include="Template\Operator\DefaultOperatorTest.cs" />
     <Compile Include="Template\Operator\DeltaByteVectorOperatorTest.cs" />
@@ -119,6 +128,10 @@
     <Content Include="..\Files\components.xml">
       <Link>components.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Files\FPL\mdIncrementalRefreshTemplate.xml">
+      <Link>FPL\mdIncrementalRefreshTemplate.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\Files\preTrade.xml">
       <Link>preTrade.xml</Link>
