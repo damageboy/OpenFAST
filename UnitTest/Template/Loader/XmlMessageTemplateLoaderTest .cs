@@ -21,15 +21,14 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using OpenFAST.Error;
 using OpenFAST.Template.Loader;
-using OpenFAST.Template.Type;
-using UnitTest.Test;
+using OpenFAST.Template.Types;
+using OpenFAST.UnitTests.Test;
 using NUnit.Framework;
 using System.IO;
 using OpenFAST.Template;
-using OpenFAST;
-using OpenFAST.Template.Type.Codec;
+using OpenFAST.Template.Types.Codec;
 
-namespace UnitTest.Template.Loader
+namespace OpenFAST.UnitTests.Template.Loader
 {
     [TestFixture]
     public class XmlMessageTemplateLoaderTest : OpenFastTestCase

@@ -20,12 +20,11 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using NUnit.Framework;
-using OpenFAST;
 using OpenFAST.Codec;
 using OpenFAST.Template;
-using UnitTest.Test;
+using OpenFAST.UnitTests.Test;
 
-namespace UnitTest.Template
+namespace OpenFAST.UnitTests.Template
 {
     [TestFixture]
     public class DynamicTemplateReferenceTest : OpenFastTestCase

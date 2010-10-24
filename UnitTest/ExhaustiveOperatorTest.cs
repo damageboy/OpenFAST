@@ -21,14 +21,13 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System;
 using NUnit.Framework;
-using OpenFAST;
 using OpenFAST.Codec;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
-using OpenFAST.Template.Type;
-using UnitTest.Test;
+using OpenFAST.Template.Types;
+using OpenFAST.UnitTests.Test;
 
-namespace UnitTest
+namespace OpenFAST.UnitTests
 {
     [TestFixture]
     public class ExhaustiveOperatorTest

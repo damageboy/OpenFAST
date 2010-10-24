@@ -173,7 +173,7 @@ namespace OpenFAST
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            DecimalValue t = obj as DecimalValue;
+            var t = obj as DecimalValue;
             if (t == null) return false;
             return t.Exponent == Exponent && t.Mantissa == Mantissa;
         }

@@ -21,14 +21,13 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System.IO;
 using NUnit.Framework;
-using OpenFAST;
 using OpenFAST.Codec;
 using OpenFAST.Error;
 using OpenFAST.Template;
-using OpenFAST.Template.Type;
-using UnitTest.Test;
+using OpenFAST.Template.Types;
+using OpenFAST.UnitTests.Test;
 
-namespace UnitTest.Template
+namespace OpenFAST.UnitTests.Template
 {
     [TestFixture]
     public class GroupTest : OpenFastTestCase
@@ -107,9 +106,9 @@ namespace UnitTest.Template
         {
             try
             {
-                ObjectMother.QuoteTemplate().Decode(
+                ObjectMother.QuoteTemplate.Decode(
                     new MemoryStream(ByteUtil.ConvertBitStringToFastByteArray("00000000 10000000")),
-                    ObjectMother.QuoteTemplate(), new Context(),
+                    ObjectMother.QuoteTemplate, new Context(),
                     BitVectorReader.InfiniteTrue);
                 Assert.Fail();
             }
@@ -122,7 +121,7 @@ namespace UnitTest.Template
         [TestCase]
         public void TestDecodeGroupWithPresenceMapWithTooManyBits()
         {
-            MessageTemplate g = ObjectMother.QuoteTemplate();
+            MessageTemplate g = ObjectMother.QuoteTemplate;
             var c = new Context();
             c.RegisterTemplate(1, g);
             try

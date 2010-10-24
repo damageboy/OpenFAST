@@ -22,10 +22,10 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System;
 using NUnit.Framework;
 using OpenFAST.Error;
-using OpenFAST.Template.Type;
-using UnitTest.Test;
+using OpenFAST.Template.Types;
+using OpenFAST.UnitTests.Test;
 
-namespace UnitTest.Template
+namespace OpenFAST.UnitTests.Template
 {
     [TestFixture]
     public class TypeTest : OpenFastTestCase

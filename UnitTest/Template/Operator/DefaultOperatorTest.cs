@@ -19,14 +19,13 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
-using OpenFAST;
 using OpenFAST.Codec;
 using OpenFAST.Template;
-using OpenFAST.Template.Type;
-using UnitTest.Test;
+using OpenFAST.Template.Types;
+using OpenFAST.UnitTests.Test;
 using NUnit.Framework;
 
-namespace UnitTest.Template.Operator
+namespace OpenFAST.UnitTests.Template.Operator
 {
     [TestFixture]
     public class DefaultOperatorTest : OpenFastTestCase

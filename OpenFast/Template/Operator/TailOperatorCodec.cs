@@ -22,7 +22,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System;
 using System.Text;
 using OpenFAST.Error;
-using OpenFAST.Template.Type;
+using OpenFAST.Template.Types;
 
 namespace OpenFAST.Template.Operator
 {

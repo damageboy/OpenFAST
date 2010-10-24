@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using OpenFAST.Error;
-using OpenFAST.Template.Type;
+using OpenFAST.Template.Types;
 
 namespace OpenFAST.Template.Loader
 {

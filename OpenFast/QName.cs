@@ -89,7 +89,7 @@ namespace OpenFAST
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            QName t = obj as QName;
+            var t = obj as QName;
             if ( t == null) return false;
             return Equals(t._name, _name) && Equals(t._namespace, _namespace);
         }

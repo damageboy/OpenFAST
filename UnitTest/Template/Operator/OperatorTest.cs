@@ -20,13 +20,12 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using NUnit.Framework;
-using OpenFAST;
 using OpenFAST.Error;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
-using OpenFAST.Template.Type;
+using OpenFAST.Template.Types;
 
-namespace UnitTest.Template.Operator
+namespace OpenFAST.UnitTests.Template.Operator
 {
     [TestFixture]
     public class OperatorTest
@@ -53,10 +52,10 @@ namespace UnitTest.Template.Operator
         //public void TestCopyOperatorWithOptionalPresence()
         //{
         //    OperatorCodec copy = OperatorCodec.COPY_ALL;
-        //    Scalar field = new Scalar("", Type.U32, Operator.COPY, ScalarValue.UNDEFINED, true);
+        //    Scalar field = new Scalar("", FASTType.U32, Operator.COPY, ScalarValue.UNDEFINED, true);
         //    assertEquals(null, copy.getValueToEncode(null, ScalarValue.UNDEFINED, field));
         //    //newly added implementation	
-        //    Scalar field1 = new Scalar("", Type.U32, Operator.COPY, ScalarValue.UNDEFINED, true);
+        //    Scalar field1 = new Scalar("", FASTType.U32, Operator.COPY, ScalarValue.UNDEFINED, true);
         //    assertEquals(null, copy.decodeEmptyValue(ScalarValue.UNDEFINED, field1));
         //}
         [Test]

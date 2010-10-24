@@ -23,7 +23,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using OpenFAST.Template;
-using OpenFAST.Template.Type.Codec;
+using OpenFAST.Template.Types.Codec;
 
 namespace OpenFAST.Codec
 {

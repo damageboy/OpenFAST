@@ -22,7 +22,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using OpenFAST.Error;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
-using OpenFAST.Template.Type;
+using OpenFAST.Template.Types;
 
 namespace OpenFAST.Session.Template.Exchange
 {

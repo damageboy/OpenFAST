@@ -22,7 +22,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System;
 using System.IO;
 using OpenFAST.Error;
-using OpenFAST.Template.Type;
+using OpenFAST.Template.Types;
 
 namespace OpenFAST.Template
 {
@@ -63,7 +63,7 @@ namespace OpenFAST.Template
             get { return _length; }
         }
 
-        public override System.Type ValueType
+        public override Type ValueType
         {
             get { return typeof (SequenceValue); }
         }

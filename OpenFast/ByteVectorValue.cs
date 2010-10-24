@@ -70,7 +70,7 @@ namespace OpenFAST
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            ByteVectorValue t = obj as ByteVectorValue;
+            var t = obj as ByteVectorValue;
             if (t==null) return false;
             return Util.ArraySegmentEquals(t._value,_value);
         }

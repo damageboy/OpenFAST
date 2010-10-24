@@ -28,7 +28,7 @@ namespace OpenFAST.Template
     [Serializable]
     public sealed class DynamicTemplateReference : Field
     {
-        public static readonly DynamicTemplateReference INSTANCE = new DynamicTemplateReference();
+        public static readonly DynamicTemplateReference Instance = new DynamicTemplateReference();
 
         private DynamicTemplateReference() : base(QName.Null, false)
         {
@@ -39,7 +39,7 @@ namespace OpenFAST.Template
             get { return null; }
         }
 
-        public override System.Type ValueType
+        public override Type ValueType
         {
             get { return null; }
         }

@@ -51,7 +51,7 @@ namespace OpenFAST.Template
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            LongValue t = obj as LongValue;
+            var t = obj as LongValue;
             if (t==null) return false;
             return t._value == _value;
         }

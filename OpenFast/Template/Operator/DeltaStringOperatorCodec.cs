@@ -21,7 +21,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System;
 using OpenFAST.Error;
-using OpenFAST.Template.Type;
+using OpenFAST.Template.Types;
 using OpenFAST.Utility;
 
 namespace OpenFAST.Template.Operator
@@ -70,7 +70,7 @@ namespace OpenFAST.Template.Operator
                                             diffValue, v);
             }
             byte[] bytes = Util.ApplyDifference(v, diffValue);
-            return field.Type.GetValue(bytes);
+            return field.FASTType.GetValue(bytes);
             //return Util.ApplyDifference((StringValue) v, diffValue);
         }
 

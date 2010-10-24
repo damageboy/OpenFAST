@@ -21,11 +21,10 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System.IO;
 using NUnit.Framework;
-using OpenFAST;
 using OpenFAST.Error;
-using UnitTest.Test;
+using OpenFAST.UnitTests.Test;
 
-namespace UnitTest
+namespace OpenFAST.UnitTests
 {
     public class IoExceptionThrowingStream : Stream
     {
@@ -145,7 +144,7 @@ namespace UnitTest
         public void TestIoErrorOnClose()
         {
             var output = new MessageOutputStream(new IoExceptionOnCloseStream());
-            output.RegisterTemplate(ObjectMother.AllocInstrctnTemplateId, ObjectMother.AllocationInstruction());
+            output.RegisterTemplate(ObjectMother.AllocInstrctnTemplateId, ObjectMother.AllocationInstruction);
             Message message = ObjectMother.BasicAllocationInstruction();
             try
             {
@@ -162,7 +161,7 @@ namespace UnitTest
         public void TestIoErrorOnWrite()
         {
             var output = new MessageOutputStream(new IoExceptionThrowingStream());
-            output.RegisterTemplate(ObjectMother.AllocInstrctnTemplateId, ObjectMother.AllocationInstruction());
+            output.RegisterTemplate(ObjectMother.AllocInstrctnTemplateId, ObjectMother.AllocationInstruction);
             Message message = ObjectMother.BasicAllocationInstruction();
             try
             {
@@ -182,7 +181,7 @@ namespace UnitTest
             var output = new MessageOutputStream(byteOut);
             try
             {
-                output.WriteMessage(new Message(ObjectMother.AllocationInstruction()));
+                output.WriteMessage(new Message(ObjectMother.AllocationInstruction));
                 Assert.Fail();
             }
             catch (DynErrorException e)

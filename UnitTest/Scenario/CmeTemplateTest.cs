@@ -21,11 +21,10 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System.IO;
 using NUnit.Framework;
-using OpenFAST;
 using OpenFAST.Template.Loader;
-using UnitTest.Test;
+using OpenFAST.UnitTests.Test;
 
-namespace UnitTest.Scenario
+namespace OpenFAST.UnitTests.Scenario
 {
     [TestFixture]
     public class CmeTemplateTest : OpenFastTestCase

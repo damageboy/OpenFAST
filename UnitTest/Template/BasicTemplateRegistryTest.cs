@@ -21,9 +21,9 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using NUnit.Framework;
 using OpenFAST.Template;
-using UnitTest.Test;
+using OpenFAST.UnitTests.Test;
 
-namespace UnitTest.Template
+namespace OpenFAST.UnitTests.Template
 {
     [TestFixture]
     public class BasicTemplateRegistryTest : OpenFastTestCase

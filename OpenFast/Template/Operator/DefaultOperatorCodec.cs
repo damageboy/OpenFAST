@@ -20,7 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System;
-using OpenFAST.Template.Type;
+using OpenFAST.Template.Types;
 
 namespace OpenFAST.Template.Operator
 {

@@ -23,10 +23,10 @@ using System.Xml;
 using NUnit.Framework;
 using OpenFAST.Template;
 using OpenFAST.Template.Loader;
-using UnitTest.Test;
+using OpenFAST.UnitTests.Test;
 using OpenFAST.Error;
 
-namespace UnitTest.Template.Loader
+namespace OpenFAST.UnitTests.Template.Loader
 {
     [TestFixture]
     public class TemplateRefParserTest : OpenFastTestCase
@@ -43,7 +43,7 @@ namespace UnitTest.Template.Loader
         public void TestParseDynamic()
         {
             XmlElement dynTempRefDef = Document("<templateRef/>").DocumentElement;
-            Assert.AreEqual(DynamicTemplateReference.INSTANCE, _parser.Parse(dynTempRefDef, _context));
+            Assert.AreEqual(DynamicTemplateReference.Instance, _parser.Parse(dynTempRefDef, _context));
         }
         [Test]
         public void TestParseStatic()

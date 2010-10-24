@@ -2,7 +2,7 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -238,40 +238,40 @@
     <Compile Include="Template\ITemplateRegisteredListener.cs" />
     <Compile Include="Template\ITemplateRegistry.cs" />
     <Compile Include="Template\TwinValue.cs" />
-    <Compile Include="Template\Type\ByteVectorType.cs" />
-    <Compile Include="Template\Type\Codec\AsciiString.cs" />
-    <Compile Include="Template\Type\Codec\BitVectorType.cs" />
-    <Compile Include="Template\Type\Codec\ByteVectorType.cs" />
-    <Compile Include="Template\Type\Codec\DateInteger.cs" />
-    <Compile Include="Template\Type\Codec\DateString.cs" />
-    <Compile Include="Template\Type\Codec\EpochTimestamp.cs" />
-    <Compile Include="Template\Type\Codec\IntegerCodec.cs" />
-    <Compile Include="Template\Type\Codec\MillisecondsSinceMidnight.cs" />
-    <Compile Include="Template\Type\Codec\NotStopBitEncodedTypeCodec.cs" />
-    <Compile Include="Template\Type\Codec\NullableAsciiString.cs" />
-    <Compile Include="Template\Type\Codec\NullableByteVector.cs" />
-    <Compile Include="Template\Type\Codec\NullableSignedInteger.cs" />
-    <Compile Include="Template\Type\Codec\NullableSingleFieldDecimal.cs" />
-    <Compile Include="Template\Type\Codec\NullableStringDelta.cs" />
-    <Compile Include="Template\Type\Codec\NullableUnicodeString.cs" />
-    <Compile Include="Template\Type\Codec\NullableUnsignedInteger.cs" />
-    <Compile Include="Template\Type\Codec\SignedInteger.cs" />
-    <Compile Include="Template\Type\Codec\SingleFieldDecimal.cs" />
-    <Compile Include="Template\Type\Codec\StringDelta.cs" />
-    <Compile Include="Template\Type\Codec\TimeInteger.cs" />
-    <Compile Include="Template\Type\Codec\TimestampInteger.cs" />
-    <Compile Include="Template\Type\Codec\TypeCodec.cs" />
-    <Compile Include="Template\Type\Codec\UnicodeString.cs" />
-    <Compile Include="Template\Type\Codec\UnsignedInteger.cs" />
-    <Compile Include="Template\Type\DateType.cs" />
-    <Compile Include="Template\Type\DecimalConverter.cs" />
-    <Compile Include="Template\Type\DecimalType.cs" />
-    <Compile Include="Template\Type\IntegerType.cs" />
-    <Compile Include="Template\Type\SignedIntegerType.cs" />
-    <Compile Include="Template\Type\SimpleType.cs" />
-    <Compile Include="Template\Type\StringType.cs" />
-    <Compile Include="Template\Type\FASTType.cs" />
-    <Compile Include="Template\Type\UnsignedIntegerType.cs" />
+    <Compile Include="Template\Types\ByteVectorType.cs" />
+    <Compile Include="Template\Types\Codec\AsciiString.cs" />
+    <Compile Include="Template\Types\Codec\BitVectorType.cs" />
+    <Compile Include="Template\Types\Codec\ByteVectorType.cs" />
+    <Compile Include="Template\Types\Codec\DateInteger.cs" />
+    <Compile Include="Template\Types\Codec\DateString.cs" />
+    <Compile Include="Template\Types\Codec\EpochTimestamp.cs" />
+    <Compile Include="Template\Types\Codec\IntegerCodec.cs" />
+    <Compile Include="Template\Types\Codec\MillisecondsSinceMidnight.cs" />
+    <Compile Include="Template\Types\Codec\NotStopBitEncodedTypeCodec.cs" />
+    <Compile Include="Template\Types\Codec\NullableAsciiString.cs" />
+    <Compile Include="Template\Types\Codec\NullableByteVector.cs" />
+    <Compile Include="Template\Types\Codec\NullableSignedInteger.cs" />
+    <Compile Include="Template\Types\Codec\NullableSingleFieldDecimal.cs" />
+    <Compile Include="Template\Types\Codec\NullableStringDelta.cs" />
+    <Compile Include="Template\Types\Codec\NullableUnicodeString.cs" />
+    <Compile Include="Template\Types\Codec\NullableUnsignedInteger.cs" />
+    <Compile Include="Template\Types\Codec\SignedInteger.cs" />
+    <Compile Include="Template\Types\Codec\SingleFieldDecimal.cs" />
+    <Compile Include="Template\Types\Codec\StringDelta.cs" />
+    <Compile Include="Template\Types\Codec\TimeInteger.cs" />
+    <Compile Include="Template\Types\Codec\TimestampInteger.cs" />
+    <Compile Include="Template\Types\Codec\TypeCodec.cs" />
+    <Compile Include="Template\Types\Codec\UnicodeString.cs" />
+    <Compile Include="Template\Types\Codec\UnsignedInteger.cs" />
+    <Compile Include="Template\Types\DateType.cs" />
+    <Compile Include="Template\Types\DecimalConverter.cs" />
+    <Compile Include="Template\Types\DecimalType.cs" />
+    <Compile Include="Template\Types\IntegerType.cs" />
+    <Compile Include="Template\Types\SignedIntegerType.cs" />
+    <Compile Include="Template\Types\SimpleType.cs" />
+    <Compile Include="Template\Types\StringType.cs" />
+    <Compile Include="Template\Types\FASTType.cs" />
+    <Compile Include="Template\Types\UnsignedIntegerType.cs" />
     <Compile Include="UnsupportedOperationException.cs" />
     <Compile Include="Utility\Tuple.cs" />
     <Compile Include="Utility\RecordingInputStream.cs" />

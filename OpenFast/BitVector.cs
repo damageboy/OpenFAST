@@ -117,7 +117,7 @@ namespace OpenFAST
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            BitVector t = obj as BitVector;
+            var t = obj as BitVector;
             if ( t == null ) return false;
             return Util.ArrayEquals(t._bytes, _bytes);
         }

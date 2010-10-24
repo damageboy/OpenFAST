@@ -20,7 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System.Xml;
-using OpenFAST.Template.Type;
+using OpenFAST.Template.Types;
 using OpenFAST.Utility;
 
 namespace OpenFAST.Template.Loader

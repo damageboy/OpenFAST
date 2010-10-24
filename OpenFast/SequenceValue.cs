@@ -109,7 +109,7 @@ namespace OpenFAST
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            SequenceValue t = obj as SequenceValue;
+            var t = obj as SequenceValue;
             if (t==null) return false;
             return Util.ListEquals(t._elements, _elements);
         }

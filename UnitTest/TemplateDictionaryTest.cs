@@ -20,13 +20,12 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using NUnit.Framework;
-using OpenFAST;
 using OpenFAST.Error;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
-using OpenFAST.Template.Type;
+using OpenFAST.Template.Types;
 
-namespace UnitTest
+namespace OpenFAST.UnitTests
 {
     [TestFixture]
     public class TemplateDictionaryTest

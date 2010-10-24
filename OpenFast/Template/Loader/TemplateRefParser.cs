@@ -44,7 +44,7 @@ namespace OpenFAST.Template.Loader
                                              templateName);
                 return null;
             }
-            return DynamicTemplateReference.INSTANCE;
+            return DynamicTemplateReference.Instance;
         }
 
         public virtual bool CanParse(XmlElement element, ParsingContext context)

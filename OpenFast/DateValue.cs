@@ -61,7 +61,7 @@ namespace OpenFAST
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            DateValue t = obj as DateValue;
+            var t = obj as DateValue;
             if (t==null) return false;
             return t._value.Equals(_value);
         }

@@ -8,7 +8,7 @@
     <ProjectGuid>{DE3C32FE-D32D-4938-B4C0-8ECCAFB8173D}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PerfUnitTest</RootNamespace>
+    <RootNamespace>OpenFAST.PerfUnitTest</RootNamespace>
     <AssemblyName>PerfUnitTest</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

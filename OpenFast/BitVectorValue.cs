@@ -52,7 +52,7 @@ namespace OpenFAST
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            BitVectorValue t = obj as BitVectorValue;
+            var t = obj as BitVectorValue;
             if (t==null) return false;
             return t.Value.Equals(_value);
         }

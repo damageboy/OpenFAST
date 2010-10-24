@@ -21,13 +21,12 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System.IO;
 using NUnit.Framework;
-using OpenFAST;
 using OpenFAST.Codec;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
-using OpenFAST.Template.Type;
+using OpenFAST.Template.Types;
 
-namespace UnitTest.Codec
+namespace OpenFAST.UnitTests.Codec
 {
     [TestFixture]
     public class FastDecoderTest

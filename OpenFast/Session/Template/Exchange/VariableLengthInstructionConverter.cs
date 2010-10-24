@@ -21,7 +21,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using OpenFAST.Error;
 using OpenFAST.Template;
-using Type = OpenFAST.Template.Type.FASTType;
+using OpenFAST.Template.Types;
 
 namespace OpenFAST.Session.Template.Exchange
 {
@@ -58,8 +58,8 @@ namespace OpenFAST.Session.Template.Exchange
         {
             if (!field.GetType().Equals(typeof (Scalar)))
                 return false;
-            Type type = ((Scalar) field).Type;
-            return type.Equals(Type.ByteVector) || type.Equals(Type.Unicode);
+            var type = ((Scalar) field).FASTType;
+            return type.Equals(FASTType.ByteVector) || type.Equals(FASTType.Unicode);
         }
     }
 }

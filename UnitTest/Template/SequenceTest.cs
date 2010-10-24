@@ -21,12 +21,11 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System.IO;
 using NUnit.Framework;
-using OpenFAST;
 using OpenFAST.Template;
-using OpenFAST.Template.Type;
-using UnitTest.Test;
+using OpenFAST.Template.Types;
+using OpenFAST.UnitTests.Test;
 
-namespace UnitTest.Template
+namespace OpenFAST.UnitTests.Template
 {
     [TestFixture]
     public class SequenceTest

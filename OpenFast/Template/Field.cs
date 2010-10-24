@@ -87,7 +87,7 @@ namespace OpenFAST.Template
             set { _id = value; }
         }
 
-        public abstract System.Type ValueType { get; }
+        public abstract Type ValueType { get; }
         public abstract string TypeName { get; }
 
         #region Equals

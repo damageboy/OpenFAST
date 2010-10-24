@@ -21,13 +21,12 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System.Xml;
 using NUnit.Framework;
-using OpenFAST;
 using OpenFAST.Template;
 using OpenFAST.Template.Loader;
-using OpenFAST.Template.Type;
-using UnitTest.Test;
+using OpenFAST.Template.Types;
+using OpenFAST.UnitTests.Test;
 
-namespace UnitTest.Template.Loader
+namespace OpenFAST.UnitTests.Template.Loader
 {
     [TestFixture]
     public class StringParserTest : OpenFastTestCase

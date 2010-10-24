@@ -23,8 +23,8 @@ using System;
 using System.IO;
 using OpenFAST.Error;
 using OpenFAST.Template.Operator;
-using OpenFAST.Template.Type;
-using OpenFAST.Template.Type.Codec;
+using OpenFAST.Template.Types;
+using OpenFAST.Template.Types.Codec;
 using OpenFAST.Utility;
 
 namespace OpenFAST.Template
@@ -36,28 +36,28 @@ namespace OpenFAST.Template
         private readonly ScalarValue _initialValue;
         private readonly Operator.Operator _operator;
         private readonly OperatorCodec _operatorCodec;
-        private readonly FASTType _type;
+        private readonly FASTType _fastType;
         private readonly TypeCodec _typeCodec;
         private string _dictionary;
 
-        public Scalar(string name, FASTType type, Operator.Operator op, ScalarValue defaultValue,
+        public Scalar(string name, FASTType fastType, Operator.Operator op, ScalarValue defaultValue,
                       bool optional)
-            : this(new QName(name), type, op, defaultValue, optional)
+            : this(new QName(name), fastType, op, defaultValue, optional)
         {
         }
 
-        public Scalar(QName name, FASTType type, Operator.Operator op, ScalarValue defaultValue,
+        public Scalar(QName name, FASTType fastType, Operator.Operator op, ScalarValue defaultValue,
                       bool optional)
-            : this(name, type, op, op.GetCodec(type), defaultValue, optional)
+            : this(name, fastType, op, op.GetCodec(fastType), defaultValue, optional)
         {
         }
 
-        public Scalar(QName name, FASTType type, OperatorCodec operatorCodec, ScalarValue defaultValue, bool optional)
-            : this(name, type, operatorCodec.Operator, operatorCodec, defaultValue, optional)
+        public Scalar(QName name, FASTType fastType, OperatorCodec operatorCodec, ScalarValue defaultValue, bool optional)
+            : this(name, fastType, operatorCodec.Operator, operatorCodec, defaultValue, optional)
         {
         }
 
-        private Scalar(QName name, FASTType type, Operator.Operator op, OperatorCodec operatorCodec,
+        private Scalar(QName name, FASTType fastType, Operator.Operator op, OperatorCodec operatorCodec,
                        ScalarValue defaultValue, bool optional)
             : base(name, optional)
         {
@@ -65,15 +65,15 @@ namespace OpenFAST.Template
             _operatorCodec = operatorCodec;
             _dictionary = DictionaryFields.Global;
             _defaultValue = defaultValue ?? ScalarValue.Undefined;
-            _type = type;
-            _typeCodec = type.GetCodec(op, optional);
-            _initialValue = ((defaultValue == null) || defaultValue.IsUndefined) ? _type.DefaultValue : defaultValue;
+            _fastType = fastType;
+            _typeCodec = fastType.GetCodec(op, optional);
+            _initialValue = ((defaultValue == null) || defaultValue.IsUndefined) ? _fastType.DefaultValue : defaultValue;
             op.Validate(this);
         }
 
-        public FASTType Type
+        public FASTType FASTType
         {
-            get { return _type; }
+            get { return _fastType; }
         }
 
         public OperatorCodec OperatorCodec
@@ -101,7 +101,7 @@ namespace OpenFAST.Template
             get { return _defaultValue; }
         }
 
-        public override System.Type ValueType
+        public override Type ValueType
         {
             get { return typeof (ScalarValue); }
         }
@@ -184,7 +184,7 @@ namespace OpenFAST.Template
                     {
                         dict = context.GetDictionary(Dictionary);
                         priorValue = context.Lookup(dict, decodeTemplate, key);
-                        ValidateDictionaryTypeAgainstFieldType(priorValue, _type);
+                        ValidateDictionaryTypeAgainstFieldType(priorValue, _fastType);
                     }
 
                     ScalarValue decodedValue = _typeCodec.Decode(inStream);
@@ -200,13 +200,13 @@ namespace OpenFAST.Template
                     {
                         dict = context.GetDictionary(Dictionary);
                         priorValue = context.Lookup(dict, decodeTemplate, key);
-                        ValidateDictionaryTypeAgainstFieldType(priorValue, _type);
+                        ValidateDictionaryTypeAgainstFieldType(priorValue, _fastType);
                     }
 
                     value = _operatorCodec.DecodeEmptyValue(priorValue, this);
                 }
 
-                ValidateDecodedValueIsCorrectForType(value, _type);
+                ValidateDecodedValueIsCorrectForType(value, _fastType);
 
 #warning TODO: Review if this previous "if" statement is needed.
                 // if (Operator != Template.Operator.Operator.DELTA || value != null)
@@ -244,25 +244,25 @@ namespace OpenFAST.Template
 
         public override string ToString()
         {
-            return string.Format("Scalar [name={0}, operator={1}, type={2}, dictionary={3}]", Name, _operator, _type,
+            return string.Format("Scalar [name={0}, operator={1}, type={2}, dictionary={3}]", Name, _operator, _fastType,
                                  _dictionary);
         }
 
         public override IFieldValue CreateValue(string value)
         {
-            return _type.GetValue(value);
+            return _fastType.GetValue(value);
         }
 
         public string Serialize(ScalarValue value)
         {
-            return _type.Serialize(value);
+            return _fastType.Serialize(value);
         }
 
         public override bool Equals(Object other)
         {
             if (ReferenceEquals(other, this))
                 return true;
-            Scalar t = other as Scalar;
+            var t = other as Scalar;
             if (t==null)
                 return false;
             return Equals(t);
@@ -271,7 +271,7 @@ namespace OpenFAST.Template
         internal bool Equals(Scalar other)
         {
             bool equals = EqualsPrivate(Name, other.Name);
-            equals = equals && EqualsPrivate(_type, other._type);
+            equals = equals && EqualsPrivate(_fastType, other._fastType);
             equals = equals && EqualsPrivate(_typeCodec, other._typeCodec);
             equals = equals && EqualsPrivate(_operator, other._operator);
             equals = equals && EqualsPrivate(_operatorCodec, other._operatorCodec);
@@ -294,7 +294,7 @@ namespace OpenFAST.Template
 
         public override int GetHashCode()
         {
-            return QName.GetHashCode() + _type.GetHashCode() + _typeCodec.GetHashCode() + _operator.GetHashCode() +
+            return QName.GetHashCode() + _fastType.GetHashCode() + _typeCodec.GetHashCode() + _operator.GetHashCode() +
                    _operatorCodec.GetHashCode() + _initialValue.GetHashCode() + _dictionary.GetHashCode();
         }
         public OperatorCodec GetOperatorCodec()

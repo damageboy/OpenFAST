@@ -21,12 +21,11 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System.IO;
 using NUnit.Framework;
-using OpenFAST;
 using OpenFAST.Template;
 using OpenFAST.Template.Loader;
-using UnitTest.Test;
+using OpenFAST.UnitTests.Test;
 
-namespace UnitTest
+namespace OpenFAST.UnitTests
 {
     [TestFixture]
     public class TemplateTest : OpenFastTestCase
@@ -44,31 +43,32 @@ namespace UnitTest
 
         #endregion
 
-        private const string SCP_1_1_NS = "http://www.fixprotocol.org/ns/fast/scp/1.1";
-        private const string PRE_TRADE_NS = "http://www.openfast.org/fix44/preTrade";
-        private const string SESSION_NS = "http://www.openfast.org/fix44/session";
-        private const string COMPONENTS_NS = "http://www.openfast.org/fix44/components";
-        private const string FIX_44_NS = "http://www.openfast.org/fix44";
-        private const string EXT_NS = "http://www.openfast.org/ext";
+        private const string Scp11Ns = "http://www.fixprotocol.org/ns/fast/scp/1.1";
+        private const string PreTradeNs = "http://www.openfast.org/fix44/preTrade";
+        private const string SessionNs = "http://www.openfast.org/fix44/session";
+        private const string ComponentsNs = "http://www.openfast.org/fix44/components";
+        private const string Fix44Ns = "http://www.openfast.org/fix44";
+        private const string ExtNs = "http://www.openfast.org/ext";
+
         private IMessageTemplateLoader _loader;
 
         [Test]
         public void TestTemplateExtension()
         {
-            MessageTemplate logon = _loader.TemplateRegistry.GetTemplate(new QName("Logon", SESSION_NS));
-            Assert.IsTrue(logon.HasAttribute(new QName("reset", SCP_1_1_NS)));
+            MessageTemplate logon = _loader.TemplateRegistry.GetTemplate(new QName("Logon", SessionNs));
+            Assert.IsTrue(logon.HasAttribute(new QName("reset", Scp11Ns)));
         }
 
         [Test]
         public void TestTemplates()
         {
-            MessageTemplate quote = _loader.TemplateRegistry.GetTemplate(new QName("Quote", PRE_TRADE_NS));
+            MessageTemplate quote = _loader.TemplateRegistry.GetTemplate(new QName("Quote", PreTradeNs));
 
-            Assert.AreEqual(FIX_44_NS, quote.GetField("QuoteID").QName.Namespace);
-            Assert.IsNotNull(quote.GetField(new QName("Group", EXT_NS)));
+            Assert.AreEqual(Fix44Ns, quote.GetField("QuoteID").QName.Namespace);
+            Assert.IsNotNull(quote.GetField(new QName("Group", ExtNs)));
 
             Assert.AreEqual(1, quote.StaticTemplateReferences.Length);
-            Assert.IsNotNull(quote.GetStaticTemplateReference(new QName("Instrument", COMPONENTS_NS)));
+            Assert.IsNotNull(quote.GetStaticTemplateReference(new QName("Instrument", ComponentsNs)));
         }
     }
 }

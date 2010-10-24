@@ -22,45 +22,45 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System;
 using System.IO;
 using System.Text;
-using OpenFAST.Template.Type;
+using OpenFAST.Template.Types;
 
 namespace OpenFAST.Template
 {
     [Serializable]
     public sealed class ComposedScalar : Field
     {
-        private const System.Type ScalarValueType = null;
+        private const Type ScalarValueType = null;
         private readonly Scalar[] _fields;
-        private readonly FASTType _type;
+        private readonly FASTType _fastType;
         private readonly IComposedValueConverter _valueConverter;
 
-        public ComposedScalar(string name, FASTType type, Scalar[] fields, bool optional,
+        public ComposedScalar(string name, FASTType fastType, Scalar[] fields, bool optional,
                               IComposedValueConverter valueConverter)
-            : this(new QName(name), type, fields, optional, valueConverter)
+            : this(new QName(name), fastType, fields, optional, valueConverter)
         {
         }
 
-        public ComposedScalar(QName name, FASTType type, Scalar[] fields, bool optional,
+        public ComposedScalar(QName name, FASTType fastType, Scalar[] fields, bool optional,
                               IComposedValueConverter valueConverter) : base(name, optional)
         {
             _fields = fields;
             _valueConverter = valueConverter;
-            _type = type;
+            _fastType = fastType;
         }
 
         public override string TypeName
         {
-            get { return _type.Name; }
+            get { return _fastType.Name; }
         }
 
-        public override System.Type ValueType
+        public override Type ValueType
         {
             get { return ScalarValueType; }
         }
 
-        public FASTType Type
+        public FASTType FASTType
         {
-            get { return _type; }
+            get { return _fastType; }
         }
 
         public Scalar[] Fields
@@ -70,7 +70,7 @@ namespace OpenFAST.Template
 
         public override IFieldValue CreateValue(string value)
         {
-            return _type.GetValue(value);
+            return _fastType.GetValue(value);
         }
 
         public override IFieldValue Decode(Stream inStream, Group decodeTemplate, Context context,
@@ -140,7 +140,7 @@ namespace OpenFAST.Template
                 Scalar fld1 = _fields[i];
                 Scalar fld2 = other._fields[i];
 
-                if (!fld2.Type.Equals(fld1.Type))
+                if (!fld2.FASTType.Equals(fld1.FASTType))
                     return false;
                 if (!fld2.TypeCodec.Equals(fld1.TypeCodec))
                     return false;

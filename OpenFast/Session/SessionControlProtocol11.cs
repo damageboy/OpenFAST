@@ -27,8 +27,7 @@ using OpenFAST.Error;
 using OpenFAST.Session.Template.Exchange;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
-using OpenFAST.Utility;
-using Type = OpenFAST.Template.Type.FASTType;
+using OpenFAST.Template.Types;
 
 namespace OpenFAST.Session
 {
@@ -133,17 +132,17 @@ namespace OpenFAST.Session
                 "Alert",
                 new Field[]
                     {
-                        new Scalar("Severity", Type.U32, Operator.None, ScalarValue.Undefined, false),
-                        new Scalar("Code", Type.U32, Operator.None, ScalarValue.Undefined, false),
-                        new Scalar("Value", Type.U32, Operator.None, ScalarValue.Undefined, true),
-                        new Scalar("Description", Type.Ascii, Operator.None, ScalarValue.Undefined, false)
+                        new Scalar("Severity", FASTType.U32, Operator.None, ScalarValue.Undefined, false),
+                        new Scalar("Code", FASTType.U32, Operator.None, ScalarValue.Undefined, false),
+                        new Scalar("Value", FASTType.U32, Operator.None, ScalarValue.Undefined, true),
+                        new Scalar("Description", FASTType.Ascii, Operator.None, ScalarValue.Undefined, false)
                     });
             FASTHelloTemplate = new MessageTemplate(
                 "Hello",
                 new Field[]
                     {
-                        new Scalar("SenderName", Type.Ascii, Operator.None, ScalarValue.Undefined, false),
-                        new Scalar("VendorId", Type.Ascii, Operator.None, ScalarValue.Undefined, true)
+                        new Scalar("SenderName", FASTType.Ascii, Operator.None, ScalarValue.Undefined, false),
+                        new Scalar("VendorId", FASTType.Ascii, Operator.None, ScalarValue.Undefined, true)
                     });
 
             RESET = new ResetMessageObj(FastResetTemplate);
@@ -162,35 +161,35 @@ namespace OpenFAST.Session
                         new Sequence(
                             Qualify("Attributes"), new Field[] {new StaticTemplateReference(Attribute)}, false),
                         new Sequence(
-                            Qualify("Content"), new Field[] {DynamicTemplateReference.INSTANCE}, false)
+                            Qualify("Content"), new Field[] {DynamicTemplateReference.Instance}, false)
                     });
             TemplateName = new MessageTemplate(
                 new QName("TemplateName", Namespace),
                 new Field[]
                     {
-                        new Scalar(Qualify("Ns"), Type.Unicode, Operator.Copy, null, false),
-                        new Scalar(Qualify("Name"), Type.Unicode, Operator.None, null, false)
+                        new Scalar(Qualify("Ns"), FASTType.Unicode, Operator.Copy, null, false),
+                        new Scalar(Qualify("Name"), FASTType.Unicode, Operator.None, null, false)
                     });
             NsName = new MessageTemplate(
                 new QName("NsName", Namespace),
                 new[]
                     {
                         Dict("Ns", false, DictionaryFields.Template),
-                        new Scalar(Qualify("Name"), Type.Unicode, Operator.None, null, false)
+                        new Scalar(Qualify("Name"), FASTType.Unicode, Operator.None, null, false)
                     });
             NsNameWithAuxId = new MessageTemplate(
                 new QName("NsNameWithAuxId", Namespace),
                 new Field[]
                     {
                         new StaticTemplateReference(NsName),
-                        new Scalar(Qualify("AuxId"), Type.Unicode, Operator.None, null, true)
+                        new Scalar(Qualify("AuxId"), FASTType.Unicode, Operator.None, null, true)
                     });
             FieldBase = new MessageTemplate(
                 new QName("PrimFieldBase", Namespace),
                 new Field[]
                     {
                         new StaticTemplateReference(NsNameWithAuxId),
-                        new Scalar(Qualify("Optional"), Type.U32, Operator.None, null, false),
+                        new Scalar(Qualify("Optional"), FASTType.U32, Operator.None, null, false),
                         new StaticTemplateReference(Other)
                     });
             PrimFieldBase = new MessageTemplate(
@@ -198,63 +197,63 @@ namespace OpenFAST.Session
                 new Field[]
                     {
                         new StaticTemplateReference(FieldBase),
-                        new Group(Qualify("Operator"), new Field[] {DynamicTemplateReference.INSTANCE}, true)
+                        new Group(Qualify("Operator"), new Field[] {DynamicTemplateReference.Instance}, true)
                     });
             Int32Instr = new MessageTemplate(
                 new QName("Int32Instr", Namespace),
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBase),
-                        new Scalar(Qualify("InitialValue"), Type.I32, Operator.None, null, true)
+                        new Scalar(Qualify("InitialValue"), FASTType.I32, Operator.None, null, true)
                     });
             Uint32Instr = new MessageTemplate(
                 new QName("UInt32Instr", Namespace),
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBase),
-                        new Scalar(Qualify("InitialValue"), Type.U32, Operator.None, null, true)
+                        new Scalar(Qualify("InitialValue"), FASTType.U32, Operator.None, null, true)
                     });
             Int64Instr = new MessageTemplate(
                 new QName("Int64Instr", Namespace),
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBase),
-                        new Scalar(Qualify("InitialValue"), Type.I64, Operator.None, null, true)
+                        new Scalar(Qualify("InitialValue"), FASTType.I64, Operator.None, null, true)
                     });
             Uint64Instr = new MessageTemplate(
                 new QName("UInt64Instr", Namespace),
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBase),
-                        new Scalar(Qualify("InitialValue"), Type.U64, Operator.None, null, true)
+                        new Scalar(Qualify("InitialValue"), FASTType.U64, Operator.None, null, true)
                     });
             DecimalInstr = new MessageTemplate(
                 new QName("DecimalInstr", Namespace),
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBase),
-                        new Scalar(Qualify("InitialValue"), Type.Decimal, Operator.None, null, true)
+                        new Scalar(Qualify("InitialValue"), FASTType.Decimal, Operator.None, null, true)
                     });
             UnicodeInstr = new MessageTemplate(
                 new QName("UnicodeInstr", Namespace),
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBaseWithLength),
-                        new Scalar(Qualify("InitialValue"), Type.Unicode, Operator.None, null, true)
+                        new Scalar(Qualify("InitialValue"), FASTType.Unicode, Operator.None, null, true)
                     });
             AsciiInstr = new MessageTemplate(
                 new QName("AsciiInstr", Namespace),
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBase),
-                        new Scalar(Qualify("InitialValue"), Type.Ascii, Operator.None, null, true)
+                        new Scalar(Qualify("InitialValue"), FASTType.Ascii, Operator.None, null, true)
                     });
             ByteVectorInstr = new MessageTemplate(
                 new QName("ByteVectorInstr", Namespace),
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBaseWithLength),
-                        new Scalar(Qualify("InitialValue"), Type.ByteVector, Operator.None, null, true)
+                        new Scalar(Qualify("InitialValue"), FASTType.ByteVector, Operator.None, null, true)
                     });
             TemplateDefinition = new MessageTemplate(
                 new QName("TemplateDef", Namespace),
@@ -264,7 +263,7 @@ namespace OpenFAST.Session
                         Unicodeopt("AuxId"), U32Opt("TemplateId"),
                         new StaticTemplateReference(TypeRef), U32("Reset"),
                         new StaticTemplateReference(Other),
-                        new Sequence(Qualify("Instructions"), new Field[] {DynamicTemplateReference.INSTANCE}, false)
+                        new Sequence(Qualify("Instructions"), new Field[] {DynamicTemplateReference.Instance}, false)
                     });
             GroupInstr = new MessageTemplate(
                 new QName("GroupInstr", Namespace),
@@ -273,7 +272,7 @@ namespace OpenFAST.Session
                         new StaticTemplateReference(FieldBase),
                         new StaticTemplateReference(TypeRef),
                         new Sequence(Qualify("Instructions"),
-                                     new Field[] {DynamicTemplateReference.INSTANCE},
+                                     new Field[] {DynamicTemplateReference.Instance},
                                      false)
                     });
             SequenceInstr = new MessageTemplate(
@@ -289,17 +288,17 @@ namespace OpenFAST.Session
                                     new Group(Qualify("Name"),
                                               new Field[] {new StaticTemplateReference(NsNameWithAuxId)}, true),
                                     new Group(Qualify("Operator"),
-                                              new Field[] {DynamicTemplateReference.INSTANCE}, true),
-                                    new Scalar(Qualify("InitialValue"), Type.U32, Operator.None, null, true),
+                                              new Field[] {DynamicTemplateReference.Instance}, true),
+                                    new Scalar(Qualify("InitialValue"), FASTType.U32, Operator.None, null, true),
                                     new StaticTemplateReference(Other)
                                 }, true),
-                        new Sequence(Qualify("Instructions"), new Field[] {DynamicTemplateReference.INSTANCE}, false)
+                        new Sequence(Qualify("Instructions"), new Field[] {DynamicTemplateReference.Instance}, false)
                     });
             Text = new MessageTemplate(
                 Qualify("Text"),
                 new Field[]
                     {
-                        new Scalar(Qualify("Value"), Type.Unicode, Operator.None, ScalarValue.Undefined, false)
+                        new Scalar(Qualify("Value"), FASTType.Unicode, Operator.None, ScalarValue.Undefined, false)
                     });
             CompDecimalInstr = new MessageTemplate(
                 Qualify("CompositeDecimalInstr"),
@@ -311,9 +310,10 @@ namespace OpenFAST.Session
                             new Field[]
                                 {
                                     new Group(
-                                        Qualify("Operator"), new Field[] {DynamicTemplateReference.INSTANCE}, false),
+                                        Qualify("Operator"), new Field[] {DynamicTemplateReference.Instance}, false),
                                     new Scalar(
-                                        Qualify("InitialValue"), Type.I32, Operator.None, ScalarValue.Undefined, true),
+                                        Qualify("InitialValue"), FASTType.I32, Operator.None, ScalarValue.Undefined,
+                                        true),
                                     new StaticTemplateReference(Other)
                                 }, true),
                         new Group(
@@ -322,9 +322,10 @@ namespace OpenFAST.Session
                                 {
                                     new Group(
                                         Qualify("Operator"),
-                                        new Field[] {DynamicTemplateReference.INSTANCE}, false),
+                                        new Field[] {DynamicTemplateReference.Instance}, false),
                                     new Scalar(
-                                        Qualify("InitialValue"), Type.I32, Operator.None, ScalarValue.Undefined, true),
+                                        Qualify("InitialValue"), FASTType.I32, Operator.None, ScalarValue.Undefined,
+                                        true),
                                     new StaticTemplateReference(Other)
                                 }, true)
                     });
@@ -772,12 +773,12 @@ namespace OpenFAST.Session
 
         private static Field U32(string name)
         {
-            return new Scalar(Qualify(name), Type.U32, Operator.None, null, false);
+            return new Scalar(Qualify(name), FASTType.U32, Operator.None, null, false);
         }
 
         private static Field Dict(string name, bool optional, string dictionary)
         {
-            var scalar = new Scalar(Qualify(name), Type.Unicode, Operator.Copy, null, optional)
+            var scalar = new Scalar(Qualify(name), FASTType.Unicode, Operator.Copy, null, optional)
                              {Dictionary = dictionary};
             return scalar;
         }
@@ -789,17 +790,17 @@ namespace OpenFAST.Session
 
         private static Field Unicodeopt(string name)
         {
-            return new Scalar(Qualify(name), Type.Unicode, Operator.None, null, true);
+            return new Scalar(Qualify(name), FASTType.Unicode, Operator.None, null, true);
         }
 
         private static Field Unicode(string name)
         {
-            return new Scalar(Qualify(name), Type.Unicode, Operator.None, null, false);
+            return new Scalar(Qualify(name), FASTType.Unicode, Operator.None, null, false);
         }
 
         private static Field U32Opt(string name)
         {
-            return new Scalar(Qualify(name), Type.U32, Operator.None, null, true);
+            return new Scalar(Qualify(name), FASTType.U32, Operator.None, null, true);
         }
 
         #region Nested type: AlertSessionMessageHandler

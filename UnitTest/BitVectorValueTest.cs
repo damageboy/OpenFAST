@@ -20,9 +20,8 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using NUnit.Framework;
-using OpenFAST;
 
-namespace UnitTest
+namespace OpenFAST.UnitTests
 {
     [TestFixture]
     public class BitVectorValueTest

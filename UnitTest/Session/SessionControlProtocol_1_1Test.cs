@@ -20,12 +20,11 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using NUnit.Framework;
-using OpenFAST;
 using OpenFAST.Session;
-using UnitTest.Test;
+using OpenFAST.UnitTests.Test;
 using OpenFAST.Template;
 
-namespace UnitTest.Session
+namespace OpenFAST.UnitTests.Session
 {
     [TestFixture]
     public class SessionControlProtocol_1_1Test : OpenFastTestCase
@@ -41,7 +40,7 @@ namespace UnitTest.Session
         [Test]
         public void TestSimpleCreateTemplateDefinitionMessage()
         {
-            Message templateDef = SCP_1_1.CreateTemplateDefinitionMessage(ObjectMother.QuoteTemplate());
+            Message templateDef = SCP_1_1.CreateTemplateDefinitionMessage(ObjectMother.QuoteTemplate);
             Assert.AreEqual("Quote", templateDef.GetString("Name"));
             SequenceValue instructions = templateDef.GetSequence("Instructions");
             Assert.AreEqual("bid", instructions[0].GetGroup(0).GetString("Name"));
@@ -50,40 +49,40 @@ namespace UnitTest.Session
         [Test]
         public void TestSimpleCreateTemplateFromMessage()
         {
-            Message templateDef = SCP_1_1.CreateTemplateDefinitionMessage(ObjectMother.QuoteTemplate());
+            Message templateDef = SCP_1_1.CreateTemplateDefinitionMessage(ObjectMother.QuoteTemplate);
             MessageTemplate template = SCP_1_1.CreateTemplateFromMessage(templateDef, TemplateRegistryFields.Null);
-            Assert.AreEqual(ObjectMother.QuoteTemplate(), template);
+            Assert.AreEqual(ObjectMother.QuoteTemplate, template);
         }
         [Test]
         public void TestComplexCreateTemplateDefinitionMessage()
         {
-            Message templateDef = SCP_1_1.CreateTemplateDefinitionMessage(ObjectMother.AllocationInstruction());
+            Message templateDef = SCP_1_1.CreateTemplateDefinitionMessage(ObjectMother.AllocationInstruction);
             Assert.AreEqual("AllocInstrctn", templateDef.GetString("Name"));
         }
         [Test]
         public void TestComplexCreateTemplateFromMessage()
         {
-            Message templateDef = SCP_1_1.CreateTemplateDefinitionMessage(ObjectMother.AllocationInstruction());
+            Message templateDef = SCP_1_1.CreateTemplateDefinitionMessage(ObjectMother.AllocationInstruction);
             MessageTemplate template = SCP_1_1.CreateTemplateFromMessage(templateDef, TemplateRegistryFields.Null);
-            Assert.AreEqual(ObjectMother.AllocationInstruction(), template);
+            Assert.AreEqual(ObjectMother.AllocationInstruction, template);
         }
         [Test]
         public void TestCreateTemplateDeclarationMessage()
         {
-            Message templateDecl = SCP_1_1.CreateTemplateDeclarationMessage(ObjectMother.QuoteTemplate(), 104);
+            Message templateDecl = SCP_1_1.CreateTemplateDeclarationMessage(ObjectMother.QuoteTemplate, 104);
             Assert.AreEqual("Quote", templateDecl.GetString("Name"));
             Assert.AreEqual(104, templateDecl.GetInt("TemplateId"));
         }
         [Test]
         public void TestTemplateRef()
         {
-            Message templateDef = SCP_1_1.CreateTemplateDefinitionMessage(ObjectMother.BatchTemplate());
+            Message templateDef = SCP_1_1.CreateTemplateDefinitionMessage(ObjectMother.BatchTemplate);
             Assert.AreEqual("Header", templateDef.GetSequence("Instructions")[0].GetGroup(0).GetString("Name"));
             Assert.AreEqual(SessionControlProtocol11.DynTempRefMessage, templateDef.GetSequence("Instructions")[1].GetGroup(0)
                     .GetSequence("Instructions")[0].GetGroup(0));
             BasicTemplateRegistry registry = new BasicTemplateRegistry();
-            registry.Register(24, ObjectMother.HeaderTemplate());
-            Assert.AreEqual(ObjectMother.BatchTemplate(), SCP_1_1.CreateTemplateFromMessage(templateDef, registry));
+            registry.Register(24, ObjectMother.HeaderTemplate);
+            Assert.AreEqual(ObjectMother.BatchTemplate, SCP_1_1.CreateTemplateFromMessage(templateDef, registry));
         }
 
     }

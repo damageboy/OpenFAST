@@ -24,22 +24,17 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using NUnit.Framework;
-using OpenFAST;
 using OpenFAST.Codec;
 using OpenFAST.Template;
 using OpenFAST.Template.Loader;
 using OpenFAST.Template.Operator;
-using OpenFAST.Template.Type;
-using OpenFAST.Template.Type.Codec;
+using OpenFAST.Template.Types;
+using OpenFAST.Template.Types.Codec;
 
-namespace UnitTest.Test
+namespace OpenFAST.UnitTests.Test
 {
     public abstract class OpenFastTestCase
     {
-        protected static readonly ScalarValue Null = ScalarValue.Null;
-
-        protected static readonly ScalarValue Undef = ScalarValue.Undefined;
-
         protected static DecimalValue Decimal(double value)
         {
             return new DecimalValue(value);
@@ -126,7 +121,7 @@ namespace UnitTest.Test
         {
             return ByteUtil.ConvertHexStringToByteArray(hexString);
         }
-        protected ByteVectorValue ByteVector(String hexString)
+        protected static ByteVectorValue ByteVector(String hexString)
         {
             return Byte(Byte(hexString));
         }
@@ -174,7 +169,7 @@ namespace UnitTest.Test
                                                         ScalarValue mantissaValue)
         {
             var field = (ComposedScalar) fieldSet.GetField(fieldIndex);
-            Assert.AreEqual(type, field.Type);
+            Assert.AreEqual(type, field.FASTType);
             Assert.AreEqual(name, field.Name);
 
             Scalar[] fields = field.Fields;
@@ -190,7 +185,7 @@ namespace UnitTest.Test
                                                         ScalarValue exponentValue, Operator mantissaOp,
                                                         ScalarValue mantissaValue)
         {
-            Assert.AreEqual(type, field.Type);
+            Assert.AreEqual(type, field.FASTType);
             Assert.AreEqual(name, field.Name);
             Scalar[] fields = field.Fields;
             Assert.AreEqual(exponentOp, fields[0].Operator);
@@ -209,7 +204,7 @@ namespace UnitTest.Test
 
         protected static void AssertSequenceLengthField(Sequence sequence, String name, FASTType type, Operator op)
         {
-            Assert.AreEqual(type, sequence.Length.Type);
+            Assert.AreEqual(type, sequence.Length.FASTType);
             Assert.AreEqual(name, sequence.Length.Name);
             Assert.AreEqual(op, sequence.Length.Operator);
         }
@@ -238,7 +233,7 @@ namespace UnitTest.Test
         private static void AssertScalarField(Scalar field, FASTType type, string name)
         {
             Assert.AreEqual(name, field.Name);
-            Assert.AreEqual(type, field.Type);
+            Assert.AreEqual(type, field.FASTType);
         }
 
         protected static XmlDocument Document(String xml)
@@ -260,7 +255,7 @@ namespace UnitTest.Test
                                                 ScalarValue defaultVal, bool optional)
         {
             var qname = new QName(name, ns);
-            Assert.AreEqual(type, scalar.Type);
+            Assert.AreEqual(type, scalar.FASTType);
             Assert.AreEqual(op, scalar.Operator);
             Assert.AreEqual(qname, scalar.QName);
             var keyName = new QName(key, keyNamespace);

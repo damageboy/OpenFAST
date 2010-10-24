@@ -22,7 +22,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System;
 using System.IO;
 using OpenFAST.Error;
-using OpenFAST.Template.Type;
+using OpenFAST.Template.Types;
 
 namespace OpenFAST.Template
 {
@@ -39,7 +39,7 @@ namespace OpenFAST.Template
         {
         }
 
-        public new static System.Type ValueType
+        public new static Type ValueType
         {
             get { return typeof (Message); }
         }

@@ -35,7 +35,7 @@ namespace OpenFAST.Session.Template.Exchange
         public virtual Field Convert(GroupValue groupValue, ITemplateRegistry templateRegistry,
                                      ConversionContext context)
         {
-            return DynamicTemplateReference.INSTANCE;
+            return DynamicTemplateReference.Instance;
         }
 
         public virtual GroupValue Convert(Field field, ConversionContext context)

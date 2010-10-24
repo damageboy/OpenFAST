@@ -20,13 +20,12 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System.Xml;
-using OpenFAST;
 using OpenFAST.Template;
 using OpenFAST.Template.Loader;
-using UnitTest.Test;
+using OpenFAST.UnitTests.Test;
 using NUnit.Framework;
 
-namespace UnitTest.Template.Loader
+namespace OpenFAST.UnitTests.Template.Loader
 {
     [TestFixture]
     public class SequenceParserTest : OpenFastTestCase

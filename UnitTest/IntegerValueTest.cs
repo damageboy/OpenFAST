@@ -22,9 +22,9 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System;
 using NUnit.Framework;
 using OpenFAST.Error;
-using UnitTest.Test;
+using OpenFAST.UnitTests.Test;
 
-namespace UnitTest
+namespace OpenFAST.UnitTests
 {
     [TestFixture]
     public class IntegerValueTest : OpenFastTestCase

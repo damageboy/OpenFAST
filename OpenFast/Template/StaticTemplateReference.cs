@@ -39,7 +39,7 @@ namespace OpenFAST.Template
             get { return null; }
         }
 
-        public override System.Type ValueType
+        public override Type ValueType
         {
             get { return null; }
         }

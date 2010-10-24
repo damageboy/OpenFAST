@@ -23,8 +23,8 @@ using System;
 using System.Text;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
+using OpenFAST.Template.Types;
 using OpenFAST.Utility;
-using Type = OpenFAST.Template.Type.FASTType;
 
 namespace OpenFAST
 {
@@ -94,12 +94,12 @@ namespace OpenFAST
                 Scalar scalar;
                 if (_group.TryGetIntrospectiveField(fieldName, out scalar))
                 {
-                    if (scalar.Type.Equals(Type.Unicode) ||
-                        scalar.Type.Equals(Type.String) ||
-                        scalar.Type.Equals(Type.Ascii))
+                    if (scalar.FASTType.Equals(FASTType.Unicode) ||
+                        scalar.FASTType.Equals(FASTType.String) ||
+                        scalar.FASTType.Equals(FASTType.Ascii))
                         return GetString(scalar.Name).Length;
 
-                    if (scalar.Type.Equals(Type.ByteVector))
+                    if (scalar.FASTType.Equals(FASTType.ByteVector))
                         return GetBytes(scalar.Name).Length;
                 }
             }
@@ -232,7 +232,7 @@ namespace OpenFAST
 
         public bool TryGetValue(string fieldName, out IFieldValue value)
         {
-            int index = -1;
+            int index;
             value = null;
             if (_group.TryGetFieldIndex(fieldName, out index))
             {

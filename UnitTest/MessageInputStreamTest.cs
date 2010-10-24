@@ -20,11 +20,10 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using NUnit.Framework;
-using OpenFAST;
 using OpenFAST.Error;
-using UnitTest.Test;
+using OpenFAST.UnitTests.Test;
 
-namespace UnitTest
+namespace OpenFAST.UnitTests
 {
     [TestFixture]
     public class MessageInputStreamTest : OpenFastTestCase

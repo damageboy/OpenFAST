@@ -22,7 +22,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System.Collections.Generic;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
-using OpenFAST.Template.Type;
+using OpenFAST.Template.Types;
 using OpenFAST.Utility;
 
 namespace OpenFAST.Session.Template.Exchange
@@ -96,7 +96,7 @@ namespace OpenFAST.Session.Template.Exchange
         public override GroupValue Convert(Field field, ConversionContext context)
         {
             var scalar = (Scalar) field;
-            var scalarTemplate = (MessageTemplate) _typeTemplateMap[scalar.Type];
+            var scalarTemplate = (MessageTemplate) _typeTemplateMap[scalar.FASTType];
             var scalarMsg = new Message(scalarTemplate);
             SetNameAndId(scalar, scalarMsg);
             scalarMsg.SetInteger("Optional", scalar.IsOptional ? 1 : 0);

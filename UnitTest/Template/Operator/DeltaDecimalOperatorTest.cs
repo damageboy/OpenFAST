@@ -20,15 +20,14 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using NUnit.Framework;
-using OpenFAST;
 using OpenFAST.Error;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
-using OpenFAST.Template.Type;
-using OpenFAST.Template.Type.Codec;
-using UnitTest.Test;
+using OpenFAST.Template.Types;
+using OpenFAST.Template.Types.Codec;
+using OpenFAST.UnitTests.Test;
 
-namespace UnitTest.Template.Operator
+namespace OpenFAST.UnitTests.Template.Operator
 {
     [TestFixture]
     public class DeltaDecimalOperatorTest : OpenFastTestCase

@@ -22,11 +22,10 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System;
 using System.IO;
 using NUnit.Framework;
-using OpenFAST;
 
-namespace UnitTest.Test
+namespace OpenFAST.UnitTests.Test
 {
-    public class TestUtil
+    public static class TestUtil
     {
         public static byte[] ToByte(StreamWriter stream)
         {

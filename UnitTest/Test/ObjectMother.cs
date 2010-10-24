@@ -20,14 +20,13 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System;
-using OpenFAST;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
-using OpenFAST.Template.Type;
+using OpenFAST.Template.Types;
 
-namespace UnitTest.Test
+namespace OpenFAST.UnitTests.Test
 {
-    public class ObjectMother
+    public static class ObjectMother
     {
         private static MessageTemplate _quoteTemplate;
         private static MessageTemplate _allocationInstruction;
@@ -38,58 +37,118 @@ namespace UnitTest.Test
         public static readonly int QuoteTemplateId = 10;
         public static readonly int AllocInstrctnTemplateId = 25;
 
-        public static MessageTemplate QuoteTemplate()
+        public static MessageTemplate QuoteTemplate
         {
-            if (_quoteTemplate == null)
+            get
             {
-                _quoteTemplate = new MessageTemplate(
-                    "Quote",
-                    new Field[]
-                        {
-                            new Scalar("bid", FASTType.Decimal, Operator.Delta,
-                                       ScalarValue.Undefined, false),
-                            new Scalar("ask", FASTType.Decimal, Operator.Delta,
-                                       ScalarValue.Undefined, false)
-                        });
+                return
+                    _quoteTemplate ??
+                    (_quoteTemplate =
+                     new MessageTemplate(
+                         "Quote",
+                         new Field[]
+                             {
+                                 new Scalar("bid", FASTType.Decimal, Operator.Delta, ScalarValue.Undefined, false),
+                                 new Scalar("ask", FASTType.Decimal, Operator.Delta, ScalarValue.Undefined, false)
+                             }));
             }
-
-            return _quoteTemplate;
         }
 
-        public static MessageTemplate BatchTemplate()
+        public static MessageTemplate BatchTemplate
         {
-            if (_batchTemplate == null)
+            get
             {
-                _batchTemplate = new MessageTemplate(
-                    "Batch",
-                    new Field[]
-                        {
-                            new StaticTemplateReference(HeaderTemplate()),
-                            new Sequence("Batch", new Field[] {DynamicTemplateReference.INSTANCE}, false)
-                        });
+                return
+                    _batchTemplate ??
+                    (_batchTemplate =
+                     new MessageTemplate(
+                         "Batch",
+                         new Field[]
+                             {
+                                 new StaticTemplateReference(HeaderTemplate),
+                                 new Sequence("Batch", new Field[] {DynamicTemplateReference.Instance}, false)
+                             }));
             }
-
-            return _batchTemplate;
         }
 
-        public static MessageTemplate HeaderTemplate()
+        public static MessageTemplate HeaderTemplate
         {
-            if (_headerTemplate == null)
+            get
             {
-                _headerTemplate = new MessageTemplate(
-                    "Header",
-                    new Field[]
-                        {
-                            new Scalar("Sent", FASTType.U32, Operator.Delta, ScalarValue.Undefined, false)
-                        });
+                return
+                    _headerTemplate ??
+                    (_headerTemplate =
+                     new MessageTemplate(
+                         "Header",
+                         new Field[]
+                             {
+                                 new Scalar("Sent", FASTType.U32, Operator.Delta, ScalarValue.Undefined, false)
+                             }));
             }
+        }
 
-            return _headerTemplate;
+        public static MessageTemplate AllocationInstruction
+        {
+            get
+            {
+                return
+                    _allocationInstruction ??
+                    (_allocationInstruction =
+                     new MessageTemplate(
+                         "AllocInstrctn",
+                         new Field[]
+                             {
+                                 Allocations,
+                                 Instrument,
+                                 new Scalar("ID", FASTType.Ascii, Operator.Delta, ScalarValue.Undefined, false),
+                                 new Scalar("Side", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                                 new Scalar("Quantity", FASTType.Decimal, Operator.Delta, ScalarValue.Undefined, false),
+                                 new Scalar("Average Price", FASTType.Decimal, Operator.Delta, ScalarValue.Undefined,
+                                            false)
+                             }));
+            }
+        }
+
+        public static Sequence Allocations
+        {
+            get
+            {
+                return
+                    _allocations ??
+                    (_allocations =
+                     new Sequence(
+                         "Allocations",
+                         new Field[]
+                             {
+                                 new Scalar("Account", FASTType.Ascii, Operator.Copy, ScalarValue.Undefined, false),
+                                 new Scalar("Price", FASTType.Decimal, Operator.Delta, ScalarValue.Undefined, false),
+                                 new Scalar("Quantity", FASTType.Decimal, Operator.Delta, ScalarValue.Undefined, false),
+                                 new Scalar("Average Price", FASTType.Decimal, Operator.Delta, ScalarValue.Undefined,
+                                            false)
+                             }, false));
+            }
+        }
+
+        private static Group Instrument
+        {
+            get
+            {
+                return
+                    _instrument ??
+                    (_instrument =
+                     new Group(
+                         "Instrmt",
+                         new Field[]
+                             {
+                                 new Scalar("Symbol", FASTType.Ascii, Operator.Copy, ScalarValue.Undefined, false),
+                                 new Scalar("MMY", FASTType.Ascii, Operator.Delta, ScalarValue.Undefined, false),
+                             }, false));
+            }
         }
 
         public static Message Quote(double bid, double ask)
         {
-            var quote = new Message(QuoteTemplate());
+            var quote = new Message(QuoteTemplate);
             quote.SetDecimal(1, bid);
             quote.SetDecimal(2, ask);
 
@@ -100,7 +159,7 @@ namespace UnitTest.Test
                                                double quantity, double averagePrice, GroupValue instrument,
                                                SequenceValue allocations)
         {
-            var allocInstrctn = new Message(AllocationInstruction());
+            var allocInstrctn = new Message(AllocationInstruction);
             allocInstrctn.SetFieldValue(1, allocations);
             allocInstrctn.SetFieldValue(2, instrument);
             allocInstrctn.SetFieldValue(3, new StringValue(id));
@@ -111,63 +170,9 @@ namespace UnitTest.Test
             return allocInstrctn;
         }
 
-        public static MessageTemplate AllocationInstruction()
-        {
-            if (_allocationInstruction == null)
-            {
-                _allocationInstruction = new MessageTemplate(
-                    "AllocInstrctn",
-                    new Field[]
-                        {
-                            Allocations(),
-                            Instrument(),
-                            new Scalar("ID", FASTType.Ascii, Operator.Delta, ScalarValue.Undefined, false),
-                            new Scalar("Side", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("Quantity", FASTType.Decimal, Operator.Delta, ScalarValue.Undefined, false),
-                            new Scalar("Average Price", FASTType.Decimal, Operator.Delta, ScalarValue.Undefined, false)
-                        });
-            }
-
-            return _allocationInstruction;
-        }
-
-        public static Sequence Allocations()
-        {
-            if (_allocations == null)
-            {
-                _allocations = new Sequence(
-                    "Allocations",
-                    new Field[]
-                        {
-                            new Scalar("Account", FASTType.Ascii, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("Price", FASTType.Decimal, Operator.Delta, ScalarValue.Undefined, false),
-                            new Scalar("Quantity", FASTType.Decimal, Operator.Delta, ScalarValue.Undefined, false),
-                            new Scalar("Average Price", FASTType.Decimal, Operator.Delta, ScalarValue.Undefined, false)
-                        }, false);
-            }
-
-            return _allocations;
-        }
-
-        private static Group Instrument()
-        {
-            if (_instrument == null)
-            {
-                _instrument = new Group(
-                    "Instrmt",
-                    new Field[]
-                        {
-                            new Scalar("Symbol", FASTType.Ascii, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("MMY", FASTType.Ascii, Operator.Delta, ScalarValue.Undefined, false),
-                        }, false);
-            }
-
-            return _instrument;
-        }
-
         public static GroupValue NewInstrument(String symbol, String mmy)
         {
-            return new GroupValue(Instrument(),
+            return new GroupValue(Instrument,
                                   new IFieldValue[] {new StringValue(symbol), new StringValue(mmy)});
         }
 
@@ -176,7 +181,7 @@ namespace UnitTest.Test
         {
             StringValue acct = account != null ? new StringValue(account) : null;
             return new GroupValue(
-                Allocations().Group,
+                Allocations.Group,
                 new IFieldValue[]
                     {
                         acct, new DecimalValue(price), new DecimalValue(quantity), new DecimalValue(0.0)
@@ -190,7 +195,7 @@ namespace UnitTest.Test
 
         private static SequenceValue BasicAllocations()
         {
-            var value = new SequenceValue(AllocationInstruction().GetSequence("Allocations"));
+            var value = new SequenceValue(AllocationInstruction.GetSequence("Allocations"));
             value.Add(NewAllocation("general", 101.0, 15.0));
             value.Add(NewAllocation("specific", 103.0, 10.0));
             return value;

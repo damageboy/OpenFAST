@@ -23,11 +23,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
-using OpenFAST.Error;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
-using OpenFAST.Template.Type;
-using Type = OpenFAST.Template.Type.FASTType;
+using OpenFAST.Template.Types;
 
 namespace OpenFAST.Utility
 {
@@ -194,9 +192,9 @@ namespace OpenFAST.Utility
         public static ComposedScalar ComposedDecimal(QName name, Operator exponentOp, ScalarValue exponentVal,
                                                      Operator mantissaOp, ScalarValue mantissaVal, bool optional)
         {
-            var exponentScalar = new Scalar(Global.CreateImplicitName(name), Type.I32, exponentOp, exponentVal, optional);
-            var mantissaScalar = new Scalar(Global.CreateImplicitName(name), Type.I64, mantissaOp, mantissaVal, false);
-            return new ComposedScalar(name, Type.Decimal, new[] {exponentScalar, mantissaScalar}, optional,
+            var exponentScalar = new Scalar(Global.CreateImplicitName(name), FASTType.I32, exponentOp, exponentVal, optional);
+            var mantissaScalar = new Scalar(Global.CreateImplicitName(name), FASTType.I64, mantissaOp, mantissaVal, false);
+            return new ComposedScalar(name, FASTType.Decimal, new[] {exponentScalar, mantissaScalar}, optional,
                                       new DecimalConverter());
         }
 

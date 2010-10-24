@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using OpenFAST.Error;
-using OpenFAST.Template.Type.Codec;
+using OpenFAST.Template.Types.Codec;
 using OpenFAST.Utility;
 
 namespace OpenFAST.Template
@@ -90,7 +90,7 @@ namespace OpenFAST.Template
             get { return _fields.Length; }
         }
 
-        public override System.Type ValueType
+        public override Type ValueType
         {
             get { return typeof (GroupValue); }
         }

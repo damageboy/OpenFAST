@@ -22,7 +22,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System;
 using System.Collections.Generic;
 using OpenFAST.Error;
-using OpenFAST.Template.Type;
+using OpenFAST.Template.Types;
 
 namespace OpenFAST.Template.Operator
 {
@@ -95,7 +95,7 @@ namespace OpenFAST.Template.Operator
                 return true;
             if (ReferenceEquals(other, null))
                     return false;
-            Operator t = other as Operator;
+            var t = other as Operator;
             if (t == null)
                 return false;
             return t.Equals(_name);

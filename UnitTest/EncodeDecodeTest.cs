@@ -21,13 +21,12 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System.IO;
 using NUnit.Framework;
-using OpenFAST;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
-using OpenFAST.Template.Type;
-using UnitTest.Test;
+using OpenFAST.Template.Types;
+using OpenFAST.UnitTests.Test;
 
-namespace UnitTest
+namespace OpenFAST.UnitTests
 {
     [TestFixture]
     public class EncodeDecodeTest
@@ -122,9 +121,9 @@ namespace UnitTest
             var outStream = new MemoryStream();
             var output = new MessageOutputStream(outStream);
             output.RegisterTemplate(ObjectMother.AllocInstrctnTemplateId,
-                                    ObjectMother.AllocationInstruction());
+                                    ObjectMother.AllocationInstruction);
 
-            var allocations = new SequenceValue(ObjectMother.AllocationInstruction()
+            var allocations = new SequenceValue(ObjectMother.AllocationInstruction
                                                     .GetSequence("Allocations"));
             allocations.Add(ObjectMother.NewAllocation("fortyFiveFund", 22.5, 75.0));
             allocations.Add(ObjectMother.NewAllocation("fortyFund", 24.6, 25.0));
@@ -132,7 +131,7 @@ namespace UnitTest
             Message ai1 = ObjectMother.NewAllocInstrctn("ltg0001", 1, 100.0, 23.4,
                                                         ObjectMother.NewInstrument("CTYA", "200910"), allocations);
 
-            allocations = new SequenceValue(ObjectMother.AllocationInstruction()
+            allocations = new SequenceValue(ObjectMother.AllocationInstruction
                                                 .GetSequence("Allocations"));
             allocations.Add(ObjectMother.NewAllocation("fortyFiveFund", 22.5, 75.0));
             allocations.Add(ObjectMother.NewAllocation("fortyFund", 24.6, 25.0));
@@ -140,7 +139,7 @@ namespace UnitTest
             Message ai2 = ObjectMother.NewAllocInstrctn("ltg0001", 1, 100.0, 23.4,
                                                         ObjectMother.NewInstrument("CTYA", "200910"), allocations);
 
-            allocations = new SequenceValue(ObjectMother.AllocationInstruction()
+            allocations = new SequenceValue(ObjectMother.AllocationInstruction
                                                 .GetSequence("Allocations"));
             allocations.Add(ObjectMother.NewAllocation("fortyFiveFund", 22.5, 75.0));
             allocations.Add(ObjectMother.NewAllocation("fortyFund", 24.6, 25.0));
@@ -156,7 +155,7 @@ namespace UnitTest
             var input = new MessageInputStream(new MemoryStream(
                                                    bytes));
             input.RegisterTemplate(ObjectMother.AllocInstrctnTemplateId,
-                                   ObjectMother.AllocationInstruction());
+                                   ObjectMother.AllocationInstruction);
 
             Message message = input.ReadMessage();
             Assert.AreEqual(ai1, message);

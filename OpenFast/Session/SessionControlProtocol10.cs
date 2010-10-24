@@ -23,8 +23,7 @@ using OpenFAST.Codec;
 using OpenFAST.Error;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
-using OpenFAST.Utility;
-using Type = OpenFAST.Template.Type.FASTType;
+using OpenFAST.Template.Types;
 
 namespace OpenFAST.Session
 {
@@ -44,16 +43,16 @@ namespace OpenFAST.Session
                 "",
                 new Field[]
                     {
-                        new Scalar("Severity", Type.U32, Operator.None, ScalarValue.Undefined, false),
-                        new Scalar("Code", Type.U32, Operator.None, ScalarValue.Undefined, false),
-                        new Scalar("Value", Type.U32, Operator.None, ScalarValue.Undefined, true),
-                        new Scalar("Description", Type.Ascii, Operator.None, ScalarValue.Undefined, false)
+                        new Scalar("Severity", FASTType.U32, Operator.None, ScalarValue.Undefined, false),
+                        new Scalar("Code", FASTType.U32, Operator.None, ScalarValue.Undefined, false),
+                        new Scalar("Value", FASTType.U32, Operator.None, ScalarValue.Undefined, true),
+                        new Scalar("Description", FASTType.Ascii, Operator.None, ScalarValue.Undefined, false)
                     });
             HelloTemplate = new MessageTemplate(
                 "",
                 new Field[]
                     {
-                        new Scalar("SenderName", Type.Ascii, Operator.None, ScalarValue.Undefined, false)
+                        new Scalar("SenderName", FASTType.Ascii, Operator.None, ScalarValue.Undefined, false)
                     });
             ResetHandler = new ResetMessageHandler();
         }
@@ -164,11 +163,11 @@ namespace OpenFAST.Session
 
         #region Nested type: ResetMessageHandler
 
-        public class ResetMessageHandler : IMessageHandler
+        private sealed class ResetMessageHandler : IMessageHandler
         {
             #region IMessageHandler Members
 
-            public virtual void HandleMessage(Message readMessage, Context context, ICoder coder)
+            public void HandleMessage(Message readMessage, Context context, ICoder coder)
             {
                 coder.Reset();
             }

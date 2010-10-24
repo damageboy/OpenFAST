@@ -3,7 +3,7 @@ using OpenFAST;
 using OpenFAST.Session;
 using OpenFAST.Template;
 using OpenFAST.Template.Operator;
-using OpenFAST.Template.Type;
+using OpenFAST.Template.Types;
 
 namespace TCPServer
 {
