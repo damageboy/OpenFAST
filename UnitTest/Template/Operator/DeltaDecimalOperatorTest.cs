@@ -36,7 +36,7 @@ namespace OpenFAST.UnitTests.Template.Operator
         public void TestGetValueToEncodeForMandatory()
         {
             var field = new Scalar("", FASTType.Decimal, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, false);
-            OperatorCodec operatortemp = field.GetOperatorCodec();
+            OperatorCodec operatortemp = field.OperatorCodec;
 
             var value = (DecimalValue)operatortemp.GetValueToEncode(Decimal(9427.55), ScalarValue.Undefined, field);
             Assert.AreEqual(new decimal(9427.55), value.ToBigDecimal());
@@ -57,7 +57,7 @@ namespace OpenFAST.UnitTests.Template.Operator
         public void TestGetValueToEncodeForOptional()
         {
             var field = new Scalar("", FASTType.Decimal, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, true);
-            OperatorCodec operatortemp = field.GetOperatorCodec();
+            OperatorCodec operatortemp = field.OperatorCodec;
 
             var value = (DecimalValue)operatortemp.GetValueToEncode(Decimal(9427.55),
                     ScalarValue.Undefined, field);
@@ -85,23 +85,23 @@ namespace OpenFAST.UnitTests.Template.Operator
         {
             var field = new Scalar("", FASTType.Decimal, OpenFAST.Template.Operator.Operator.Delta, Decimal(12000),
                     false);
-            var value = (DecimalValue)field.GetOperatorCodec()
+            var value = (DecimalValue)field.OperatorCodec
                                                      .GetValueToEncode(Decimal(12000),
                     ScalarValue.Undefined, field);
             Assert.AreEqual(0, value.Mantissa);
             Assert.AreEqual(0, value.Exponent);
 
-            value = (DecimalValue)field.GetOperatorCodec()
+            value = (DecimalValue)field.OperatorCodec
                                         .GetValueToEncode(Decimal(12100), Decimal(12000), field);
             Assert.AreEqual(109, value.Mantissa);
             Assert.AreEqual(-1, value.Exponent);
 
-            value = (DecimalValue)field.GetOperatorCodec()
+            value = (DecimalValue)field.OperatorCodec
                                         .GetValueToEncode(Decimal(12150), Decimal(12100), field);
             Assert.AreEqual(1094, value.Mantissa);
             Assert.AreEqual(-1, value.Exponent);
 
-            value = (DecimalValue)field.GetOperatorCodec()
+            value = (DecimalValue)field.OperatorCodec
                                         .GetValueToEncode(Decimal(12200), Decimal(12150), field);
             Assert.AreEqual(-1093, value.Mantissa);
             Assert.AreEqual(1, value.Exponent);
@@ -126,7 +126,7 @@ namespace OpenFAST.UnitTests.Template.Operator
             try
             {
                 var field = new Scalar("", FASTType.Decimal, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, false);
-                field.GetOperatorCodec()
+                field.OperatorCodec
                      .GetValueToEncode(null, ScalarValue.Undefined, field);
                 Assert.Fail();
             }

@@ -102,6 +102,7 @@ namespace OpenFAST
             return new IntegerValue(_value + addend.ToInt());
         }
 
+        [Obsolete("need?")] // BUG? Do we need this?
         public string Serialize()
         {
             return Convert.ToString(_value);

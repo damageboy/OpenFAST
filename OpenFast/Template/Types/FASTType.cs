@@ -90,6 +90,7 @@ namespace OpenFAST.Template.Types
             return _name;
         }
 
+        [Obsolete("need?")] // BUG? Do we need this?
         public virtual string Serialize(ScalarValue value)
         {
             return value.ToString();

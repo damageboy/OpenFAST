@@ -33,7 +33,6 @@ namespace OpenFAST.Template
         private Dictionary<QName, string> _attributes;
         private string _id;
         private QName _key;
-        private MessageTemplate _template;
 
         protected Field(QName name, bool isOptional)
             : this(name, name, isOptional, null)
@@ -143,19 +142,11 @@ namespace OpenFAST.Template
             _attributes[qname] = value;
         }
 
-        public void SetMessageTemplate(MessageTemplate template)
-        {
-            _template = template;
-        }
-
-        public MessageTemplate GetTemplate()
-        {
-            return _template;
-        }
+        public MessageTemplate MessageTemplate { get; set; }
 
         protected bool IsPresent(BitVectorReader presenceMapReader)
         {
-            return (!UsesPresenceMapBit()) || presenceMapReader.Read();
+            return (!UsesPresenceMapBit) || presenceMapReader.Read();
         }
 
         public abstract byte[] Encode(IFieldValue value, Group encodeTemplate, Context context,
@@ -164,7 +155,7 @@ namespace OpenFAST.Template
         public abstract IFieldValue Decode(Stream inStream, Group decodeTemplate, Context context,
                                            BitVectorReader presenceMapReader);
 
-        public abstract bool UsesPresenceMapBit();
+        public abstract bool UsesPresenceMapBit { get; }
 
         public abstract bool IsPresenceMapBitSet(byte[] encoding, IFieldValue fieldValue);
 

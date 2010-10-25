@@ -75,6 +75,7 @@ namespace OpenFAST.Template.Types
             }
         }
 
+        [Obsolete("need?")] // BUG? Do we need this?
         public override string Serialize(ScalarValue value)
         {
             return (((DateValue) value).Value).ToString(_format, _formatProvider);

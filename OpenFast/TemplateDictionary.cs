@@ -29,7 +29,7 @@ namespace OpenFAST
 {
     public sealed class TemplateDictionary : IDictionary
     {
-        private readonly Dictionary<Tuple<Group, QName>, ScalarValue> _table =
+        private readonly Dictionary<Tuple<Group, QName>, ScalarValue> _dictionary =
             new Dictionary<Tuple<Group, QName>, ScalarValue>();
 
         #region IDictionary Members
@@ -37,7 +37,7 @@ namespace OpenFAST
         public ScalarValue Lookup(Group template, QName key, QName applicationType)
         {
             ScalarValue value;
-            if (_table.TryGetValue(Tuple.Create(template, key), out value))
+            if (_dictionary.TryGetValue(Tuple.Create(template, key), out value))
                 return value;
 
             return ScalarValue.Undefined;
@@ -45,12 +45,12 @@ namespace OpenFAST
 
         public void Reset()
         {
-            _table.Clear();
+            _dictionary.Clear();
         }
 
         public void Store(Group group, QName applicationType, QName key, ScalarValue valueToEncode)
         {
-            _table[Tuple.Create(group, key)] = valueToEncode;
+            _dictionary[Tuple.Create(group, key)] = valueToEncode;
         }
 
         #endregion
@@ -58,7 +58,7 @@ namespace OpenFAST
         public override string ToString()
         {
             var builder = new StringBuilder();
-            foreach (var kv in _table.GroupBy(i => i.Key.Item1))
+            foreach (var kv in _dictionary.GroupBy(i => i.Key.Item1))
             {
                 builder.Append("Dictionary: Template=").Append(kv.Key);
 

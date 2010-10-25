@@ -57,7 +57,7 @@ namespace OpenFAST.Session.Template.Exchange
 
         public override Field Convert(GroupValue fieldDef, ITemplateRegistry templateRegistry, ConversionContext context)
         {
-            FASTType type = _templateTypeMap[fieldDef.GetGroup()];
+            FASTType type = _templateTypeMap[fieldDef.Group];
             bool optional = fieldDef.GetBool("Optional");
             ScalarValue initialValue = fieldDef.IsDefined("InitialValue")
                                            ? (ScalarValue) fieldDef.GetValue("InitialValue")
@@ -71,7 +71,7 @@ namespace OpenFAST.Session.Template.Exchange
             if (fieldDef.IsDefined("Operator"))
             {
                 GroupValue operatorGroup = fieldDef.GetGroup("Operator").GetGroup(0);
-                Operator operatortemp = GetOperator(operatorGroup.GetGroup());
+                Operator operatortemp = GetOperator(operatorGroup.Group);
                 scalar = new Scalar(qname, type, operatortemp, initialValue, optional);
                 if (operatorGroup.IsDefined("Dictionary"))
                     scalar.Dictionary = operatorGroup.GetString("Dictionary");

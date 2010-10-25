@@ -32,16 +32,14 @@ namespace OpenFAST.Template
     [Serializable]
     public class Group : Field
     {
-        protected readonly Field[] _fieldDefinitions;
-        protected readonly Dictionary<string, Field> _fieldIdMap;
-        protected readonly Dictionary<Field, int> _fieldIndexMap;
-        protected readonly Dictionary<QName, Field> _fieldNameMap;
-        protected readonly Field[] _fields;
-        protected readonly Dictionary<string, Scalar> _introspectiveFieldMap;
-        protected readonly StaticTemplateReference[] _staticTemplateReferences;
-        protected readonly bool _usesPresenceMapRenamedField;
-        protected string _childNamespace = "";
-        private QName _typeReference;
+        private readonly Field[] _fieldDefinitions;
+        private readonly Dictionary<string, Field> _fieldIdMap;
+        private readonly Dictionary<Field, int> _fieldIndexMap;
+        private readonly Dictionary<QName, Field> _fieldNameMap;
+        private readonly Field[] _fields;
+        private readonly Dictionary<string, Scalar> _introspectiveFieldMap;
+        private readonly StaticTemplateReference[] _staticTemplateReferences;
+        private readonly bool _usesPresenceMapRenamedField;
 
         public Group(string name, Field[] fields, bool optional)
             : this(new QName(name), fields, optional)
@@ -51,6 +49,7 @@ namespace OpenFAST.Template
         public Group(QName name, Field[] fields, bool optional)
             : base(name, optional)
         {
+            ChildNamespace = "";
             if (fields == null) throw new ArgumentNullException("fields");
 
             var expandedFields = new List<Field>();
@@ -76,7 +75,7 @@ namespace OpenFAST.Template
             _fieldNameMap = Util.ToSafeDictionary(_fields, f => f.QName);
             _fieldIdMap = Util.ToSafeDictionary(_fields, f => f.Id);
             _introspectiveFieldMap = ConstructInstrospectiveFields(_fields);
-            _usesPresenceMapRenamedField = _fields.Any(t => t.UsesPresenceMapBit());
+            _usesPresenceMapRenamedField = _fields.Any(t => t.UsesPresenceMapBit);
             _staticTemplateReferences = references.ToArray();
         }
 
@@ -105,17 +104,9 @@ namespace OpenFAST.Template
             get { return _fields; }
         }
 
-        public QName TypeReference
-        {
-            get { return _typeReference; }
-            set { _typeReference = value; }
-        }
+        public QName TypeReference { get; set; }
 
-        public string ChildNamespace
-        {
-            get { return _childNamespace; }
-            set { _childNamespace = value; }
-        }
+        public string ChildNamespace { get; set; }
 
         public StaticTemplateReference[] StaticTemplateReferences
         {
@@ -129,7 +120,7 @@ namespace OpenFAST.Template
 
         public bool HasTypeReference
         {
-            get { return _typeReference != null; }
+            get { return TypeReference != null; }
         }
 
         // BAD ABSTRACTION
@@ -176,7 +167,7 @@ namespace OpenFAST.Template
             var groupValue = (GroupValue) value;
             if (context.TraceEnabled)
             {
-                context.GetEncodeTrace().GroupStart(this);
+                context.EncodeTrace.GroupStart(this);
             }
             var presenceMapBuilder = new BitVectorBuilder(template.MaxPresenceMapSize);
             try
@@ -201,7 +192,7 @@ namespace OpenFAST.Template
                 {
                     byte[] pmap = presenceMapBuilder.BitVector.TruncatedBytes;
                     if (context.TraceEnabled)
-                        context.GetEncodeTrace().Pmap(pmap);
+                        context.EncodeTrace.Pmap(pmap);
                     buffer.Write(pmap, 0, pmap.Length);
                 }
                 foreach (var t in fieldEncodings)
@@ -213,7 +204,7 @@ namespace OpenFAST.Template
                     }
                 }
                 if (context.TraceEnabled)
-                    context.GetEncodeTrace().GroupEnd();
+                    context.EncodeTrace.GroupEnd();
                 return buffer.ToArray();
             }
             catch (IOException e)
@@ -228,7 +219,7 @@ namespace OpenFAST.Template
         {
             try
             {
-                if (!UsesPresenceMapBit() || pmapReader.Read())
+                if (!UsesPresenceMapBit || pmapReader.Read())
                 {
                     if (context.TraceEnabled)
                         context.DecodeTrace.GroupStart(this);
@@ -278,7 +269,7 @@ namespace OpenFAST.Template
                 values[fieldIndex] = _fields[fieldIndex].Decode(inStream, template, context, pmapReader);
             }
 
-            if (pmapReader.HasMoreBitsSet())
+            if (pmapReader.HasMoreBitsSet)
             {
                 Global.ErrorHandler.OnError(null, RepError.PmapTooManyBits,
                                             "The presence map {0} has too many bits for the group {1}", pmapReader, this);
@@ -293,9 +284,9 @@ namespace OpenFAST.Template
         }
 
 
-        public override bool UsesPresenceMapBit()
+        public override bool UsesPresenceMapBit
         {
-            return IsOptional;
+            get { return IsOptional; }
         }
 
         public virtual bool UsesPresenceMap()
@@ -334,7 +325,7 @@ namespace OpenFAST.Template
 
         private QName QnameWithChildNs(string fieldName)
         {
-            return new QName(fieldName, _childNamespace);
+            return new QName(fieldName, ChildNamespace);
         }
 
         private static Dictionary<Field, int> ConstructFieldIndexMap(Field[] fields)
@@ -407,17 +398,6 @@ namespace OpenFAST.Template
         {
             return Name;
         }
-
-        public void SetTypeReference(QName typeReference)
-        {
-            _typeReference = typeReference;
-        }
-
-        public QName GetTypeReference()
-        {
-            return _typeReference;
-        }
-
 
         public virtual StaticTemplateReference GetStaticTemplateReference(string qname)
         {

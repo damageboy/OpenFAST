@@ -97,14 +97,16 @@ namespace OpenFAST.Template.Loader
 
         #endregion
 
-        public void SetErrorHandler(IErrorHandler value)
+        public IErrorHandler ErrorHandler
         {
-            _initialContext.ErrorHandler = value;
+            get { return _initialContext.ErrorHandler; }
+            set { _initialContext.ErrorHandler = value; }
         }
 
-        public void SetTypeMap(Dictionary<string, FASTType> value)
+        public Dictionary<string, FASTType> TypeMap
         {
-            _initialContext.TypeMap = value;
+            get { return _initialContext.TypeMap; }
+            set { _initialContext.TypeMap = value; }
         }
 
         public static ParsingContext CreateInitialContext()

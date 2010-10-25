@@ -28,6 +28,6 @@ namespace OpenFAST
         void AddMessageHandler(MessageTemplate template, IMessageHandler handler);
         void AddMessageHandler(IMessageHandler handler);
         void Close();
-        ITemplateRegistry GetTemplateRegistry();
+        ITemplateRegistry TemplateRegistry { get; }
     }
 }

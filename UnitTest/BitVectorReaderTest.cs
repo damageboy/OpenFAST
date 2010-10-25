@@ -32,7 +32,7 @@ namespace OpenFAST.UnitTests
             var reader = new BitVectorReader(new BitVector(ByteUtil.ConvertBitStringToFastByteArray("11000000")));
             Assert.IsTrue(reader.Read());
             Assert.IsFalse(reader.Read());
-            Assert.IsFalse(reader.HasMoreBitsSet());
+            Assert.IsFalse(reader.HasMoreBitsSet);
         }
     }
 }

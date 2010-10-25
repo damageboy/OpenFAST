@@ -31,8 +31,8 @@ namespace OpenFAST.Template
     {
         public MessageTemplate(QName name, Field[] fields) : base(name, AddTemplateIdField(fields), false)
         {
-            UpdateTemplateReference(_fields);
-            _fields[0].SetMessageTemplate(this);
+            UpdateTemplateReference(Fields);
+            Fields[0].MessageTemplate = this;
         }
 
         public MessageTemplate(string name, Field[] fields) : this(new QName(name), fields)
@@ -67,7 +67,7 @@ namespace OpenFAST.Template
         {
             for (int i = 0; i < fields.Length; i++)
             {
-                fields[i].SetMessageTemplate(this);
+                fields[i].MessageTemplate = this;
             }
         }
 
@@ -133,11 +133,11 @@ namespace OpenFAST.Template
         {
             if (!Name.Equals(other.Name))
                 return false;
-            if (_fields.Length != other._fields.Length)
+            if (Fields.Length != other.Fields.Length)
                 return false;
-            for (int i = 0; i < _fields.Length; i++)
+            for (int i = 0; i < Fields.Length; i++)
             {
-                if (!_fields[i].Equals(other._fields[i]))
+                if (!Fields[i].Equals(other.Fields[i]))
                     return false;
             }
             return true;

@@ -48,7 +48,7 @@ namespace OpenFAST.Session.Template.Exchange
                 String typeRefNs = ""; // context.getNamespace();
                 if (typeRef.IsDefined("Ns"))
                     typeRefNs = typeRef.GetString("Ns");
-                group.SetTypeReference(new QName(typeRefName, typeRefNs));
+                group.TypeReference = new QName(typeRefName, typeRefNs);
             }
             if (fieldDef.IsDefined("AuxId"))
             {
@@ -122,12 +122,11 @@ namespace OpenFAST.Session.Template.Exchange
             for (int i = 0; i < fields.Length; i++)
             {
                 GroupValue fieldDef = instructions[i].GetGroup(0);
-                IFieldInstructionConverter converter = context.GetConverter(fieldDef.GetGroup());
+                IFieldInstructionConverter converter = context.GetConverter(fieldDef.Group);
                 if (converter == null)
-                {
-                    throw new SystemException("Encountered unknown group " + fieldDef.GetGroup() +
-                                              "while processing field instructions " + groupDef.GetGroup());
-                }
+                    throw new SystemException("Encountered unknown group " + fieldDef.Group +
+                                              "while processing field instructions " + groupDef.Group);
+
                 fields[i] = converter.Convert(fieldDef, registry, context);
             }
             return fields;

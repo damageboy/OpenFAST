@@ -67,18 +67,13 @@ namespace OpenFAST.Template
             _defaultValue = defaultValue ?? ScalarValue.Undefined;
             _fastType = fastType;
             _typeCodec = fastType.GetCodec(op, optional);
-            _initialValue = ((defaultValue == null) || defaultValue.IsUndefined) ? _fastType.DefaultValue : defaultValue;
+            _initialValue = (defaultValue == null || defaultValue.IsUndefined) ? _fastType.DefaultValue : defaultValue;
             op.Validate(this);
         }
 
         public FASTType FASTType
         {
             get { return _fastType; }
-        }
-
-        public OperatorCodec OperatorCodec
-        {
-            get { return _operatorCodec; }
         }
 
         public Operator.Operator Operator
@@ -146,14 +141,14 @@ namespace OpenFAST.Template
             byte[] encoding = _typeCodec.Encode(valueToEncode);
             if (context.TraceEnabled && encoding.Length > 0)
             {
-                context.GetEncodeTrace().Field(this, fieldValue, valueToEncode, encoding, presenceMapBuilder.Index);
+                context.EncodeTrace.Field(this, fieldValue, valueToEncode, encoding, presenceMapBuilder.Index);
             }
             return encoding;
         }
 
-        public override bool UsesPresenceMapBit()
+        public override bool UsesPresenceMapBit
         {
-            return _operatorCodec.UsesPresenceMapBit(IsOptional);
+            get { return _operatorCodec.UsesPresenceMapBit(IsOptional); }
         }
 
         public override bool IsPresenceMapBitSet(byte[] encoding, IFieldValue fieldValue)
@@ -253,6 +248,7 @@ namespace OpenFAST.Template
             return _fastType.GetValue(value);
         }
 
+        [Obsolete("need?")] // BUG? Do we need this?
         public string Serialize(ScalarValue value)
         {
             return _fastType.Serialize(value);
@@ -297,9 +293,10 @@ namespace OpenFAST.Template
             return QName.GetHashCode() + _fastType.GetHashCode() + _typeCodec.GetHashCode() + _operator.GetHashCode() +
                    _operatorCodec.GetHashCode() + _initialValue.GetHashCode() + _dictionary.GetHashCode();
         }
-        public OperatorCodec GetOperatorCodec()
+
+        public OperatorCodec OperatorCodec
         {
-            return _operatorCodec;
+            get { return _operatorCodec; }
         }
     }
 }

@@ -57,7 +57,7 @@ namespace OpenFAST.Session.Template.Exchange
                     lengthName = Global.CreateImplicitName(qname);
                 Operator op = Operator.None;
                 if (lengthDef.IsDefined("Operator"))
-                    op = GetOperator(lengthDef.GetGroup("Operator").GetGroup(0).GetGroup());
+                    op = GetOperator(lengthDef.GetGroup("Operator").GetGroup(0).Group);
                 ScalarValue initialValue = ScalarValue.Undefined;
                 if (lengthDef.IsDefined("InitialValue"))
                     initialValue = (ScalarValue) lengthDef.GetValue("InitialValue");

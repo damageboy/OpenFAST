@@ -33,9 +33,9 @@ namespace OpenFAST
 
         private readonly GlobalDictionary _globalDictionary = new GlobalDictionary();
         private readonly TemplateDictionary _templateDictionary = new TemplateDictionary();
+        private readonly ApplicationTypeDictionary _applicationTypeDictionary = new ApplicationTypeDictionary();
 
         private QName _currentApplicationType;
-        private ITrace _encodeTraceInternal;
         private IErrorHandler _errorHandler = ErrorHandlerFields.Default;
         private ITemplateRegistry _templateRegistry = new BasicTemplateRegistry();
 
@@ -43,7 +43,7 @@ namespace OpenFAST
         {
             _dictionaries[DictionaryFields.Global] = _globalDictionary;
             _dictionaries[DictionaryFields.Template] = _templateDictionary;
-            _dictionaries[DictionaryFields.Type] = new ApplicationTypeDictionary();
+            _dictionaries[DictionaryFields.Type] = _applicationTypeDictionary;
         }
 
         public int LastTemplateId { get; set; }
@@ -65,7 +65,7 @@ namespace OpenFAST
         }
 
         public bool TraceEnabled { get; set; }
-
+        public ITrace EncodeTrace { get; set; }
         public ITrace DecodeTrace { get; set; }
 
         public int GetTemplateId(MessageTemplate template)
@@ -119,9 +119,11 @@ namespace OpenFAST
 
         internal IDictionary GetDictionary(string dictionary)
         {
-            // Speed optimization for the well-known dictionaries in case the same constant was used
+            // Speed optimization for the well-known dictionaries in case the same constant was used.
+            // Make sure the string is interned usidng DictionaryFields.InternDictionaryName()
             if (ReferenceEquals(dictionary, DictionaryFields.Global)) return _globalDictionary;
             if (ReferenceEquals(dictionary, DictionaryFields.Template)) return _templateDictionary;
+            if (ReferenceEquals(dictionary, DictionaryFields.Type)) return _applicationTypeDictionary;
 
             IDictionary value;
             if (!_dictionaries.TryGetValue(dictionary, out value))
@@ -144,18 +146,8 @@ namespace OpenFAST
 
         public void StartTrace()
         {
-            SetEncodeTrace(new BasicEncodeTrace());
+            EncodeTrace = new BasicEncodeTrace();
             DecodeTrace = new BasicDecodeTrace();
-        }
-
-        public void SetEncodeTrace(BasicEncodeTrace encodeTrace)
-        {
-            _encodeTraceInternal = encodeTrace;
-        }
-
-        public ITrace GetEncodeTrace()
-        {
-            return _encodeTraceInternal;
         }
     }
 }

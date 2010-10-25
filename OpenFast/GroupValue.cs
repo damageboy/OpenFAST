@@ -242,9 +242,9 @@ namespace OpenFAST
             return false;
         }
 
-        public Group GetGroup()
+        public Group Group
         {
-            return _group;
+            get { return _group; }
         }
 
         public void SetString(Field field, string value)
@@ -330,7 +330,8 @@ namespace OpenFAST
 
         public void SetString(string fieldName, string value)
         {
-            SetFieldValue(fieldName, _group.GetField(fieldName).CreateValue(value));
+            var field = _group.GetField(fieldName);
+            SetFieldValue(field, field.CreateValue(value));
         }
 
         public override string ToString()
@@ -357,7 +358,8 @@ namespace OpenFAST
 
         public void SetFieldValue(string fieldName, string value)
         {
-            SetFieldValue(fieldName, _group.GetField(fieldName).CreateValue(value));
+            var field = _group.GetField(fieldName);
+            SetFieldValue(field, field.CreateValue(value));
         }
 
         public bool IsDefined(int fieldIndex)

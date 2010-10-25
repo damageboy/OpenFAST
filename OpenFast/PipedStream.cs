@@ -26,17 +26,17 @@ namespace OpenFAST
 {
     public sealed class PipedStream : Stream
     {
-        private readonly Stream baseStream;
-        private long position;
+        private readonly Stream _baseStream;
+        private long _position;
 
         public PipedStream()
         {
-            baseStream = new MemoryStream();
+            _baseStream = new MemoryStream();
         }
 
         public PipedStream(Stream stream)
         {
-            baseStream = stream;
+            _baseStream = stream;
         }
 
 
@@ -57,13 +57,13 @@ namespace OpenFAST
 
         public override long Length
         {
-            get { return baseStream.Length; }
+            get { return _baseStream.Length; }
         }
 
         public override long Position
         {
-            get { return position; }
-            set { position = value; }
+            get { return _position; }
+            set { _position = value; }
         }
 
         public override void Flush()
@@ -72,13 +72,13 @@ namespace OpenFAST
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            lock (baseStream)
+            lock (_baseStream)
             {
-                long oldPosition = baseStream.Position;
-                baseStream.Position = position;
-                int bytesRead = baseStream.Read(buffer, offset, count);
-                position = position + bytesRead;
-                baseStream.Position = oldPosition;
+                long oldPosition = _baseStream.Position;
+                _baseStream.Position = _position;
+                int bytesRead = _baseStream.Read(buffer, offset, count);
+                _position = _position + bytesRead;
+                _baseStream.Position = oldPosition;
                 return bytesRead;
             }
         }
@@ -100,13 +100,13 @@ namespace OpenFAST
 
         public override void Write(byte[] buffer, int offset, int count)
         {
-            lock (baseStream)
+            lock (_baseStream)
             {
-                long oldPosition = baseStream.Position;
-                baseStream.Position = position;
-                baseStream.Write(buffer, offset, count);
-                position = position + count;
-                baseStream.Position = oldPosition;
+                long oldPosition = _baseStream.Position;
+                _baseStream.Position = _position;
+                _baseStream.Write(buffer, offset, count);
+                _position = _position + count;
+                _baseStream.Position = oldPosition;
             }
         }
     }

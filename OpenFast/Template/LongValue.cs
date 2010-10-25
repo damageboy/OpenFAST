@@ -95,6 +95,7 @@ namespace OpenFAST.Template
             return new LongValue(_value + addend.ToLong());
         }
 
+        [Obsolete("need?")] // BUG? Do we need this?
         public string Serialize()
         {
             return Convert.ToString(_value);

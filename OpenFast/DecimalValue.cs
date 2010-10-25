@@ -96,6 +96,7 @@ namespace OpenFAST
             return new DecimalValue(Decimal.Add(ToBigDecimal(), addend.ToBigDecimal()));
         }
 
+        [Obsolete("need?")] // BUG? Do we need this?
         public string Serialize()
         {
             return ToString();

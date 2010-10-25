@@ -26,7 +26,7 @@ namespace TCPClient
 
         public void SendMessage(string symbol)
         {
-            var message = new Message(_ses.MessageOutputStream.GetTemplateRegistry().GetTemplate("Arbitry"));
+            var message = new Message(_ses.MessageOutputStream.TemplateRegistry.GetTemplate("Arbitry"));
             message.SetInteger(1, _rnd.Next()%1000);
             message.SetInteger(2, _rnd.Next()%1000);
             message.SetInteger(3, _rnd.Next()%1000);

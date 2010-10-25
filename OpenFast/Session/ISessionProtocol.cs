@@ -28,6 +28,8 @@ namespace OpenFAST.Session
     {
         Message ResetMessage { get; }
         Message CloseMessage { get; }
+        bool SupportsTemplateExchange { get; }
+
         void ConfigureSession(Session session);
 
         Session Connect(string senderName, IConnection connection, ITemplateRegistry inboundRegistry,
@@ -39,7 +41,6 @@ namespace OpenFAST.Session
         bool IsProtocolMessage(Message message);
         void HandleMessage(Session session, Message message);
 
-        bool SupportsTemplateExchange();
         Message CreateTemplateDefinitionMessage(MessageTemplate messageTemplate);
         Message CreateTemplateDeclarationMessage(MessageTemplate messageTemplate, int templateId);
     }

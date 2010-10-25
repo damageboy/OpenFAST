@@ -33,33 +33,35 @@ namespace OpenFAST.Session
         private const int HelloTemplateId = 16000;
         private const int AlertTemplateId = 16001;
 
-        private static readonly MessageTemplate AlertTemplate;
-        private static readonly MessageTemplate HelloTemplate;
-        private static readonly IMessageHandler ResetHandler;
-
-        static SessionControlProtocol10()
-        {
-            AlertTemplate = new MessageTemplate(
+        public static readonly MessageTemplate AlertTemplate =
+            new MessageTemplate(
                 "",
-                new Field[]
+                new[]
                     {
                         new Scalar("Severity", FASTType.U32, Operator.None, ScalarValue.Undefined, false),
                         new Scalar("Code", FASTType.U32, Operator.None, ScalarValue.Undefined, false),
                         new Scalar("Value", FASTType.U32, Operator.None, ScalarValue.Undefined, true),
                         new Scalar("Description", FASTType.Ascii, Operator.None, ScalarValue.Undefined, false)
                     });
-            HelloTemplate = new MessageTemplate(
+
+        public static readonly MessageTemplate HelloTemplate =
+            new MessageTemplate(
                 "",
-                new Field[]
+                new[]
                     {
                         new Scalar("SenderName", FASTType.Ascii, Operator.None, ScalarValue.Undefined, false)
                     });
-            ResetHandler = new ResetMessageHandler();
-        }
+
+        private static readonly IMessageHandler ResetHandler = new ResetMessageHandler();
 
         public override Message CloseMessage
         {
             get { return CreateFastAlertMessage(DynError.Close); }
+        }
+
+        public override bool SupportsTemplateExchange
+        {
+            get { return false; }
         }
 
         public override Session OnNewConnection(string serverName, IConnection connection)
@@ -98,8 +100,8 @@ namespace OpenFAST.Session
 
         public override void ConfigureSession(Session session)
         {
-            RegisterSessionTemplates(session.MessageInputStream.GetTemplateRegistry());
-            RegisterSessionTemplates(session.MessageOutputStream.GetTemplateRegistry());
+            RegisterSessionTemplates(session.MessageInputStream.TemplateRegistry);
+            RegisterSessionTemplates(session.MessageOutputStream.TemplateRegistry);
             session.MessageInputStream.AddMessageHandler(FastResetTemplate, ResetHandler);
             session.MessageOutputStream.AddMessageHandler(FastResetTemplate, ResetHandler);
         }
@@ -144,11 +146,6 @@ namespace OpenFAST.Session
                 return false;
             return (message.Template.Equals(AlertTemplate)) || (message.Template.Equals(HelloTemplate)) ||
                    (message.Template.Equals(FastResetTemplate));
-        }
-
-        public override bool SupportsTemplateExchange()
-        {
-            return false;
         }
 
         public override Message CreateTemplateDeclarationMessage(MessageTemplate messageTemplate, int templateId)

@@ -57,9 +57,9 @@ namespace OpenFAST
             return _vector.IsSet(_index++);
         }
 
-        public virtual bool HasMoreBitsSet()
+        public virtual bool HasMoreBitsSet
         {
-            return _vector.IndexOfLastSet() > _index;
+            get { return _vector.IndexOfLastSet() > _index; }
         }
 
         public override string ToString()
@@ -101,9 +101,9 @@ namespace OpenFAST
                 throw new InvalidOperationException();
             }
 
-            public override bool HasMoreBitsSet()
+            public override bool HasMoreBitsSet
             {
-                return false;
+                get { return false; }
             }
         }
 

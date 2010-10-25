@@ -114,9 +114,9 @@ namespace OpenFAST.Template
                               ScalarValue.Undefined, optional);
         }
 
-        public override bool UsesPresenceMapBit()
+        public override bool UsesPresenceMapBit
         {
-            return _length.UsesPresenceMapBit();
+            get { return _length.UsesPresenceMapBit; }
         }
 
         public override bool IsPresenceMapBitSet(byte[] encoding, IFieldValue fieldValue)

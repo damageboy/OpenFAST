@@ -71,9 +71,9 @@ namespace OpenFAST.Template
             return false;
         }
 
-        public override bool UsesPresenceMapBit()
+        public override bool UsesPresenceMapBit
         {
-            return false;
+            get { return false; }
         }
 
         public override bool Equals(Object obj)

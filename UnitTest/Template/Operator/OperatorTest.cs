@@ -90,10 +90,10 @@ namespace OpenFAST.UnitTests.Template.Operator
         public void TestDeltaValueOperatorForEncodingIntegerValue()
         {
             var field = new Scalar("", FASTType.I32, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, false);
-            Assert.AreEqual(new IntegerValue(15), field.GetOperatorCodec().GetValueToEncode(new IntegerValue(45), new IntegerValue(30), field));
-            Assert.AreEqual(new IntegerValue(-15), field.GetOperatorCodec().GetValueToEncode(new IntegerValue(30), new IntegerValue(45), field));
+            Assert.AreEqual(new IntegerValue(15), field.OperatorCodec.GetValueToEncode(new IntegerValue(45), new IntegerValue(30), field));
+            Assert.AreEqual(new IntegerValue(-15), field.OperatorCodec.GetValueToEncode(new IntegerValue(30), new IntegerValue(45), field));
             field = new Scalar("", FASTType.I32, OpenFAST.Template.Operator.Operator.Delta, new IntegerValue(25), false);
-            Assert.AreEqual(new IntegerValue(5), field.GetOperatorCodec().GetValueToEncode(new IntegerValue(30), ScalarValue.Undefined, field));
+            Assert.AreEqual(new IntegerValue(5), field.OperatorCodec.GetValueToEncode(new IntegerValue(30), ScalarValue.Undefined, field));
         }
         [Test]
         public void TestDeltaValueOperatorForDecodingIntegerValue()
@@ -114,7 +114,7 @@ namespace OpenFAST.UnitTests.Template.Operator
             try
             {
                 var field = new Scalar("", FASTType.I32, OpenFAST.Template.Operator.Operator.Delta, new IntegerValue(25), false);
-                field.GetOperatorCodec().GetValueToEncode(new IntegerValue(30), null, field);
+                field.OperatorCodec.GetValueToEncode(new IntegerValue(30), null, field);
                 Assert.Fail();
             }
             catch (DynErrorException e)
@@ -143,7 +143,7 @@ namespace OpenFAST.UnitTests.Template.Operator
         public void TestDeltaOperatorForOptionalUnsignedInteger()
         {
             var field = new Scalar("", FASTType.U32, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, true);
-            OperatorCodec delta = field.GetOperatorCodec();
+            OperatorCodec delta = field.OperatorCodec;
             Assert.AreEqual(ScalarValue.Null, delta.GetValueToEncode(null, ScalarValue.Undefined, field));
         }
         [Test]

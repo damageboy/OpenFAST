@@ -38,13 +38,13 @@ namespace OpenFAST.Session.Template.Exchange
             bool optional = fieldDef.GetBool("Optional");
             GroupValue exponentDef = fieldDef.GetGroup("Exponent");
             GroupValue exponentOperatorDef = exponentDef.GetGroup("Operator").GetGroup(0);
-            Operator exponentOperator = GetOperator(exponentOperatorDef.GetGroup());
+            Operator exponentOperator = GetOperator(exponentOperatorDef.Group);
             ScalarValue exponentDefaultValue = ScalarValue.Undefined;
             if (exponentDef.IsDefined("InitialValue"))
                 exponentDefaultValue = new IntegerValue(exponentDef.GetInt("InitialValue"));
             GroupValue mantissaDef = fieldDef.GetGroup("Mantissa");
             GroupValue mantissaOperatorDef = mantissaDef.GetGroup("Operator").GetGroup(0);
-            Operator mantissaOperator = GetOperator(mantissaOperatorDef.GetGroup());
+            Operator mantissaOperator = GetOperator(mantissaOperatorDef.Group);
             ScalarValue mantissaDefaultValue = ScalarValue.Undefined;
             if (mantissaDef.IsDefined("InitialValue"))
                 mantissaDefaultValue = new LongValue(mantissaDef.GetInt("InitialValue"));

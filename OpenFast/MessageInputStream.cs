@@ -88,9 +88,10 @@ namespace OpenFAST
             _handlers.Add(handler);
         }
 
-        public ITemplateRegistry GetTemplateRegistry()
+        public ITemplateRegistry TemplateRegistry
         {
-            return _context.TemplateRegistry;
+            get { return _context.TemplateRegistry; }
+            set { _context.TemplateRegistry = value; }
         }
 
         #endregion
@@ -133,11 +134,6 @@ namespace OpenFAST
         public void RegisterTemplate(int templateId, MessageTemplate template)
         {
             _context.RegisterTemplate(templateId, template);
-        }
-
-        public void SetTemplateRegistry(ITemplateRegistry registry)
-        {
-            _context.TemplateRegistry = registry;
         }
 
         //public void  AddTemplateRegisteredListener(TemplateRegisteredListener templateRegisteredListener)

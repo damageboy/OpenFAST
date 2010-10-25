@@ -110,7 +110,7 @@ namespace OpenFAST.Debug
             {
                 builder.Append(Indent(indent));
                 builder.Append(_field.Name).Append("[");
-                if (_field.UsesPresenceMapBit())
+                if (_field.UsesPresenceMapBit)
                     builder.Append("pmapIndex:").Append(_pmapIndex);
                 builder.Append("]: ").Append(_value).Append(" = ").Append(_encoded).Append(" -> ");
                 builder.Append(ByteUtil.ConvertByteArrayToBitString(_encoding));

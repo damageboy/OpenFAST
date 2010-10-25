@@ -47,7 +47,7 @@ namespace OpenFAST.Session.Template.Exchange
             string value;
             if (scalar.TryGetAttribute(FastConstants.LengthField, out value))
             {
-                var lengthDef = new GroupValue(fieldDef.GetGroup().GetGroup("Length"));
+                var lengthDef = new GroupValue(fieldDef.Group.GetGroup("Length"));
                 lengthDef.SetString("Name", value);
                 fieldDef.SetFieldValue("Length", lengthDef);
             }

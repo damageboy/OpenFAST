@@ -275,7 +275,7 @@ namespace OpenFAST.UnitTests.Template.Loader
         public void TestNullDocument()
         {
             var loader = new XmlMessageTemplateLoader();
-            loader.SetErrorHandler(ErrorHandlerFields.Null);
+            loader.ErrorHandler = ErrorHandlerFields.Null;
             Assert.AreEqual(0, loader.Load(null).Length);
         }
 

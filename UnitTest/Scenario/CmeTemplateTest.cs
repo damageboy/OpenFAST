@@ -39,7 +39,7 @@ namespace OpenFAST.UnitTests.Scenario
 
             var is1 = new StreamReader("CME/messages.fast");
             var mis = new MessageInputStream(is1.BaseStream);
-            mis.SetTemplateRegistry(templateLoader.TemplateRegistry);
+            mis.TemplateRegistry = templateLoader.TemplateRegistry;
             Message md = mis.ReadMessage();
             Assert.AreEqual(-5025.0, md.GetSequence("MDEntries")[0].GetDouble("NetChgPrevDay"), .1);
         }

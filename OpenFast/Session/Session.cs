@@ -233,7 +233,7 @@ namespace OpenFAST.Session
 
         public virtual void SendTemplates(ITemplateRegistry registry)
         {
-            if (!_protocol.SupportsTemplateExchange())
+            if (!_protocol.SupportsTemplateExchange)
             {
                 throw new NotSupportedException("The procotol " + _protocol +
                                                 " does not support template exchange.");
@@ -247,24 +247,24 @@ namespace OpenFAST.Session
                 _outStream.WriteMessage(_protocol.CreateTemplateDeclarationMessage(template, templateId));
 
                 // BUG? double check if IsRegister() done on the same object as RegisterTemplate
-                if (!_outStream.GetTemplateRegistry().IsRegistered(template))
+                if (!_outStream.TemplateRegistry.IsRegistered(template))
                     _outStream.RegisterTemplate(templateId, template);
             }
         }
 
         public virtual void AddDynamicTemplateDefinition(MessageTemplate template)
         {
-            _inStream.GetTemplateRegistry().Define(template);
-            _outStream.GetTemplateRegistry().Define(template);
+            _inStream.TemplateRegistry.Define(template);
+            _outStream.TemplateRegistry.Define(template);
         }
 
         public virtual void RegisterDynamicTemplate(QName templateName, int id)
         {
-            if (!_inStream.GetTemplateRegistry().TryRegister(id, templateName))
+            if (!_inStream.TemplateRegistry.TryRegister(id, templateName))
                 throw new ArgumentOutOfRangeException("templateName", templateName,
                                                       "Template is not defined in the input stream.");
 
-            if (!_outStream.GetTemplateRegistry().TryRegister(id, templateName))
+            if (!_outStream.TemplateRegistry.TryRegister(id, templateName))
                 throw new ArgumentOutOfRangeException("templateName", templateName,
                                                       "Template is not defined in the output stream.");
         }

@@ -48,7 +48,7 @@ namespace OpenFAST.Session
 
         public abstract void HandleMessage(Session param1, Message param2);
         public abstract void OnError(Session param1, DynError param2, string param3);
-        public abstract bool SupportsTemplateExchange();
+        public abstract bool SupportsTemplateExchange { get; }
         public abstract void ConfigureSession(Session param1);
         public abstract Message CreateTemplateDeclarationMessage(MessageTemplate param1, int param2);
         public abstract bool IsProtocolMessage(Message param1);
