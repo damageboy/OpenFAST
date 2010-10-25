@@ -29,7 +29,7 @@ using OpenFAST.Template.Types;
 
 namespace OpenFAST.Utility
 {
-    internal static class Util
+    public static class Util
     {
         private static readonly TwinValue NoDiff = new TwinValue(new IntegerValue(0), ByteVectorValue.EmptyBytes);
 
