@@ -84,7 +84,7 @@ namespace OpenFAST.Template
             get { return _fields.Length*2; }
         }
 
-        public virtual int FieldCount
+        public int FieldCount
         {
             get { return _fields.Length; }
         }
@@ -188,7 +188,7 @@ namespace OpenFAST.Template
                 }
                 var buffer = new MemoryStream();
 
-                if (UsesPresenceMap())
+                if (UsesPresenceMap)
                 {
                     byte[] pmap = presenceMapBuilder.BitVector.TruncatedBytes;
                     if (context.TraceEnabled)
@@ -240,10 +240,10 @@ namespace OpenFAST.Template
         }
 
 
-        protected virtual IFieldValue[] DecodeFieldValues(Stream inStream, Group template,
+        private IFieldValue[] DecodeFieldValues(Stream inStream, Group template,
                                                           Context context)
         {
-            if (!UsesPresenceMap())
+            if (!UsesPresenceMap)
             {
                 return DecodeFieldValues(inStream, template, BitVectorReader.Null, context);
             }
@@ -258,7 +258,7 @@ namespace OpenFAST.Template
             return DecodeFieldValues(inStream, template, new BitVectorReader(pmap), context);
         }
 
-        public IFieldValue[] DecodeFieldValues(Stream inStream, Group template,
+        protected IFieldValue[] DecodeFieldValues(Stream inStream, Group template,
                                                BitVectorReader pmapReader, Context context)
         {
             var values = new IFieldValue[_fields.Length];
@@ -289,9 +289,9 @@ namespace OpenFAST.Template
             get { return IsOptional; }
         }
 
-        public virtual bool UsesPresenceMap()
+        protected virtual bool UsesPresenceMap
         {
-            return _usesPresenceMapRenamedField;
+            get { return _usesPresenceMapRenamedField; }
         }
 
         public override IFieldValue CreateValue(string value)
@@ -355,7 +355,7 @@ namespace OpenFAST.Template
             return false;
         }
 
-        public virtual int GetFieldIndex(Field field)
+        public int GetFieldIndex(Field field)
         {
             int index;
             if (!_fieldIndexMap.TryGetValue(field, out index))
@@ -364,32 +364,32 @@ namespace OpenFAST.Template
             return index;
         }
 
-        public virtual Sequence GetSequence(string fieldName)
+        public Sequence GetSequence(string fieldName)
         {
             return (Sequence) GetField(fieldName);
         }
 
-        public virtual Scalar GetScalar(string fieldName)
+        public Scalar GetScalar(string fieldName)
         {
             return (Scalar) GetField(fieldName);
         }
 
-        public virtual Scalar GetScalar(int index)
+        public Scalar GetScalar(int index)
         {
             return (Scalar) _fields[index];
         }
 
-        public virtual Group GetGroup(string fieldName)
+        public Group GetGroup(string fieldName)
         {
             return (Group) GetField(fieldName);
         }
 
-        public virtual bool HasField(string fieldName)
+        public bool HasField(string fieldName)
         {
             return HasField(QnameWithChildNs(fieldName));
         }
 
-        public virtual bool HasField(QName fieldName)
+        public bool HasField(QName fieldName)
         {
             return _fieldNameMap.ContainsKey(fieldName);
         }
@@ -399,12 +399,12 @@ namespace OpenFAST.Template
             return Name;
         }
 
-        public virtual StaticTemplateReference GetStaticTemplateReference(string qname)
+        public StaticTemplateReference GetStaticTemplateReference(string qname)
         {
             return GetStaticTemplateReference(new QName(qname, QName.Namespace));
         }
 
-        public virtual StaticTemplateReference GetStaticTemplateReference(QName qname)
+        public StaticTemplateReference GetStaticTemplateReference(QName qname)
         {
             for (int i = 0; i < _staticTemplateReferences.Length; i++)
                 if (_staticTemplateReferences[i].QName.Equals(qname))
@@ -412,7 +412,7 @@ namespace OpenFAST.Template
             return null;
         }
 
-        public virtual bool TryGetIntrospectiveField(string fieldName, out Scalar field)
+        public bool TryGetIntrospectiveField(string fieldName, out Scalar field)
         {
             return _introspectiveFieldMap.TryGetValue(fieldName, out field);
         }

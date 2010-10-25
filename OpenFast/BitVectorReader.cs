@@ -42,12 +42,7 @@ namespace OpenFAST
             _vector = vector;
         }
 
-        public virtual BitVector BitVector
-        {
-            get { return _vector; }
-        }
-
-        public virtual int Index
+        public int Index
         {
             get { return _index; }
         }
@@ -67,14 +62,9 @@ namespace OpenFAST
             return _vector.ToString();
         }
 
-        public virtual bool Peek()
-        {
-            return _vector.IsSet(_index);
-        }
-
         #region Nested type: InfiniteBitVectorReader
 
-        public sealed class InfiniteBitVectorReader : BitVectorReader
+        private sealed class InfiniteBitVectorReader : BitVectorReader
         {
             internal InfiniteBitVectorReader(BitVector vector) : base(vector)
             {
@@ -90,7 +80,7 @@ namespace OpenFAST
 
         #region Nested type: NullBitVectorReader
 
-        public sealed class NullBitVectorReader : BitVectorReader
+        private sealed class NullBitVectorReader : BitVectorReader
         {
             internal NullBitVectorReader(BitVector vector) : base(vector)
             {

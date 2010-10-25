@@ -42,11 +42,6 @@ namespace OpenFAST
         {
         }
 
-        public override int FieldCount
-        {
-            get { return Values.Length; }
-        }
-
         public MessageTemplate Template
         {
             get { return _template; }

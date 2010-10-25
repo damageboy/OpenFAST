@@ -31,20 +31,20 @@ namespace OpenFAST.Sessions
         }
     }
 
-    public class NullSessionFactory : ISessionFactory
+    public sealed class NullSessionFactory : ISessionFactory
     {
         #region ISessionFactory Members
 
-        public virtual Session Session
+        public Session Session
         {
             get { return null; }
         }
 
-        public virtual void Close()
+        public void Close()
         {
         }
 
-        public virtual IClient GetClient(string serverName)
+        public IClient GetClient(string serverName)
         {
             return null;
         }

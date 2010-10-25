@@ -42,7 +42,7 @@ namespace OpenFAST.Template.Loader
             return scalar;
         }
 
-        protected internal override XmlElement GetOperatorElement(XmlElement fieldNode)
+        protected override XmlElement GetOperatorElement(XmlElement fieldNode)
         {
             XmlElement operatorElement = base.GetOperatorElement(fieldNode);
             if (operatorElement != null && operatorElement.Name.Equals("length"))

@@ -89,41 +89,41 @@ namespace OpenFAST.Template.Loader
             set { _dictionary = DictionaryFields.InternDictionaryName(value); }
         }
 
-        public virtual IErrorHandler ErrorHandler
+        public IErrorHandler ErrorHandler
         {
             get { return _errorHandler ?? _parent.ErrorHandler; }
             set { _errorHandler = value; }
         }
 
-        public virtual ITemplateRegistry TemplateRegistry
+        public ITemplateRegistry TemplateRegistry
         {
             get { return _templateRegistry ?? _parent.TemplateRegistry; }
             set { _templateRegistry = value; }
         }
 
-        public virtual Dictionary<string, FastType> TypeMap
+        public Dictionary<string, FastType> TypeMap
         {
             get { return _typeMap ?? _parent.TypeMap; }
             set { _typeMap = value; }
         }
 
-        public virtual List<IFieldParser> FieldParsers
+        public List<IFieldParser> FieldParsers
         {
             get { return _fieldParsers ?? _parent.FieldParsers; }
             set { _fieldParsers = value; }
         }
 
-        public virtual ParsingContext Parent
+        public ParsingContext Parent
         {
             get { return _parent; }
         }
 
-        public virtual QName Name
+        public QName Name
         {
             get { return _name; }
         }
 
-        public virtual IFieldParser GetFieldParser(XmlElement element)
+        public IFieldParser GetFieldParser(XmlElement element)
         {
             List<IFieldParser> parsers = FieldParsers;
             for (int i = parsers.Count - 1; i >= 0; i--)
@@ -135,7 +135,7 @@ namespace OpenFAST.Template.Loader
             return null;
         }
 
-        public virtual void AddFieldParser(IFieldParser parser)
+        public void AddFieldParser(IFieldParser parser)
         {
             FieldParsers.Add(parser);
         }

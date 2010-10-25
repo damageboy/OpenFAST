@@ -20,6 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System;
+using System.Linq;
 using System.Xml;
 
 namespace OpenFAST.Template.Loader
@@ -41,10 +42,7 @@ namespace OpenFAST.Template.Loader
 
         public virtual bool CanParse(XmlElement element, ParsingContext context)
         {
-            for (int i = 0; i < _parseableNodeNames.Length; i++)
-                if (_parseableNodeNames[i].Equals(element.Name))
-                    return true;
-            return false;
+            return _parseableNodeNames.Any(t => t.Equals(element.Name));
         }
 
         public Field Parse(XmlElement fieldNode, ParsingContext parent)
@@ -57,7 +55,7 @@ namespace OpenFAST.Template.Loader
 
         public abstract Field Parse(XmlElement fieldNode, bool optional, ParsingContext context);
 
-        protected internal static void ParseExternalAttributes(XmlElement element, Field field)
+        protected static void ParseExternalAttributes(XmlElement element, Field field)
         {
             XmlNamedNodeMap attributes = element.Attributes;
             for (int i = 0; i < attributes.Count; i++)
@@ -70,8 +68,7 @@ namespace OpenFAST.Template.Loader
             }
         }
 
-
-        protected internal static XmlElement GetElement(XmlElement fieldNode, int elementIndex)
+        protected static XmlElement GetElement(XmlElement fieldNode, int elementIndex)
         {
             XmlNodeList children = fieldNode.ChildNodes;
             int elemIndex = 0;
@@ -89,7 +86,7 @@ namespace OpenFAST.Template.Loader
             return null;
         }
 
-        protected internal static bool IsElement(XmlNode item)
+        protected static bool IsElement(XmlNode item)
         {
             return Convert.ToInt16(item.NodeType) == (short) XmlNodeType.Element;
         }

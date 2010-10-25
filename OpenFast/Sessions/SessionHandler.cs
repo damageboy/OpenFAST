@@ -23,19 +23,14 @@ namespace OpenFAST.Sessions
 {
     public static class SessionHandlerFields
     {
-        public static readonly ISessionHandler Null;
-
-        static SessionHandlerFields()
-        {
-            Null = new NullSessionHandler();
-        }
+        public static readonly ISessionHandler Null = new NullSessionHandler();
     }
 
-    public class NullSessionHandler : ISessionHandler
+    public sealed class NullSessionHandler : ISessionHandler
     {
         #region ISessionHandler Members
 
-        public virtual void NewSession(Session session)
+        public void NewSession(Session session)
         {
         }
 

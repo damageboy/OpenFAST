@@ -34,7 +34,7 @@ namespace OpenFAST.Template.Loader
             return element.Name.Equals("string");
         }
 
-        protected internal override string GetTypeName(XmlElement fieldNode)
+        protected override string GetTypeName(XmlElement fieldNode)
         {
             if (fieldNode.HasAttribute("charset"))
                 return fieldNode.GetAttribute("charset");

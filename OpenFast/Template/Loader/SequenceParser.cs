@@ -86,12 +86,12 @@ namespace OpenFAST.Template.Loader
                 enclosingInstance = internalInstance;
             }
 
-            protected internal override FastType GetType(XmlElement fieldNode, ParsingContext context)
+            protected override FastType GetType(XmlElement fieldNode, ParsingContext context)
             {
                 return FastType.U32;
             }
 
-            protected internal override QName GetName(XmlElement fieldNode, ParsingContext context)
+            protected override QName GetName(XmlElement fieldNode, ParsingContext context)
             {
                 if (context.Name == null)
                     return Global.CreateImplicitName(context.Parent.Name);

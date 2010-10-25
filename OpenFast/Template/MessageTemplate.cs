@@ -72,9 +72,9 @@ namespace OpenFAST.Template
             }
         }
 
-        public override bool UsesPresenceMap()
+        protected override bool UsesPresenceMap
         {
-            return true;
+            get { return true; }
         }
 
         private static Field[] AddTemplateIdField(Field[] fields)

@@ -58,11 +58,6 @@ namespace OpenFAST
         {
         }
 
-        public virtual int FieldCount
-        {
-            get { return _values.Length; }
-        }
-
         public IFieldValue[] Values
         {
             get { return _values; }

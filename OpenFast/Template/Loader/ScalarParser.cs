@@ -77,12 +77,12 @@ namespace OpenFAST.Template.Loader
             return scalar;
         }
 
-        protected internal virtual QName GetName(XmlElement fieldNode, ParsingContext context)
+        protected virtual QName GetName(XmlElement fieldNode, ParsingContext context)
         {
             return context.Name;
         }
 
-        protected internal virtual FastType GetType(XmlElement fieldNode, ParsingContext context)
+        protected virtual FastType GetType(XmlElement fieldNode, ParsingContext context)
         {
             string typeName = GetTypeName(fieldNode);
             FastType value;
@@ -96,12 +96,12 @@ namespace OpenFAST.Template.Loader
             return value;
         }
 
-        protected internal virtual string GetTypeName(XmlElement fieldNode)
+        protected virtual string GetTypeName(XmlElement fieldNode)
         {
             return fieldNode.Name;
         }
 
-        protected internal virtual XmlElement GetOperatorElement(XmlElement fieldNode)
+        protected virtual XmlElement GetOperatorElement(XmlElement fieldNode)
         {
             return GetElement(fieldNode, 1);
         }

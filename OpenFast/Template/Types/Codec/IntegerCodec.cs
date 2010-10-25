@@ -31,7 +31,7 @@ namespace OpenFAST.Template.Types.Codec
         {
         }
 
-        protected internal static ScalarValue CreateValue(long value)
+        protected static ScalarValue CreateValue(long value)
         {
             if (Util.IsBiggerThanInt(value))
             {

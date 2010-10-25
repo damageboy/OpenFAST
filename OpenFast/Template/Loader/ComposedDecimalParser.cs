@@ -61,10 +61,10 @@ namespace OpenFAST.Template.Loader
                     exponentNode = fieldChildren.Item(i);
                 }
             }
-            return createComposedDecimal(fieldNode, context.Name, optional, mantissaNode, exponentNode, context);
+            return CreateComposedDecimal(fieldNode, context.Name, optional, mantissaNode, exponentNode, context);
         }
 
-        private static Field createComposedDecimal(XmlElement fieldNode, QName name, bool optional,
+        private static Field CreateComposedDecimal(XmlElement fieldNode, QName name, bool optional,
                                                    XmlNode mantissaNode, XmlNode exponentNode,
                                                    ParsingContext context)
         {

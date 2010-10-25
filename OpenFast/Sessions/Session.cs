@@ -28,7 +28,7 @@ using OpenFAST.Template;
 
 namespace OpenFAST.Sessions
 {
-    public class Session : IErrorHandler
+    public sealed class Session : IErrorHandler
     {
         private readonly IConnection _connection;
         private readonly ISessionProtocol _protocol;
@@ -65,9 +65,9 @@ namespace OpenFAST.Sessions
             protocol.ConfigureSession(this);
         }
 
-        public virtual IClient Client { get; set; }
+        public IClient Client { get; set; }
 
-        public virtual IErrorHandler ErrorHandler
+        public IErrorHandler ErrorHandler
         {
             get { return _errorHandler; }
             set
@@ -78,13 +78,14 @@ namespace OpenFAST.Sessions
             }
         }
 
-        public virtual IConnection Connection
+        public IConnection Connection
         {
             get { return _connection; }
         }
 
-        public virtual IMessageListener MessageHandler
+        public IMessageListener MessageHandler
         {
+            get { return _messageListener; }
             set
             {
                 _messageListener = value;
@@ -92,7 +93,7 @@ namespace OpenFAST.Sessions
             }
         }
 
-        public virtual bool IsListening
+        public bool IsListening
         {
             get { return _listening; }
             set
@@ -103,8 +104,9 @@ namespace OpenFAST.Sessions
             }
         }
 
-        public virtual ISessionListener SessionListener
+        public ISessionListener SessionListener
         {
+            get { return _sessionListener; }
             set { _sessionListener = value; }
         }
 
@@ -145,7 +147,7 @@ namespace OpenFAST.Sessions
 
         #endregion
 
-        public virtual void Close()
+        public void Close()
         {
             _listening = false;
             _outStream.WriteMessage(_protocol.CloseMessage);
@@ -155,7 +157,7 @@ namespace OpenFAST.Sessions
         }
 
         // RESPONDER
-        public virtual void Close(DynError error)
+        public void Close(DynError error)
         {
             _listening = false;
             _inStream.Close();
@@ -163,7 +165,7 @@ namespace OpenFAST.Sessions
             _sessionListener.OnClose();
         }
 
-        public virtual void Reset()
+        public void Reset()
         {
             _outStream.Reset();
             _inStream.Reset();
@@ -231,7 +233,7 @@ namespace OpenFAST.Sessions
             _listeningThread.Start();
         }
 
-        public virtual void SendTemplates(ITemplateRegistry registry)
+        public void SendTemplates(ITemplateRegistry registry)
         {
             if (!_protocol.SupportsTemplateExchange)
             {
@@ -252,13 +254,13 @@ namespace OpenFAST.Sessions
             }
         }
 
-        public virtual void AddDynamicTemplateDefinition(MessageTemplate template)
+        public void AddDynamicTemplateDefinition(MessageTemplate template)
         {
             _inStream.TemplateRegistry.Define(template);
             _outStream.TemplateRegistry.Define(template);
         }
 
-        public virtual void RegisterDynamicTemplate(QName templateName, int id)
+        public void RegisterDynamicTemplate(QName templateName, int id)
         {
             if (!_inStream.TemplateRegistry.TryRegister(id, templateName))
                 throw new ArgumentOutOfRangeException("templateName", templateName,

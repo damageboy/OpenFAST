@@ -72,7 +72,7 @@ namespace OpenFAST.Template.Loader
             return fields.ToArray();
         }
 
-        protected internal static QName GetTypeReference(XmlElement templateTag)
+        private static QName GetTypeReference(XmlElement templateTag)
         {
             string typeRefNs = "";
             XmlNodeList typeReferenceTags = templateTag.GetElementsByTagName("typeRef");

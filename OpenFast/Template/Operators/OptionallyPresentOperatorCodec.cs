@@ -20,6 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System;
+using System.Collections.Generic;
 using OpenFAST.Error;
 using OpenFAST.Template.Types;
 
@@ -28,7 +29,7 @@ namespace OpenFAST.Template.Operators
     [Serializable]
     public abstract class OptionallyPresentOperatorCodec : OperatorCodec
     {
-        protected internal OptionallyPresentOperatorCodec(Operator op, FastType[] types)
+        protected internal OptionallyPresentOperatorCodec(Operator op, IEnumerable<FastType> types)
             : base(op, types)
         {
         }

@@ -23,19 +23,14 @@ namespace OpenFAST.Sessions
 {
     public static class SessionListenerFields
     {
-        public static readonly ISessionListener Null;
-
-        static SessionListenerFields()
-        {
-            Null = new NullSessionListener();
-        }
+        public static readonly ISessionListener Null = new NullSessionListener();
     }
 
-    public class NullSessionListener : ISessionListener
+    public sealed class NullSessionListener : ISessionListener
     {
         #region ISessionListener Members
 
-        public virtual void OnClose()
+        public void OnClose()
         {
         }
 
