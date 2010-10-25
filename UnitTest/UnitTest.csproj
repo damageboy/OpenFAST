@@ -107,6 +107,11 @@
     <Compile Include="Template\Operator\DeltaStringOperatorTest.cs" />
     <Compile Include="Template\Operator\OperatorTest.cs" />
     <Compile Include="Template\SequenceTest.cs" />
+    <Compile Include="Template\Types\Codec\SignedIntegerTest.cs" />
+    <Compile Include="Template\Types\Codec\SingleFieldDecimalTest.cs" />
+    <Compile Include="Template\Types\Codec\StringDeltaTest.cs" />
+    <Compile Include="Template\Types\Codec\UnicodeStringTest.cs" />
+    <Compile Include="Template\Types\Codec\UnsignedIntegerTest.cs" />
     <Compile Include="Template\TypeTest.cs" />
     <Compile Include="Template\Types\Codec\AsciiStringTest.cs" />
     <Compile Include="Template\Types\Codec\ByteVectorTest.cs" />
