@@ -2,7 +2,7 @@
 
 namespace OpenFAST.TCPServer
 {
-    public class FASTMessageListener : IMessageListener
+    public class MessageListener : IMessageListener
     {
         //When the client sends a message this will print that on the console.
 

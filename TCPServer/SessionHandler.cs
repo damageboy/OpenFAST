@@ -14,7 +14,7 @@ namespace OpenFAST.TCPServer
         {
             //session.IsListening = true;
             session.ErrorHandler = new FastServer.ServerErrorHandler();
-            session.MessageHandler = new FASTMessageListener();
+            session.MessageHandler = new MessageListener();
             //register a template
             ITemplateRegistry registry = new BasicTemplateRegistry();
             var template = new MessageTemplate(

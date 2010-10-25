@@ -58,7 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FASTMessageListener.cs" />
+    <Compile Include="MessageListener.cs" />
     <Compile Include="FASTServer.cs" />
     <Compile Include="SessionHandler.cs" />
     <Compile Include="Program.cs" />
