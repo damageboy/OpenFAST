@@ -81,7 +81,7 @@
     <Compile Include="MessageTest.cs" />
     <Compile Include="Scenario\CmeTemplateTest.cs" />
     <Compile Include="Scenario\ErrorCasesTest.cs" />
-    <Compile Include="Session\SessionControlProtocol_1_1Test.cs" />
+    <Compile Include="Sessions\SessionControlProtocol_1_1Test.cs" />
     <Compile Include="StringValueTest.cs" />
     <Compile Include="TemplateDictionaryTest.cs" />
     <Compile Include="TemplateTest.cs" />
