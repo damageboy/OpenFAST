@@ -43,7 +43,7 @@ namespace OpenFAST
         {
             _dictionaries[DictionaryFields.Global] = _globalDictionary;
             _dictionaries[DictionaryFields.Template] = _templateDictionary;
-            _dictionaries["type"] = new ApplicationTypeDictionary();
+            _dictionaries[DictionaryFields.Type] = new ApplicationTypeDictionary();
         }
 
         public int LastTemplateId { get; set; }

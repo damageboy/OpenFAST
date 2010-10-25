@@ -92,7 +92,7 @@ namespace OpenFAST.Template
             set
             {
                 if (value == null) throw new ArgumentNullException("value");
-                _dictionary = value;
+                _dictionary = DictionaryFields.InternDictionaryName(value);
             }
         }
 

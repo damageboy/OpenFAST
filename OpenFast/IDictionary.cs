@@ -25,8 +25,28 @@ namespace OpenFAST
 {
     public static class DictionaryFields
     {
-        public const string Template = "template";
         public const string Global = "global";
+        public const string Template = "template";
+        public const string Type = "type";
+
+        /// <summary>
+        /// Improve performance by using globally defined constants above
+        /// <see cref="string.Intern"/> might be a better alternative.
+        /// </summary>
+        internal static string InternDictionaryName(string dictionary)
+        {
+            switch (dictionary)
+            {
+                case Global:
+                    return Global;
+                case Template:
+                    return Template;
+                case Type:
+                    return Type;
+                default:
+                    return dictionary;
+            }
+        }
     }
 
     public interface IDictionary

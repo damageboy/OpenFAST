@@ -35,12 +35,12 @@ namespace OpenFAST.UnitTests
 
             var context = new Context();
 
-            context.Store("type", ObjectMother.AllocationInstruction, new QName("ID"), String("1234"));
+            context.Store(DictionaryFields.Type, ObjectMother.AllocationInstruction, new QName("ID"), String("1234"));
 
             Assert.AreEqual(String("1234"),
-                            context.Lookup("type", ObjectMother.AllocationInstruction, new QName("ID")));
+                            context.Lookup(DictionaryFields.Type, ObjectMother.AllocationInstruction, new QName("ID")));
             Assert.AreEqual(ScalarValue.Undefined,
-                            context.Lookup("type", ObjectMother.Allocations.Group, new QName("ID")));
+                            context.Lookup(DictionaryFields.Type, ObjectMother.Allocations.Group, new QName("ID")));
         }
     }
 }

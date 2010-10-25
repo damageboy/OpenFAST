@@ -86,7 +86,7 @@ namespace OpenFAST.Template.Loader
         public string Dictionary
         {
             get { return _dictionary ?? _parent.Dictionary; }
-            set { _dictionary = value; }
+            set { _dictionary = DictionaryFields.InternDictionaryName(value); }
         }
 
         public virtual IErrorHandler ErrorHandler

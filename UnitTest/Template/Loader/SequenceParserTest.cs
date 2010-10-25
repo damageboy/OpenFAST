@@ -88,7 +88,7 @@ namespace OpenFAST.UnitTests.Template.Loader
 
             Assert.True(_parser.CanParse(node, c));
             var sequence = (Sequence) _parser.Parse(node, c);
-            Assert.AreEqual("type", sequence.Length.Dictionary);
+            Assert.AreEqual(DictionaryFields.Type, sequence.Length.Dictionary);
             Assert.AreEqual("http://openfast.org/override", sequence.Length.QName.Namespace);
             Assert.AreEqual("http://openfast.org/override", sequence.QName.Namespace);
         }
@@ -111,7 +111,7 @@ namespace OpenFAST.UnitTests.Template.Loader
 
             Assert.True(_parser.CanParse(node, c));
             var sequence = (Sequence) _parser.Parse(node, c);
-            Assert.AreEqual("type", sequence.Length.Dictionary);
+            Assert.AreEqual(DictionaryFields.Type, sequence.Length.Dictionary);
             Assert.AreEqual("http://openfast.org/override", sequence.Length.QName.Namespace);
             Assert.AreEqual("http://openfast.org/override", sequence.QName.Namespace);
             Assert.AreEqual(new QName("Seq", "org.openfast.override"), sequence.TypeReference);
