@@ -89,8 +89,8 @@ namespace OpenFAST.UnitTests.Scenario
         {
             const string templateXml = "<template name='SampleTemplate'>" +
                                        "  <decimal name='bid' presence='optional'>" +
-                                       "    <mantissa><copy /></mantissa>" +
-                                       "    <exponent><copy value='-2' /></exponent>" +
+                                       "    <mantissa><copy/></mantissa>" +
+                                       "    <exponent><copy value='-2'/></exponent>" +
                                        "  </decimal>" +
                                        "</template>";
             MessageTemplate template = Template(templateXml);

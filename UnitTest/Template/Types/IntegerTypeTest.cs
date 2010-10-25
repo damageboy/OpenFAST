@@ -19,14 +19,14 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
+using NUnit.Framework;
 using OpenFAST.Codec;
 using OpenFAST.Error;
 using OpenFAST.Template;
-using NUnit.Framework;
 using OpenFAST.Template.Types.Codec;
 using OpenFAST.UnitTests.Test;
 
-namespace OpenFAST.UnitTests.Template.Type
+namespace OpenFAST.UnitTests.Template.Types
 {
     [TestFixture]
     public class IntegerTypeTest : OpenFastTestCase
@@ -43,10 +43,14 @@ namespace OpenFAST.UnitTests.Template.Type
             Assert.AreEqual(4, IntegerCodec.GetSignedIntegerSize(134217727));
             Assert.AreEqual(4, IntegerCodec.GetSignedIntegerSize(-134217728));
         }
+
         [Test]
         public void TestIntegerSizeTooLarge()
         {
-            MessageTemplate template = Template("<template>" + "  <uInt32 name=\"price\"/>" + "</template>");
+            MessageTemplate template = Template(
+                "<template>" +
+                "  <uInt32 name='price'/>" +
+                "</template>");
             FastDecoder decoder = Decoder("11000000 10000001 00111111 01111111 01111111 01111111 11111111", template);
             try
             {

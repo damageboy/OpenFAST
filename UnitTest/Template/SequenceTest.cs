@@ -35,7 +35,7 @@ namespace OpenFAST.UnitTests.Template
         [SetUp]
         protected void SetUp()
         {
-            _template = new MessageTemplate("", new Field[] {});
+            _template = new MessageTemplate("", new Field[0]);
             _context = new Context();
         }
 

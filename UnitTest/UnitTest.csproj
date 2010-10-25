@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{05D5E09C-CEF1-4831-BF48-DAA36977100B}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -108,12 +108,12 @@
     <Compile Include="Template\Operator\OperatorTest.cs" />
     <Compile Include="Template\SequenceTest.cs" />
     <Compile Include="Template\TypeTest.cs" />
-    <Compile Include="Template\Type\Codec\AsciiStringTest.cs" />
-    <Compile Include="Template\Type\Codec\ByteVectorTest.cs" />
-    <Compile Include="Template\Type\Codec\ComposedDecimalTest.cs" />
-    <Compile Include="Template\Type\Codec\DateStringTest.cs" />
-    <Compile Include="Template\Type\IntegerTypeTest.cs" />
-    <Compile Include="Template\Type\StringTypeTest.cs" />
+    <Compile Include="Template\Types\Codec\AsciiStringTest.cs" />
+    <Compile Include="Template\Types\Codec\ByteVectorTest.cs" />
+    <Compile Include="Template\Types\Codec\ComposedDecimalTest.cs" />
+    <Compile Include="Template\Types\Codec\DateStringTest.cs" />
+    <Compile Include="Template\Types\IntegerTypeTest.cs" />
+    <Compile Include="Template\Types\StringTypeTest.cs" />
     <Compile Include="Test\ObjectMother.cs" />
     <Compile Include="Test\OpenFastTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

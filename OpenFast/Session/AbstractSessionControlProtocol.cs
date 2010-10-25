@@ -27,7 +27,7 @@ namespace OpenFAST.Session
 {
     public abstract class AbstractSessionControlProtocol : ISessionProtocol
     {
-        internal static readonly MessageTemplate FastResetTemplate = new MessageTemplate("Reset", new Field[] {});
+        internal static readonly MessageTemplate FastResetTemplate = new MessageTemplate("Reset", new Field[0]);
         private static readonly Message Reset = new ResetMessageObj(FastResetTemplate);
 
         #region ISessionProtocol Members

@@ -39,7 +39,7 @@ namespace OpenFAST.UnitTests.Template
                                      "</template>");
             _template = Template("<template>" +
                                  "  <uInt32 name='quantity'/>" +
-                                 "  <templateRef />" +
+                                 "  <templateRef/>" +
                                  "  <decimal name='price'/>" +
                                  "</template>");
             _message = new Message(_template);

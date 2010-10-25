@@ -20,33 +20,20 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using NUnit.Framework;
-using OpenFAST.Error;
-using OpenFAST.Template.Types;
 using OpenFAST.Template.Types.Codec;
 using OpenFAST.UnitTests.Test;
 
-namespace OpenFAST.UnitTests.Template.Type.Codec
+namespace OpenFAST.UnitTests.Template.Types.Codec
 {
     [TestFixture]
-    public class AsciiStringTest : OpenFastTestCase
+    public class DateStringTest : OpenFastTestCase
     {
         [Test]
-        public void TestDecodeEmptyString()
+        public void TestEncodeDecode()
         {
-            TypeCodec coder = FASTType.Ascii.GetCodec(OpenFAST.Template.Operator.Operator.None, false);
-
-            Assert.AreEqual("", coder.Decode(BitStream("10000000")).ToString());
-            Assert.AreEqual("\u0000", coder.Decode(BitStream("00000000 10000000")).ToString());
-
-            try
-            {
-                coder.Decode(BitStream("00000000 11000001"));
-                Assert.Fail();
-            }
-            catch (RepErrorException e)
-            {
-                Assert.AreEqual(RepError.StringOverlong, e.Error);
-            }
+            AssertEncodeDecode(new DateValue(Date(2007, 7, 7)),
+                               "00110010 00110000 00110000 00110111 00110000 00110111 00110000 10110111",
+                               TypeCodec.DateString);
         }
     }
 }

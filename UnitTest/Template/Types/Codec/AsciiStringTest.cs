@@ -20,23 +20,33 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using NUnit.Framework;
-using OpenFAST.Codec;
-using OpenFAST.Template;
+using OpenFAST.Error;
+using OpenFAST.Template.Types;
+using OpenFAST.Template.Types.Codec;
 using OpenFAST.UnitTests.Test;
 
-namespace OpenFAST.UnitTests.Template.Type
+namespace OpenFAST.UnitTests.Template.Types.Codec
 {
     [TestFixture]
-    public class StringTypeTest : OpenFastTestCase
+    public class AsciiStringTest : OpenFastTestCase
     {
         [Test]
-        public void TestStringWithLength()
+        public void TestDecodeEmptyString()
         {
-            MessageTemplate template = Template("<template name=\"template\">"
-                    + "  <string name=\"message\" charset=\"unicode\"><length name=\"messageLength\"/><copy/></string>" + "</template>");
-            FastDecoder decoder = Decoder("11100000 10000001 10000010 01010101 10101010", template);
-            Message message = decoder.ReadMessage();
-            Assert.AreEqual(2, message.GetInt("messageLength"));
+            TypeCodec coder = FASTType.Ascii.GetCodec(OpenFAST.Template.Operator.Operator.None, false);
+
+            Assert.AreEqual("", coder.Decode(BitStream("10000000")).ToString());
+            Assert.AreEqual("\u0000", coder.Decode(BitStream("00000000 10000000")).ToString());
+
+            try
+            {
+                coder.Decode(BitStream("00000000 11000001"));
+                Assert.Fail();
+            }
+            catch (RepErrorException e)
+            {
+                Assert.AreEqual(RepError.StringOverlong, e.Error);
+            }
         }
     }
 }

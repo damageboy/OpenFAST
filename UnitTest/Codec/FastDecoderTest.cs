@@ -34,7 +34,7 @@ namespace OpenFAST.UnitTests.Codec
         [Test]
         public void TestDecodeEmptyMessage()
         {
-            var messageTemplate = new MessageTemplate("", new Field[] {});
+            var messageTemplate = new MessageTemplate("", new Field[0]);
             Stream input = ByteUtil.CreateByteStream("11000000 11110001");
             var context = new Context();
             context.RegisterTemplate(113, messageTemplate);
@@ -241,7 +241,7 @@ namespace OpenFAST.UnitTests.Codec
         [Test]
         public void TestDecodeSequentialEmptyMessages()
         {
-            var messageTemplate = new MessageTemplate("", new Field[] {});
+            var messageTemplate = new MessageTemplate("", new Field[0]);
             Stream input = ByteUtil.CreateByteStream("11000000 11110001 10000000");
             var context = new Context();
             context.RegisterTemplate(113, messageTemplate);

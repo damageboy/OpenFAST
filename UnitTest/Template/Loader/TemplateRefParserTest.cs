@@ -21,43 +21,51 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System.Xml;
 using NUnit.Framework;
+using OpenFAST.Error;
 using OpenFAST.Template;
 using OpenFAST.Template.Loader;
 using OpenFAST.UnitTests.Test;
-using OpenFAST.Error;
 
 namespace OpenFAST.UnitTests.Template.Loader
 {
     [TestFixture]
     public class TemplateRefParserTest : OpenFastTestCase
     {
-        private TemplateRefParser _parser;
-        private ParsingContext _context;
+        #region Setup/Teardown
+
         [SetUp]
         protected void SetUp()
         {
             _parser = new TemplateRefParser();
             _context = XmlMessageTemplateLoader.CreateInitialContext();
         }
+
+        #endregion
+
+        private TemplateRefParser _parser;
+        private ParsingContext _context;
+
         [Test]
         public void TestParseDynamic()
         {
-            XmlElement dynTempRefDef = Document("<templateRef/>").DocumentElement;
+            XmlElement dynTempRefDef = Document("<templateRef/>");
             Assert.AreEqual(DynamicTemplateReference.Instance, _parser.Parse(dynTempRefDef, _context));
         }
+
         [Test]
         public void TestParseStatic()
         {
-            XmlElement statTempRefDef = Document("<templateRef name=\"base\"/>").DocumentElement;
-            var baset = new MessageTemplate("base", new Field[] { });
+            XmlElement statTempRefDef = Document("<templateRef name='base'/>");
+            var baset = new MessageTemplate("base", new Field[0]);
             _context.TemplateRegistry.Define(baset);
-            var statTempRef = (StaticTemplateReference)_parser.Parse(statTempRefDef, _context);
+            var statTempRef = (StaticTemplateReference) _parser.Parse(statTempRefDef, _context);
             Assert.AreEqual(baset, statTempRef.Template);
         }
+
         [Test]
         public void TestParseStaticWithUndefinedTemplate()
         {
-            XmlElement statTempRefDef = Document("<templateRef name=\"base\"/>").DocumentElement;
+            XmlElement statTempRefDef = Document("<templateRef name='base'/>");
             try
             {
                 _parser.Parse(statTempRefDef, _context);

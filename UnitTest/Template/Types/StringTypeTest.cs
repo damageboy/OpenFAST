@@ -19,20 +19,26 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
-using OpenFAST.Template.Types.Codec;
-using OpenFAST.UnitTests.Test;
 using NUnit.Framework;
+using OpenFAST.Codec;
+using OpenFAST.Template;
+using OpenFAST.UnitTests.Test;
 
-namespace OpenFAST.UnitTests.Template.Type.Codec
+namespace OpenFAST.UnitTests.Template.Types
 {
     [TestFixture]
-    public class DateStringTest : OpenFastTestCase
+    public class StringTypeTest : OpenFastTestCase
     {
         [Test]
-        public void TestEncodeDecode()
+        public void TestStringWithLength()
         {
-            AssertEncodeDecode(new DateValue(Date(2007, 7, 7)), "00110010 00110000 00110000 00110111 00110000 00110111 00110000 10110111",
-                    TypeCodec.DateString);
+            MessageTemplate template = Template(
+                "<template name='template'>" +
+                "  <string name='message' charset='unicode'><length name='messageLength'/><copy/></string>" +
+                "</template>");
+            FastDecoder decoder = Decoder("11100000 10000001 10000010 01010101 10101010", template);
+            Message message = decoder.ReadMessage();
+            Assert.AreEqual(2, message.GetInt("messageLength"));
         }
     }
 }

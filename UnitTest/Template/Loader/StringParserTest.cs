@@ -31,22 +31,29 @@ namespace OpenFAST.UnitTests.Template.Loader
     [TestFixture]
     public class StringParserTest : OpenFastTestCase
     {
-        private ScalarParser _parser;
-        private ParsingContext _context;
+        #region Setup/Teardown
+
         [SetUp]
         protected void SetUp()
         {
             _parser = new StringParser();
             _context = XmlMessageTemplateLoader.CreateInitialContext();
         }
+
+        #endregion
+
+        private ScalarParser _parser;
+        private ParsingContext _context;
+
         [Test]
         public void TestParse()
         {
-            XmlElement unicodeDef = Document("<string name=\"message\" charset=\"unicode\"/>").DocumentElement;
+            XmlElement unicodeDef = Document("<string name='message' charset='unicode'/>");
             Assert.True(_parser.CanParse(unicodeDef, _context));
-            var unicode = (Scalar)_parser.Parse(unicodeDef, _context);
-            AssertScalarField(unicode, FASTType.Unicode, "message", null, "", DictionaryFields.Global, "message", OpenFAST.Template.Operator.Operator.None,
-                    ScalarValue.Undefined, false);
+            var unicode = (Scalar) _parser.Parse(unicodeDef, _context);
+            AssertScalarField(unicode, FASTType.Unicode, "message", null, "", DictionaryFields.Global, "message",
+                              OpenFAST.Template.Operator.Operator.None,
+                              ScalarValue.Undefined, false);
         }
     }
 }

@@ -20,39 +20,45 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System.Xml;
+using NUnit.Framework;
 using OpenFAST.Template;
 using OpenFAST.Template.Loader;
 using OpenFAST.UnitTests.Test;
-using NUnit.Framework;
 
 namespace OpenFAST.UnitTests.Template.Loader
 {
     [TestFixture]
     public class SequenceParserTest : OpenFastTestCase
     {
+        #region Setup/Teardown
 
-        private SequenceParser _parser;
-        private ParsingContext _context;
         [SetUp]
         public void SetUp()
         {
             _parser = new SequenceParser();
             _context = ParsingContext.Null;
         }
+
+        #endregion
+
+        private SequenceParser _parser;
+        private ParsingContext _context;
+
         [Test]
         public void TestInheritDictionary()
         {
             var c = new ParsingContext(_context) {Dictionary = "template"};
-            XmlElement node = Document("<sequence name=\"seq\"></sequence>").DocumentElement;
+            XmlElement node = Document("<sequence name='seq'/>");
 
             Assert.True(_parser.CanParse(node, c));
-            var sequence = (Sequence)_parser.Parse(node, c);
+            var sequence = (Sequence) _parser.Parse(node, c);
             Assert.AreEqual("template", sequence.Length.Dictionary);
 
-            node = Document("<sequence name=\"seq\"><length name=\"explicitLength\"/></sequence>").DocumentElement;
-            sequence = (Sequence)_parser.Parse(node, c);
+            node = Document("<sequence name='seq'><length name='explicitLength'/></sequence>");
+            sequence = (Sequence) _parser.Parse(node, c);
             Assert.AreEqual("template", sequence.Length.Dictionary);
         }
+
         [Test]
         public void TestInheritance()
         {
@@ -60,27 +66,33 @@ namespace OpenFAST.UnitTests.Template.Loader
             const string dictionary = "template";
             var c = new ParsingContext(_context) {Dictionary = dictionary, Namespace = ns};
 
-            XmlElement node = Document("<sequence name=\"seq\"><length name=\"seqLen\"/></sequence>").DocumentElement;
+            XmlElement node = Document("<sequence name='seq'><length name='seqLen'/></sequence>");
 
             Assert.True(_parser.CanParse(node, c));
-            var sequence = (Sequence)_parser.Parse(node, c);
+            var sequence = (Sequence) _parser.Parse(node, c);
             Assert.AreEqual(dictionary, sequence.Length.Dictionary);
             Assert.AreEqual(ns, sequence.Length.QName.Namespace);
             Assert.AreEqual(ns, sequence.QName.Namespace);
         }
+
         [Test]
         public void TestOverride()
         {
             var c = new ParsingContext(_context) {Dictionary = "template", Namespace = "http://openfast.org/test"};
 
-            XmlElement node = Document("<sequence name=\"seq\" ns=\"http://openfast.org/override\" dictionary=\"type\"><length name=\"seqLen\"/></sequence>").DocumentElement;
+            XmlElement node =
+                Document(
+                    "<sequence name='seq' ns='http://openfast.org/override' dictionary='type'>" +
+                    "  <length name='seqLen'/>" +
+                    "</sequence>");
 
             Assert.True(_parser.CanParse(node, c));
-            var sequence = (Sequence)_parser.Parse(node, c);
+            var sequence = (Sequence) _parser.Parse(node, c);
             Assert.AreEqual("type", sequence.Length.Dictionary);
             Assert.AreEqual("http://openfast.org/override", sequence.Length.QName.Namespace);
             Assert.AreEqual("http://openfast.org/override", sequence.QName.Namespace);
         }
+
         [Test]
         public void TestSequenceWithFields()
         {
@@ -90,15 +102,15 @@ namespace OpenFAST.UnitTests.Template.Loader
                             Namespace = "http://openfast.org/test"
                         };
 
-            XmlElement node = Document("<sequence name=\"seq\" ns=\"http://openfast.org/override\" dictionary=\"type\">" +
-                    "<length name=\"seqLen\"/>" +
-                    "<string name=\"value\"><copy/></string>" +
-                    "<uInt32 name=\"date\"><delta/></uInt32>" +
-                    "<typeRef name=\"Seq\" ns=\"org.openfast.override\"/>" +
-                "</sequence>").DocumentElement;
+            XmlElement node = Document("<sequence name='seq' ns='http://openfast.org/override' dictionary='type'>" +
+                                       "  <length name='seqLen'/>" +
+                                       "  <string name='value'><copy/></string>" +
+                                       "  <uInt32 name='date'><delta/></uInt32>" +
+                                       "  <typeRef name='Seq' ns='org.openfast.override'/>" +
+                                       "</sequence>");
 
             Assert.True(_parser.CanParse(node, c));
-            var sequence = (Sequence)_parser.Parse(node, c);
+            var sequence = (Sequence) _parser.Parse(node, c);
             Assert.AreEqual("type", sequence.Length.Dictionary);
             Assert.AreEqual("http://openfast.org/override", sequence.Length.QName.Namespace);
             Assert.AreEqual("http://openfast.org/override", sequence.QName.Namespace);

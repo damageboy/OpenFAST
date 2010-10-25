@@ -37,7 +37,7 @@ namespace OpenFAST.UnitTests.Template
         [SetUp]
         protected void SetUp()
         {
-            _template = new MessageTemplate("", new Field[] {});
+            _template = new MessageTemplate("", new Field[0]);
             _context = new Context();
         }
 
@@ -49,13 +49,15 @@ namespace OpenFAST.UnitTests.Template
         [TestCase]
         public void TestEncode()
         {
-            var firstName = new Scalar("First Name", FASTType.U32, OpenFAST.Template.Operator.Operator.Copy, ScalarValue.Undefined, true);
-            var lastName = new Scalar("Last Name", FASTType.U32, OpenFAST.Template.Operator.Operator.None, ScalarValue.Undefined, false);
+            var firstName = new Scalar("First Name", FASTType.U32, OpenFAST.Template.Operator.Operator.Copy,
+                                       ScalarValue.Undefined, true);
+            var lastName = new Scalar("Last Name", FASTType.U32, OpenFAST.Template.Operator.Operator.None,
+                                      ScalarValue.Undefined, false);
             var theGroup = new Group("guy", new Field[] {firstName, lastName}, false);
 
             byte[] actual = theGroup.Encode(
                 new GroupValue(
-                    new Group("", new Field[] {}, false),
+                    new Group("", new Field[0], false),
                     new IFieldValue[] {new IntegerValue(1), new IntegerValue(2)}),
                 _template, _context);
 
@@ -69,8 +71,10 @@ namespace OpenFAST.UnitTests.Template
         {
             const string message = "11000000 10000010 10000010";
             Stream inp = new MemoryStream(ByteUtil.ConvertBitStringToFastByteArray(message));
-            var firstname = new Scalar("firstName", FASTType.U32, OpenFAST.Template.Operator.Operator.Copy, ScalarValue.Undefined, true);
-            var lastName = new Scalar("lastName", FASTType.U32, OpenFAST.Template.Operator.Operator.None, ScalarValue.Undefined, false);
+            var firstname = new Scalar("firstName", FASTType.U32, OpenFAST.Template.Operator.Operator.Copy,
+                                       ScalarValue.Undefined, true);
+            var lastName = new Scalar("lastName", FASTType.U32, OpenFAST.Template.Operator.Operator.None,
+                                      ScalarValue.Undefined, false);
 
             // MessageInputStream in = new MessageInputStream(new
             // ByteArrayInputStream(message.getBytes()));
@@ -84,7 +88,12 @@ namespace OpenFAST.UnitTests.Template
         public void TestGroupWithoutPresenceMap()
         {
             MessageTemplate template = Template(
-                "<template><group name='priceGroup' presence='optional'><decimal name='price'><delta/></decimal></group></template>");
+                "<template>" +
+                "  <group name='priceGroup' presence='optional'>" +
+                "    <decimal name='price'><delta/></decimal>" +
+                "  </group>" +
+                "</template>");
+
             var encodingContext = new Context();
             var decodingContext = new Context();
             encodingContext.RegisterTemplate(1, template);

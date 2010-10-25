@@ -236,11 +236,11 @@ namespace OpenFAST.UnitTests.Test
             Assert.AreEqual(type, field.FASTType);
         }
 
-        protected static XmlDocument Document(String xml)
+        protected static XmlElement Document(String xml)
         {
             var doc = new XmlDocument();
             doc.LoadXml(xml);
-            return doc;
+            return doc.DocumentElement;
         }
 
         protected static void AssertScalarField(Scalar scalar, FASTType type, String name, String id, String ns,

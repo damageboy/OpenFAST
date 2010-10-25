@@ -34,7 +34,7 @@ namespace OpenFAST.UnitTests.Codec
         [Test]
         public void TestEncodeEmptyMessage()
         {
-            var messageTemplate = new MessageTemplate("", new Field[] {});
+            var messageTemplate = new MessageTemplate("", new Field[0]);
             var message = new Message(messageTemplate);
             var context = new Context();
             context.RegisterTemplate(113, messageTemplate);
@@ -46,22 +46,18 @@ namespace OpenFAST.UnitTests.Codec
         [Test]
         public void TestEncodeMessageWithAllFieldTypes()
         {
-            var template = new MessageTemplate("",
-                                               new Field[]
-                                                   {
-                                                       new Scalar("1", FASTType.String, Operator.Copy,
-                                                                  ScalarValue.Undefined, false),
-                                                       new Scalar("2", FASTType.ByteVector, Operator.Copy,
-                                                                  ScalarValue.Undefined, false),
-                                                       new Scalar("3", FASTType.Decimal, Operator.Copy,
-                                                                  ScalarValue.Undefined, false),
-                                                       new Scalar("4", FASTType.I32, Operator.Copy,
-                                                                  ScalarValue.Undefined, false),
-                                                       new Scalar("5", FASTType.String, Operator.Copy,
-                                                                  ScalarValue.Undefined, false),
-                                                       new Scalar("6", FASTType.U32, Operator.Copy,
-                                                                  ScalarValue.Undefined, false),
-                                                   });
+            var template = new MessageTemplate(
+                "",
+                new Field[]
+                    {
+                        new Scalar("1", FASTType.String, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("2", FASTType.ByteVector, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("3", FASTType.Decimal, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("4", FASTType.I32, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("5", FASTType.String, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("6", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                    });
+
             var context = new Context();
             context.RegisterTemplate(113, template);
 
@@ -107,7 +103,7 @@ namespace OpenFAST.UnitTests.Codec
             message.SetInteger(6, 1);
             message.SetInteger(7, 1);
 
-            //               --PMAP-- --PMAP-- --PMAP-- --TID---
+            //                     --PMAP-- --PMAP-- --PMAP-- --TID---
             //WHAT IT THINKS 01000000 00000000 10000000 11110001
             const string msgstr = "11000000 11110001";
 
@@ -117,22 +113,19 @@ namespace OpenFAST.UnitTests.Codec
         [Test]
         public void TestEncodeMessageWithSignedIntegerFieldTypesAndAllOperators()
         {
-            var template = new MessageTemplate("",
-                                               new Field[]
-                                                   {
-                                                       new Scalar("1", FASTType.I32, Operator.Copy,
-                                                                  ScalarValue.Undefined, false),
-                                                       new Scalar("2", FASTType.I32, Operator.Delta,
-                                                                  ScalarValue.Undefined, false),
-                                                       new Scalar("3", FASTType.I32, Operator.Increment,
-                                                                  new IntegerValue(10), false),
-                                                       new Scalar("4", FASTType.I32, Operator.Increment,
-                                                                  ScalarValue.Undefined, false),
-                                                       new Scalar("5", FASTType.I32, Operator.Constant,
-                                                                  new IntegerValue(1), false), /* NON-TRANSFERRABLE */
-                                                       new Scalar("6", FASTType.I32, Operator.Default,
-                                                                  new IntegerValue(2), false)
-                                                   });
+            var template = new MessageTemplate(
+                "",
+                new Field[]
+                    {
+                        new Scalar("1", FASTType.I32, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("2", FASTType.I32, Operator.Delta, ScalarValue.Undefined, false),
+                        new Scalar("3", FASTType.I32, Operator.Increment, new IntegerValue(10), false),
+                        new Scalar("4", FASTType.I32, Operator.Increment, ScalarValue.Undefined, false),
+                        new Scalar("5", FASTType.I32, Operator.Constant, new IntegerValue(1), false),
+                        /* NON-TRANSFERRABLE */
+                        new Scalar("6", FASTType.I32, Operator.Default, new IntegerValue(2), false)
+                    });
+
             var context = new Context();
             context.RegisterTemplate(113, template);
 
@@ -146,7 +139,7 @@ namespace OpenFAST.UnitTests.Codec
             message.SetInteger(5, 1);
             message.SetInteger(6, 2);
 
-            //             --PMAP-- --TID--- --------#1------- ------------#2------------ ---#4---
+            //                   --PMAP-- --TID--- --------#1------- ------------#2------------ ---#4---
             const string msg1 = "11101000 11110001 00000000 11101101 00000001 01100110 10011110 10000011";
             TestUtil.AssertBitVectorEquals(msg1, encoder.Encode(message));
 
@@ -155,7 +148,7 @@ namespace OpenFAST.UnitTests.Codec
             message.SetInteger(4, 4);
             message.SetInteger(6, 3);
 
-            //             --PMAP-- ---#2--- ---#6---
+            //                  --PMAP-- ---#2--- ---#6---
             const string msg2 = "10000100 11111111 10000011";
             TestUtil.AssertBitVectorEquals(msg2, encoder.Encode(message));
 
@@ -164,7 +157,7 @@ namespace OpenFAST.UnitTests.Codec
             message.SetInteger(3, 12);
             message.SetInteger(4, 1);
 
-            //             --PMAP-- --------#1------- --------#2------- ---#4--- ---#6---
+            //                  --PMAP-- --------#1------- --------#2------- ---#4--- ---#6---
             const string msg3 = "10101100 00000000 11100000 00001000 10000111 10000001 10000011";
             AssertEquals(msg3, encoder.Encode(message));
         }
@@ -172,18 +165,17 @@ namespace OpenFAST.UnitTests.Codec
         [Test]
         public void TestEncodeMessageWithStringFieldTypesAndAllOperators()
         {
-            var template = new MessageTemplate("",
-                                               new Field[]
-                                                   {
-                                                       new Scalar("1", FASTType.String, Operator.Copy,
-                                                                  ScalarValue.Undefined, false),
-                                                       new Scalar("2", FASTType.String, Operator.Delta,
-                                                                  ScalarValue.Undefined, false),
-                                                       new Scalar("3", FASTType.String, Operator.Constant,
-                                                                  new StringValue("e"), false), /* NON-TRANSFERRABLE */
-                                                       new Scalar("4", FASTType.String, Operator.Default,
-                                                                  new StringValue("long"), false)
-                                                   });
+            var template = new MessageTemplate(
+                "",
+                new Field[]
+                    {
+                        new Scalar("1", FASTType.String, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("2", FASTType.String, Operator.Delta, ScalarValue.Undefined, false),
+                        new Scalar("3", FASTType.String, Operator.Constant, new StringValue("e"), false),
+                        /* NON-TRANSFERRABLE */
+                        new Scalar("4", FASTType.String, Operator.Default, new StringValue("long"), false)
+                    });
+
             var context = new Context();
             context.RegisterTemplate(113, template);
 
@@ -193,11 +185,11 @@ namespace OpenFAST.UnitTests.Codec
             message.SetString(3, "e");
             message.SetString(4, "long");
 
-            //             --PMAP-- --TID--- --------#1------- ---------------------#2------------------------------
+            //   --PMAP-- --TID--- --------#1------- ---------------------#2------------------------------
             const string msg1 =
                 "11100000 11110001 01101111 11101110 10000000 01000100 01000011 01000010 00110011 10110010";
 
-            //             --PMAP-- --------#2---------------- ---------------------#4---------------------
+            //                   --PMAP-- --------#2---------------- ---------------------#4---------------------
             const string msg2 = "10010000 10000010 00110001 10110110 01110011 01101000 01101111 01110010 11110100";
 
             var encoder = new FastEncoder(context);
@@ -213,22 +205,19 @@ namespace OpenFAST.UnitTests.Codec
         [Test]
         public void TestEncodeMessageWithUnsignedIntegerFieldTypesAndAllOperators()
         {
-            var template = new MessageTemplate("",
-                                               new Field[]
-                                                   {
-                                                       new Scalar("1", FASTType.U32, Operator.Copy,
-                                                                  ScalarValue.Undefined, false),
-                                                       new Scalar("2", FASTType.U32, Operator.Delta,
-                                                                  ScalarValue.Undefined, false),
-                                                       new Scalar("3", FASTType.I32, Operator.Increment,
-                                                                  new IntegerValue(10), false),
-                                                       new Scalar("4", FASTType.I32, Operator.Increment,
-                                                                  ScalarValue.Undefined, false),
-                                                       new Scalar("5", FASTType.I32, Operator.Constant,
-                                                                  new IntegerValue(1), false), /* NON-TRANSFERRABLE */
-                                                       new Scalar("6", FASTType.I32, Operator.Default,
-                                                                  new IntegerValue(2), false)
-                                                   });
+            var template = new MessageTemplate(
+                "",
+                new Field[]
+                    {
+                        new Scalar("1", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("2", FASTType.U32, Operator.Delta, ScalarValue.Undefined, false),
+                        new Scalar("3", FASTType.I32, Operator.Increment, new IntegerValue(10), false),
+                        new Scalar("4", FASTType.I32, Operator.Increment, ScalarValue.Undefined, false),
+                        new Scalar("5", FASTType.I32, Operator.Constant, new IntegerValue(1), false),
+                        /* NON-TRANSFERRABLE */
+                        new Scalar("6", FASTType.I32, Operator.Default, new IntegerValue(2), false)
+                    });
+
             var context = new Context();
             context.RegisterTemplate(113, template);
 
@@ -242,7 +231,7 @@ namespace OpenFAST.UnitTests.Codec
             message.SetInteger(5, 1);
             message.SetInteger(6, 2);
 
-            //             --PMAP-- --TID--- ---#1--- ------------#2------------ ---#4---
+            //                   --PMAP-- --TID--- ---#1--- ------------#2------------ ---#4---
             const string msg1 = "11101000 11110001 11101101 00000001 01100110 10011110 10000011";
             AssertEquals(msg1, encoder.Encode(message));
 
@@ -251,7 +240,7 @@ namespace OpenFAST.UnitTests.Codec
             message.SetInteger(4, 4);
             message.SetInteger(6, 3);
 
-            //             --PMAP-- ---#2--- ---#6---
+            //                   --PMAP-- ---#2--- ---#6---
             const string msg2 = "10000100 10000001 10000011";
             AssertEquals(msg2, encoder.Encode(message));
 
@@ -260,7 +249,7 @@ namespace OpenFAST.UnitTests.Codec
             message.SetInteger(3, 12);
             message.SetInteger(4, 1);
 
-            //             --PMAP-- ---#1--- --------#2------- ---#4--- ---#6---
+            //                   --PMAP-- ---#1--- --------#2------- ---#4--- ---#6---
             const string msg3 = "10101100 11100000 00001000 10000101 10000001 10000011";
             AssertEquals(msg3, encoder.Encode(message));
         }
@@ -268,7 +257,7 @@ namespace OpenFAST.UnitTests.Codec
         [Test]
         public void TestEncodeSequentialEmptyMessages()
         {
-            var messageTemplate = new MessageTemplate("", new Field[] {});
+            var messageTemplate = new MessageTemplate("", new Field[0]);
             var message = new Message(messageTemplate);
             var nextMsg = new Message(messageTemplate);
             var context = new Context();
@@ -286,12 +275,13 @@ namespace OpenFAST.UnitTests.Codec
         [Test]
         public void TestEncodeSimpleMessage()
         {
-            var template = new MessageTemplate("",
-                                               new Field[]
-                                                   {
-                                                       new Scalar("1", FASTType.U32, Operator.Copy,
-                                                                  ScalarValue.Undefined, false)
-                                                   });
+            var template = new MessageTemplate(
+                "",
+                new Field[]
+                    {
+                        new Scalar("1", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false)
+                    });
+
             var context = new Context();
             context.RegisterTemplate(113, template);
 
