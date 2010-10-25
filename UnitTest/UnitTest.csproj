@@ -107,6 +107,13 @@
     <Compile Include="Template\Operators\DeltaStringOperatorTest.cs" />
     <Compile Include="Template\Operators\OperatorTest.cs" />
     <Compile Include="Template\SequenceTest.cs" />
+    <Compile Include="Template\Types\Codec\NullableAsciiStringTest.cs" />
+    <Compile Include="Template\Types\Codec\NullableByteVectorTest.cs" />
+    <Compile Include="Template\Types\Codec\NullableSignedIntegerTest.cs" />
+    <Compile Include="Template\Types\Codec\NullableSingleFieldDecimalTest.cs" />
+    <Compile Include="Template\Types\Codec\NullableStringDeltaTest.cs" />
+    <Compile Include="Template\Types\Codec\NullableUnicodeStringTest.cs" />
+    <Compile Include="Template\Types\Codec\NullableUnsignedIntegerTest.cs" />
     <Compile Include="Template\Types\Codec\SignedIntegerTest.cs" />
     <Compile Include="Template\Types\Codec\SingleFieldDecimalTest.cs" />
     <Compile Include="Template\Types\Codec\StringDeltaTest.cs" />
