@@ -21,6 +21,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using NUnit.Framework;
 using OpenFAST.Template;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 using OpenFAST.Template.Types.Codec;
 using OpenFAST.UnitTests.Test;
@@ -31,15 +32,16 @@ namespace OpenFAST.UnitTests.Template.Types.Codec
     public class StringDeltaTest : OpenFastTestCase
     {
         [Test]
-        public void TestEncodeValue() 
+        public void TestEncodeValue()
         {
             AssertEncodeDecode(Twin(Int(1), new StringValue("A")), "10000001 11000001", TypeCodec.StringDelta);
         }
+
         [Test]
         public void TestNullValue()
         {
-            var scalar = new Scalar("deltaString", FASTType.String, OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined, true);
-            var template = new MessageTemplate("template", new Field[] { scalar });
+            var scalar = new Scalar("deltaString", FastType.String, Operator.Delta, ScalarValue.Undefined, true);
+            var template = new MessageTemplate("template", new Field[] {scalar});
             var bvBuilder = new BitVectorBuilder(7);
             TestUtil.AssertBitVectorEquals("10000000", scalar.Encode(null, template, new Context(), bvBuilder));
 

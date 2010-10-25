@@ -24,6 +24,7 @@ using NUnit.Framework;
 using OpenFAST.Error;
 using OpenFAST.Template;
 using OpenFAST.Template.Loader;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 using OpenFAST.UnitTests.Test;
 
@@ -67,8 +68,8 @@ namespace OpenFAST.UnitTests.Template.Loader
             XmlElement int32Def = Document("<int32 name='value'><copy/></int32>");
             Assert.True(_parser.CanParse(int32Def, _context));
             var int32 = (Scalar) _parser.Parse(int32Def, _context);
-            AssertScalarField(int32, FASTType.I32, "value", null, "", DictionaryFields.Global, "value",
-                              OpenFAST.Template.Operator.Operator.Copy, ScalarValue.Undefined, false);
+            AssertScalarField(int32, FastType.I32, "value", null, "", DictionaryFields.Global, "value",
+                              Operator.Copy, ScalarValue.Undefined, false);
         }
 
         [Test]
@@ -79,8 +80,8 @@ namespace OpenFAST.UnitTests.Template.Loader
                     "<decimal name='price'><delta value='1.2' key='decimalValue' dictionary='marketData'/></decimal>");
             Assert.True(_parser.CanParse(decimalDef, _context));
             var decimalt = (Scalar) _parser.Parse(decimalDef, _context);
-            AssertScalarField(decimalt, FASTType.Decimal, "price", null, "", "marketData", "decimalValue",
-                              OpenFAST.Template.Operator.Operator.Delta, new DecimalValue(1.2), false);
+            AssertScalarField(decimalt, FastType.Decimal, "price", null, "", "marketData", "decimalValue",
+                              Operator.Delta, new DecimalValue(1.2), false);
         }
 
         [Test]
@@ -90,8 +91,8 @@ namespace OpenFAST.UnitTests.Template.Loader
                 Document("<string name='text' ns='http://openfast.org/data/' presence='optional'><default/></string>");
             Assert.True(_parser.CanParse(stringDef, _context));
             var stringt = (Scalar) _parser.Parse(stringDef, _context);
-            AssertScalarField(stringt, FASTType.String, "text", null, "http://openfast.org/data/",
-                              DictionaryFields.Global, "text", OpenFAST.Template.Operator.Operator.Default,
+            AssertScalarField(stringt, FastType.String, "text", null, "http://openfast.org/data/",
+                              DictionaryFields.Global, "text", Operator.Default,
                               ScalarValue.Undefined, true);
         }
 
@@ -101,8 +102,8 @@ namespace OpenFAST.UnitTests.Template.Loader
             XmlElement uintDef =
                 Document("<uInt32 name='uint'><copy key='values' ns='http://openfast.org/data/'/></uInt32>");
             var uintt = (Scalar) _parser.Parse(uintDef, _context);
-            AssertScalarField(uintt, FASTType.U32, "uint", null, "", DictionaryFields.Global, "values",
-                              "http://openfast.org/data/", OpenFAST.Template.Operator.Operator.Copy,
+            AssertScalarField(uintt, FastType.U32, "uint", null, "", DictionaryFields.Global, "values",
+                              "http://openfast.org/data/", Operator.Copy,
                               ScalarValue.Undefined, false);
         }
     }

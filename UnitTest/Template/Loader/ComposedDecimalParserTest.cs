@@ -23,6 +23,7 @@ using System.Xml;
 using NUnit.Framework;
 using OpenFAST.Template;
 using OpenFAST.Template.Loader;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 using OpenFAST.UnitTests.Test;
 
@@ -54,9 +55,8 @@ namespace OpenFAST.UnitTests.Template.Loader
             Assert.True(_parser.CanParse(decimalDef, _context));
             var decimalt = (ComposedScalar) _parser.Parse(decimalDef, _context);
 
-            AssertComposedScalarField(decimalt, FASTType.Decimal, "composed", OpenFAST.Template.Operator.Operator.Copy,
-                                      new IntegerValue(-2), OpenFAST.Template.Operator.Operator.Delta,
-                                      new IntegerValue(100));
+            AssertComposedScalarField(decimalt, FastType.Decimal, "composed", Operator.Copy,
+                                      new IntegerValue(-2), Operator.Delta, new IntegerValue(100));
 
             Scalar exponent = decimalt.Fields[0];
             Scalar mantissa = decimalt.Fields[1];
@@ -77,9 +77,8 @@ namespace OpenFAST.UnitTests.Template.Loader
             _context.Dictionary = "template";
             Assert.True(_parser.CanParse(decimalDef, _context));
             var decimalt = (ComposedScalar) _parser.Parse(decimalDef, _context);
-            AssertComposedScalarField(decimalt, FASTType.Decimal, "composed",
-                                      OpenFAST.Template.Operator.Operator.Constant, new IntegerValue(-2),
-                                      OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined);
+            AssertComposedScalarField(decimalt, FastType.Decimal, "composed", Operator.Constant, new IntegerValue(-2),
+                                      Operator.Delta, ScalarValue.Undefined);
             Assert.AreEqual("template", decimalt.Fields[0].Dictionary);
             Assert.AreEqual("template", decimalt.Fields[1].Dictionary);
         }
@@ -92,9 +91,8 @@ namespace OpenFAST.UnitTests.Template.Loader
                     "<decimal name='composed'><mantissa><delta/></mantissa><exponent><constant value='-2'/></exponent></decimal>");
             Assert.True(_parser.CanParse(decimalDef, _context));
             var decimalt = (ComposedScalar) _parser.Parse(decimalDef, _context);
-            AssertComposedScalarField(decimalt, FASTType.Decimal, "composed",
-                                      OpenFAST.Template.Operator.Operator.Constant, new IntegerValue(-2),
-                                      OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined);
+            AssertComposedScalarField(decimalt, FastType.Decimal, "composed", Operator.Constant, new IntegerValue(-2),
+                                      Operator.Delta, ScalarValue.Undefined);
         }
     }
 }

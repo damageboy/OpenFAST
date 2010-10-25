@@ -21,7 +21,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System;
 using OpenFAST.Template;
-using OpenFAST.Template.Operator;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 
 namespace OpenFAST.UnitTests.Test
@@ -48,8 +48,8 @@ namespace OpenFAST.UnitTests.Test
                          "Quote",
                          new Field[]
                              {
-                                 new Scalar("bid", FASTType.Decimal, Operator.Delta, ScalarValue.Undefined, false),
-                                 new Scalar("ask", FASTType.Decimal, Operator.Delta, ScalarValue.Undefined, false)
+                                 new Scalar("bid", FastType.Decimal, Operator.Delta, ScalarValue.Undefined, false),
+                                 new Scalar("ask", FastType.Decimal, Operator.Delta, ScalarValue.Undefined, false)
                              }));
             }
         }
@@ -82,7 +82,7 @@ namespace OpenFAST.UnitTests.Test
                          "Header",
                          new Field[]
                              {
-                                 new Scalar("Sent", FASTType.U32, Operator.Delta, ScalarValue.Undefined, false)
+                                 new Scalar("Sent", FastType.U32, Operator.Delta, ScalarValue.Undefined, false)
                              }));
             }
         }
@@ -100,10 +100,10 @@ namespace OpenFAST.UnitTests.Test
                              {
                                  Allocations,
                                  Instrument,
-                                 new Scalar("ID", FASTType.Ascii, Operator.Delta, ScalarValue.Undefined, false),
-                                 new Scalar("Side", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
-                                 new Scalar("Quantity", FASTType.Decimal, Operator.Delta, ScalarValue.Undefined, false),
-                                 new Scalar("Average Price", FASTType.Decimal, Operator.Delta, ScalarValue.Undefined,
+                                 new Scalar("ID", FastType.Ascii, Operator.Delta, ScalarValue.Undefined, false),
+                                 new Scalar("Side", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                                 new Scalar("Quantity", FastType.Decimal, Operator.Delta, ScalarValue.Undefined, false),
+                                 new Scalar("Average Price", FastType.Decimal, Operator.Delta, ScalarValue.Undefined,
                                             false)
                              }));
             }
@@ -120,10 +120,10 @@ namespace OpenFAST.UnitTests.Test
                          "Allocations",
                          new Field[]
                              {
-                                 new Scalar("Account", FASTType.Ascii, Operator.Copy, ScalarValue.Undefined, false),
-                                 new Scalar("Price", FASTType.Decimal, Operator.Delta, ScalarValue.Undefined, false),
-                                 new Scalar("Quantity", FASTType.Decimal, Operator.Delta, ScalarValue.Undefined, false),
-                                 new Scalar("Average Price", FASTType.Decimal, Operator.Delta, ScalarValue.Undefined,
+                                 new Scalar("Account", FastType.Ascii, Operator.Copy, ScalarValue.Undefined, false),
+                                 new Scalar("Price", FastType.Decimal, Operator.Delta, ScalarValue.Undefined, false),
+                                 new Scalar("Quantity", FastType.Decimal, Operator.Delta, ScalarValue.Undefined, false),
+                                 new Scalar("Average Price", FastType.Decimal, Operator.Delta, ScalarValue.Undefined,
                                             false)
                              }, false));
             }
@@ -140,8 +140,8 @@ namespace OpenFAST.UnitTests.Test
                          "Instrmt",
                          new Field[]
                              {
-                                 new Scalar("Symbol", FASTType.Ascii, Operator.Copy, ScalarValue.Undefined, false),
-                                 new Scalar("MMY", FASTType.Ascii, Operator.Delta, ScalarValue.Undefined, false),
+                                 new Scalar("Symbol", FastType.Ascii, Operator.Copy, ScalarValue.Undefined, false),
+                                 new Scalar("MMY", FastType.Ascii, Operator.Delta, ScalarValue.Undefined, false),
                              }, false));
             }
         }

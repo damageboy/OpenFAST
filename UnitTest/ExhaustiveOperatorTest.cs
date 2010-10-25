@@ -23,7 +23,7 @@ using System;
 using NUnit.Framework;
 using OpenFAST.Codec;
 using OpenFAST.Template;
-using OpenFAST.Template.Operator;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 using OpenFAST.UnitTests.Test;
 
@@ -79,7 +79,7 @@ namespace OpenFAST.UnitTests
         [Test]
         public void TestConstantOperatorWithMandatoryField()
         {
-            var field = new Scalar("", FASTType.U32, Operator.Constant, new IntegerValue(16), false);
+            var field = new Scalar("", FastType.U32, Operator.Constant, new IntegerValue(16), false);
             MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
@@ -103,7 +103,7 @@ namespace OpenFAST.UnitTests
         [Test]
         public void TestConstantOperatorWithOptionalField()
         {
-            var field = new Scalar("", FASTType.U32, Operator.Constant, new IntegerValue(16), true);
+            var field = new Scalar("", FastType.U32, Operator.Constant, new IntegerValue(16), true);
             MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
@@ -124,7 +124,7 @@ namespace OpenFAST.UnitTests
         [Test]
         public void TestCopyOperatorWithMandatoryField()
         {
-            var field = new Scalar("", FASTType.U32, Operator.Copy,
+            var field = new Scalar("", FastType.U32, Operator.Copy,
                                    new IntegerValue(16), false);
             MessageTemplate template = RegisterTemplate(field);
 
@@ -154,7 +154,7 @@ namespace OpenFAST.UnitTests
         [Test]
         public void TestCopyOperatorWithOptionalField()
         {
-            var field = new Scalar("", FASTType.U32, Operator.Copy,
+            var field = new Scalar("", FastType.U32, Operator.Copy,
                                    new IntegerValue(16), true);
             MessageTemplate template = RegisterTemplate(field);
 
@@ -190,7 +190,7 @@ namespace OpenFAST.UnitTests
         [Test]
         public void TestDefaultOperatorWithMandatoryField()
         {
-            var field = new Scalar("", FASTType.U32, Operator.Default,
+            var field = new Scalar("", FastType.U32, Operator.Default,
                                    new IntegerValue(16), false);
             MessageTemplate template = RegisterTemplate(field);
 
@@ -213,7 +213,7 @@ namespace OpenFAST.UnitTests
         [Test]
         public void TestDefaultOperatorWithOptionalField()
         {
-            var field = new Scalar("", FASTType.U32, Operator.Default,
+            var field = new Scalar("", FastType.U32, Operator.Default,
                                    new IntegerValue(16), true);
             MessageTemplate template = RegisterTemplate(field);
 
@@ -242,8 +242,7 @@ namespace OpenFAST.UnitTests
         [Test]
         public void TestDeltaOperatorWithMandatoryField()
         {
-            var field = new Scalar("", FASTType.U32,
-                                   Operator.Increment, new IntegerValue(16), false);
+            var field = new Scalar("", FastType.U32, Operator.Increment, new IntegerValue(16), false);
             MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
@@ -272,7 +271,7 @@ namespace OpenFAST.UnitTests
         [Test]
         public void TestDeltaOperatorWithOptionalField()
         {
-            var field = new Scalar("", FASTType.U32, Operator.Delta,
+            var field = new Scalar("", FastType.U32, Operator.Delta,
                                    new IntegerValue(16), true);
             MessageTemplate template = RegisterTemplate(field);
 
@@ -308,7 +307,7 @@ namespace OpenFAST.UnitTests
         [Test]
         public void TestEmptyOperatorWithMandatoryField()
         {
-            var field = new Scalar("", FASTType.U32, Operator.None,
+            var field = new Scalar("", FastType.U32, Operator.None,
                                    ScalarValue.Undefined, false);
             MessageTemplate template = RegisterTemplate(field);
 
@@ -337,7 +336,7 @@ namespace OpenFAST.UnitTests
         [Test]
         public void TestEmptyOperatorWithOptionalField()
         {
-            var field = new Scalar("", FASTType.U32, Operator.None,
+            var field = new Scalar("", FastType.U32, Operator.None,
                                    ScalarValue.Undefined, true);
             MessageTemplate template = RegisterTemplate(field);
 
@@ -357,7 +356,7 @@ namespace OpenFAST.UnitTests
         [Test]
         public void TestEmptyOperatorWithOptionalFieldOnNullValue()
         {
-            var field = new Scalar("", FASTType.U32, Operator.None,
+            var field = new Scalar("", FastType.U32, Operator.None,
                                    ScalarValue.Undefined, true);
             MessageTemplate template = RegisterTemplate(field);
 
@@ -376,7 +375,7 @@ namespace OpenFAST.UnitTests
         [Test]
         public void TestEmptyOperatorWithSequenceOfMessages()
         {
-            var field = new Scalar("", FASTType.U32, Operator.None,
+            var field = new Scalar("", FastType.U32, Operator.None,
                                    ScalarValue.Undefined, true);
             MessageTemplate template = RegisterTemplate(field);
 
@@ -404,8 +403,7 @@ namespace OpenFAST.UnitTests
         [Test]
         public void TestIncrementOperatorWithMandatoryField()
         {
-            var field = new Scalar("", FASTType.U32,
-                                   Operator.Increment, new IntegerValue(16), false);
+            var field = new Scalar("", FastType.U32, Operator.Increment, new IntegerValue(16), false);
             MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
@@ -434,8 +432,7 @@ namespace OpenFAST.UnitTests
         [Test]
         public void TestIncrementOperatorWithOptionalField()
         {
-            var field = new Scalar("", FASTType.U32,
-                                   Operator.Increment, new IntegerValue(16), true);
+            var field = new Scalar("", FastType.U32, Operator.Increment, new IntegerValue(16), true);
             MessageTemplate template = RegisterTemplate(field);
 
             var msg1 = new Message(template);
@@ -470,7 +467,7 @@ namespace OpenFAST.UnitTests
         [Test]
         public void TestTailOperatorWithMandatoryField()
         {
-            var field = new Scalar("", FASTType.String, Operator.Tail,
+            var field = new Scalar("", FastType.String, Operator.Tail,
                                    new StringValue("abc"), false);
             MessageTemplate template = RegisterTemplate(field);
 
@@ -508,7 +505,7 @@ namespace OpenFAST.UnitTests
         [Test]
         public void TestTailOperatorWithOptionalField()
         {
-            var field = new Scalar("", FASTType.String, Operator.Tail,
+            var field = new Scalar("", FastType.String, Operator.Tail,
                                    new StringValue("abc"), true);
             MessageTemplate template = RegisterTemplate(field);
 

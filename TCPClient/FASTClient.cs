@@ -1,27 +1,26 @@
 ﻿using System;
-using OpenFAST;
 using OpenFAST.Error;
-using OpenFAST.Session;
-using OpenFAST.Session.Tcp;
+using OpenFAST.Sessions;
+using OpenFAST.Sessions.Tcp;
 
-namespace TCPClient
+namespace OpenFAST.TCPClient
 {
-    public class FASTClient
+    public class FastClient
     {
-        private readonly FastClient _fc;
+        private readonly Sessions.FastClient _fc;
         private readonly Random _rnd = new Random();
-        private Session _ses;
+        private Sessions.Session _ses;
 
-        public FASTClient(string host, int port)
+        public FastClient(string host, int port)
         {
-            _fc = new FastClient("client", SessionConstants.Scp11, new TcpEndpoint(host, port));
+            _fc = new Sessions.FastClient("client", SessionConstants.Scp11, new TcpEndpoint(host, port));
         }
 
         public void Connect()
         {
             _ses = _fc.Connect();
             _ses.ErrorHandler = new ClientErrorHandler();
-            _ses.MessageHandler = new FASTClientMessageHandler();
+            _ses.MessageHandler = new ClientMessageHandler();
         }
 
         public void SendMessage(string symbol)

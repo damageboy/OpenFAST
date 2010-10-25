@@ -20,6 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System.Xml;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 using OpenFAST.Utility;
 
@@ -46,7 +47,7 @@ namespace OpenFAST.Template.Loader
 
         public override Field Parse(XmlElement fieldNode, bool optional, ParsingContext context)
         {
-            Operator.Operator op = Operator.Operator.None;
+            Operator op = Operator.None;
             string defaultValue = null;
             string key = null;
             string ns = "";
@@ -55,7 +56,7 @@ namespace OpenFAST.Template.Loader
             {
                 if (operatorElement.HasAttribute("value"))
                     defaultValue = operatorElement.GetAttribute("value");
-                op = Operator.Operator.GetOperator(operatorElement.Name);
+                op = Operator.GetOperator(operatorElement.Name);
                 if (operatorElement.HasAttribute("key"))
                     key = operatorElement.GetAttribute("key");
                 if (operatorElement.HasAttribute("ns"))
@@ -63,7 +64,8 @@ namespace OpenFAST.Template.Loader
                 if (operatorElement.HasAttribute("dictionary"))
                     context.Dictionary = operatorElement.GetAttribute("dictionary");
             }
-            FASTType type = GetType(fieldNode, context);
+
+            FastType type = GetType(fieldNode, context);
             var scalar = new Scalar(GetName(fieldNode, context), type, op, type.GetValue(defaultValue),
                                     optional);
             if (fieldNode.HasAttribute("id"))
@@ -80,10 +82,10 @@ namespace OpenFAST.Template.Loader
             return context.Name;
         }
 
-        protected internal virtual FASTType GetType(XmlElement fieldNode, ParsingContext context)
+        protected internal virtual FastType GetType(XmlElement fieldNode, ParsingContext context)
         {
             string typeName = GetTypeName(fieldNode);
-            FASTType value;
+            FastType value;
             if (!context.TypeMap.TryGetValue(typeName, out value))
             {
                 context.ErrorHandler.OnError(

@@ -20,12 +20,13 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types.Codec;
 
 namespace OpenFAST.Template.Types
 {
     [Serializable]
-    public abstract class SimpleType : FASTType
+    public abstract class SimpleType : FastType
     {
         private readonly TypeCodec _codec;
         private readonly TypeCodec _nullableCodec;
@@ -37,7 +38,7 @@ namespace OpenFAST.Template.Types
         }
 
 
-        public override TypeCodec GetCodec(Operator.Operator op, bool optional)
+        public override TypeCodec GetCodec(Operator op, bool optional)
         {
             return optional ? _nullableCodec : _codec;
         }

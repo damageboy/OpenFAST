@@ -23,6 +23,7 @@ using System.Xml;
 using NUnit.Framework;
 using OpenFAST.Template;
 using OpenFAST.Template.Loader;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 using OpenFAST.UnitTests.Test;
 
@@ -51,9 +52,8 @@ namespace OpenFAST.UnitTests.Template.Loader
             XmlElement unicodeDef = Document("<string name='message' charset='unicode'/>");
             Assert.True(_parser.CanParse(unicodeDef, _context));
             var unicode = (Scalar) _parser.Parse(unicodeDef, _context);
-            AssertScalarField(unicode, FASTType.Unicode, "message", null, "", DictionaryFields.Global, "message",
-                              OpenFAST.Template.Operator.Operator.None,
-                              ScalarValue.Undefined, false);
+            AssertScalarField(unicode, FastType.Unicode, "message", null, "", DictionaryFields.Global, "message",
+                              Operator.None, ScalarValue.Undefined, false);
         }
     }
 }

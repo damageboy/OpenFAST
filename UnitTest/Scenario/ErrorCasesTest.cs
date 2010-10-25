@@ -22,7 +22,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using NUnit.Framework;
 using OpenFAST.Codec;
 using OpenFAST.Template;
-using OpenFAST.Template.Operator;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 using OpenFAST.UnitTests.Test;
 
@@ -70,7 +70,7 @@ namespace OpenFAST.UnitTests.Scenario
             var nestedSequence = new Sequence("nested",
                                               new Field[]
                                                   {
-                                                      new Scalar("string", FASTType.Ascii, Operator.Copy,
+                                                      new Scalar("string", FastType.Ascii, Operator.Copy,
                                                                  ScalarValue.Undefined, false)
                                                   }, true);
             var group = new Group("group", new Field[] {nestedSequence}, true);

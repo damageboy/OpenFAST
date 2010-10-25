@@ -1,14 +1,14 @@
 ﻿using System;
 
-namespace TCPServer
+namespace OpenFAST.TCPServer
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        private static void Main()
         {
             try
             {
-                new FASTServer();
+                new FastServer();
             }
             catch(Exception ex)
             {

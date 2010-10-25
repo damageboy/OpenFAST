@@ -22,6 +22,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System;
 using System.IO;
 using OpenFAST.Error;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 
 namespace OpenFAST.Template
@@ -79,7 +80,7 @@ namespace OpenFAST.Template
         private static Field[] AddTemplateIdField(Field[] fields)
         {
             var newFields = new Field[fields.Length + 1];
-            newFields[0] = new Scalar("templateId", FASTType.U32, Operator.Operator.Copy, ScalarValue.Undefined, false);
+            newFields[0] = new Scalar("templateId", FastType.U32, Operator.Copy, ScalarValue.Undefined, false);
             Array.Copy(fields, 0, newFields, 1, fields.Length);
             return newFields;
         }

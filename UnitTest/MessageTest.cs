@@ -21,7 +21,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using NUnit.Framework;
 using OpenFAST.Template;
-using OpenFAST.Template.Operator;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 
 namespace OpenFAST.UnitTests
@@ -36,7 +36,7 @@ namespace OpenFAST.UnitTests
                 "",
                 new Field[]
                     {
-                        new Scalar("1", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false)
+                        new Scalar("1", FastType.U32, Operator.Copy, ScalarValue.Undefined, false)
                     });
             GroupValue message = new Message(template);
             message.SetInteger(1, 1);
@@ -55,7 +55,7 @@ namespace OpenFAST.UnitTests
                 "",
                 new Field[]
                     {
-                        new Scalar("1", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false)
+                        new Scalar("1", FastType.U32, Operator.Copy, ScalarValue.Undefined, false)
                     });
             var message = new Message(template);
             var other = new Message(template);

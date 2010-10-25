@@ -23,7 +23,7 @@ using System.IO;
 using NUnit.Framework;
 using OpenFAST.Codec;
 using OpenFAST.Template;
-using OpenFAST.Template.Operator;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 
 namespace OpenFAST.UnitTests.Codec
@@ -55,12 +55,12 @@ namespace OpenFAST.UnitTests.Codec
                 "",
                 new Field[]
                     {
-                        new Scalar("1", FASTType.Ascii, Operator.Copy, ScalarValue.Undefined, false),
-                        new Scalar("2", FASTType.ByteVector, Operator.Copy, ScalarValue.Undefined, false),
-                        new Scalar("3", FASTType.Decimal, Operator.Copy, ScalarValue.Undefined, false),
-                        new Scalar("4", FASTType.I32, Operator.Copy, ScalarValue.Undefined, false),
-                        new Scalar("5", FASTType.Ascii, Operator.Copy, ScalarValue.Undefined, false),
-                        new Scalar("6", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("1", FastType.Ascii, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("2", FastType.ByteVector, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("3", FastType.Decimal, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("4", FastType.I32, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("5", FastType.Ascii, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("6", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
                     });
             var context = new Context();
             context.RegisterTemplate(113, template);
@@ -82,13 +82,13 @@ namespace OpenFAST.UnitTests.Codec
                 "",
                 new Field[]
                     {
-                        new Scalar("1", FASTType.I32, Operator.Copy, ScalarValue.Undefined, false),
-                        new Scalar("2", FASTType.I32, Operator.Delta, ScalarValue.Undefined, false),
-                        new Scalar("3", FASTType.I32, Operator.Increment, new IntegerValue(10), false),
-                        new Scalar("4", FASTType.I32, Operator.Increment, ScalarValue.Undefined, false),
-                        new Scalar("5", FASTType.I32, Operator.Constant, new IntegerValue(1), false),
+                        new Scalar("1", FastType.I32, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("2", FastType.I32, Operator.Delta, ScalarValue.Undefined, false),
+                        new Scalar("3", FastType.I32, Operator.Increment, new IntegerValue(10), false),
+                        new Scalar("4", FastType.I32, Operator.Increment, ScalarValue.Undefined, false),
+                        new Scalar("5", FastType.I32, Operator.Constant, new IntegerValue(1), false),
                         /* NON-TRANSFERRABLE */
-                        new Scalar("6", FASTType.I32, Operator.Default, new IntegerValue(2), false)
+                        new Scalar("6", FastType.I32, Operator.Default, new IntegerValue(2), false)
                     });
 
             GroupValue message = new Message(template);
@@ -142,11 +142,11 @@ namespace OpenFAST.UnitTests.Codec
                 "",
                 new Field[]
                     {
-                        new Scalar("1", FASTType.Ascii, Operator.Copy, ScalarValue.Undefined, false),
-                        new Scalar("2", FASTType.Ascii, Operator.Delta, ScalarValue.Undefined, false),
-                        new Scalar("3", FASTType.Ascii, Operator.Constant, new StringValue("e"), false),
+                        new Scalar("1", FastType.Ascii, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("2", FastType.Ascii, Operator.Delta, ScalarValue.Undefined, false),
+                        new Scalar("3", FastType.Ascii, Operator.Constant, new StringValue("e"), false),
                         /* NON-TRANSFERRABLE */
-                        new Scalar("4", FASTType.Ascii, Operator.Default, new StringValue("long"), false)
+                        new Scalar("4", FastType.Ascii, Operator.Default, new StringValue("long"), false)
                     });
 
             var message = new Message(template);
@@ -185,13 +185,13 @@ namespace OpenFAST.UnitTests.Codec
                 "",
                 new Field[]
                     {
-                        new Scalar("1", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
-                        new Scalar("2", FASTType.U32, Operator.Delta, ScalarValue.Undefined, false),
-                        new Scalar("3", FASTType.U32, Operator.Increment, new IntegerValue(10), false),
-                        new Scalar("4", FASTType.U32, Operator.Increment, ScalarValue.Undefined, false),
-                        new Scalar("5", FASTType.U32, Operator.Constant, new IntegerValue(1), false),
+                        new Scalar("1", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                        new Scalar("2", FastType.U32, Operator.Delta, ScalarValue.Undefined, false),
+                        new Scalar("3", FastType.U32, Operator.Increment, new IntegerValue(10), false),
+                        new Scalar("4", FastType.U32, Operator.Increment, ScalarValue.Undefined, false),
+                        new Scalar("5", FastType.U32, Operator.Constant, new IntegerValue(1), false),
                         /* NON-TRANSFERRABLE */
-                        new Scalar("6", FASTType.U32, Operator.Default, new IntegerValue(2), false)
+                        new Scalar("6", FastType.U32, Operator.Default, new IntegerValue(2), false)
                     });
 
             GroupValue message = new Message(template);
@@ -260,7 +260,7 @@ namespace OpenFAST.UnitTests.Codec
                 "",
                 new Field[]
                     {
-                        new Scalar("1", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false)
+                        new Scalar("1", FastType.U32, Operator.Copy, ScalarValue.Undefined, false)
                     });
             Stream input = ByteUtil.CreateByteStream("11100000 11110001 10000001");
             var context = new Context();

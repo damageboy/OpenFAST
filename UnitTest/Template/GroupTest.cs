@@ -24,6 +24,7 @@ using NUnit.Framework;
 using OpenFAST.Codec;
 using OpenFAST.Error;
 using OpenFAST.Template;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 using OpenFAST.UnitTests.Test;
 
@@ -49,9 +50,9 @@ namespace OpenFAST.UnitTests.Template
         [TestCase]
         public void TestEncode()
         {
-            var firstName = new Scalar("First Name", FASTType.U32, OpenFAST.Template.Operator.Operator.Copy,
+            var firstName = new Scalar("First Name", FastType.U32, Operator.Copy,
                                        ScalarValue.Undefined, true);
-            var lastName = new Scalar("Last Name", FASTType.U32, OpenFAST.Template.Operator.Operator.None,
+            var lastName = new Scalar("Last Name", FastType.U32, Operator.None,
                                       ScalarValue.Undefined, false);
             var theGroup = new Group("guy", new Field[] {firstName, lastName}, false);
 
@@ -71,9 +72,9 @@ namespace OpenFAST.UnitTests.Template
         {
             const string message = "11000000 10000010 10000010";
             Stream inp = new MemoryStream(ByteUtil.ConvertBitStringToFastByteArray(message));
-            var firstname = new Scalar("firstName", FASTType.U32, OpenFAST.Template.Operator.Operator.Copy,
+            var firstname = new Scalar("firstName", FastType.U32, Operator.Copy,
                                        ScalarValue.Undefined, true);
-            var lastName = new Scalar("lastName", FASTType.U32, OpenFAST.Template.Operator.Operator.None,
+            var lastName = new Scalar("lastName", FastType.U32, Operator.None,
                                       ScalarValue.Undefined, false);
 
             // MessageInputStream in = new MessageInputStream(new

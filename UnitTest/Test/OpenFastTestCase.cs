@@ -27,7 +27,7 @@ using NUnit.Framework;
 using OpenFAST.Codec;
 using OpenFAST.Template;
 using OpenFAST.Template.Loader;
-using OpenFAST.Template.Operator;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 using OpenFAST.Template.Types.Codec;
 
@@ -153,7 +153,7 @@ namespace OpenFAST.UnitTests.Test
             return new MessageTemplate("Doesn't matter", new[] {field});
         }
 
-        protected static void AssertScalarField(IFieldSet fieldSet, int fieldIndex, FASTType type, String name,
+        protected static void AssertScalarField(IFieldSet fieldSet, int fieldIndex, FastType type, String name,
                                                 OperatorCodec operatorCodec,
                                                 ScalarValue defaultValue)
         {
@@ -163,7 +163,7 @@ namespace OpenFAST.UnitTests.Test
             Assert.AreEqual(defaultValue, field.DefaultValue);
         }
 
-        protected static void AssertComposedScalarField(IFieldSet fieldSet, int fieldIndex, FASTType type, String name,
+        protected static void AssertComposedScalarField(IFieldSet fieldSet, int fieldIndex, FastType type, String name,
                                                         Operator exponentOp,
                                                         ScalarValue exponentValue, Operator mantissaOp,
                                                         ScalarValue mantissaValue)
@@ -180,7 +180,7 @@ namespace OpenFAST.UnitTests.Test
             Assert.AreEqual(mantissaValue, fields[1].DefaultValue);
         }
 
-        protected static void AssertComposedScalarField(ComposedScalar field, FASTType type, String name,
+        protected static void AssertComposedScalarField(ComposedScalar field, FastType type, String name,
                                                         Operator exponentOp,
                                                         ScalarValue exponentValue, Operator mantissaOp,
                                                         ScalarValue mantissaValue)
@@ -195,14 +195,14 @@ namespace OpenFAST.UnitTests.Test
             Assert.AreEqual(mantissaValue, fields[1].DefaultValue);
         }
 
-        protected static void AssertScalarField(IFieldSet fieldSet, int fieldIndex, FASTType type, String name, Operator op)
+        protected static void AssertScalarField(IFieldSet fieldSet, int fieldIndex, FastType type, String name, Operator op)
         {
             var field = (Scalar) fieldSet.GetField(fieldIndex);
             AssertScalarField(field, type, name);
             Assert.AreEqual(op, field.Operator);
         }
 
-        protected static void AssertSequenceLengthField(Sequence sequence, String name, FASTType type, Operator op)
+        protected static void AssertSequenceLengthField(Sequence sequence, String name, FastType type, Operator op)
         {
             Assert.AreEqual(type, sequence.Length.FASTType);
             Assert.AreEqual(name, sequence.Length.Name);
@@ -221,7 +221,7 @@ namespace OpenFAST.UnitTests.Test
             Assert.AreEqual(name, currentGroup.Name);
         }
 
-        protected static void AssertOptionalScalarField(IFieldSet fieldSet, int fieldIndex, FASTType type, String name,
+        protected static void AssertOptionalScalarField(IFieldSet fieldSet, int fieldIndex, FastType type, String name,
                                                         Operator op)
         {
             var field = (Scalar) fieldSet.GetField(fieldIndex);
@@ -230,7 +230,7 @@ namespace OpenFAST.UnitTests.Test
             Assert.IsTrue(field.IsOptional);
         }
 
-        private static void AssertScalarField(Scalar field, FASTType type, string name)
+        private static void AssertScalarField(Scalar field, FastType type, string name)
         {
             Assert.AreEqual(name, field.Name);
             Assert.AreEqual(type, field.FASTType);
@@ -243,14 +243,14 @@ namespace OpenFAST.UnitTests.Test
             return doc.DocumentElement;
         }
 
-        protected static void AssertScalarField(Scalar scalar, FASTType type, String name, String id, String ns,
+        protected static void AssertScalarField(Scalar scalar, FastType type, String name, String id, String ns,
                                                 String dictionary, String key, Operator op,
                                                 ScalarValue defaultVal, bool optional)
         {
             AssertScalarField(scalar, type, name, id, ns, dictionary, key, ns, op, defaultVal, optional);
         }
 
-        protected static void AssertScalarField(Scalar scalar, FASTType type, String name, String id, String ns,
+        protected static void AssertScalarField(Scalar scalar, FastType type, String name, String id, String ns,
                                                 String dictionary, String key, String keyNamespace, Operator op,
                                                 ScalarValue defaultVal, bool optional)
         {

@@ -22,7 +22,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System.IO;
 using NUnit.Framework;
 using OpenFAST.Template;
-using OpenFAST.Template.Operator;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 using OpenFAST.UnitTests.Test;
 
@@ -38,23 +38,23 @@ namespace OpenFAST.UnitTests
                 "Company",
                 new Field[]
                     {
-                        new Scalar("Name", FASTType.String, Operator.None, ScalarValue.Undefined, false),
-                        new Scalar("Id", FASTType.U32, Operator.Increment, ScalarValue.Undefined, false),
+                        new Scalar("Name", FastType.String, Operator.None, ScalarValue.Undefined, false),
+                        new Scalar("Id", FastType.U32, Operator.Increment, ScalarValue.Undefined, false),
                         new Sequence(
                             "Employees",
                             new Field[]
                                 {
-                                    new Scalar("First Name", FASTType.String, Operator.Copy, ScalarValue.Undefined,
+                                    new Scalar("First Name", FastType.String, Operator.Copy, ScalarValue.Undefined,
                                                false),
-                                    new Scalar("Last Name", FASTType.String, Operator.Copy, ScalarValue.Undefined, false)
+                                    new Scalar("Last Name", FastType.String, Operator.Copy, ScalarValue.Undefined, false)
                                     ,
-                                    new Scalar("Age", FASTType.U32, Operator.Delta, ScalarValue.Undefined, false)
+                                    new Scalar("Age", FastType.U32, Operator.Delta, ScalarValue.Undefined, false)
                                 }, false),
                         new Group(
                             "Tax Information",
                             new Field[]
                                 {
-                                    new Scalar("EIN", FASTType.String, Operator.None, ScalarValue.Undefined, false)
+                                    new Scalar("EIN", FastType.String, Operator.None, ScalarValue.Undefined, false)
                                 }, false)
                     });
 

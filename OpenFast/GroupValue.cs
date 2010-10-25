@@ -22,7 +22,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System;
 using System.Text;
 using OpenFAST.Template;
-using OpenFAST.Template.Operator;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 using OpenFAST.Utility;
 
@@ -94,12 +94,12 @@ namespace OpenFAST
                 Scalar scalar;
                 if (_group.TryGetIntrospectiveField(fieldName, out scalar))
                 {
-                    if (scalar.FASTType.Equals(FASTType.Unicode) ||
-                        scalar.FASTType.Equals(FASTType.String) ||
-                        scalar.FASTType.Equals(FASTType.Ascii))
+                    if (scalar.FASTType.Equals(FastType.Unicode) ||
+                        scalar.FASTType.Equals(FastType.String) ||
+                        scalar.FASTType.Equals(FastType.Ascii))
                         return GetString(scalar.Name).Length;
 
-                    if (scalar.FASTType.Equals(FASTType.ByteVector))
+                    if (scalar.FASTType.Equals(FastType.ByteVector))
                         return GetBytes(scalar.Name).Length;
                 }
             }

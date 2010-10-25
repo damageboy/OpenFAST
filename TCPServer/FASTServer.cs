@@ -1,23 +1,22 @@
 ﻿using System;
-using OpenFAST;
 using OpenFAST.Error;
-using OpenFAST.Session;
-using OpenFAST.Session.Tcp;
+using OpenFAST.Sessions;
+using OpenFAST.Sessions.Tcp;
 
-namespace TCPServer
+namespace OpenFAST.TCPServer
 {
-    public class FASTServer
+    public class FastServer
     {
         private readonly ISessionProtocol _scpSessionProtocol = SessionConstants.Scp11;
-        private readonly FASTSessionHandler _sessionHandler;
+        private readonly SessionHandler _sessionHandler;
 
-        public FASTServer()
+        public FastServer()
         {
             var endpoint = new TcpEndpoint(16121);
 
-            _sessionHandler = new FASTSessionHandler();
+            _sessionHandler = new SessionHandler();
 
-            var fs = new FastServer("test", _scpSessionProtocol, endpoint);
+            var fs = new Sessions.FastServer("test", _scpSessionProtocol, endpoint);
 
             Global.ErrorHandler = new ServerErrorHandler();
             fs.SessionHandler = _sessionHandler;

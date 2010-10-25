@@ -21,6 +21,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using NUnit.Framework;
 using OpenFAST.Template;
+using OpenFAST.Template.Operators;
 using OpenFAST.UnitTests.Test;
 using OpenFAST.Utility;
 
@@ -41,9 +42,7 @@ namespace OpenFAST.UnitTests.Template.Types.Codec
         [Test]
         public void TestCopyExponentDefaultMantissa()
         {
-            ComposedScalar decimalt = Util.ComposedDecimal(_name, OpenFAST.Template.Operator.Operator.Copy,
-                                                           ScalarValue.Undefined,
-                                                           OpenFAST.Template.Operator.Operator.Default,
+            ComposedScalar decimalt = Util.ComposedDecimal(_name, Operator.Copy, ScalarValue.Undefined, Operator.Default,
                                                            new LongValue(1), false);
             var context = new Context();
             var pmapBuilder = new BitVectorBuilder(7);
@@ -69,11 +68,8 @@ namespace OpenFAST.UnitTests.Template.Types.Codec
         [Test]
         public void TestCopyExponentDeltaMantissa()
         {
-            ComposedScalar decimalt = Util.ComposedDecimal(_name, OpenFAST.Template.Operator.Operator.Copy,
-                                                           ScalarValue.Undefined,
-                                                           OpenFAST.Template.Operator.Operator.Delta,
-                                                           new IntegerValue(1),
-                                                           false);
+            ComposedScalar decimalt = Util.ComposedDecimal(_name, Operator.Copy, ScalarValue.Undefined, Operator.Delta,
+                                                           new IntegerValue(1), false);
             var context = new Context();
             var pmapBuilder = new BitVectorBuilder(7);
             TestUtil.AssertBitVectorEquals("11111110 00000001 00010110 10101100",
@@ -89,8 +85,7 @@ namespace OpenFAST.UnitTests.Template.Types.Codec
         public void TestInitialValues()
         {
             var context = new Context();
-            ComposedScalar scalar = Util.ComposedDecimal(_name, OpenFAST.Template.Operator.Operator.Default, Int(-3),
-                                                         OpenFAST.Template.Operator.Operator.Delta,
+            ComposedScalar scalar = Util.ComposedDecimal(_name, Operator.Default, Int(-3), Operator.Delta,
                                                          ScalarValue.Undefined, false);
             TestUtil.AssertBitVectorEquals("00000101 01100000 11110101",
                                            scalar.Encode(Decimal(94325, -3), _template, context, new BitVectorBuilder(7)));
@@ -140,9 +135,9 @@ namespace OpenFAST.UnitTests.Template.Types.Codec
         [Test]
         public void TestOptionalConstantExponent()
         {
-            ComposedScalar decimalt = Util.ComposedDecimal(_name, OpenFAST.Template.Operator.Operator.Constant,
+            ComposedScalar decimalt = Util.ComposedDecimal(_name, Operator.Constant,
                                                            new IntegerValue(-2),
-                                                           OpenFAST.Template.Operator.Operator.Default,
+                                                           Operator.Default,
                                                            new LongValue(100), true);
             var context = new Context();
             var pmapBuilder = new BitVectorBuilder(7);
@@ -155,10 +150,10 @@ namespace OpenFAST.UnitTests.Template.Types.Codec
         [Test]
         public void TestOptionalDefaultNullExponent()
         {
-            ComposedScalar decimalt = Util.ComposedDecimal(_name, OpenFAST.Template.Operator.Operator.Default,
+            ComposedScalar decimalt = Util.ComposedDecimal(_name, Operator.Default,
                                                            ScalarValue.Undefined,
-                                                           OpenFAST.Template.Operator.Operator.Delta, new IntegerValue(
-                                                                                                          12200), true);
+                                                           Operator.Delta, new IntegerValue(
+                                                                               12200), true);
             var context = new Context();
             var pmapBuilder = new BitVectorBuilder(7);
 
@@ -177,9 +172,9 @@ namespace OpenFAST.UnitTests.Template.Types.Codec
         [Test]
         public void TestOptionalDeltaExponentCopyMantissa()
         {
-            ComposedScalar decimalt = Util.ComposedDecimal(_name, OpenFAST.Template.Operator.Operator.Delta,
+            ComposedScalar decimalt = Util.ComposedDecimal(_name, Operator.Delta,
                                                            ScalarValue.Undefined,
-                                                           OpenFAST.Template.Operator.Operator.Copy,
+                                                           Operator.Copy,
                                                            ScalarValue.Undefined, true);
             var context = new Context();
             var pmapBuilder = new BitVectorBuilder(7);
@@ -200,9 +195,9 @@ namespace OpenFAST.UnitTests.Template.Types.Codec
         {
             const string encoding = "11111110 00111001 01000101 10100011";
 
-            ComposedScalar scalar = Util.ComposedDecimal(_name, OpenFAST.Template.Operator.Operator.Copy,
+            ComposedScalar scalar = Util.ComposedDecimal(_name, Operator.Copy,
                                                          ScalarValue.Undefined,
-                                                         OpenFAST.Template.Operator.Operator.Delta,
+                                                         Operator.Delta,
                                                          ScalarValue.Undefined, true);
 
             TestUtil.AssertBitVectorEquals(encoding,

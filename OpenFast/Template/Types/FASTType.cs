@@ -22,40 +22,41 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System;
 using System.Collections.Generic;
 using System.Text;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types.Codec;
 using OpenFAST.Utility;
 
 namespace OpenFAST.Template.Types
 {
     [Serializable]
-    public abstract class FASTType
+    public abstract class FastType
     {
-        private static readonly Dictionary<string, FASTType> TypeNameMap = new Dictionary<string, FASTType>();
+        private static readonly Dictionary<string, FastType> TypeNameMap = new Dictionary<string, FastType>();
 
-        public static readonly FASTType U8 = new UnsignedIntegerType(8, 256);
-        public static readonly FASTType U16 = new UnsignedIntegerType(16, 65536);
-        public static readonly FASTType U32 = new UnsignedIntegerType(32, 4294967295L);
-        public static readonly FASTType U64 = new UnsignedIntegerType(64, Int64.MaxValue);
-        public static readonly FASTType I8 = new SignedIntegerType(8, SByte.MinValue, SByte.MaxValue);
-        public static readonly FASTType I16 = new SignedIntegerType(16, Int16.MinValue, Int16.MaxValue);
-        public static readonly FASTType I32 = new SignedIntegerType(32, Int32.MinValue, Int32.MaxValue);
-        public static readonly FASTType I64 = new SignedIntegerType(64, Int64.MinValue, Int64.MaxValue);
-        public static readonly FASTType String = new FASTTypeString("string", TypeCodec.Ascii, TypeCodec.NullableAscii);
-        public static readonly FASTType Ascii = new FASTTypeString("ascii", TypeCodec.Ascii, TypeCodec.NullableAscii);
+        public static readonly FastType U8 = new UnsignedIntegerType(8, 256);
+        public static readonly FastType U16 = new UnsignedIntegerType(16, 65536);
+        public static readonly FastType U32 = new UnsignedIntegerType(32, 4294967295L);
+        public static readonly FastType U64 = new UnsignedIntegerType(64, Int64.MaxValue);
+        public static readonly FastType I8 = new SignedIntegerType(8, SByte.MinValue, SByte.MaxValue);
+        public static readonly FastType I16 = new SignedIntegerType(16, Int16.MinValue, Int16.MaxValue);
+        public static readonly FastType I32 = new SignedIntegerType(32, Int32.MinValue, Int32.MaxValue);
+        public static readonly FastType I64 = new SignedIntegerType(64, Int64.MinValue, Int64.MaxValue);
+        public static readonly FastType String = new TypeString("string", TypeCodec.Ascii, TypeCodec.NullableAscii);
+        public static readonly FastType Ascii = new TypeString("ascii", TypeCodec.Ascii, TypeCodec.NullableAscii);
 
-        public static readonly FASTType Unicode = new FASTUTFTypeString("unicode", TypeCodec.Unicode,
+        public static readonly FastType Unicode = new UtfTypeString("unicode", TypeCodec.Unicode,
                                                                         TypeCodec.NullableUnicode);
 
-        public static readonly FASTType ByteVector = new ByteVectorType();
-        public static readonly FASTType Decimal = new DecimalType();
+        public static readonly FastType ByteVector = new ByteVectorType();
+        public static readonly FastType Decimal = new DecimalType();
 
-        public static readonly FASTType[] IntegerTypes = new[] {U8, U16, U32, U64, I8, I16, I32, I64};
+        public static readonly FastType[] IntegerTypes = new[] { U8, U16, U32, U64, I8, I16, I32, I64 };
 
-        private static FASTType[] _staticAllTypes;
+        private static FastType[] _staticAllTypes;
 
         private readonly string _name;
 
-        protected FASTType(string typeName)
+        protected FastType(string typeName)
         {
             if (typeName == null) throw new ArgumentNullException("typeName");
             _name = typeName;
@@ -69,14 +70,14 @@ namespace OpenFAST.Template.Types
 
         public abstract ScalarValue DefaultValue { get; }
 
-        public static Dictionary<string, FASTType> RegisteredTypeMap
+        public static Dictionary<string, FastType> RegisteredTypeMap
         {
             get { return TypeNameMap; }
         }
 
-        public static FASTType GetType(string typeName)
+        public static FastType GetType(string typeName)
         {
-            FASTType value;
+            FastType value;
             if (TypeNameMap.TryGetValue(typeName, out value))
                 return value;
 
@@ -96,7 +97,7 @@ namespace OpenFAST.Template.Types
             return value.ToString();
         }
 
-        public abstract TypeCodec GetCodec(Operator.Operator op, bool optional);
+        public abstract TypeCodec GetCodec(Operator op, bool optional);
         public abstract ScalarValue GetValue(string value);
         public abstract bool IsValueOf(ScalarValue priorValue);
 
@@ -104,7 +105,7 @@ namespace OpenFAST.Template.Types
         {
         }
 
-        public static FASTType[] AllTypes()
+        public static FastType[] AllTypes()
         {
             return _staticAllTypes ??
                    (_staticAllTypes = new[]
@@ -125,7 +126,7 @@ namespace OpenFAST.Template.Types
         {
             if (ReferenceEquals(this, obj)) return true;
 
-            var other = obj as FASTType;
+            var other = obj as FastType;
             if (ReferenceEquals(null, other)) return false;
             return Equals(other._name, _name);
         }
@@ -137,11 +138,11 @@ namespace OpenFAST.Template.Types
 
         #endregion
 
-        #region Nested type: FASTTypeString
+        #region Nested type: TypeString
 
-        private sealed class FASTTypeString : StringType
+        private sealed class TypeString : StringType
         {
-            public FASTTypeString(string typeName, TypeCodec codec, TypeCodec nullableCodec)
+            public TypeString(string typeName, TypeCodec codec, TypeCodec nullableCodec)
                 : base(typeName, codec, nullableCodec)
             {
             }
@@ -154,11 +155,11 @@ namespace OpenFAST.Template.Types
 
         #endregion
 
-        #region Nested type: FASTUTFTypeString
+        #region Nested type: UtfTypeString
 
-        private sealed class FASTUTFTypeString : StringType
+        private sealed class UtfTypeString : StringType
         {
-            public FASTUTFTypeString(string typeName, TypeCodec codec, TypeCodec nullableCodec)
+            public UtfTypeString(string typeName, TypeCodec codec, TypeCodec nullableCodec)
                 : base(typeName, codec, nullableCodec)
             {
             }

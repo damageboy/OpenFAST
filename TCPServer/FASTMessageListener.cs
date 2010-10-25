@@ -1,7 +1,6 @@
-﻿using OpenFAST;
-using OpenFAST.Session;
+﻿using OpenFAST.Sessions;
 
-namespace TCPServer
+namespace OpenFAST.TCPServer
 {
     public class FASTMessageListener : IMessageListener
     {

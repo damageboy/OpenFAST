@@ -8,7 +8,7 @@
     <ProjectGuid>{02E1C7BC-F6ED-405C-9AC2-00217B09C332}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TCPClient</RootNamespace>
+    <RootNamespace>OpenFAST.TCPClient</RootNamespace>
     <AssemblyName>TCPClient</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FASTClient.cs" />
-    <Compile Include="FASTClientMessageHandler.cs" />
+    <Compile Include="ClientMessageHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

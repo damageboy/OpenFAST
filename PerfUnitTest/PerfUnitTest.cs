@@ -3,7 +3,7 @@ using System.IO;
 using NUnit.Framework;
 using OpenFAST.Codec;
 using OpenFAST.Template;
-using OpenFAST.Template.Operator;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 
 namespace OpenFAST.PerfUnitTest
@@ -47,19 +47,19 @@ namespace OpenFAST.PerfUnitTest
                     "Quote",
                     new[]
                         {
-                            new Scalar("SYMBOL", FASTType.String, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("TIME_STAMP", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("BID_EXCH_Q", FASTType.String, Operator.Copy, emptyStr, false),
-                            new Scalar("SEQ_NUM", FASTType.U32, Operator.Increment, zero, false),
-                            new Scalar("BID_Q", FASTType.I32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("BID_SIZE_Q", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("DATE_STAMP", FASTType.String, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("SCALE", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("ITEM_TYPE", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("CONDITION", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("ASK_EXCH_Q", FASTType.String, Operator.Copy, emptyStr, false),
-                            new Scalar("ASK_Q", FASTType.I32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("ASK_SIZE_Q", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("SYMBOL", FastType.String, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("TIME_STAMP", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("BID_EXCH_Q", FastType.String, Operator.Copy, emptyStr, false),
+                            new Scalar("SEQ_NUM", FastType.U32, Operator.Increment, zero, false),
+                            new Scalar("BID_Q", FastType.I32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("BID_SIZE_Q", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("DATE_STAMP", FastType.String, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("SCALE", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("ITEM_TYPE", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("CONDITION", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("ASK_EXCH_Q", FastType.String, Operator.Copy, emptyStr, false),
+                            new Scalar("ASK_Q", FastType.I32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("ASK_SIZE_Q", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
                         }));
 
             _context.RegisterTemplate(
@@ -68,16 +68,16 @@ namespace OpenFAST.PerfUnitTest
                     "Trade",
                     new[]
                         {
-                            new Scalar("SYMBOL", FASTType.String, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("TIME_STAMP", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("EXCH", FASTType.String, Operator.Copy, emptyStr, false),
-                            new Scalar("SEQ_NUM", FASTType.U32, Operator.Increment, zero, false),
-                            new Scalar("PRICE", FASTType.I32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("VOLUME", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("DATE_STAMP", FASTType.String, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("SCALE", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("ITEM_TYPE", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("CONDITION", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("SYMBOL", FastType.String, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("TIME_STAMP", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("EXCH", FastType.String, Operator.Copy, emptyStr, false),
+                            new Scalar("SEQ_NUM", FastType.U32, Operator.Increment, zero, false),
+                            new Scalar("PRICE", FastType.I32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("VOLUME", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("DATE_STAMP", FastType.String, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("SCALE", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("ITEM_TYPE", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("CONDITION", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
                         }));
 
             _context.RegisterTemplate(
@@ -86,16 +86,16 @@ namespace OpenFAST.PerfUnitTest
                     "Bid",
                     new[]
                         {
-                            new Scalar("SYMBOL", FASTType.String, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("TIME_STAMP", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("EXCH", FASTType.String, Operator.Copy, emptyStr, false),
-                            new Scalar("SEQ_NUM", FASTType.U32, Operator.Increment, zero, false),
-                            new Scalar("PRICE_B", FASTType.I32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("VOLUME_B", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("DATE_STAMP", FASTType.String, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("SCALE", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("ITEM_TYPE", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("CONDITION", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("SYMBOL", FastType.String, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("TIME_STAMP", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("EXCH", FastType.String, Operator.Copy, emptyStr, false),
+                            new Scalar("SEQ_NUM", FastType.U32, Operator.Increment, zero, false),
+                            new Scalar("PRICE_B", FastType.I32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("VOLUME_B", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("DATE_STAMP", FastType.String, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("SCALE", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("ITEM_TYPE", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("CONDITION", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
                         }));
             _context.RegisterTemplate(
                 'A',
@@ -103,16 +103,16 @@ namespace OpenFAST.PerfUnitTest
                     "Ask",
                     new[]
                         {
-                            new Scalar("SYMBOL", FASTType.String, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("TIME_STAMP", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("EXCH", FASTType.String, Operator.Copy, emptyStr, false),
-                            new Scalar("SEQ_NUM", FASTType.U32, Operator.Increment, zero, false),
-                            new Scalar("PRICE_A", FASTType.I32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("VOLUME_A", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("DATE_STAMP", FASTType.String, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("SCALE", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("ITEM_TYPE", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
-                            new Scalar("CONDITION", FASTType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("SYMBOL", FastType.String, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("TIME_STAMP", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("EXCH", FastType.String, Operator.Copy, emptyStr, false),
+                            new Scalar("SEQ_NUM", FastType.U32, Operator.Increment, zero, false),
+                            new Scalar("PRICE_A", FastType.I32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("VOLUME_A", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("DATE_STAMP", FastType.String, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("SCALE", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("ITEM_TYPE", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
+                            new Scalar("CONDITION", FastType.U32, Operator.Copy, ScalarValue.Undefined, false),
                         }));
         }
 

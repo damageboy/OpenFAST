@@ -103,7 +103,7 @@ namespace OpenFAST.Template.Loader
             set { _initialContext.ErrorHandler = value; }
         }
 
-        public Dictionary<string, FASTType> TypeMap
+        public Dictionary<string, FastType> TypeMap
         {
             get { return _initialContext.TypeMap; }
             set { _initialContext.TypeMap = value; }
@@ -115,7 +115,7 @@ namespace OpenFAST.Template.Loader
                                      {
                                          ErrorHandler = ErrorHandlerFields.Default,
                                          TemplateRegistry = new BasicTemplateRegistry(),
-                                         TypeMap = FASTType.RegisteredTypeMap,
+                                         TypeMap = FastType.RegisteredTypeMap,
                                          FieldParsers = new List<IFieldParser>()
                                      };
             initialContext.AddFieldParser(new ScalarParser());

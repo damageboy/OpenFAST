@@ -20,6 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types.Codec;
 
 namespace OpenFAST.Template.Types
@@ -32,9 +33,9 @@ namespace OpenFAST.Template.Types
         {
         }
 
-        public override TypeCodec GetCodec(Operator.Operator op, bool optional)
+        public override TypeCodec GetCodec(Operator op, bool optional)
         {
-            if (op.Equals(Operator.Operator.Delta))
+            if (op.Equals(Operator.Delta))
                 return optional ? TypeCodec.NullableInteger : TypeCodec.Integer;
 
             return base.GetCodec(op, optional);

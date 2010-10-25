@@ -22,6 +22,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System;
 using System.IO;
 using OpenFAST.Error;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 
 namespace OpenFAST.Template
@@ -110,8 +111,8 @@ namespace OpenFAST.Template
 
         private static Scalar CreateLength(QName name, bool optional)
         {
-            return new Scalar(Global.CreateImplicitName(name), FASTType.U32, Operator.Operator.None,
-                              ScalarValue.Undefined, optional);
+            return new Scalar(Global.CreateImplicitName(name), FastType.U32, Operator.None, ScalarValue.Undefined,
+                              optional);
         }
 
         public override bool UsesPresenceMapBit

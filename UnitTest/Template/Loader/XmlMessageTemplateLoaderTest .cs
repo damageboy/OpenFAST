@@ -25,6 +25,7 @@ using NUnit.Framework;
 using OpenFAST.Error;
 using OpenFAST.Template;
 using OpenFAST.Template.Loader;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 using OpenFAST.Template.Types.Codec;
 using OpenFAST.UnitTests.Test;
@@ -46,7 +47,7 @@ namespace OpenFAST.UnitTests.Template.Loader
             IMessageTemplateLoader loader = new XmlMessageTemplateLoader();
             MessageTemplate bvt = loader.Load(new MemoryStream(Encoding.ASCII.GetBytes(templateXml)))[0];
 
-            AssertScalarField(bvt, 1, FASTType.ByteVector, "data", OpenFAST.Template.Operator.Operator.Tail);
+            AssertScalarField(bvt, 1, FastType.ByteVector, "data", Operator.Tail);
         }
 
         [Test]
@@ -66,8 +67,8 @@ namespace OpenFAST.UnitTests.Template.Loader
             MessageTemplate[] templates = loader.Load(new MemoryStream(Encoding.ASCII.GetBytes(template2Xml)));
 
             Assert.AreEqual(4, templates[0].FieldCount);
-            AssertScalarField(templates[0], 1, FASTType.U32, "quantity", OpenFAST.Template.Operator.Operator.None);
-            AssertScalarField(templates[0], 3, FASTType.Decimal, "price", OpenFAST.Template.Operator.Operator.None);
+            AssertScalarField(templates[0], 1, FastType.U32, "quantity", Operator.None);
+            AssertScalarField(templates[0], 3, FastType.Decimal, "price", Operator.None);
             Assert.True(templates[0].GetField(2) is DynamicTemplateReference);
         }
 
@@ -84,66 +85,43 @@ namespace OpenFAST.UnitTests.Template.Loader
 
             /********************************** TEMPLATE FIELDS **********************************/
             int index = 0;
-            AssertScalarField(messageTemplate, index++, FASTType.U32, "templateId",
-                              OpenFAST.Template.Operator.Operator.Copy);
-            AssertScalarField(messageTemplate, index++, FASTType.Ascii, "8",
-                              OpenFAST.Template.Operator.Operator.Constant);
-            AssertScalarField(messageTemplate, index++, FASTType.U32, "9", OpenFAST.Template.Operator.Operator.Constant);
-            AssertScalarField(messageTemplate, index++, FASTType.Ascii, "35",
-                              OpenFAST.Template.Operator.Operator.Constant);
-            AssertScalarField(messageTemplate, index++, FASTType.Ascii, "49",
-                              OpenFAST.Template.Operator.Operator.Constant);
-            AssertScalarField(messageTemplate, index++, FASTType.U32, "34",
-                              OpenFAST.Template.Operator.Operator.Increment);
-            AssertScalarField(messageTemplate, index++, FASTType.Ascii, "52", OpenFAST.Template.Operator.Operator.Delta);
-            AssertScalarField(messageTemplate, index++, FASTType.U32, "75", OpenFAST.Template.Operator.Operator.Copy);
+            AssertScalarField(messageTemplate, index++, FastType.U32, "templateId", Operator.Copy);
+            AssertScalarField(messageTemplate, index++, FastType.Ascii, "8", Operator.Constant);
+            AssertScalarField(messageTemplate, index++, FastType.U32, "9", Operator.Constant);
+            AssertScalarField(messageTemplate, index++, FastType.Ascii, "35", Operator.Constant);
+            AssertScalarField(messageTemplate, index++, FastType.Ascii, "49", Operator.Constant);
+            AssertScalarField(messageTemplate, index++, FastType.U32, "34", Operator.Increment);
+            AssertScalarField(messageTemplate, index++, FastType.Ascii, "52", Operator.Delta);
+            AssertScalarField(messageTemplate, index++, FastType.U32, "75", Operator.Copy);
 
             /************************************* SEQUENCE **************************************/
             AssertSequence(messageTemplate, index, 17);
 
             var sequence = (Sequence) messageTemplate.GetField(index++);
             Assert.AreEqual("MDEntries", sequence.TypeReference.Name);
-            AssertSequenceLengthField(sequence, "268", FASTType.U32, OpenFAST.Template.Operator.Operator.None);
+            AssertSequenceLengthField(sequence, "268", FastType.U32, Operator.None);
 
             /********************************** SEQUENCE FIELDS **********************************/
             int seqIndex = 0;
-            AssertScalarField(sequence, seqIndex++, FASTType.Decimal, "270",
-                              OpenFAST.Template.Operator.Operator.Delta);
-            AssertScalarField(sequence, seqIndex++, FASTType.I32, "271",
-                              OpenFAST.Template.Operator.Operator.Delta);
-            AssertScalarField(sequence, seqIndex++, FASTType.U32, "273",
-                              OpenFAST.Template.Operator.Operator.Delta);
-            AssertOptionalScalarField(sequence, seqIndex++, FASTType.U32,
-                                      "346", OpenFAST.Template.Operator.Operator.None);
-            AssertScalarField(sequence, seqIndex++, FASTType.U32, "1023",
-                              OpenFAST.Template.Operator.Operator.Increment);
-            AssertScalarField(sequence, seqIndex++, FASTType.Ascii, "279",
-                              OpenFAST.Template.Operator.Operator.Copy);
-            AssertScalarField(sequence, seqIndex++, FASTType.Ascii, "269",
-                              OpenFAST.Template.Operator.Operator.Copy);
-            AssertScalarField(sequence, seqIndex++, FASTType.Ascii, "107",
-                              OpenFAST.Template.Operator.Operator.Copy);
-            AssertScalarField(sequence, seqIndex++, FASTType.Ascii, "48",
-                              OpenFAST.Template.Operator.Operator.Delta);
-            AssertScalarField(sequence, seqIndex++, FASTType.Ascii, "276",
-                              OpenFAST.Template.Operator.Operator.Copy);
-            AssertScalarField(sequence, seqIndex++, FASTType.Ascii, "274",
-                              OpenFAST.Template.Operator.Operator.Copy);
-            AssertScalarField(sequence, seqIndex++, FASTType.Decimal, "451",
-                              OpenFAST.Template.Operator.Operator.Copy);
-            AssertScalarField(sequence, seqIndex++, FASTType.Ascii, "277",
-                              OpenFAST.Template.Operator.Operator.Default);
-            AssertOptionalScalarField(sequence, seqIndex++, FASTType.U32,
-                                      "1020", OpenFAST.Template.Operator.Operator.None);
-            AssertScalarField(sequence, seqIndex++, FASTType.I32, "537",
-                              OpenFAST.Template.Operator.Operator.Default);
-            AssertScalarField(sequence, seqIndex++, FASTType.Ascii, "1024",
-                              OpenFAST.Template.Operator.Operator.Default);
-            AssertScalarField(sequence, seqIndex, FASTType.Ascii, "336",
-                              OpenFAST.Template.Operator.Operator.Default);
+            AssertScalarField(sequence, seqIndex++, FastType.Decimal, "270", Operator.Delta);
+            AssertScalarField(sequence, seqIndex++, FastType.I32, "271", Operator.Delta);
+            AssertScalarField(sequence, seqIndex++, FastType.U32, "273", Operator.Delta);
+            AssertOptionalScalarField(sequence, seqIndex++, FastType.U32, "346", Operator.None);
+            AssertScalarField(sequence, seqIndex++, FastType.U32, "1023", Operator.Increment);
+            AssertScalarField(sequence, seqIndex++, FastType.Ascii, "279", Operator.Copy);
+            AssertScalarField(sequence, seqIndex++, FastType.Ascii, "269", Operator.Copy);
+            AssertScalarField(sequence, seqIndex++, FastType.Ascii, "107", Operator.Copy);
+            AssertScalarField(sequence, seqIndex++, FastType.Ascii, "48", Operator.Delta);
+            AssertScalarField(sequence, seqIndex++, FastType.Ascii, "276", Operator.Copy);
+            AssertScalarField(sequence, seqIndex++, FastType.Ascii, "274", Operator.Copy);
+            AssertScalarField(sequence, seqIndex++, FastType.Decimal, "451", Operator.Copy);
+            AssertScalarField(sequence, seqIndex++, FastType.Ascii, "277", Operator.Default);
+            AssertOptionalScalarField(sequence, seqIndex++, FastType.U32, "1020", Operator.None);
+            AssertScalarField(sequence, seqIndex++, FastType.I32, "537", Operator.Default);
+            AssertScalarField(sequence, seqIndex++, FastType.Ascii, "1024", Operator.Default);
+            AssertScalarField(sequence, seqIndex, FastType.Ascii, "336", Operator.Default);
 
-            AssertScalarField(messageTemplate, index, FASTType.Ascii, "10",
-                              OpenFAST.Template.Operator.Operator.None);
+            AssertScalarField(messageTemplate, index, FastType.Ascii, "10", Operator.None);
         }
 
         [Test]
@@ -165,20 +143,16 @@ namespace OpenFAST.UnitTests.Template.Loader
             MessageTemplate messageTemplate = templates[0];
             Assert.AreEqual("SampleTemplate", messageTemplate.Name);
             Assert.AreEqual(7, messageTemplate.FieldCount);
-            AssertComposedScalarField(messageTemplate, 1, FASTType.Decimal, "bid",
-                                      OpenFAST.Template.Operator.Operator.Copy, Int(-2),
-                                      OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined);
-            AssertComposedScalarField(messageTemplate, 2, FASTType.Decimal, "ask",
-                                      OpenFAST.Template.Operator.Operator.None, ScalarValue.Undefined,
-                                      OpenFAST.Template.Operator.Operator.Delta, ScalarValue.Undefined);
-            AssertComposedScalarField(messageTemplate, 3, FASTType.Decimal, "high",
-                                      OpenFAST.Template.Operator.Operator.Copy, ScalarValue.Undefined,
-                                      OpenFAST.Template.Operator.Operator.None, ScalarValue.Undefined);
-            AssertComposedScalarField(messageTemplate, 4, FASTType.Decimal, "low",
-                                      OpenFAST.Template.Operator.Operator.Copy, Int(-2),
-                                      OpenFAST.Template.Operator.Operator.Delta, Int(10));
-            AssertScalarField(messageTemplate, 5, FASTType.Decimal, "open", OpenFAST.Template.Operator.Operator.Copy);
-            AssertScalarField(messageTemplate, 6, FASTType.Decimal, "close", OpenFAST.Template.Operator.Operator.Copy);
+            AssertComposedScalarField(messageTemplate, 1, FastType.Decimal, "bid", Operator.Copy, Int(-2),
+                                      Operator.Delta, ScalarValue.Undefined);
+            AssertComposedScalarField(messageTemplate, 2, FastType.Decimal, "ask", Operator.None, ScalarValue.Undefined,
+                                      Operator.Delta, ScalarValue.Undefined);
+            AssertComposedScalarField(messageTemplate, 3, FastType.Decimal, "high", Operator.Copy, ScalarValue.Undefined,
+                                      Operator.None, ScalarValue.Undefined);
+            AssertComposedScalarField(messageTemplate, 4, FastType.Decimal, "low", Operator.Copy, Int(-2),
+                                      Operator.Delta, Int(10));
+            AssertScalarField(messageTemplate, 5, FastType.Decimal, "open", Operator.Copy);
+            AssertScalarField(messageTemplate, 6, FastType.Decimal, "close", Operator.Copy);
         }
 
         [Test]
@@ -297,9 +271,9 @@ namespace OpenFAST.UnitTests.Template.Loader
             loader1.Load(new MemoryStream(Encoding.ASCII.GetBytes(template1Xml)));
             MessageTemplate[] templates = loader2.Load(new MemoryStream(Encoding.ASCII.GetBytes(template2Xml)));
             Assert.AreEqual(4, templates[0].FieldCount);
-            AssertScalarField(templates[0], 1, FASTType.U32, "quantity", OpenFAST.Template.Operator.Operator.None);
-            AssertScalarField(templates[0], 2, FASTType.Ascii, "string", OpenFAST.Template.Operator.Operator.None);
-            AssertScalarField(templates[0], 3, FASTType.Decimal, "price", OpenFAST.Template.Operator.Operator.None);
+            AssertScalarField(templates[0], 1, FastType.U32, "quantity", Operator.None);
+            AssertScalarField(templates[0], 2, FastType.Ascii, "string", Operator.None);
+            AssertScalarField(templates[0], 3, FastType.Decimal, "price", Operator.None);
         }
 
         [Test]
@@ -318,9 +292,9 @@ namespace OpenFAST.UnitTests.Template.Loader
             MessageTemplate[] templates =
                 new XmlMessageTemplateLoader().Load(new MemoryStream(Encoding.ASCII.GetBytes(templateXml)));
             AssertEquals(4, templates[1].FieldCount);
-            AssertScalarField(templates[1], 1, FASTType.U32, "quantity", OpenFAST.Template.Operator.Operator.None);
-            AssertScalarField(templates[1], 2, FASTType.Ascii, "string", OpenFAST.Template.Operator.Operator.None);
-            AssertScalarField(templates[1], 3, FASTType.Decimal, "price", OpenFAST.Template.Operator.Operator.None);
+            AssertScalarField(templates[1], 1, FastType.U32, "quantity", Operator.None);
+            AssertScalarField(templates[1], 2, FastType.Ascii, "string", Operator.None);
+            AssertScalarField(templates[1], 3, FastType.Decimal, "price", Operator.None);
         }
 
         [Test]
@@ -340,9 +314,9 @@ namespace OpenFAST.UnitTests.Template.Loader
             MessageTemplate[] templates = loader.Load(new MemoryStream(Encoding.ASCII.GetBytes(template2Xml)));
 
             Assert.AreEqual(4, templates[0].FieldCount);
-            AssertScalarField(templates[0], 1, FASTType.U32, "quantity", OpenFAST.Template.Operator.Operator.None);
-            AssertScalarField(templates[0], 2, FASTType.Ascii, "string", OpenFAST.Template.Operator.Operator.None);
-            AssertScalarField(templates[0], 3, FASTType.Decimal, "price", OpenFAST.Template.Operator.Operator.None);
+            AssertScalarField(templates[0], 1, FastType.U32, "quantity", Operator.None);
+            AssertScalarField(templates[0], 2, FastType.Ascii, "string", Operator.None);
+            AssertScalarField(templates[0], 3, FastType.Decimal, "price", Operator.None);
         }
 
         //public void testCustomFieldParser() {

@@ -22,7 +22,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System;
 using System.IO;
 using OpenFAST.Error;
-using OpenFAST.Template.Operator;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 using OpenFAST.Template.Types.Codec;
 using OpenFAST.Utility;
@@ -34,30 +34,30 @@ namespace OpenFAST.Template
     {
         private readonly ScalarValue _defaultValue;
         private readonly ScalarValue _initialValue;
-        private readonly Operator.Operator _operator;
+        private readonly Operator _operator;
         private readonly OperatorCodec _operatorCodec;
-        private readonly FASTType _fastType;
+        private readonly FastType _fastType;
         private readonly TypeCodec _typeCodec;
         private string _dictionary;
 
-        public Scalar(string name, FASTType fastType, Operator.Operator op, ScalarValue defaultValue,
+        public Scalar(string name, FastType fastType, Operator op, ScalarValue defaultValue,
                       bool optional)
             : this(new QName(name), fastType, op, defaultValue, optional)
         {
         }
 
-        public Scalar(QName name, FASTType fastType, Operator.Operator op, ScalarValue defaultValue,
+        public Scalar(QName name, FastType fastType, Operator op, ScalarValue defaultValue,
                       bool optional)
             : this(name, fastType, op, op.GetCodec(fastType), defaultValue, optional)
         {
         }
 
-        public Scalar(QName name, FASTType fastType, OperatorCodec operatorCodec, ScalarValue defaultValue, bool optional)
+        public Scalar(QName name, FastType fastType, OperatorCodec operatorCodec, ScalarValue defaultValue, bool optional)
             : this(name, fastType, operatorCodec.Operator, operatorCodec, defaultValue, optional)
         {
         }
 
-        private Scalar(QName name, FASTType fastType, Operator.Operator op, OperatorCodec operatorCodec,
+        private Scalar(QName name, FastType fastType, Operator op, OperatorCodec operatorCodec,
                        ScalarValue defaultValue, bool optional)
             : base(name, optional)
         {
@@ -71,12 +71,12 @@ namespace OpenFAST.Template
             op.Validate(this);
         }
 
-        public FASTType FASTType
+        public FastType FASTType
         {
             get { return _fastType; }
         }
 
-        public Operator.Operator Operator
+        public Operator Operator
         {
             get { return _operator; }
         }
@@ -219,14 +219,14 @@ namespace OpenFAST.Template
             }
         }
 
-        private static void ValidateDecodedValueIsCorrectForType(ScalarValue value, FASTType type)
+        private static void ValidateDecodedValueIsCorrectForType(ScalarValue value, FastType type)
         {
             if (value == null)
                 return;
             type.ValidateValue(value);
         }
 
-        private static void ValidateDictionaryTypeAgainstFieldType(ScalarValue priorValue, FASTType type)
+        private static void ValidateDictionaryTypeAgainstFieldType(ScalarValue priorValue, FastType type)
         {
             if (priorValue == null || priorValue.IsUndefined)
                 return;

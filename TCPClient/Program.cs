@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace TCPClient
+namespace OpenFAST.TCPClient
 {
     internal class Program
     {
@@ -10,7 +10,7 @@ namespace TCPClient
             Thread.Sleep(1000);
             try
             {
-                var client = new FASTClient("127.0.0.1", 16121);
+                var client = new FastClient("127.0.0.1", 16121);
                 client.Connect();
                 Thread.Sleep(1000);
                 while (true)

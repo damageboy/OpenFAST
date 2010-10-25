@@ -20,6 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System.Xml;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 using OpenFAST.Utility;
 
@@ -84,7 +85,7 @@ namespace OpenFAST.Template.Loader
                 mantissaOperator = operatorElement.Name;
 
                 if (operatorElement.HasAttribute("value"))
-                    mantissaDefaultValue = FASTType.I64.GetValue(operatorElement.GetAttribute("value"));
+                    mantissaDefaultValue = FastType.I64.GetValue(operatorElement.GetAttribute("value"));
                 if (operatorElement.HasAttribute("ns"))
                     mantissaNamespace = operatorElement.GetAttribute("ns");
                 if (operatorElement.HasAttribute("key"))
@@ -99,7 +100,7 @@ namespace OpenFAST.Template.Loader
                 exponentOperator = operatorElement.Name;
 
                 if (operatorElement.HasAttribute("value"))
-                    exponentDefaultValue = FASTType.I32.GetValue(operatorElement.GetAttribute("value"));
+                    exponentDefaultValue = FastType.I32.GetValue(operatorElement.GetAttribute("value"));
                 if (operatorElement.HasAttribute("ns"))
                     exponentNamespace = operatorElement.GetAttribute("ns");
                 if (operatorElement.HasAttribute("key"))
@@ -108,9 +109,8 @@ namespace OpenFAST.Template.Loader
                     exponentDictionary = operatorElement.GetAttribute("dictionary");
             }
 
-            ComposedScalar scalar = Util.ComposedDecimal(name, Operator.Operator.GetOperator(exponentOperator),
-                                                         exponentDefaultValue,
-                                                         Operator.Operator.GetOperator(mantissaOperator),
+            ComposedScalar scalar = Util.ComposedDecimal(name, Operator.GetOperator(exponentOperator),
+                                                         exponentDefaultValue, Operator.GetOperator(mantissaOperator),
                                                          mantissaDefaultValue, optional);
 
             Scalar exponent = scalar.Fields[0];

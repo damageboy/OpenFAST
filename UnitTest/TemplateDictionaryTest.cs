@@ -22,7 +22,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using NUnit.Framework;
 using OpenFAST.Error;
 using OpenFAST.Template;
-using OpenFAST.Template.Operator;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 
 namespace OpenFAST.UnitTests
@@ -38,7 +38,7 @@ namespace OpenFAST.UnitTests
                 "Position",
                 new Field[]
                     {
-                        new Scalar("exchange", FASTType.String, Operator.Copy, ScalarValue.Undefined, false)
+                        new Scalar("exchange", FastType.String, Operator.Copy, ScalarValue.Undefined, false)
                     });
             ScalarValue value = new StringValue("NYSE");
             dictionary.Store(template, FastConstants.AnyType, new QName("exchange"), value);
@@ -54,7 +54,7 @@ namespace OpenFAST.UnitTests
                 "Position",
                 new Field[]
                     {
-                        new Scalar("exchange", FASTType.String, Operator.Copy, ScalarValue.Undefined, false)
+                        new Scalar("exchange", FastType.String, Operator.Copy, ScalarValue.Undefined, false)
                     });
             ScalarValue value = new StringValue("NYSE");
             ScalarValue marketValue = new DecimalValue(100000.00);
@@ -74,7 +74,7 @@ namespace OpenFAST.UnitTests
                 "Position",
                 new Field[]
                     {
-                        new Scalar("exchange", FASTType.String, Operator.Copy, ScalarValue.Undefined, false)
+                        new Scalar("exchange", FastType.String, Operator.Copy, ScalarValue.Undefined, false)
                     });
             ScalarValue value = new StringValue("NYSE");
             dictionary.Store(template, FastConstants.AnyType, new QName("exchange"), value);
@@ -93,7 +93,7 @@ namespace OpenFAST.UnitTests
                 "Position",
                 new Field[]
                     {
-                        new Scalar("exchange", FASTType.String, Operator.Copy, ScalarValue.Undefined, false)
+                        new Scalar("exchange", FastType.String, Operator.Copy, ScalarValue.Undefined, false)
                     });
             ScalarValue value = new StringValue("NYSE");
             dictionary.Store(template, FastConstants.AnyType, new QName("exchange"), value);
@@ -104,7 +104,7 @@ namespace OpenFAST.UnitTests
                 "Quote",
                 new Field[]
                     {
-                        new Scalar("bid", FASTType.Decimal, Operator.Delta, ScalarValue.Undefined, false)
+                        new Scalar("bid", FastType.Decimal, Operator.Delta, ScalarValue.Undefined, false)
                     });
             Assert.AreEqual(ScalarValue.Undefined,
                             dictionary.Lookup(quoteTemplate, new QName("exchange"), FastConstants.AnyType));

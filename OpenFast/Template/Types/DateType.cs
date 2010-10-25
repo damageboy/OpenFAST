@@ -21,12 +21,13 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System;
 using System.Globalization;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types.Codec;
 
 namespace OpenFAST.Template.Types
 {
     [Serializable]
-    public sealed class DateType : FASTType, IEquatable<DateType>
+    public sealed class DateType : FastType, IEquatable<DateType>
     {
         private readonly TypeCodec _dateCodec;
         private readonly string _format;
@@ -54,7 +55,7 @@ namespace OpenFAST.Template.Types
             return priorValue is DateValue;
         }
 
-        public override TypeCodec GetCodec(Operator.Operator op, bool optional)
+        public override TypeCodec GetCodec(Operator op, bool optional)
         {
             return _dateCodec;
         }

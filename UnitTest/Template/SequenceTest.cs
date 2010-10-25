@@ -22,6 +22,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System.IO;
 using NUnit.Framework;
 using OpenFAST.Template;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 using OpenFAST.UnitTests.Test;
 
@@ -50,8 +51,8 @@ namespace OpenFAST.UnitTests.Template
             const string actual = "10000010 11100000 10000001 10000010 11100000 10000011 10000100";
             Stream stream = ByteUtil.CreateByteStream(actual);
 
-            var firstNumber = new Scalar("First Number", FASTType.I32, OpenFAST.Template.Operator.Operator.Copy, ScalarValue.Undefined, false);
-            var lastNumber = new Scalar("Second Number", FASTType.I32, OpenFAST.Template.Operator.Operator.Copy, ScalarValue.Undefined, false);
+            var firstNumber = new Scalar("First Number", FastType.I32, Operator.Copy, ScalarValue.Undefined, false);
+            var lastNumber = new Scalar("Second Number", FastType.I32, Operator.Copy, ScalarValue.Undefined, false);
             var sequence1 = new Sequence("Contants", new Field[] {firstNumber, lastNumber}, false);
 
             var sequenceValue = new SequenceValue(sequence1);
@@ -71,8 +72,8 @@ namespace OpenFAST.UnitTests.Template
         [Test]
         public void TestEncode()
         {
-            var firstName = new Scalar("First Name", FASTType.I32, OpenFAST.Template.Operator.Operator.Copy, ScalarValue.Undefined, false);
-            var lastName = new Scalar("Last Name", FASTType.I32, OpenFAST.Template.Operator.Operator.Copy, ScalarValue.Undefined, false);
+            var firstName = new Scalar("First Name", FastType.I32, Operator.Copy, ScalarValue.Undefined, false);
+            var lastName = new Scalar("Last Name", FastType.I32, Operator.Copy, ScalarValue.Undefined, false);
             var sequence1 = new Sequence("Contacts", new Field[] {firstName, lastName}, false);
 
             var sequenceValue = new SequenceValue(sequence1);

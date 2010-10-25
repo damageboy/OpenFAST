@@ -21,9 +21,9 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using System.IO;
 using NUnit.Framework;
-using OpenFAST.Session;
+using OpenFAST.Sessions;
 using OpenFAST.Template;
-using OpenFAST.Template.Operator;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 using OpenFAST.UnitTests.Test;
 
@@ -39,7 +39,7 @@ namespace OpenFAST.UnitTests
         {
             _output = new StreamWriter(new MemoryStream());
             _connection = new MyConnection(_output.BaseStream);
-            _session = new OpenFAST.Session.Session(_connection,
+            _session = new OpenFAST.Sessions.Session(_connection,
                                    SessionConstants.Scp10,
                                    TemplateRegistryFields.Null, TemplateRegistryFields.Null);
         }
@@ -53,7 +53,7 @@ namespace OpenFAST.UnitTests
 
         #endregion
 
-        private OpenFAST.Session.Session _session;
+        private OpenFAST.Sessions.Session _session;
         private StreamWriter _output;
         private MyConnection _connection;
 
@@ -92,12 +92,12 @@ namespace OpenFAST.UnitTests
         [Test]
         public void TestMultipleDictionaryTypes()
         {
-            var bid = new Scalar("bid", FASTType.Decimal, Operator.Copy, ScalarValue.Undefined, false)
+            var bid = new Scalar("bid", FastType.Decimal, Operator.Copy, ScalarValue.Undefined, false)
                           {Dictionary = DictionaryFields.Template};
 
             var quote = new MessageTemplate("quote", new Field[] {bid});
 
-            var bidR = new Scalar("bid", FASTType.Decimal, Operator.Copy, ScalarValue.Undefined, false);
+            var bidR = new Scalar("bid", FastType.Decimal, Operator.Copy, ScalarValue.Undefined, false);
             var request = new MessageTemplate("request",
                                               new Field[] {bidR});
 

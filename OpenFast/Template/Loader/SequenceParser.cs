@@ -20,6 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System.Xml;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 
 namespace OpenFAST.Template.Loader
@@ -54,9 +55,8 @@ namespace OpenFAST.Template.Loader
 
             if (lengthElements.Count == 0)
             {
-                var implicitLength = new Scalar(Global.CreateImplicitName(name), FASTType.U32, Operator.Operator.None,
-                                                ScalarValue.Undefined, optional)
-                                         {Dictionary = parent.Dictionary};
+                var implicitLength = new Scalar(Global.CreateImplicitName(name), FastType.U32, Operator.None,
+                                                ScalarValue.Undefined, optional) {Dictionary = parent.Dictionary};
                 return implicitLength;
             }
 
@@ -86,9 +86,9 @@ namespace OpenFAST.Template.Loader
                 enclosingInstance = internalInstance;
             }
 
-            protected internal override FASTType GetType(XmlElement fieldNode, ParsingContext context)
+            protected internal override FastType GetType(XmlElement fieldNode, ParsingContext context)
             {
-                return FASTType.U32;
+                return FastType.U32;
             }
 
             protected internal override QName GetName(XmlElement fieldNode, ParsingContext context)

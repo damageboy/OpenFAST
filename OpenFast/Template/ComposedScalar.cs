@@ -31,16 +31,16 @@ namespace OpenFAST.Template
     {
         private const Type ScalarValueType = null;
         private readonly Scalar[] _fields;
-        private readonly FASTType _fastType;
+        private readonly FastType _fastType;
         private readonly IComposedValueConverter _valueConverter;
 
-        public ComposedScalar(string name, FASTType fastType, Scalar[] fields, bool optional,
+        public ComposedScalar(string name, FastType fastType, Scalar[] fields, bool optional,
                               IComposedValueConverter valueConverter)
             : this(new QName(name), fastType, fields, optional, valueConverter)
         {
         }
 
-        public ComposedScalar(QName name, FASTType fastType, Scalar[] fields, bool optional,
+        public ComposedScalar(QName name, FastType fastType, Scalar[] fields, bool optional,
                               IComposedValueConverter valueConverter) : base(name, optional)
         {
             _fields = fields;
@@ -58,7 +58,7 @@ namespace OpenFAST.Template
             get { return ScalarValueType; }
         }
 
-        public FASTType FASTType
+        public FastType FASTType
         {
             get { return _fastType; }
         }

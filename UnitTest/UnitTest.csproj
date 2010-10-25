@@ -101,11 +101,11 @@
     <Compile Include="Template\Loader\TemplateRefParserTest.cs" />
     <Compile Include="Template\Loader\XmlMessageTemplateLoaderTest .cs" />
     <Compile Include="Template\MessageTemplateTest.cs" />
-    <Compile Include="Template\Operator\DefaultOperatorTest.cs" />
-    <Compile Include="Template\Operator\DeltaByteVectorOperatorTest.cs" />
-    <Compile Include="Template\Operator\DeltaDecimalOperatorTest.cs" />
-    <Compile Include="Template\Operator\DeltaStringOperatorTest.cs" />
-    <Compile Include="Template\Operator\OperatorTest.cs" />
+    <Compile Include="Template\Operators\DefaultOperatorTest.cs" />
+    <Compile Include="Template\Operators\DeltaByteVectorOperatorTest.cs" />
+    <Compile Include="Template\Operators\DeltaDecimalOperatorTest.cs" />
+    <Compile Include="Template\Operators\DeltaStringOperatorTest.cs" />
+    <Compile Include="Template\Operators\OperatorTest.cs" />
     <Compile Include="Template\SequenceTest.cs" />
     <Compile Include="Template\Types\Codec\SignedIntegerTest.cs" />
     <Compile Include="Template\Types\Codec\SingleFieldDecimalTest.cs" />

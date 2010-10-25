@@ -40,7 +40,7 @@ namespace OpenFAST.Template.Loader
         private string _namespace;
         private string _templateNamespace;
         private ITemplateRegistry _templateRegistry;
-        private Dictionary<string, FASTType> _typeMap;
+        private Dictionary<string, FastType> _typeMap;
 
         static ParsingContext()
         {
@@ -101,7 +101,7 @@ namespace OpenFAST.Template.Loader
             set { _templateRegistry = value; }
         }
 
-        public virtual Dictionary<string, FASTType> TypeMap
+        public virtual Dictionary<string, FastType> TypeMap
         {
             get { return _typeMap ?? _parent.TypeMap; }
             set { _typeMap = value; }

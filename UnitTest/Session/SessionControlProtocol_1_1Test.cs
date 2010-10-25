@@ -20,7 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using NUnit.Framework;
-using OpenFAST.Session;
+using OpenFAST.Sessions;
 using OpenFAST.UnitTests.Test;
 using OpenFAST.Template;
 

@@ -33,10 +33,10 @@ namespace OpenFAST.UnitTests.Template
 //        [Test]
 //        public void TestGetType()
 //        {
-//            Assert.Equals(FASTType.U32, FASTType.GetType("uInt32"));
+//            Assert.Equals(FastType.U32, FastType.GetType("uInt32"));
 //            try
 //            {
-//                FASTType.GetType("u32");
+//                FastType.GetType("u32");
 //                Assert.Fail();
 //            }
 //            catch (Exception e)

@@ -21,6 +21,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 */
 using NUnit.Framework;
 using OpenFAST.Error;
+using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 using OpenFAST.Template.Types.Codec;
 using OpenFAST.UnitTests.Test;
@@ -33,7 +34,7 @@ namespace OpenFAST.UnitTests.Template.Types.Codec
         [Test]
         public void TestDecodeEmptyString()
         {
-            TypeCodec coder = FASTType.Ascii.GetCodec(OpenFAST.Template.Operator.Operator.None, false);
+            TypeCodec coder = FastType.Ascii.GetCodec(Operator.None, false);
 
             Assert.AreEqual("", coder.Decode(BitStream("10000000")).ToString());
             Assert.AreEqual("\u0000", coder.Decode(BitStream("00000000 10000000")).ToString());
