@@ -114,7 +114,7 @@ namespace OpenFAST
         {
             if (group.HasTypeReference)
                 _currentApplicationType = group.TypeReference;
-            dictionary.Store(group, _currentApplicationType, key, valueToEncode);
+            dictionary.Store(group, key, _currentApplicationType, valueToEncode);
         }
 
         internal IDictionary GetDictionary(string dictionary)

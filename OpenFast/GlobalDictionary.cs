@@ -38,7 +38,7 @@ namespace OpenFAST
             return _dictionary.TryGetValue(key, out value) ? value : ScalarValue.Undefined;
         }
 
-        public void Store(Group group, QName applicationType, QName key, ScalarValue value)
+        public void Store(Group template, QName key, QName applicationType, ScalarValue value)
         {
             _dictionary[key] = value;
         }

@@ -51,8 +51,8 @@ namespace OpenFAST
 
     public interface IDictionary
     {
-        ScalarValue Lookup(Group template, QName key, QName currentApplicationType);
-        void Store(Group group, QName applicationType, QName key, ScalarValue valueToEncode);
+        ScalarValue Lookup(Group template, QName key, QName applicationType);
+        void Store(Group template, QName key, QName applicationType, ScalarValue value);
         void Reset();
     }
 }

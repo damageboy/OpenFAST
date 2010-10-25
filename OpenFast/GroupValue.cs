@@ -233,12 +233,12 @@ namespace OpenFAST
         public bool TryGetValue(string fieldName, out IFieldValue value)
         {
             int index;
-            value = null;
             if (_group.TryGetFieldIndex(fieldName, out index))
             {
                 value = _values[index];
                 return true;
             }
+            value = null;
             return false;
         }
 
@@ -370,12 +370,7 @@ namespace OpenFAST
         public bool IsDefined(string fieldName)
         {
             IFieldValue ret;
-            if (TryGetValue(fieldName, out ret))
-            {
-                if (ret != null)
-                    return true;
-            }
-            return false;
+            return TryGetValue(fieldName, out ret) && ret != null;
         }
 
         #region Equals

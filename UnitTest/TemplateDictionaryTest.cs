@@ -41,7 +41,7 @@ namespace OpenFAST.UnitTests
                         new Scalar("exchange", FastType.String, Operator.Copy, ScalarValue.Undefined, false)
                     });
             ScalarValue value = new StringValue("NYSE");
-            dictionary.Store(template, FastConstants.AnyType, new QName("exchange"), value);
+            dictionary.Store(template, new QName("exchange"), FastConstants.AnyType, value);
 
             Assert.AreEqual(ScalarValue.Undefined, dictionary.Lookup(template, new QName("bid"), FastConstants.AnyType));
         }
@@ -58,8 +58,8 @@ namespace OpenFAST.UnitTests
                     });
             ScalarValue value = new StringValue("NYSE");
             ScalarValue marketValue = new DecimalValue(100000.00);
-            dictionary.Store(template, FastConstants.AnyType, new QName("exchange"), value);
-            dictionary.Store(template, FastConstants.AnyType, new QName("marketValue"), marketValue);
+            dictionary.Store(template, new QName("exchange"), FastConstants.AnyType, value);
+            dictionary.Store(template, new QName("marketValue"), FastConstants.AnyType, marketValue);
 
             Assert.AreNotEqual(ScalarValue.Undefined, value);
             Assert.AreEqual(value, dictionary.Lookup(template, new QName("exchange"), FastConstants.AnyType));
@@ -77,7 +77,7 @@ namespace OpenFAST.UnitTests
                         new Scalar("exchange", FastType.String, Operator.Copy, ScalarValue.Undefined, false)
                     });
             ScalarValue value = new StringValue("NYSE");
-            dictionary.Store(template, FastConstants.AnyType, new QName("exchange"), value);
+            dictionary.Store(template, new QName("exchange"), FastConstants.AnyType, value);
 
             Assert.AreEqual(value, dictionary.Lookup(template, new QName("exchange"), FastConstants.AnyType));
             dictionary.Reset();
@@ -96,7 +96,7 @@ namespace OpenFAST.UnitTests
                         new Scalar("exchange", FastType.String, Operator.Copy, ScalarValue.Undefined, false)
                     });
             ScalarValue value = new StringValue("NYSE");
-            dictionary.Store(template, FastConstants.AnyType, new QName("exchange"), value);
+            dictionary.Store(template, new QName("exchange"), FastConstants.AnyType, value);
 
             Assert.AreEqual(value, dictionary.Lookup(template, new QName("exchange"), FastConstants.AnyType));
 

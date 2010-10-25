@@ -48,9 +48,9 @@ namespace OpenFAST
             _dictionary.Clear();
         }
 
-        public void Store(Group group, QName applicationType, QName key, ScalarValue value)
+        public void Store(Group template, QName key, QName applicationType, ScalarValue value)
         {
-            _dictionary[Tuple.Create(group.TypeReference, key)] = value;
+            _dictionary[Tuple.Create(template.TypeReference, key)] = value;
         }
 
         #endregion

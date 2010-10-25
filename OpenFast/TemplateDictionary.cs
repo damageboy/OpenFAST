@@ -48,9 +48,9 @@ namespace OpenFAST
             _dictionary.Clear();
         }
 
-        public void Store(Group group, QName applicationType, QName key, ScalarValue valueToEncode)
+        public void Store(Group template, QName key, QName applicationType, ScalarValue value)
         {
-            _dictionary[Tuple.Create(group, key)] = valueToEncode;
+            _dictionary[Tuple.Create(template, key)] = value;
         }
 
         #endregion
