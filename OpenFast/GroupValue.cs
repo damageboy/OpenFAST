@@ -104,9 +104,12 @@ namespace OpenFAST
 
         public bool GetBool(string fieldName)
         {
-            if (!IsDefined(fieldName))
+            IFieldValue ret;
+            if(!(TryGetValue(fieldName, out ret) && ret != null))
+            {
                 return false;
-            return GetScalar(fieldName).ToInt() != 0;
+            }
+            return ((ScalarValue) ret).ToInt() != 0;
         }
 
         public long GetLong(int fieldIndex)

@@ -50,9 +50,10 @@ namespace OpenFAST.Sessions.Template.Exchange
                 mantissaDefaultValue = new LongValue(mantissaDef.GetInt("InitialValue"));
             ComposedScalar composedDecimal = Util.ComposedDecimal(name, exponentOperator, exponentDefaultValue,
                                                                   mantissaOperator, mantissaDefaultValue, optional);
-            if (fieldDef.IsDefined("AuxId"))
+            IFieldValue retAuxId;
+            if (fieldDef.TryGetValue("AuxId", out retAuxId) && retAuxId!=null)
             {
-                composedDecimal.Id = fieldDef.GetString("AuxId");
+                composedDecimal.Id = retAuxId.ToString();
             }
             return composedDecimal;
         }

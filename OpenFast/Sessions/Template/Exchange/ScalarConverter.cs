@@ -59,26 +59,32 @@ namespace OpenFAST.Sessions.Template.Exchange
         {
             FastType type = _templateTypeMap[fieldDef.Group];
             bool optional = fieldDef.GetBool("Optional");
-            ScalarValue initialValue = fieldDef.IsDefined("InitialValue")
-                                           ? (ScalarValue) fieldDef.GetValue("InitialValue")
+            IFieldValue retInitialValue;
+            ScalarValue initialValue = fieldDef.TryGetValue("InitialValue",out retInitialValue) && retInitialValue!=null
+                                           ? (ScalarValue)retInitialValue
                                            : ScalarValue.Undefined;
 
             string name = fieldDef.GetString("Name");
-            string tempNs = fieldDef.IsDefined("Ns") ? fieldDef.GetString("Ns") : "";
+            IFieldValue rettempNs;
+            string tempNs = fieldDef.TryGetValue("Ns", out rettempNs) && rettempNs != null ? rettempNs.ToString() : "";
             var qname = new QName(name, tempNs);
 
             Scalar scalar;
-            if (fieldDef.IsDefined("Operator"))
+            IFieldValue retOperator;
+            if (fieldDef.TryGetValue("Operator", out retOperator) && retOperator!=null)
             {
-                GroupValue operatorGroup = fieldDef.GetGroup("Operator").GetGroup(0);
+                GroupValue operatorGroup = ((GroupValue)retOperator).GetGroup(0);
                 Operator operatortemp = GetOperator(operatorGroup.Group);
                 scalar = new Scalar(qname, type, operatortemp, initialValue, optional);
-                if (operatorGroup.IsDefined("Dictionary"))
-                    scalar.Dictionary = operatorGroup.GetString("Dictionary");
-                if (operatorGroup.IsDefined("Key"))
+                IFieldValue retDictionary;
+                if (operatorGroup.TryGetValue("Dictionary", out retDictionary) && retDictionary != null)
+                    scalar.Dictionary = retDictionary.ToString();
+                IFieldValue retKey;
+                if (operatorGroup.TryGetValue("Key", out retKey) && retKey != null)
                 {
-                    string keyName = operatorGroup.GetGroup("Key").GetString("Name");
-                    string ns = operatorGroup.GetGroup("Key").GetString("Ns");
+                    GroupValue retOperatorGroup = (GroupValue) retKey;
+                    string keyName = retOperatorGroup.GetString("Name");
+                    string ns = retOperatorGroup.GetString("Ns");
                     scalar.Key = new QName(keyName, ns);
                 }
             }
@@ -86,9 +92,10 @@ namespace OpenFAST.Sessions.Template.Exchange
             {
                 scalar = new Scalar(qname, type, Operator.None, initialValue, optional);
             }
-            if (fieldDef.IsDefined("AuxId"))
+            IFieldValue retAuxId;
+            if (fieldDef.TryGetValue("AuxId", out retAuxId) && retAuxId!=null)
             {
-                scalar.Id = fieldDef.GetString("AuxId");
+                scalar.Id = retAuxId.ToString();
             }
             return scalar;
         }

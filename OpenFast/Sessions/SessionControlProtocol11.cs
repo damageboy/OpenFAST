@@ -642,24 +642,26 @@ namespace OpenFAST.Sessions
             //return new MessageTemplate(name, fields);
             string name = templateDef.GetString("Name");
             string tempnamespace = "";
-            if (templateDef.IsDefined("Ns"))
-                tempnamespace = templateDef.GetString("Ns");
+            IFieldValue retNs;
+            if (templateDef.TryGetValue("Ns", out retNs) && retNs!=null)
+                tempnamespace = retNs.ToString();
             Field[] fields = GroupConverter.ParseFieldInstructions(templateDef, registry, _initialContext);
             var group = new MessageTemplate(new QName(name, tempnamespace), fields);
-            
-            if (templateDef.IsDefined("TypeRef"))
+            IFieldValue retTypeRef;
+            if (templateDef.TryGetValue("TypeRef", out retTypeRef) && retTypeRef!=null)
             {
-                GroupValue typeRef = templateDef.GetGroup("TypeRef");
+                GroupValue typeRef = (GroupValue)retTypeRef;
                 string typeRefName = typeRef.GetString("Name");
                 string typeRefNs = ""; // context.getNamespace();
-                if (typeRef.IsDefined("Ns"))
-                    typeRefNs = typeRef.GetString("Ns");
+                IFieldValue retNs2;
+                if (typeRef.TryGetValue("Ns", out retNs2) && retNs2!=null)
+                    typeRefNs = retNs2.ToString();
                 group.TypeReference = new QName(typeRefName, typeRefNs);
             }
-
-            if (templateDef.IsDefined("AuxId"))
+            IFieldValue retAuxId;
+            if (templateDef.TryGetValue("AuxId", out retAuxId) && retAuxId!=null)
             {
-                group.Id = templateDef.GetString("AuxId");
+                group.Id = retAuxId.ToString();
             }
             
             return group;

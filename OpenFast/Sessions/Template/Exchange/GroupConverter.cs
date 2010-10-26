@@ -36,23 +36,29 @@ namespace OpenFAST.Sessions.Template.Exchange
         {
             string name = fieldDef.GetString("Name");
             string namespacetemp = "";
-            if (fieldDef.IsDefined("Ns"))
-                namespacetemp = fieldDef.GetString("Ns");
+            IFieldValue retns;
+            if (fieldDef.TryGetValue("Ns", out retns) && retns != null )
+            {
+                namespacetemp = retns.ToString();
+            }
             Field[] fields = ParseFieldInstructions(fieldDef, templateRegistry, context);
             bool optional = fieldDef.GetBool("Optional");
             var group = new Group(new QName(name, namespacetemp), fields, optional);
-            if (fieldDef.IsDefined("TypeRef"))
+            IFieldValue retTypeRef;
+            if (fieldDef.TryGetValue("TypeRef", out retTypeRef) && retTypeRef != null)
             {
-                GroupValue typeRef = fieldDef.GetGroup("TypeRef");
+                GroupValue typeRef = (GroupValue)retTypeRef;
                 String typeRefName = typeRef.GetString("Name");
                 String typeRefNs = ""; // context.getNamespace();
-                if (typeRef.IsDefined("Ns"))
-                    typeRefNs = typeRef.GetString("Ns");
+                IFieldValue retNsTypeRef;
+                if (typeRef.TryGetValue("Ns", out retNsTypeRef) && retNsTypeRef != null )
+                    typeRefNs = retNsTypeRef.ToString();
                 group.TypeReference = new QName(typeRefName, typeRefNs);
             }
-            if (fieldDef.IsDefined("AuxId"))
+            IFieldValue retAuxId;
+            if (fieldDef.TryGetValue("AuxId", out retAuxId) && retAuxId != null)
             {
-                group.Id = fieldDef.GetString("AuxId");
+                group.Id = retAuxId.ToString();
             }
             return group;
         }

@@ -35,8 +35,9 @@ namespace OpenFAST.Sessions.Template.Exchange
         public override Field Convert(GroupValue fieldDef, ITemplateRegistry templateRegistry, ConversionContext context)
         {
             var scalar = (Scalar) base.Convert(fieldDef, templateRegistry, context);
-            if (fieldDef.IsDefined("Length"))
-                scalar.AddAttribute(FastConstants.LengthField, fieldDef.GetGroup("Length").GetString("Name"));
+            IFieldValue retLength;
+            if (fieldDef.TryGetValue("Length", out retLength) && retLength!=null)
+                scalar.AddAttribute(FastConstants.LengthField, ((GroupValue)retLength).GetString("Name"));
             return scalar;
         }
 

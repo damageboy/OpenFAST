@@ -41,38 +41,44 @@ namespace OpenFAST.Sessions.Template.Exchange
             Field[] fields = GroupConverter.ParseFieldInstructions(fieldDef, templateRegistry, context);
             bool optional = fieldDef.GetBool("Optional");
             Scalar length = null;
-            if (fieldDef.IsDefined("Length"))
+            IFieldValue retLength;
+            if (fieldDef.TryGetValue("Length", out retLength) && retLength!=null)
             {
-                GroupValue lengthDef = fieldDef.GetGroup("Length");
+                GroupValue lengthDef = (GroupValue)retLength;
                 QName lengthName;
                 string id = null;
-                if (lengthDef.IsDefined("Name"))
+                IFieldValue retName;
+                if (lengthDef.TryGetValue("Name", out retName) && retName != null)
                 {
-                    GroupValue nameDef = lengthDef.GetGroup("Name");
+                    GroupValue nameDef = (GroupValue)retName;
                     lengthName = new QName(nameDef.GetString("Name"), nameDef.GetString("Ns"));
-                    if (nameDef.IsDefined("AuxId"))
-                        id = nameDef.GetString("AuxId");
+                    IFieldValue retAuxId;
+                    if (nameDef.TryGetValue("AuxId", out retAuxId) && retAuxId != null)
+                        id = retAuxId.ToString();
                 }
                 else
                     lengthName = Global.CreateImplicitName(qname);
                 Operator op = Operator.None;
-                if (lengthDef.IsDefined("Operator"))
-                    op = GetOperator(lengthDef.GetGroup("Operator").GetGroup(0).Group);
+                IFieldValue retOperator;
+                if (lengthDef.TryGetValue("Operator", out retOperator) && retOperator != null)
+                    op = GetOperator(((GroupValue)retOperator).GetGroup(0).Group);
                 ScalarValue initialValue = ScalarValue.Undefined;
-                if (lengthDef.IsDefined("InitialValue"))
-                    initialValue = (ScalarValue) lengthDef.GetValue("InitialValue");
+                IFieldValue retInitialValue;
+                if (lengthDef.TryGetValue("InitialValue", out retInitialValue) && retInitialValue != null)
+                    initialValue = (ScalarValue) retInitialValue;
                 length = new Scalar(lengthName, FastType.U32, op, initialValue, optional) {Id = id};
             }
 
             var sequence = new Sequence(qname, length, fields, optional);
-
-            if (fieldDef.IsDefined("TypeRef"))
+            IFieldValue retTypeRef;
+            if (fieldDef.TryGetValue("TypeRef", out retTypeRef) && retTypeRef != null)
             {
-                GroupValue typeRef = fieldDef.GetGroup("TypeRef");
+                GroupValue typeRef = (GroupValue)retTypeRef;
                 string typeRefName = typeRef.GetString("Name");
                 string typeRefNs = ""; // context.getNamespace();
-                if (typeRef.IsDefined("Ns"))
-                    typeRefNs = typeRef.GetString("Ns");
+                IFieldValue rettypeRefNs;
+                if (typeRef.TryGetValue("Ns", out rettypeRefNs) && rettypeRefNs!=null)
+                    typeRefNs = rettypeRefNs.ToString();
                 sequence.TypeReference = new QName(typeRefName, typeRefNs);
             }
             return sequence;
