@@ -31,7 +31,7 @@ namespace OpenFAST.Template.Loader
 
         public override bool CanParse(XmlElement element, ParsingContext context)
         {
-            return "byteVector".Equals(element.Name);
+            return "byteVector".Equals(element.LocalName);
         }
     }
 }

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<tests xmlns="http://www.fixprotocol.org/ns/fast/t/1.0"
+       xmlns:td="http://www.fixprotocol.org/ns/fast/td/1.1"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.fixprotocol.org/ns/fast/t/1.0 ../TemplateSchema.xsd">
+
+  <test name="EmptyMessage">
+    <desc>Empty message and empty template</desc>
+    <td:templates>
+      <td:template id="113" name=""></td:template>
+    </td:templates>
+    <binstr>11000000 11110001</binstr>
+    <data>
+      <message>$M=TestTemplate|1=111111</message>
+      <message>1=111112|2=222223|3=33333334|4=44444445|5=testString2|6=10.51</message>
+      <message>group1=&lt;1=111156|2=22242>&lt;1=11112|2=222224>|group3=&lt;6=10.5>&lt;6=10.5431></message>
+      <message>group1=&lt;1=111156|2=22242>&lt;1=11112|2=222224>|group3=&lt;6=10.5>&lt;6=10.5431></message>
+    </data>
+  </test>
+
+</tests>

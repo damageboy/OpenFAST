@@ -58,8 +58,14 @@
       <HintPath>..\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationTypeDictionaryTest.cs" />
@@ -131,6 +137,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test\TestUtil.cs" />
     <Compile Include="TypeConversionTest.cs" />
+    <Compile Include="XmlBasedTests\XmlTestRunner.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OpenFast\OpenFAST.csproj">
@@ -165,6 +172,9 @@
       <Link>CME\messages.fast</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <EmbeddedResource Include="..\Files\TestSchema.xsd">
+      <Link>XmlBasedTests\TestSchema.xsd</Link>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

@@ -22,6 +22,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
 using System;
 using System.Linq;
 using System.Xml;
+using OpenFAST.Error;
 
 namespace OpenFAST.Template.Loader
 {
@@ -42,7 +43,7 @@ namespace OpenFAST.Template.Loader
 
         public virtual bool CanParse(XmlElement element, ParsingContext context)
         {
-            return _parseableNodeNames.Any(t => t.Equals(element.Name));
+            return _parseableNodeNames.Any(t => t.Equals(element.LocalName));
         }
 
         public Field Parse(XmlElement fieldNode, ParsingContext parent)
@@ -62,7 +63,7 @@ namespace OpenFAST.Template.Loader
             {
                 var attribute = (XmlAttribute) attributes.Item(i);
                 if (string.IsNullOrEmpty(attribute.NamespaceURI) ||
-                    attribute.NamespaceURI.Equals(XmlMessageTemplateLoader.TemplateDefinitionNs))
+                    attribute.NamespaceURI.Equals(FastConstants.TemplateDefinition11))
                     continue;
                 field.AddAttribute(new QName(attribute.LocalName, attribute.NamespaceURI), attribute.Value);
             }

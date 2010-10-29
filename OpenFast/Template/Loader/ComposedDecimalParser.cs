@@ -37,7 +37,7 @@ namespace OpenFAST.Template.Loader
             XmlNodeList children = element.ChildNodes;
             for (int i = 0; i < children.Count; i++)
             {
-                string nodeName = children.Item(i).Name;
+                string nodeName = children.Item(i).LocalName;
                 if (nodeName.Equals("mantissa") || nodeName.Equals("exponent"))
                     return true;
             }
@@ -52,11 +52,11 @@ namespace OpenFAST.Template.Loader
 
             for (int i = 0; i < fieldChildren.Count; i++)
             {
-                if ("mantissa".Equals(fieldChildren.Item(i).Name))
+                if ("mantissa".Equals(fieldChildren.Item(i).LocalName))
                 {
                     mantissaNode = fieldChildren.Item(i);
                 }
-                else if ("exponent".Equals(fieldChildren.Item(i).Name))
+                else if ("exponent".Equals(fieldChildren.Item(i).LocalName))
                 {
                     exponentNode = fieldChildren.Item(i);
                 }
@@ -82,7 +82,7 @@ namespace OpenFAST.Template.Loader
             if ((mantissaNode != null) && mantissaNode.HasChildNodes)
             {
                 XmlElement operatorElement = GetElement((XmlElement) mantissaNode, 1);
-                mantissaOperator = operatorElement.Name;
+                mantissaOperator = operatorElement.LocalName;
 
                 if (operatorElement.HasAttribute("value"))
                     mantissaDefaultValue = FastType.I64.GetValue(operatorElement.GetAttribute("value"));
@@ -97,7 +97,7 @@ namespace OpenFAST.Template.Loader
             if ((exponentNode != null) && exponentNode.HasChildNodes)
             {
                 XmlElement operatorElement = GetElement((XmlElement) exponentNode, 1);
-                exponentOperator = operatorElement.Name;
+                exponentOperator = operatorElement.LocalName;
 
                 if (operatorElement.HasAttribute("value"))
                     exponentDefaultValue = FastType.I32.GetValue(operatorElement.GetAttribute("value"));

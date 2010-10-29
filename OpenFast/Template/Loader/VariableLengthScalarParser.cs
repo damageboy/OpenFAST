@@ -34,7 +34,7 @@ namespace OpenFAST.Template.Loader
         {
             var scalar = (Scalar) base.Parse(fieldNode, optional, context);
             XmlElement element = GetElement(fieldNode, 1);
-            if (element != null && element.Name.Equals("length"))
+            if (element != null && element.LocalName.Equals("length"))
             {
                 string length = element.GetAttribute("name");
                 scalar.AddAttribute(FastConstants.LengthField, length);
@@ -45,7 +45,7 @@ namespace OpenFAST.Template.Loader
         protected override XmlElement GetOperatorElement(XmlElement fieldNode)
         {
             XmlElement operatorElement = base.GetOperatorElement(fieldNode);
-            if (operatorElement != null && operatorElement.Name.Equals("length"))
+            if (operatorElement != null && operatorElement.LocalName.Equals("length"))
                 return GetElement(fieldNode, 2);
             return operatorElement;
         }

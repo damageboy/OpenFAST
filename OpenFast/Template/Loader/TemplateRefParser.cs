@@ -49,7 +49,7 @@ namespace OpenFAST.Template.Loader
 
         public virtual bool CanParse(XmlElement element, ParsingContext context)
         {
-            return "templateRef".Equals(element.Name);
+            return "templateRef".Equals(element.LocalName);
         }
 
         #endregion

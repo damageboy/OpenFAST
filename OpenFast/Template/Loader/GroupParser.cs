@@ -58,13 +58,13 @@ namespace OpenFAST.Template.Loader
 
                 if (IsElement(item))
                 {
-                    if ("typeRef".Equals(item.Name) || "length".Equals(item.Name))
+                    if ("typeRef".Equals(item.LocalName) || "length".Equals(item.LocalName))
                         continue;
                     var element = (XmlElement) item;
                     IFieldParser fieldParser = context.GetFieldParser(element);
                     if (fieldParser == null)
                         context.ErrorHandler.OnError(null, DynError.ParseError, "No parser registered for {0}",
-                                                     element.Name);
+                                                     element.LocalName);
                     if (fieldParser != null) fields.Add(fieldParser.Parse(element, context));
                 }
             }

@@ -20,6 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System.IO;
+using System.Xml;
 
 namespace OpenFAST.Template.Loader
 {
@@ -27,5 +28,6 @@ namespace OpenFAST.Template.Loader
     {
         ITemplateRegistry TemplateRegistry { get; set; }
         MessageTemplate[] Load(Stream source);
+        MessageTemplate[] Load(XmlElement root);
     }
 }

@@ -30,12 +30,6 @@ namespace OpenFAST.Template.Loader
 {
     public sealed class XmlMessageTemplateLoader : IMessageTemplateLoader
     {
-        internal const string TemplateDefinitionNs = "http://www.fixprotocol.org/ns/fast/td/1.1";
-
-        internal static readonly StaticError IoError = StaticError.IoError;
-        internal static readonly StaticError XmlParsingError = StaticError.XmlParsingError;
-        internal static readonly StaticError InvalidType = StaticError.InvalidType;
-
         private readonly ParsingContext _initialContext;
 
         private bool _loadTemplateIdFromAuxId;
@@ -49,6 +43,18 @@ namespace OpenFAST.Template.Loader
         {
             get { return _loadTemplateIdFromAuxId; }
             set { _loadTemplateIdFromAuxId = value; }
+        }
+
+        public IErrorHandler ErrorHandler
+        {
+            get { return _initialContext.ErrorHandler; }
+            set { _initialContext.ErrorHandler = value; }
+        }
+
+        public Dictionary<string, FastType> TypeMap
+        {
+            get { return _initialContext.TypeMap; }
+            set { _initialContext.TypeMap = value; }
         }
 
         #region IMessageTemplateLoader Members
@@ -68,14 +74,19 @@ namespace OpenFAST.Template.Loader
 
             XmlElement root = document.DocumentElement;
 
+            return Load(root);
+        }
+
+        public MessageTemplate[] Load(XmlElement root)
+        {
             var templateParser = new TemplateParser(_loadTemplateIdFromAuxId);
             if (root != null)
             {
-                if (root.Name.Equals("template"))
+                if (root.LocalName.Equals("template"))
                 {
                     return new[] {(MessageTemplate) templateParser.Parse(root, _initialContext)};
                 }
-                if (root.Name.Equals("templates"))
+                if (root.LocalName.Equals("templates"))
                 {
                     var context = new ParsingContext(root, _initialContext);
 
@@ -90,24 +101,12 @@ namespace OpenFAST.Template.Loader
                 }
                 _initialContext.ErrorHandler.OnError(
                     null, StaticError.InvalidXml, "Invalid root node {0}, 'template' or 'templates' expected.",
-                    root.Name);
+                    root.LocalName);
             }
             return new MessageTemplate[] {};
         }
 
         #endregion
-
-        public IErrorHandler ErrorHandler
-        {
-            get { return _initialContext.ErrorHandler; }
-            set { _initialContext.ErrorHandler = value; }
-        }
-
-        public Dictionary<string, FastType> TypeMap
-        {
-            get { return _initialContext.TypeMap; }
-            set { _initialContext.TypeMap = value; }
-        }
 
         public static ParsingContext CreateInitialContext()
         {
@@ -143,12 +142,13 @@ namespace OpenFAST.Template.Loader
             }
             catch (IOException e)
             {
-                _initialContext.ErrorHandler.OnError(e, IoError, "Error occurred while trying to read xml template: {0}",
+                _initialContext.ErrorHandler.OnError(e, StaticError.IoError,
+                                                     "Error occurred while trying to read xml template: {0}",
                                                      e.Message);
             }
             catch (Exception e)
             {
-                _initialContext.ErrorHandler.OnError(e, XmlParsingError,
+                _initialContext.ErrorHandler.OnError(e, StaticError.XmlParsingError,
                                                      "Error occurred while parsing xml template: {0}", e.Message);
             }
 

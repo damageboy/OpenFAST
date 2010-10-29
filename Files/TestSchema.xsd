@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema
+  attributeFormDefault="unqualified"
+  elementFormDefault="qualified"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://www.fixprotocol.org/ns/fast/t/1.0"
+  xmlns:t="http://www.fixprotocol.org/ns/fast/t/1.0"
+  xmlns:td="http://www.fixprotocol.org/ns/fast/td/1.1">
+
+  <xs:import
+    schemaLocation="TemplateSchema.xsd"
+    namespace="http://www.fixprotocol.org/ns/fast/td/1.1"/>
+
+  <xs:element name="tests" type="t:tests" />
+
+  <xs:complexType name="tests">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" name="test" type="t:test"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="test">
+    <xs:sequence>
+
+      <xs:element minOccurs="0" name="desc" type="xs:string" />
+
+      <xs:choice>
+        <xs:element name="templatesfile" type="t:file" />
+        <xs:element ref="td:templates" />
+      </xs:choice>
+
+      <xs:choice>
+        <xs:element name="binfile" type="t:file" />
+        <xs:element name="binstr" type="t:binary" />
+        <xs:element name="bin64" type="xs:base64Binary" />
+      </xs:choice>
+
+      <xs:choice>
+        <xs:element name="datafile" type="t:file" />
+        <xs:element name="data">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="message" type="t:message"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+
+    </xs:sequence>
+
+    <xs:attribute name="name" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="file">
+    <xs:attribute name="path" type="xs:anyURI" use="required" />
+  </xs:complexType>
+
+  <xs:simpleType name="binary">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="collapse"/>
+      <xs:pattern value="([01][01][01][01][01][01][01][01]( )*)*"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="message">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="preserve"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

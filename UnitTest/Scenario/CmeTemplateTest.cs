@@ -32,16 +32,23 @@ namespace OpenFAST.UnitTests.Scenario
         [Test]
         public void TestDeltas()
         {
-            var templateSource = new StreamReader("CME/templates.xml");
-            var templateLoader = new XmlMessageTemplateLoader {LoadTemplateIdFromAuxId = true};
-            templateLoader.Load(templateSource.BaseStream);
+            var templateLoader = new XmlMessageTemplateLoader { LoadTemplateIdFromAuxId = true };
 
+            using (var stream = File.OpenRead("CME/templates.xml"))
+            {
+                templateLoader.Load(stream);
+            }
 
-            var is1 = new StreamReader("CME/messages.fast");
-            var mis = new MessageInputStream(is1.BaseStream);
-            mis.TemplateRegistry = templateLoader.TemplateRegistry;
-            Message md = mis.ReadMessage();
-            Assert.AreEqual(-5025.0, md.GetSequence("MDEntries")[0].GetDouble("NetChgPrevDay"), .1);
+            using (var stream = File.OpenRead("CME/messages.fast"))
+            {
+                var mis = new MessageInputStream(stream)
+                              {
+                                  TemplateRegistry = templateLoader.TemplateRegistry
+                              };
+
+                Message md = mis.ReadMessage();
+                Assert.AreEqual(-5025.0, md.GetSequence("MDEntries")[0].GetDouble("NetChgPrevDay"), .1);
+            }
         }
     }
 }

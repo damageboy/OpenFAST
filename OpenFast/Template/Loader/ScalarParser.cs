@@ -20,6 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using System.Xml;
+using OpenFAST.Error;
 using OpenFAST.Template.Operators;
 using OpenFAST.Template.Types;
 using OpenFAST.Utility;
@@ -56,7 +57,7 @@ namespace OpenFAST.Template.Loader
             {
                 if (operatorElement.HasAttribute("value"))
                     defaultValue = operatorElement.GetAttribute("value");
-                op = Operator.GetOperator(operatorElement.Name);
+                op = Operator.GetOperator(operatorElement.LocalName);
                 if (operatorElement.HasAttribute("key"))
                     key = operatorElement.GetAttribute("key");
                 if (operatorElement.HasAttribute("ns"))
@@ -89,7 +90,7 @@ namespace OpenFAST.Template.Loader
             if (!context.TypeMap.TryGetValue(typeName, out value))
             {
                 context.ErrorHandler.OnError(
-                    null, XmlMessageTemplateLoader.InvalidType,
+                    null, StaticError.InvalidType,
                     "The type {0} is not defined.  Possible types: {1}", typeName,
                     Util.CollectionToString(context.TypeMap.Keys, ", "));
             }
@@ -98,7 +99,7 @@ namespace OpenFAST.Template.Loader
 
         protected virtual string GetTypeName(XmlElement fieldNode)
         {
-            return fieldNode.Name;
+            return fieldNode.LocalName;
         }
 
         protected virtual XmlElement GetOperatorElement(XmlElement fieldNode)

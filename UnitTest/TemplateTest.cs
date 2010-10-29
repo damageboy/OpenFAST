@@ -36,9 +36,13 @@ namespace OpenFAST.UnitTests
         protected void SetUp()
         {
             _loader = new XmlMessageTemplateLoader();
-            _loader.Load(new StreamReader("components.xml").BaseStream);
-            _loader.Load(new StreamReader("preTrade.xml").BaseStream);
-            _loader.Load(new StreamReader("session.xml").BaseStream);
+
+            using (FileStream stream = File.OpenRead("components.xml"))
+                _loader.Load(stream);
+            using (FileStream stream = File.OpenRead("preTrade.xml"))
+                _loader.Load(stream);
+            using (FileStream stream = File.OpenRead("session.xml"))
+                _loader.Load(stream);
         }
 
         #endregion

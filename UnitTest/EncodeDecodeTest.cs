@@ -104,8 +104,7 @@ namespace OpenFAST.UnitTests
                                                      new IFieldValue[] {new StringValue("99-99999999")}));
             output.WriteMessage(abcBuilding);
 
-            var input = new MessageInputStream(new MemoryStream(
-                                                   outStream.ToArray()));
+            var input = new MessageInputStream(new MemoryStream(outStream.ToArray()));
             input.RegisterTemplate(1, template);
 
             GroupValue message = input.ReadMessage();
@@ -152,8 +151,7 @@ namespace OpenFAST.UnitTests
             output.WriteMessage(ai3);
 
             byte[] bytes = outStream.ToArray();
-            var input = new MessageInputStream(new MemoryStream(
-                                                   bytes));
+            var input = new MessageInputStream(new MemoryStream(bytes));
             input.RegisterTemplate(ObjectMother.AllocInstrctnTemplateId,
                                    ObjectMother.AllocationInstruction);
 

@@ -31,7 +31,7 @@ namespace OpenFAST.Template.Loader
 
         public override bool CanParse(XmlElement element, ParsingContext context)
         {
-            return element.Name.Equals("string");
+            return element.LocalName.Equals("string");
         }
 
         protected override string GetTypeName(XmlElement fieldNode)

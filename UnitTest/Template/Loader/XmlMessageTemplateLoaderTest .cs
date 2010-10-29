@@ -75,9 +75,9 @@ namespace OpenFAST.UnitTests.Template.Loader
         [Test]
         public void TestLoadMdIncrementalRefreshTemplate()
         {
-            var templateStream = new StreamReader("FPL/mdIncrementalRefreshTemplate.xml");
-            IMessageTemplateLoader loader = new XmlMessageTemplateLoader();
-            MessageTemplate messageTemplate = loader.Load(templateStream.BaseStream)[0];
+            MessageTemplate messageTemplate;
+            using (var stream = File.OpenRead("FPL/mdIncrementalRefreshTemplate.xml"))
+                messageTemplate = new XmlMessageTemplateLoader().Load(stream)[0];
 
             Assert.AreEqual("MDIncrementalRefresh", messageTemplate.TypeReference.Name);
             Assert.AreEqual("MDRefreshSample", messageTemplate.Name);
@@ -248,9 +248,8 @@ namespace OpenFAST.UnitTests.Template.Loader
         [Test]
         public void TestNullDocument()
         {
-            var loader = new XmlMessageTemplateLoader();
-            loader.ErrorHandler = ErrorHandlerFields.Null;
-            Assert.AreEqual(0, loader.Load(null).Length);
+            var loader = new XmlMessageTemplateLoader {ErrorHandler = ErrorHandlerFields.Null};
+            Assert.AreEqual(0, loader.Load((Stream) null).Length);
         }
 
         [Test]
