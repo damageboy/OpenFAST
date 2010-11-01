@@ -4,18 +4,185 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.fixprotocol.org/ns/fast/t/1.0 ../TemplateSchema.xsd">
 
-  <test name="EmptyMessage">
-    <desc>Empty message and empty template</desc>
+  <test name="CME_Decimals">
+    <desc>Decimals Test from CME</desc>
     <td:templates>
-      <td:template id="113" name=""></td:template>
+      <template name="TestTemplate" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
+        <typeRef name="TestTemplate"/>
+        <decimal id="1" name="Field1"/>
+        <decimal id="2" presence="optional" name="Field2"/>
+        <decimal id="3" presence="optional" name="Field3">
+          <exponent>
+            <copy/>
+          </exponent>
+          <mantissa>
+            <copy/>
+          </mantissa>
+        </decimal>
+        <decimal id="4" presence="optional" name="Field4">
+          <exponent>
+            <increment/>
+          </exponent>
+          <mantissa>
+            <increment/>
+          </mantissa>
+        </decimal>
+        <decimal id="5" name="Field5">
+          <exponent>
+            <delta/>
+          </exponent>
+          <mantissa>
+            <delta/>
+          </mantissa>
+        </decimal>
+        <decimal id="6" presence="optional" name="Field6">
+          <exponent>
+            <constant value="1"/>
+          </exponent>
+          <mantissa>
+            <constant value="520"/>
+          </mantissa>
+        </decimal>
+      </template>
     </td:templates>
-    <binstr>11000000 11110001</binstr>
+    <binstr>
+      11111110 10000001 11111110 00001000 10011111 11111111 00000001 11011110 11111111 00010010 10101000 11111111 00000010 11010110 11111111 00011010 11111100 10011110 11111110 00001000 10011110 11111111 00000001 11101000 00000010 11001110 11111111 00000001 11110010 10000000 01100111 11011010 10111110 11111101 00000000 01010010 10100110 11111111 10100000 11111110 00011010 10010001 11111101 00000001 00111111 10000100 10000000 00011001 10000000 10111110 11111110 01111000 10000001 11111111 01101101 11010000 11111111 01100100 10110010 11111111 11010110 10000000 01000111 10001100
+    </binstr>
     <data>
-      <message>$M=TestTemplate|1=111111</message>
-      <message>1=111112|2=222223|3=33333334|4=44444445|5=testString2|6=10.51</message>
-      <message>group1=&lt;1=111156|2=22242>&lt;1=11112|2=222224>|group3=&lt;6=10.5>&lt;6=10.5431></message>
-      <message>group1=&lt;1=111156|2=22242>&lt;1=11112|2=222224>|group3=&lt;6=10.5>&lt;6=10.5431></message>
+      <message>
+        TestTemplate -> {1, 10.55, 22.2, 234.4, 34.2, 345.2, 5200, }
+      </message>
+      <message>
+        TestTemplate -> {1, 10.54, 23.2, 33.4, 24.2, 34.2, 5200, }
+      </message>
+      <message>
+        TestTemplate -> {1, 10.534, 3.2, 33.45, 24.452, 354.2, 5200, }
+      </message>
+      <message>
+        TestTemplate -> {1, -10.23, -235.2, -353.4, -4.2, -374.2, 5200, }
+      </message>
     </data>
   </test>
 
+  <test name="CME_Increment">
+    <desc>Increment Test from CME</desc>
+    <td:templates>
+      <template name="TestTemplate" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
+        <typeRef name="TestTemplate"/>
+        <uInt32 id="1" name="Field1">
+          <increment/>
+        </uInt32>
+        <int32 id="2" name="Field2">
+          <increment/>
+        </int32>
+        <uInt64 id="3" name="Field3">
+          <increment/>
+        </uInt64>
+        <int64 id="4" name="Field4">
+          <increment/>
+        </int64>
+      </template>
+    </td:templates>
+    <binstr>
+      11111100 10000001 00000110 01100100 10000111 00001101 01001000 10001110 00001111 01110010 01000000 11010101 00010101 00011000 01010110 10011100 10000000 10111100 00000110 01100100 10001011 00001101 01001000 10010010 00001111 01110010 01000000 11011001 00010101 00011000 01010110 10100000 10111100 00000110 01100100 10000110 01110010 00110111 11101110 00001111 01110010 01000000 11010010 01101010 01100111 00101001 11100000 10111100 01010110 11100111 01111110 01010010 10110010 00000001 01001011 00111001 11010101 01111101 01110000 01011101 11100100
+    </binstr>
+    <data>
+      <message>
+        TestTemplate -> {1, 111111, 222222, 33333333, 44444444, }
+      </message>
+      <message>
+        TestTemplate -> {1, 111112, 222223, 33333334, 44444445, }
+      </message>
+      <message>
+        TestTemplate -> {1, 111115, 222226, 33333337, 44444448, }
+      </message>
+      <message>
+        TestTemplate -> {1, 111110, -222226, 33333330, -44444448, }
+      </message>
+      <message>
+        TestTemplate -> {1, 11111, -22222, 3333333, -4444444, }
+      </message>
+    </data>
+  </test>
+
+  <test name="CME_Strings1">
+    <desc>Strings Test1 from CME</desc>
+    <td:templates>
+      <template name="TestTemplate" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
+        <typeRef name="TestTemplate"/>
+        <string id="1" name="Field1"/>
+        <string id="2" name="Field2">
+          <delta/>
+        </string>
+      </template>
+    </td:templates>
+    <binstr>
+      11000000 10000001 01100001 01100010 11100011 10000000 01100001 01100010 11100011 10000000 01100001 11100010 10000001 10000000 10000000 01100001 01100010 01100011 01100100 11100101 10000000 01100011 01100100 11100101 10000000 01100011 01100100 11100101 11111101 10000000 10000000 01100001 01100010 01100011 01100100 11100101 11111111 01100001 11100010
+    </binstr>
+    <data>
+      <message>
+        TestTemplate -> {1, abc, abc, }
+      </message>
+      <message>
+        TestTemplate -> {1, ab, ab, }
+      </message>
+      <message>
+        TestTemplate -> {1, abcde, abcde, }
+      </message>
+      <message>
+        TestTemplate -> {1, cde, cde, }
+      </message>
+      <message>
+        TestTemplate -> {1, abcde, abcde, }
+      </message>
+    </data>
+  </test>
+
+  <test name="CME_Delta">
+    <desc>Delta Test from CME</desc>
+    <td:templates>
+      <template name="TestTemplate" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
+        <typeRef name="TestTemplate"/>
+        <uInt32 id="1" name="Field1">
+          <delta/>
+        </uInt32>
+        <int32 id="2" name="Field2">
+          <delta/>
+        </int32>
+        <uInt64 id="3" name="Field3">
+          <delta/>
+        </uInt64>
+        <int64 id="4" name="Field4">
+          <delta/>
+        </int64>
+        <string id="5" name="Field5">
+          <delta/>
+        </string>
+        <decimal id="6" name="Field6">
+          <delta/>
+        </decimal>
+      </template>
+    </td:templates>
+    <binstr>
+      11000000 10000001 00000110 01100100 10000111 00001101 01001000 10001110 00001111 01110010 01000000 11010101 00010101 00011000 01010110 10011100 10000000 01110100 01100101 01110011 01110100 01010011 01110100 01110010 01101001 01101110 11100111 11111111 00000000 11101001 10000000 10000001 10000001 10000001 10000001 10000000 10110010 11111111 00000111 10110010 10000000 10000011 10000011 10000011 10000011 10000001 00110011 10110011 10000000 10000100 10000000 11111011 01100100 01101111 11011100 11111001 01010101 01001110 01010011 11000000 10000010 10000000 10000011 01110111 11100010 10000000 01111001 01110010 11100001 00001100 00011010 11000100 01110001 01011000 01111001 10000011 00010011 00001001 00110100 10000100 10000110 10000000 11111110 00000000 11011110
+    </binstr>
+    <data>
+      <message>
+      TestTemplate -> {1, 111111, 222222, 33333333, 44444444, testString, 10.5, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111112, 222223, 33333334, 44444445, testString2, 10.51, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111115, 222226, 33333337, 44444448, testString33, 10.55, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111110, -222226, 33333330, -44444448, testString, 10, }
+      </message>
+      <message>
+      TestTemplate -> {1, 11111, -22222, 3333333, -4444444, test, 9.5, }
+      </message>
+    </data>
+  </test>
+  
 </tests>

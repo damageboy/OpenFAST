@@ -42,69 +42,91 @@ namespace OpenFAST.UnitTests.XmlBasedTests
                 Console.WriteLine("Processing {0}...", xmlFile);
 
                 XmlReader reader = XmlReader.Create(xmlFile, settings);
-
-                var xml = new XmlDocument();
-                xml.Load(reader);
-
-                foreach (XmlElement test in xml.GetElementsByTagName("test"))
+                try
                 {
-                    XmlElement desc = test.GetElement("desc");
-                    Console.WriteLine("  Test {0}{1}", test.GetAttribute("name"),
-                                      desc == null || string.IsNullOrEmpty(desc.Value) ? "" : " - " + desc.Value);
+                    var xml = new XmlDocument();
+                    xml.Load(reader);
 
-                    var tmpl = new XmlMessageTemplateLoader();
-
-                    XmlElement templFile = test.GetElement("templatesfile");
-                    if (templFile != null)
+                    foreach (XmlElement test in xml.GetElementsByTagName("test"))
                     {
-                        using (FileStream stream = File.OpenRead(templFile.GetAttribute("path")))
-                            tmpl.Load(stream);
-                    }
-                    else
-                    {
-                        XmlElement templXml = test.GetElement("templates", FastConstants.TemplateDefinition11);
-                        if (templXml == null)
-                            throw new InvalidOperationException("Expected <templates> element not found");
-                        tmpl.Load(templXml);
-                    }
+                        XmlElement desc = test.GetElement("desc");
+                        Console.WriteLine("  Test {0}{1}", test.GetAttribute("name"),
+                                          desc == null || string.IsNullOrEmpty(desc.Value) ? "" : " - " + desc.Value);
 
+                        var tmpl = new XmlMessageTemplateLoader();
 
-                    XmlElement binFile = test.GetElement("binfile");
-                    MessageInputStream mis;
-                    if (binFile != null)
-                    {
-                        using (FileStream stream = File.OpenRead(binFile.GetAttribute("path")))
-                            mis = new MessageInputStream(stream) {TemplateRegistry = tmpl.TemplateRegistry};
-                    }
-                    else
-                    {
-                        byte[] binData;
-
-                        XmlElement binstr = test.GetElement("binstr");
-                        if (binstr != null)
+                        XmlElement templFile = test.GetElement("templatesfile");
+                        tmpl.LoadTemplateIdFromAuxId = true;
+                        if (templFile != null)
                         {
-                            binData = ByteUtil.ConvertBitStringToFastByteArray(binstr.InnerText);
+                            using (FileStream stream = File.OpenRead(templFile.GetAttribute("path")))
+                                tmpl.Load(stream);
                         }
                         else
                         {
-                            XmlElement bin64 = test.GetElement("bin64");
-                            binData = Convert.FromBase64String(bin64.Value);
+                            XmlElement templXml = test.GetElement("templates", FastConstants.TemplateDefinition11);
+                            if (templXml == null)
+                                throw new InvalidOperationException("Expected <templates> element not found");
+                            tmpl.Load(templXml);
                         }
 
-                        mis = new MessageInputStream(new MemoryStream(binData));
 
+                        XmlElement binFile = test.GetElement("binfile");
+                        MessageInputStream mis;
+                        if (binFile != null)
+                        {
+                            using (FileStream stream = File.OpenRead(binFile.GetAttribute("path")))
+                                mis = new MessageInputStream(stream) {TemplateRegistry = tmpl.TemplateRegistry};
+                        }
+                        else
+                        {
+                            byte[] binData;
+
+                            XmlElement binstr = test.GetElement("binstr");
+                            if (binstr != null)
+                            {
+                                string binStream = binstr.InnerText.Trim();
+                                binData = ByteUtil.ConvertBitStringToFastByteArray(binStream);
+                            }
+                            else
+                            {
+                                XmlElement bin64 = test.GetElement("bin64");
+                                binData = Convert.FromBase64String(bin64.Value);
+                            }
+
+                            mis = new MessageInputStream(new MemoryStream(binData));
+
+                        }
+
+                        mis.TemplateRegistry = tmpl.TemplateRegistry;
+                        //
+                        // TODO - read the messages and check them against the tests
+                        //
+                        Message msg;
+                        XmlElement target = test.GetElement("data");
+                        XmlNode msgString = target.FirstChild;
+
+                        if (msgString==null)//for creating FAST xml.. later it will be removed
+                        {
+                            Console.WriteLine( ByteUtil.ConvertByteArrayToBitString(File.ReadAllBytes("messages.fast")));                            
+                        }
+
+                        while ((msg = mis.ReadMessage()) != null)
+                        {
+                            //TODO: Introduce FIX decoding/encoding Scheme
+                            if (msgString == null)
+                                Console.WriteLine(msg.ToString());
+                            else
+                            {
+                                Assert.AreEqual(msgString.InnerText.Trim(), msg.ToString());
+                                msgString = msgString.NextSibling;
+                            }
+                        }
                     }
-
-                    mis.TemplateRegistry = tmpl.TemplateRegistry;
-
-                    //
-                    // TODO - read the messages and check them against the tests
-                    //
-                    //Message msg;
-                    //while ((msg = mis.ReadMessage()) != null)
-                    //{
-                    //    Console.WriteLine(msg);
-                    //}
+                }
+                finally
+                {
+                    reader.Close();
                 }
             }
         }
