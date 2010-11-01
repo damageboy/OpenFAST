@@ -7,6 +7,7 @@ using System.Xml.Schema;
 using NUnit.Framework;
 using OpenFAST.Error;
 using OpenFAST.Template.Loader;
+using OpenFAST.Codec;
 
 namespace OpenFAST.UnitTests.XmlBasedTests
 {
@@ -105,21 +106,27 @@ namespace OpenFAST.UnitTests.XmlBasedTests
                         Message msg;
                         XmlElement target = test.GetElement("data");
                         XmlNode msgString = target.FirstChild;
-
-                        if (msgString==null)//for creating FAST xml.. later it will be removed
-                        {
-                            Console.WriteLine( ByteUtil.ConvertByteArrayToBitString(File.ReadAllBytes("messages.fast")));                            
-                        }
-
+                        //MessageOutputStream mout = new MessageOutputStream(new MemoryStream());
+                        //mout.TemplateRegistry = tmpl.TemplateRegistry;
                         while ((msg = mis.ReadMessage()) != null)
                         {
-                            //TODO: Introduce FIX decoding/encoding Scheme
-                            if (msgString == null)
-                                Console.WriteLine(msg.ToString());
-                            else
+                            //TODO: Introduce FIX decoding/encoding Scheme);
+                            if (msgString != null)
                             {
+                                //try
+                                //{
+                                //    mout.WriteMessage(msg);
+                                //}
+                                //catch(Exception ex)
+                                //{
+                                //    Console.WriteLine(ex.ToString());
+                                //}
                                 Assert.AreEqual(msgString.InnerText.Trim(), msg.ToString());
                                 msgString = msgString.NextSibling;
+                            }
+                            else
+                            {
+                                Console.WriteLine(msg.ToString());
                             }
                         }
                     }

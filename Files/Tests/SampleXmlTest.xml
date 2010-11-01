@@ -304,4 +304,531 @@
     </data>
   </test>
 
+  <test name="CME_Limits">
+    <desc>Limit Test from CME</desc>
+    <td:templates>
+      <template name="TestTemplate" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
+        <typeRef name="TestTemplate"/>
+        <uInt32 id="1" name="Field1"/>
+        <int32 id="2" name="Field2"/>
+        <uInt64 id="3" name="Field3"/>
+        <int64 id="4" name="Field4"/>
+      </template>
+    </td:templates>
+    <binstr>
+      11000000 10000001 10000000 01111000 00000000 00000000 00000000 10000000 10000000 01111111 00111111 01111111 01111111 01111111 01111111 01111111 01111111 01111111 10011111 10000000 00001111 01111111 01111111 01111111 11111111 00000111 01111111 01111111 01111111 11111111 01000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 11100000 00000000 01000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 11100000
+    </binstr>
+    <data>
+      <message>
+      TestTemplate -> {1, 0, -2147483648, 0, -4611686018427388001, }
+      </message>
+      <message>
+      TestTemplate -> {1, 4294967295, 2147483647, 4611686018427388000, 4611686018427388000, }
+      </message>
+    </data>
+  </test>
+
+  <test name="CME_OptionalConstant">
+    <desc>Optional Constant Test from CME</desc>
+    <td:templates>
+      <template name="TestTemplate" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
+        <typeRef name="TestTemplate"/>
+        <uInt32 id="1" presence="optional" name="Field1">
+          <constant value="111111"/>
+        </uInt32>
+        <int32 id="2" presence="optional" name="Field2">
+          <constant value="222222"/>
+        </int32>
+        <uInt64 id="3" presence="optional" name="Field3">
+          <constant value="33333333"/>
+        </uInt64>
+        <int64 id="4" presence="optional" name="Field4">
+          <constant value="44444444"/>
+        </int64>
+        <string id="5" presence="optional" name="Field5">
+          <constant value="testString"/>
+        </string>
+        <decimal id="6" presence="optional" name="Field6">
+          <constant value="10.50"/>
+        </decimal>
+      </template>
+    </td:templates>
+    <binstr>
+      11000000 10000001 10000000 10000000 10000000 10000000 10000000 10000000 10000000
+    </binstr>
+    <data>
+    </data>
+  </test>
+
+  <test name="CME_OptionalCopy">
+    <desc>Optional Copy Test from CME</desc>
+    <td:templates>
+      <template name="TestTemplate" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
+        <typeRef name="TestTemplate"/>
+        <uInt32 id="1" presence="optional" name="Field1">
+          <copy/>
+        </uInt32>
+        <int32 id="2" presence="optional" name="Field2">
+          <copy/>
+        </int32>
+        <uInt64 id="3" presence="optional" name="Field3">
+          <copy/>
+        </uInt64>
+        <int64 id="4" presence="optional" name="Field4">
+          <copy/>
+        </int64>
+        <string id="5" presence="optional" name="Field5">
+          <copy/>
+        </string>
+        <decimal id="6" presence="optional" name="Field6">
+          <copy/>
+        </decimal>
+      </template>
+    </td:templates>
+    <binstr>
+      11111111 10000001 00000110 01100100 10001000 00001101 01001000 10001111 00001111 01110010 01000000 11010110 00010101 00011000 01010110 10011101 01110100 01100101 01110011 01110100 01010011 01110100 01110010 01101001 01101110 11100111 11111111 00000000 11101001 10111111 00000110 01100100 10001001 10000000 10000000 10000000 10000000 10000000 10110000 10000000 00001101 01001000 10010011 10011000 10000000 00001111 01110010 01000000 11010011 10001100 10000000 01111101 01110000 01011101 11100100 10000110 10000000 01110100 01100101 01110011 01110100 01010011 01110100 01110010 01101001 01101110 11100111 10000011 10000000 11111111 00000000 11101001 10111110 00000110 01100100 10001000 00001101 01001000 10001111 00001111 01110010 01000000 11010110 00010101 00011000 01010110 10011101 01110100 01100101 01110011 01110100 01010011 01110100 01110010 01101001 01101110 11100111
+    </binstr>
+    <data>
+    </data>
+  </test>
+
+  <test name="CME_OptionalDefault">
+    <desc>Optional Default Test from CME</desc>
+    <td:templates>
+      <template name="TestTemplate" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
+        <typeRef name="TestTemplate"/>
+        <uInt32 id="1" presence="optional" name="Field1"/>
+        <int32 id="2" presence="optional" name="Field2"/>
+        <uInt64 id="3" presence="optional" name="Field3"/>
+        <int64 id="4" presence="optional" name="Field4"/>
+        <string id="5" presence="optional" name="Field5"/>
+        <decimal id="6" presence="optional" name="Field6"/>
+      </template>
+    </td:templates>
+    <binstr>
+      11000000 10000001 00000110 01100100 10001000 00001101 01001000 10001111 00001111 01110010 01000000 11010110 00010101 00011000 01010110 10011101 01110100 01100101 01110011 01110100 01010011 01110100 01110010 01101001 01101110 11100111 11111111 00000000 11101001 10000000 00000110 01100100 10001001 10000000 10000000 10000000 10000000 10000000 10000000 10000000 00001101 01001000 10010011 10000000 10000000 10000000 10000000 10000000 10000000 10000000 00001111 01110010 01000000 11010011 10000000 10000000 10000000 10000000 10000000 10000000 10000000 01111101 01110000 01011101 11100100 10000000 10000000 10000000 10000000 10000000 10000000 10000000 01110100 01100101 01110011 01110100 01010011 01110100 01110010 01101001 01101110 11100111 10000000 10000000 10000000 10000000 10000000 10000000 10000000 11111111 00000000 11101001 10000000 00000110 01100100 10001000 00001101 01001000 10001111 00001111 01110010 01000000 11010110 00010101 00011000 01010110 10011101 01110100 01100101 01110011 01110100 01010011 01110100 01110010 01101001 01101110 11100111 11111111 00000000 11101001
+    </binstr>
+    <data>
+    </data>
+  </test>
+
+  <test name="CME_OptionalDelta">
+    <desc>Optional Delta Test from CME</desc>
+    <td:templates>
+      <template name="TestTemplate" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
+        <typeRef name="TestTemplate"/>
+        <uInt32 id="1" presence="optional" name="Field1">
+          <delta/>
+        </uInt32>
+        <int32 id="2" presence="optional" name="Field2">
+          <delta/>
+        </int32>
+        <uInt64 id="3" presence="optional" name="Field3">
+          <delta/>
+        </uInt64>
+        <int64 id="4" presence="optional" name="Field4">
+          <delta/>
+        </int64>
+        <string id="5" presence="optional" name="Field5">
+          <delta/>
+        </string>
+        <decimal id="6" presence="optional" name="Field6">
+          <delta/>
+        </decimal>
+      </template>
+    </td:templates>
+    <binstr>
+      11000000 10000001 00000110 01100100 10001000 00001101 01001000 10001111 00001111 01110010 01000000 11010110 00010101 00011000 01010110 10011101 10000001 01110100 01100101 01110011 01110100 01010011 01110100 01110010 01101001 01101110 11100111 11111111 00000000 11101001 10000000 10000010 10000000 10000000 10000000 10000000 10000000 10000000 10000000 10000101 10000000 10000000 10000000 10000000 10000000 10000000 10000000 11111101 10000000 10000000 10000000 10000000 10000000 10000000 10000000 01101000 01011000 00000111 11001000 10000000 10000000 10000000 10000000 10000000 10000000 10000000 10000001 10000000 10000000 10000000 10000000 10000000 10000000 10000000 10000000 10000001 10000000 10000000 11111111 11111100 10000100 00010111 00100111 01111000 10111001 10000001 10000000 10000001 10000000
+    </binstr>
+    <data>
+    </data>
+  </test>
+
+  <test name="CME_OptionalIncrement">
+    <desc>Optional Increment Test from CME</desc>
+    <td:templates>
+      <template name="TestTemplate" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
+        <typeRef name="TestTemplate"/>
+        <uInt32 id="1" presence="optional" name="Field1">
+          <increment/>
+        </uInt32>
+        <int32 id="2" presence="optional" name="Field2">
+          <increment/>
+        </int32>
+        <uInt64 id="3" presence="optional" name="Field3">
+          <increment/>
+        </uInt64>
+        <int64 id="4" presence="optional" name="Field4">
+          <increment/>
+        </int64>
+      </template>
+    </td:templates>
+    <binstr>
+      11111100 10000001 00000110 01100100 10001000 00001101 01001000 10001111 00001111 01110010 01000000 11010110 00010101 00011000 01010110 10011101 10011100 10000000 10000000 10000000 10110000 10000000 00001101 01001000 10010011 10011000 10000000 00001111 01110010 01000000 11010011 10001100 10000000 01111101 01110000 01011101 11100100 10111100 00000110 01100100 10001000 00001101 01001000 10001111 00001111 01110010 01000000 11010110 00010101 00011000 01010110 10011101
+    </binstr>
+    <data>
+    </data>
+  </test>
+
+  <test name="CME_Copy">
+    <desc>Optional Increment Test from CME</desc>
+    <td:templates>
+      <template name="TestTemplate" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
+        <typeRef name="TestTemplate"/>
+        <uInt32 id="1" name="Field1">
+          <copy/>
+        </uInt32>
+        <int32 id="2" name="Field2">
+          <copy/>
+        </int32>
+        <uInt64 id="3" name="Field3">
+          <copy/>
+        </uInt64>
+        <int64 id="4" name="Field4">
+          <copy/>
+        </int64>
+        <string id="5" name="Field5">
+          <copy/>
+        </string>
+        <decimal id="6" name="Field6">
+          <copy/>
+        </decimal>
+      </template>
+    </td:templates>
+    <binstr>
+      11111111 10000001 00000110 01100100 10000111 00001101 01001000 10001110 00001111 01110010 01000000 11010101 00010101 00011000 01010110 10011100 01110100 01100101 01110011 01110100 01010011 01110100 01110010 01101001 01101110 11100111 11111111 00000000 11101001 10000000 10111111 00000110 01100100 10001000 00001101 01001000 10001111 00001111 01110010 01000000 11010110 00010101 00011000 01010110 10011101 01110100 01100101 01110011 01110100 01010011 01110100 01110010 01101001 01101110 01100111 10110010 11111110 00001000 10011011 10111111 00000110 01100100 10001011 00001101 01001000 10010010 00001111 01110010 01000000 11011001 00010101 00011000 01010110 10100000 01110100 01100101 01110011 01110100 01010011 01110100 01110010 01101001 01101110 01100111 00110011 10110011 11111110 00001000 10011111 10111111 01010110 11100111 01111110 01010010 10110010 00000001 01001011 00111001 11010101 01111101 01110000 01011101 11100100 01110100 01100101 01110011 11110100 11111111 00000000 11011111 10000000
+    </binstr>
+    <data>
+      <message>
+      TestTemplate -> {1, 111111, 222222, 33333333, 44444444, testString, 10.5, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111111, 222222, 33333333, 44444444, testString, 10.5, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111112, 222223, 33333334, 44444445, testString2, 10.51, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111115, 222226, 33333337, 44444448, testString33, 10.55, }
+      </message>
+      <message>
+      TestTemplate -> {1, 11111, -22222, 3333333, -4444444, test, 9.5, }
+      </message>
+      <message>
+      TestTemplate -> {1, 11111, -22222, 3333333, -4444444, test, 9.5, }
+      </message>
+    </data>
+  </test>
+
+  <test name="CME_Default">
+    <desc>Default Test from CME</desc>
+    <td:templates>
+      <template name="TestTemplate" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
+        <typeRef name="TestTemplate"/>
+        <uInt32 id="1" name="Field1"/>
+        <int32 id="2" name="Field2"/>
+        <uInt64 id="3" name="Field3"/>
+        <int64 id="4" name="Field4"/>
+        <string id="5" name="Field5"/>
+        <decimal id="6" name="Field6"/>
+      </template>
+    </td:templates>
+    <binstr>
+      11000000 10000001 00000110 01100100 10000111 00001101 01001000 10001110 00001111 01110010 01000000 11010101 00010101 00011000 01010110 10011100 01110100 01100101 01110011 01110100 01010011 01110100 01110010 01101001 01101110 11100111 11111111 00000000 11101001 10000000 00000110 01100100 10001000 00001101 01001000 10001111 00001111 01110010 01000000 11010110 00010101 00011000 01010110 10011101 01110100 01100101 01110011 01110100 01010011 01110100 01110010 01101001 01101110 01100111 10110010 11111110 00001000 10011011 10000000 00000110 01100100 10001011 00001101 01001000 10010010 00001111 01110010 01000000 11011001 00010101 00011000 01010110 10100000 01110100 01100101 01110011 01110100 01010011 01110100 01110010 01101001 01101110 01100111 00110011 10110011 11111110 00001000 10011111 10000000 00000110 01100100 10000110 01110010 00110111 11101110 00001111 01110010 01000000 11010010 01101010 01100111 00101001 11100000 01110100 01100101 01110011 01110100 01010011 01110100 01110010 01101001 01101110 11100111 10000001 10000001 10000000 01010110 11100111 01111110 01010010 10110010 00000001 01001011 00111001 11010101 01111101 01110000 01011101 11100100 01110100 01100101 01110011 11110100 11111111 00000000 11011111
+    </binstr>
+    <data>
+      <message>
+      TestTemplate -> {1, 111111, 222222, 33333333, 44444444, testString, 10.5, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111112, 222223, 33333334, 44444445, testString2, 10.51, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111115, 222226, 33333337, 44444448, testString33, 10.55, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111110, -222226, 33333330, -44444448, testString, 10, }
+      </message>
+      <message>
+      TestTemplate -> {1, 11111, -22222, 3333333, -4444444, test, 9.5, }
+      </message>
+    </data>
+  </test>
+
+  <test name="CME_DefaultValuesCopy">
+    <desc>Default Values Copy Test from CME</desc>
+    <td:templates>
+      <template name="TestTemplate" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
+        <typeRef name="TestTemplate"/>
+        <uInt32 id="1" name="Field1">
+          <copy value="111111"/>
+        </uInt32>
+        <int32 id="2" name="Field2">
+          <copy value="222222"/>
+        </int32>
+        <uInt64 id="3" name="Field3">
+          <copy value="33333333"/>
+        </uInt64>
+        <int64 id="4" name="Field4">
+          <copy value="44444444"/>
+        </int64>
+        <string id="5" name="Field5">
+          <copy value="testString"/>
+        </string>
+        <decimal id="6" name="Field6">
+          <copy value="10.50"/>
+        </decimal>
+      </template>
+    </td:templates>
+    <binstr>
+      11000000 10000001 10111111 00000110 01100100 10001000 00001101 01001000 10001111 00001111 01110010 01000000 11010110 00010101 00011000 01010110 10011101 01110100 01100101 01110011 01110100 01010011 01110100 01110010 01101001 01101110 01100111 10110010 11111110 00001000 10011011 10111111 00000110 01100100 10001011 00001101 01001000 10010010 00001111 01110010 01000000 11011001 00010101 00011000 01010110 10100000 01110100 01100101 01110011 01110100 01010011 01110100 01110010 01101001 01101110 01100111 00110011 10110011 11111110 00001000 10011111 10111111 00000110 01100100 10000110 01110010 00110111 11101110 00001111 01110010 01000000 11010010 01101010 01100111 00101001 11100000 01110100 01100101 01110011 01110100 01010011 01110100 01110010 01101001 01101110 11100111 10000001 10000001 10111101 00000110 01100100 10000111 00001101 01001000 10001110 00001111 01110010 01000000 11010101 00010101 00011000 01010110 10011100 11111111 00000000 11101001
+    </binstr>
+    <data>
+      <message>
+      TestTemplate -> {1, 111111, 222222, 33333333, 44444444, testString, 10.5, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111112, 222223, 33333334, 44444445, testString2, 10.51, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111115, 222226, 33333337, 44444448, testString33, 10.55, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111110, -222226, 33333330, -44444448, testString, 10, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111111, 222222, 33333333, 44444444, testString, 10.5, }
+      </message>
+    </data>
+  </test>
+
+  <test name="CME_DefaultValuesDefault">
+    <desc>Default Values Default Test from CME</desc>
+    <td:templates>
+      <template name="TestTemplate" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
+        <typeRef name="TestTemplate"/>
+        <uInt32 id="1" name="Field1">
+          <increment value="111111"/>
+        </uInt32>
+        <int32 id="2" name="Field2">
+          <increment value="222222"/>
+        </int32>
+        <uInt64 id="3" name="Field3">
+          <delta value="33333333"/>
+        </uInt64>
+        <int64 id="4" name="Field4">
+          <delta value="44444444"/>
+        </int64>
+        <string id="5" name="Field5">
+          <copy value="testString"/>
+        </string>
+        <decimal id="6" name="Field6">
+          <copy value="10.50"/>
+        </decimal>
+      </template>
+    </td:templates>
+    <binstr>
+      11000000 10000001 10000000 10000000 10001100 10000001 10000001 01110100 01100101 01110011 01110100 01010011 01110100 01110010 01101001 01101110 01100111 10110010 11111110 00001000 10011011 10111100 00000110 01100100 10001011 00001101 01001000 10010010 10000011 10000011 01110100 01100101 01110011 01110100 01010011 01110100 01110010 01101001 01101110 01100111 00110011 10110011 11111110 00001000 10011111 10111100 00000110 01100100 10000110 01110010 00110111 11101110 11111001 01010101 01001110 01010011 11000000 01110100 01100101 01110011 01110100 01010011 01110100 01110010 01101001 01101110 11100111 10000001 10000001 10010100 00001101 01001000 10001110 10000011 00101010 00110001 00101100 10111100 11111111 00000000 11101001
+    </binstr>
+    <data>
+      <message>
+      TestTemplate -> {1, 111111, 222222, 33333333, 44444444, testString, 10.5, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111112, 222223, 33333334, 44444445, testString2, 10.51, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111115, 222226, 33333337, 44444448, testString33, 10.55, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111110, -222226, 33333330, -44444448, testString, 10, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111111, 222222, 33333333, 44444444, testString, 10.5, }
+      </message>
+    </data>
+  </test>
+
+  <test name="CME_DefaultValuesDelta">
+    <desc>Default Values Delta Test from CME</desc>
+    <td:templates>
+      <template name="TestTemplate" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
+        <typeRef name="TestTemplate"/>
+        <uInt32 id="1" name="Field1">
+          <delta value="111111"/>
+        </uInt32>
+        <int32 id="2" name="Field2">
+          <delta value="222222"/>
+        </int32>
+        <uInt64 id="3" name="Field3">
+          <delta value="33333333"/>
+        </uInt64>
+        <int64 id="4" name="Field4">
+          <delta value="44444444"/>
+        </int64>
+        <string id="5" name="Field5">
+          <delta value="testString"/>
+        </string>
+        <decimal id="6" name="Field6">
+          <delta value="10.5"/>
+        </decimal>
+      </template>
+    </td:templates>
+    <binstr>
+      11000000 10000001 10000000 10000000 10000000 10000000 10000000 10000000 10000000 10000000 10000000 10000001 10000001 10000001 10000001 10000000 10110010 11111111 00000111 10110010 10000000 10000011 10000011 10000011 10000011 10000001 00110011 10110011 10000000 10000100 10000000 11111011 01100100 01101111 11011100 11111001 01010101 01001110 01010011 11000000 10000010 10000000 10000011 01110111 11100010 10000000 10000001 00011011 00010000 10100000 10000011 00101010 00110001 00101100 10111100 10000000 10000000 11111110 00000000 11101000
+    </binstr>
+    <data>
+      <message>
+      TestTemplate -> {1, 111111, 222222, 33333333, 44444444, testString, 10.5, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111112, 222223, 33333334, 44444445, testString2, 10.51, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111115, 222226, 33333337, 44444448, testString33, 10.55, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111110, -222226, 33333330, -44444448, testString, 10, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111111, 222222, 33333333, 44444444, testString, 10.5, }
+      </message>
+    </data>
+  </test>
+
+  <test name="CME_DefaultValuesIncrement">
+    <desc>Default Values Increment Test from CME</desc>
+    <td:templates>
+      <template name="TestTemplate" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
+        <typeRef name="TestTemplate"/>
+        <uInt32 id="1" name="Field1">
+          <increment value="111111"/>
+        </uInt32>
+        <int32 id="2" name="Field2">
+          <increment value="222222"/>
+        </int32>
+        <uInt64 id="3" name="Field3">
+          <increment value="33333333"/>
+        </uInt64>
+        <int64 id="4" name="Field4">
+          <increment value="44444444"/>
+        </int64>
+      </template>
+    </td:templates>
+    <binstr>
+      11000000 10000001 10000000 10111100 00000110 01100100 10001011 00001101 01001000 10010010 00001111 01110010 01000000 11011001 00010101 00011000 01010110 10100000 10111100 00000110 01100100 10000110 01110010 00110111 11101110 00001111 01110010 01000000 11010010 01101010 01100111 00101001 11100000 10111100 01010110 11100111 01111110 01010010 10110010 00000001 01001011 00111001 11010101 01111101 01110000 01011101 11100100
+    </binstr>
+    <data>
+      <message>
+      TestTemplate -> {1, 111111, 222222, 33333333, 44444444, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111112, 222223, 33333334, 44444445, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111115, 222226, 33333337, 44444448, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111110, -222226, 33333330, -44444448, }
+      </message>
+      <message>
+      TestTemplate -> {1, 11111, -22222, 3333333, -4444444, }
+      </message>
+    </data>
+  </test>
+
+  <test name="CME_Constant1">
+    <desc>Default Constrant Test1 from CME</desc>
+    <td:templates>
+      <template name="TestTemplate" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
+        <typeRef name="TestTemplate"/>
+        <uInt32 id="1" name="Field1">
+          <constant value="111111"/>
+        </uInt32>
+        <int32 id="2" name="Field2">
+          <constant value="222222"/>
+        </int32>
+        <uInt64 id="3" name="Field3">
+          <constant value="33333333"/>
+        </uInt64>
+        <int64 id="4" name="Field4">
+          <constant value="44444444"/>
+        </int64>
+        <string id="5" name="Field5">
+          <constant value="testString"/>
+        </string>
+        <decimal id="6" name="Field6">
+          <constant value="10.50"/>
+        </decimal>
+      </template>
+    </td:templates>
+    <binstr>
+      11000000 10000001 10000000 10000000 10000000 10000000
+    </binstr>
+    <data>
+      <message>
+      TestTemplate -> {1, 111111, 222222, 33333333, 44444444, testString, 10.5, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111111, 222222, 33333333, 44444444, testString, 10.5, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111111, 222222, 33333333, 44444444, testString, 10.5, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111111, 222222, 33333333, 44444444, testString, 10.5, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111111, 222222, 33333333, 44444444, testString, 10.5, }
+      </message>
+    </data>
+  </test>
+
+  <test name="CME_Constant2">
+    <desc>Default Constrant Test2 from CME</desc>
+    <td:templates>
+      <template name="TestTemplate" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
+        <typeRef name="TestTemplate"/>
+        <uInt32 id="1" name="Field1">
+          <constant value="111111"/>
+        </uInt32>
+        <int32 id="2" name="Field2">
+          <constant value="222222"/>
+        </int32>
+        <uInt64 id="3" name="Field3">
+          <constant value="33333333"/>
+        </uInt64>
+        <int64 id="4" name="Field4">
+          <constant value="44444444"/>
+        </int64>
+        <string id="5" name="Field5">
+          <constant value="testString"/>
+        </string>
+        <decimal id="6" name="Field6">
+          <constant value="-10.50"/>
+        </decimal>
+      </template>
+    </td:templates>
+    <binstr>
+      11000000 10000001 10000000 10000000 10000000 10000000
+    </binstr>
+    <data>
+      <message>
+      TestTemplate -> {1, 111111, 222222, 33333333, 44444444, testString, -10.5, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111111, 222222, 33333333, 44444444, testString, -10.5, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111111, 222222, 33333333, 44444444, testString, -10.5, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111111, 222222, 33333333, 44444444, testString, -10.5, }
+      </message>
+      <message>
+      TestTemplate -> {1, 111111, 222222, 33333333, 44444444, testString, -10.5, }
+      </message>
+    </data>
+  </test>
+  
 </tests>
