@@ -1,4 +1,25 @@
-﻿using System;
+﻿/*
+
+The contents of this file are subject to the Mozilla Public License
+Version 1.1 (the "License"); you may not use this file except in
+compliance with the License. You may obtain a copy of the License at
+http://www.mozilla.org/MPL/
+
+Software distributed under the License is distributed on an "AS IS"
+basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+License for the specific language governing rights and limitations
+under the License.
+
+The Original Code is OpenFAST.
+
+The Initial Developer of the Original Code is The LaSalle Technology
+Group, LLC.  Portions created by Shariq Muhammad
+are Copyright (C) Shariq Muhammad. All Rights Reserved.
+
+Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
+                Yuri Astrakhan <FirstName><LastName>@gmail.com
+*/
+using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -7,7 +28,6 @@ using System.Xml.Schema;
 using NUnit.Framework;
 using OpenFAST.Error;
 using OpenFAST.Template.Loader;
-using OpenFAST.Codec;
 
 namespace OpenFAST.UnitTests.XmlBasedTests
 {
@@ -74,15 +94,17 @@ namespace OpenFAST.UnitTests.XmlBasedTests
 
                         XmlElement binFile = test.GetElement("binfile");
                         MessageInputStream mis;
+                        byte[] binData;
                         if (binFile != null)
                         {
                             using (FileStream stream = File.OpenRead(binFile.GetAttribute("path")))
+                            {
                                 mis = new MessageInputStream(stream) {TemplateRegistry = tmpl.TemplateRegistry};
+                                binData = File.ReadAllBytes(binFile.GetAttribute("path"));
+                            }
                         }
                         else
                         {
-                            byte[] binData;
-
                             XmlElement binstr = test.GetElement("binstr");
                             if (binstr != null)
                             {
@@ -106,28 +128,39 @@ namespace OpenFAST.UnitTests.XmlBasedTests
                         Message msg;
                         XmlElement target = test.GetElement("data");
                         XmlNode msgString = target.FirstChild;
-                        //MessageOutputStream mout = new MessageOutputStream(new MemoryStream());
-                        //mout.TemplateRegistry = tmpl.TemplateRegistry;
+                        var msgStream = new MemoryStream();
+                        var mout = new MessageOutputStream(msgStream) {TemplateRegistry = tmpl.TemplateRegistry};
                         while ((msg = mis.ReadMessage()) != null)
                         {
                             //TODO: Introduce FIX decoding/encoding Scheme);
                             if (msgString != null)
                             {
-                                //try
-                                //{
-                                //    mout.WriteMessage(msg);
-                                //}
-                                //catch(Exception ex)
-                                //{
-                                //    Console.WriteLine(ex.ToString());
-                                //}
+                                mout.WriteMessage(msg);
                                 Assert.AreEqual(msgString.InnerText.Trim(), msg.ToString());
                                 msgString = msgString.NextSibling;
+                                
                             }
                             else
                             {
-                                Console.WriteLine(msg.ToString());
+                                Console.WriteLine(msg);
                             }
+                        }
+                        //Verifying Encoding
+                        if (binData != null)
+                        {
+                            byte[] outStrem = msgStream.ToArray();
+                            if (outStrem.Length > 0)
+                            {
+                                for (int i = 0; i < binData.Length; i++)
+                                {
+                                    Assert.AreEqual(binData[i], outStrem[i]);
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("WARNING: No data emitted during encoding.");
+                            }
+
                         }
                     }
                 }

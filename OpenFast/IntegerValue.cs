@@ -53,9 +53,9 @@ namespace OpenFAST
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            var t = obj as IntegerValue;
+            var t = obj as NumericValue;
             if (t == null) return false;
-            return t._value.Equals(_value);
+            return t.ToLong() == _value;
         }
 
         public override int GetHashCode()

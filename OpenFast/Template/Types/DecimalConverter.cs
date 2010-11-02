@@ -49,7 +49,7 @@ namespace OpenFAST.Template.Types
                 return null;
             if (values[0] == ScalarValue.Undefined)
                 return ScalarValue.Undefined;
-            return new DecimalValue(((ScalarValue) values[1]).ToLong(), ((IntegerValue) values[0]).Value);
+            return new DecimalValue(((ScalarValue)values[1]).ToLong(), ((ScalarValue)values[0]).ToInt());
         }
 
         #endregion
