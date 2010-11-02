@@ -165,22 +165,25 @@ namespace OpenFAST.UnitTests.XmlBasedTests
                                 Console.WriteLine(msg);
                             }
                         }
-                        //Verifying Encoding
-                        if (binData != null)
+                        if (action == Actions.All)
                         {
-                            byte[] outStrem = msgStream.ToArray();
-                            if (outStrem.Length > 0)
+                            //Verifying Encoding
+                            if (binData != null)
                             {
-                                for (int i = 0; i < binData.Length; i++)
+                                byte[] outStrem = msgStream.ToArray();
+                                if (outStrem.Length > 0)
                                 {
-                                    Assert.AreEqual(binData[i], outStrem[i]);
+                                    for (int i = 0; i < binData.Length; i++)
+                                    {
+                                        Assert.AreEqual(binData[i], outStrem[i]);
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                Console.WriteLine("WARNING: No data emitted during encoding.");
-                            }
+                                else
+                                {
+                                    Console.WriteLine("WARNING: No data emitted during encoding.");
+                                }
 
+                            }
                         }
                     }
                 }

@@ -328,7 +328,7 @@
     </data>
   </test>
 
-  <test name="CME_OptionalConstant">
+  <test name="CME_OptionalConstant" action="decode">
     <desc>Optional Constant Test from CME</desc>
     <td:templates>
       <template name="TestTemplate" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
@@ -360,7 +360,7 @@
     </data>
   </test>
 
-  <test name="CME_OptionalCopy">
+  <test name="CME_OptionalCopy" action="decode">
     <desc>Optional Copy Test from CME</desc>
     <td:templates>
       <template name="TestTemplate" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
@@ -492,7 +492,7 @@
     </data>
   </test>
 
-  <test name="CME_OptionalIncrement">
+  <test name="CME_OptionalIncrement" action="decode">
     <desc>Optional Increment Test from CME</desc>
     <td:templates>
       <template name="TestTemplate" id="1" xmlns="http://www.fixprotocol.org/ns/fast/td/1.1">
