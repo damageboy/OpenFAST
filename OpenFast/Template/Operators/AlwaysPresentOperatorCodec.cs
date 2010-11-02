@@ -24,7 +24,6 @@ using OpenFAST.Template.Types;
 
 namespace OpenFAST.Template.Operators
 {
-    [Serializable]
     public abstract class AlwaysPresentOperatorCodec : OperatorCodec
     {
         protected internal AlwaysPresentOperatorCodec(Operator op, FastType[] types)

@@ -26,7 +26,6 @@ using OpenFAST.Template.Types;
 
 namespace OpenFAST.Template.Operators
 {
-    [Serializable]
     internal sealed class TailOperatorCodec : OperatorCodec
     {
         internal TailOperatorCodec(Operator op, FastType[] types)

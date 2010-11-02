@@ -25,7 +25,6 @@ using OpenFAST.Codec;
 
 namespace OpenFAST.Template
 {
-    [Serializable]
     public sealed class DynamicTemplateReference : Field
     {
         public static readonly DynamicTemplateReference Instance = new DynamicTemplateReference();

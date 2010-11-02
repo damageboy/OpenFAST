@@ -23,7 +23,6 @@ using System;
 
 namespace OpenFAST
 {
-    [Serializable]
     public class ScalarValue : IFieldValue
     {
         public static readonly ScalarValue Undefined;
@@ -101,7 +100,6 @@ namespace OpenFAST
 
         #region Nested type: NullScalarValue
 
-        [Serializable]
         public sealed class NullScalarValue : ScalarValue, IEquatable<NullScalarValue>
         {
             public override bool IsNull
@@ -141,7 +139,6 @@ namespace OpenFAST
 
         #region Nested type: UndefinedScalarValue
 
-        [Serializable]
         public sealed class UndefinedScalarValue : ScalarValue, IEquatable<UndefinedScalarValue>
         {
             public override bool IsUndefined

@@ -27,7 +27,6 @@ using OpenFAST.Utility;
 
 namespace OpenFAST.Template.Operators
 {
-    [Serializable]
     public abstract class OperatorCodec
     {
         private static readonly Dictionary<Tuple<Operator, FastType>, OperatorCodec> OperatorMap =

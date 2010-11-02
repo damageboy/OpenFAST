@@ -23,7 +23,6 @@ using System;
 
 namespace OpenFAST
 {
-    [Serializable]
     public abstract class NumericValue : ScalarValue
     {
         public abstract NumericValue Increment();

@@ -25,7 +25,6 @@ using System.Text;
 
 namespace OpenFAST.Template.Types.Codec
 {
-    [Serializable]
     public sealed class NullableUnicodeString : NotStopBitEncodedTypeCodec
     {
         internal NullableUnicodeString()

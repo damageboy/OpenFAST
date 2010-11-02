@@ -25,7 +25,6 @@ using System.IO;
 
 namespace OpenFAST.Template
 {
-    [Serializable]
     public abstract class Field
     {
         private readonly bool _isOptional;

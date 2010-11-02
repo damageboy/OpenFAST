@@ -26,7 +26,6 @@ using OpenFAST.Error;
 
 namespace OpenFAST.Template.Types.Codec
 {
-    [Serializable]
     internal sealed class NullableAsciiString : TypeCodec
     {
         private const int BufferInitSize = 1000;

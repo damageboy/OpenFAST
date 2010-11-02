@@ -23,7 +23,6 @@ using System;
 
 namespace OpenFAST
 {
-    [Serializable]
     public sealed class DateValue : ScalarValue, IEquatable<DateValue>
     {
         private readonly DateTime _value;

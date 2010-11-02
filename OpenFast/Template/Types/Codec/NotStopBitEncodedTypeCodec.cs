@@ -23,7 +23,6 @@ using System;
 
 namespace OpenFAST.Template.Types.Codec
 {
-    [Serializable]
     public abstract class NotStopBitEncodedTypeCodec : TypeCodec
     {
         public override byte[] Encode(ScalarValue value)

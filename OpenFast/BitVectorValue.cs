@@ -23,7 +23,6 @@ using System;
 
 namespace OpenFAST
 {
-    [Serializable]
     public sealed class BitVectorValue : ScalarValue, IEquatable<BitVectorValue>
     {
         private readonly BitVector _value;

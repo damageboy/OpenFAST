@@ -26,7 +26,6 @@ using OpenFAST.Error;
 
 namespace OpenFAST.Template.Types.Codec
 {
-    [Serializable]
     public sealed class NullableByteVector : NotStopBitEncodedTypeCodec
     {
         public static ScalarValue DefaultValue

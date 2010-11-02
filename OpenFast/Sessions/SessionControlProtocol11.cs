@@ -803,7 +803,6 @@ namespace OpenFAST.Sessions
         #region Nested type: ResetMessageObj
 
 #warning BUG? Is this object needed? It is almost identical to the parent's ResetMessageObj
-        [Serializable]
         public class ResetMessageObj : Message
         {
             internal ResetMessageObj(MessageTemplate template)

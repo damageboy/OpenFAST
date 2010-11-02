@@ -23,7 +23,6 @@ using System;
 
 namespace OpenFAST.Template
 {
-    [Serializable]
     public sealed class TwinValue : ScalarValue, IEquatable<TwinValue>
     {
         private readonly ScalarValue _first;

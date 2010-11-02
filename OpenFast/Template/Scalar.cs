@@ -29,7 +29,6 @@ using OpenFAST.Utility;
 
 namespace OpenFAST.Template
 {
-    [Serializable]
     public sealed class Scalar : Field
     {
         private readonly ScalarValue _defaultValue;

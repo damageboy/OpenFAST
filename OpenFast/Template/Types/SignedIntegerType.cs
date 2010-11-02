@@ -24,7 +24,6 @@ using OpenFAST.Template.Types.Codec;
 
 namespace OpenFAST.Template.Types
 {
-    [Serializable]
     public sealed class SignedIntegerType : IntegerType
     {
         public SignedIntegerType(int numberBits, long min, long max)

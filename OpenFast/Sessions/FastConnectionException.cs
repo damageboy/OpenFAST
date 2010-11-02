@@ -24,7 +24,6 @@ using OpenFAST.Error;
 
 namespace OpenFAST.Sessions
 {
-    [Serializable]
     public class FastConnectionException : FastException
     {
         public FastConnectionException(Exception t) : base(t.ToString())

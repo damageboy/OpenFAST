@@ -24,7 +24,6 @@ using JetBrains.Annotations;
 
 namespace OpenFAST.Error
 {
-    [Serializable]
     public class DynErrorException : FastException
     {
         private readonly DynError _error;

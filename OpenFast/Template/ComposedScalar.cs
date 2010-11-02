@@ -26,7 +26,6 @@ using OpenFAST.Template.Types;
 
 namespace OpenFAST.Template
 {
-    [Serializable]
     public sealed class ComposedScalar : Field
     {
         private const Type ScalarValueType = null;

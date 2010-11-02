@@ -25,7 +25,6 @@ using OpenFAST.Utility;
 
 namespace OpenFAST
 {
-    [Serializable]
     public sealed class DecimalValue : NumericValue, IEquatable<DecimalValue>
     {
         public readonly int Exponent;

@@ -27,7 +27,6 @@ using OpenFAST.Template.Types;
 
 namespace OpenFAST.Template
 {
-    [Serializable]
     public class Sequence : Field, IFieldSet
     {
         private readonly Group _group;

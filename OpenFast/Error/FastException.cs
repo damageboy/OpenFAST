@@ -9,7 +9,6 @@ namespace OpenFAST.Error
     /// Generic exception capable of delayed message formatting.
     /// Inherit for more specific exceptions.
     /// </summary>
-    [Serializable]
     public class FastException : Exception
     {
         private readonly object[] _arguments;

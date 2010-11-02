@@ -25,7 +25,6 @@ using OpenFAST.Utility;
 
 namespace OpenFAST.Template.Types.Codec
 {
-    [Serializable]
     public sealed class TimestampInteger : TypeCodec
     {
         public override ScalarValue Decode(Stream inStream)

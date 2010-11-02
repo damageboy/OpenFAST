@@ -25,7 +25,6 @@ using OpenFAST.Template.Types.Codec;
 
 namespace OpenFAST.Template.Types
 {
-    [Serializable]
     internal sealed class ByteVectorType : SimpleType
     {
         internal ByteVectorType() : base("byteVector", TypeCodec.ByteVector, TypeCodec.NullableByteVectorType)

@@ -28,7 +28,6 @@ using OpenFAST.Utility;
 
 namespace OpenFAST.Template.Types
 {
-    [Serializable]
     public abstract class FastType
     {
         private static readonly Dictionary<string, FastType> TypeNameMap = new Dictionary<string, FastType>();

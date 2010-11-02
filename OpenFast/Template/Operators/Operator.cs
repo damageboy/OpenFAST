@@ -26,7 +26,6 @@ using OpenFAST.Template.Types;
 
 namespace OpenFAST.Template.Operators
 {
-    [Serializable]
     public class Operator
     {
         private static readonly Dictionary<string, Operator> OperatorNameMap = new Dictionary<string, Operator>();
@@ -113,7 +112,6 @@ namespace OpenFAST.Template.Operators
 
         #region Nested type: ConstantOperator
 
-        [Serializable]
         public sealed class ConstantOperator : Operator
         {
             internal ConstantOperator(string name) : base(name)
@@ -139,7 +137,6 @@ namespace OpenFAST.Template.Operators
 
         #region Nested type: CopyOperator
 
-        [Serializable]
         public sealed class CopyOperator : Operator
         {
             internal CopyOperator(string name) : base(name)
@@ -156,7 +153,6 @@ namespace OpenFAST.Template.Operators
 
         #region Nested type: DefaultOperator
 
-        [Serializable]
         public sealed class DefaultOperator : Operator
         {
             internal DefaultOperator(string name) : base(name)
@@ -182,7 +178,6 @@ namespace OpenFAST.Template.Operators
 
         #region Nested type: DeltaOperator
 
-        [Serializable]
         public sealed class DeltaOperator : Operator
         {
             internal DeltaOperator(string name) : base(name)
@@ -199,7 +194,6 @@ namespace OpenFAST.Template.Operators
 
         #region Nested type: NoneOperator
 
-        [Serializable]
         public sealed class NoneOperator : Operator
         {
             internal NoneOperator(string name) : base(name)

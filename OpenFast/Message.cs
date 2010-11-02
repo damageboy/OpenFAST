@@ -25,7 +25,6 @@ using OpenFAST.Utility;
 
 namespace OpenFAST
 {
-    [Serializable]
     public class Message : GroupValue
     {
         private readonly MessageTemplate _template;

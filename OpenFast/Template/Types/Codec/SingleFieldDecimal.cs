@@ -25,7 +25,6 @@ using OpenFAST.Error;
 
 namespace OpenFAST.Template.Types.Codec
 {
-    [Serializable]
     internal sealed class SingleFieldDecimal : TypeCodec
     {
         public static ScalarValue DefaultValue

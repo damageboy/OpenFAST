@@ -27,7 +27,6 @@ using OpenFAST.Template.Types;
 
 namespace OpenFAST.Template
 {
-    [Serializable]
     public sealed class MessageTemplate : Group, IFieldSet, IEquatable<MessageTemplate>
     {
         public MessageTemplate(QName name, Field[] fields) : base(name, AddTemplateIdField(fields), false)

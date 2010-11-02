@@ -27,7 +27,6 @@ using OpenFAST.Utility;
 
 namespace OpenFAST
 {
-    [Serializable]
     public sealed class SequenceValue : IFieldValue, IEquatable<SequenceValue>
     {
         private readonly List<GroupValue> _elements = new List<GroupValue>();

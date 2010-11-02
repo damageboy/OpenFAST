@@ -25,7 +25,6 @@ using OpenFAST.Template.Types.Codec;
 
 namespace OpenFAST.Template.Types
 {
-    [Serializable]
     public sealed class UnsignedIntegerType : IntegerType
     {
         public UnsignedIntegerType(int numberBits, long maxValue)

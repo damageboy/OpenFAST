@@ -25,7 +25,6 @@ using OpenFAST.Template.Types.Codec;
 
 namespace OpenFAST.Template.Types
 {
-    [Serializable]
     public class StringType : SimpleType
     {
         public StringType(string typeName, TypeCodec codec, TypeCodec nullableCodec)

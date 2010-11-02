@@ -24,7 +24,6 @@ using System.IO;
 
 namespace OpenFAST.Template.Types.Codec
 {
-    [Serializable]
     public abstract class TypeCodec
     {
         protected const byte StopBit = 0x80;

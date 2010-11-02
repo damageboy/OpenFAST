@@ -23,7 +23,6 @@ using System;
 
 namespace OpenFAST.Template
 {
-    [Serializable]
     public sealed class LongValue : NumericValue, IEquatable<LongValue>
     {
         private readonly long _value;

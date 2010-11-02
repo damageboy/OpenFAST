@@ -24,7 +24,6 @@ using OpenFAST.Utility;
 
 namespace OpenFAST.Template.Types.Codec
 {
-    [Serializable]
     public abstract class IntegerCodec : TypeCodec
     {
         protected internal IntegerCodec()

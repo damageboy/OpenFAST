@@ -26,7 +26,6 @@ using OpenFAST.Template.Types.Codec;
 
 namespace OpenFAST.Template.Types
 {
-    [Serializable]
     internal sealed class DecimalType : SimpleType
     {
         internal DecimalType()

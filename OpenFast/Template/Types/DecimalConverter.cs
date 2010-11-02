@@ -23,7 +23,6 @@ using System;
 
 namespace OpenFAST.Template.Types
 {
-    [Serializable]
     public sealed class DecimalConverter : IComposedValueConverter
     {
         private static readonly IFieldValue[] NullSet = new IFieldValue[] {null, null};

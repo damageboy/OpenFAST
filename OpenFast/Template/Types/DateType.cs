@@ -26,7 +26,6 @@ using OpenFAST.Template.Types.Codec;
 
 namespace OpenFAST.Template.Types
 {
-    [Serializable]
     public sealed class DateType : FastType, IEquatable<DateType>
     {
         private readonly TypeCodec _dateCodec;

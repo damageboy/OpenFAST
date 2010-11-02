@@ -24,7 +24,6 @@ using OpenFAST.Template.Types;
 
 namespace OpenFAST.Template.Operators
 {
-    [Serializable]
     internal sealed class IncrementIntegerOperatorCodec : OperatorCodec
     {
         internal IncrementIntegerOperatorCodec(Operator op, FastType[] types)

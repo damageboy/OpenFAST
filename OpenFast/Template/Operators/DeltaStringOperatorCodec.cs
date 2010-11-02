@@ -26,7 +26,6 @@ using OpenFAST.Utility;
 
 namespace OpenFAST.Template.Operators
 {
-    [Serializable]
     internal sealed class DeltaStringOperatorCodec : AlwaysPresentOperatorCodec
     {
         internal DeltaStringOperatorCodec()

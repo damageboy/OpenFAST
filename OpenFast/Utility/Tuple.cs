@@ -31,7 +31,6 @@ namespace OpenFAST.Utility
         }
     }
 
-    [Serializable]
     public sealed class Tuple<TItem1, TItem2> : IEquatable<Tuple<TItem1, TItem2>>
     {
         private readonly TItem1 _item1;

@@ -26,7 +26,6 @@ using OpenFAST.Error;
 
 namespace OpenFAST
 {
-    [Serializable]
     public sealed class StringValue : ScalarValue, IEquatable<StringValue>
     {
         private readonly string _value;

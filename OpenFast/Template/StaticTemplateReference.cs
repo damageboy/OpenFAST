@@ -24,7 +24,6 @@ using System.IO;
 
 namespace OpenFAST.Template
 {
-    [Serializable]
     public class StaticTemplateReference : Field
     {
         private readonly MessageTemplate _template;

@@ -25,7 +25,6 @@ using OpenFAST.Template;
 
 namespace OpenFAST
 {
-    [Serializable]
     public sealed class IntegerValue : NumericValue, IEquatable<IntegerValue>
     {
         private readonly int _value;

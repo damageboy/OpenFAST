@@ -23,7 +23,6 @@ using System;
 
 namespace OpenFAST.Error
 {
-    //[Serializable]
     //public class FastDynamicError : FastException
     //{
     //    private readonly ErrorCode _error;

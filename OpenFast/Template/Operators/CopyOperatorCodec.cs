@@ -25,7 +25,6 @@ using OpenFAST.Template.Types;
 
 namespace OpenFAST.Template.Operators
 {
-    [Serializable]
     public sealed class CopyOperatorCodec : OptionallyPresentOperatorCodec
     {
         internal CopyOperatorCodec() : base(Operator.Copy, FastType.AllTypes())

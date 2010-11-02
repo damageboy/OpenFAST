@@ -29,7 +29,6 @@ using OpenFAST.Utility;
 
 namespace OpenFAST.Template
 {
-    [Serializable]
     public class Group : Field
     {
         private readonly Field[] _fieldDefinitions;

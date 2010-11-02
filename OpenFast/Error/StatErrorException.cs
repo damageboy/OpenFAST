@@ -24,7 +24,6 @@ using JetBrains.Annotations;
 
 namespace OpenFAST.Error
 {
-    [Serializable]
     public class StatErrorException : FastException
     {
         private readonly StaticError _error;

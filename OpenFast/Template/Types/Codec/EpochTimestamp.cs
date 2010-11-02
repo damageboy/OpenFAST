@@ -24,7 +24,6 @@ using System.IO;
 
 namespace OpenFAST.Template.Types.Codec
 {
-    [Serializable]
     public sealed class EpochTimestamp : TypeCodec
     {
         public override ScalarValue Decode(Stream inStream)

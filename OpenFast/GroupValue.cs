@@ -28,7 +28,6 @@ using OpenFAST.Utility;
 
 namespace OpenFAST
 {
-    [Serializable]
     public class GroupValue : IFieldValue
     {
         private readonly Group _group;

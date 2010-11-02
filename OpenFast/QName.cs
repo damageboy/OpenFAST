@@ -27,7 +27,6 @@ namespace OpenFAST
     /// Quick name.
     /// Provides efficient name searching in template registry. 
     /// </summary>
-    [Serializable]
     public sealed class QName : IEquatable<QName>
     {
         public static readonly QName Null = new QName("", "");

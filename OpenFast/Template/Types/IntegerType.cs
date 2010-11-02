@@ -26,7 +26,6 @@ using OpenFAST.Utility;
 
 namespace OpenFAST.Template.Types
 {
-    [Serializable]
     public abstract class IntegerType : SimpleType
     {
         private readonly long _maxValue;

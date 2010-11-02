@@ -57,7 +57,6 @@ namespace OpenFAST.Sessions
 
         #region Nested type: ResetMessageObj
 
-        [Serializable]
         private class ResetMessageObj : Message
         {
             internal ResetMessageObj(MessageTemplate template)

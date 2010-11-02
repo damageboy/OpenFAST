@@ -24,7 +24,6 @@ using JetBrains.Annotations;
 
 namespace OpenFAST.Error
 {
-    [Serializable]
     public class RepErrorException : FastException
     {
         private readonly RepError _error;

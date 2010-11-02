@@ -25,7 +25,6 @@ using OpenFAST.Template.Types.Codec;
 
 namespace OpenFAST.Template.Types
 {
-    [Serializable]
     public abstract class SimpleType : FastType
     {
         private readonly TypeCodec _codec;

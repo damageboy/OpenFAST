@@ -25,7 +25,6 @@ using OpenFAST.Utility;
 
 namespace OpenFAST
 {
-    [Serializable]
     public sealed class ByteVectorValue : ScalarValue, IEquatable<ByteVectorValue>
     {
         public static readonly ScalarValue EmptyBytes = new ByteVectorValue(ByteUtil.EmptyByteArray);

@@ -25,7 +25,6 @@ using System.Text;
 
 namespace OpenFAST.Template.Types.Codec
 {
-    [Serializable]
     internal sealed class ByteVectorType : TypeCodec
     {
         public override byte[] Encode(ScalarValue value)
