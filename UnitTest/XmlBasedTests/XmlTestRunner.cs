@@ -36,6 +36,14 @@ namespace OpenFAST.UnitTests.XmlBasedTests
     {
         private const string XmlTestFilesDir = @"../../../Files/Tests";
 
+        enum Actions
+        {
+            All,
+            Encode,
+            Decode,
+        }
+
+
         [Test]
         public void RunAllTests()
         {
@@ -71,8 +79,14 @@ namespace OpenFAST.UnitTests.XmlBasedTests
                     foreach (XmlElement test in xml.GetElementsByTagName("test"))
                     {
                         XmlElement desc = test.GetElement("desc");
-                        Console.WriteLine("  Test {0}{1}", test.GetAttribute("name"),
-                                          desc == null || string.IsNullOrEmpty(desc.Value) ? "" : " - " + desc.Value);
+                        
+                        string actionStr = test.GetAttribute("action");
+                        if (string.IsNullOrEmpty(actionStr)) actionStr = "all";
+                        var action = (Actions) Enum.Parse(typeof (Actions), actionStr, true);
+
+                        Console.WriteLine("  Test {0}{1}{2}", test.GetAttribute("name"),
+                                          desc == null || string.IsNullOrEmpty(desc.Value) ? "" : " - " + desc.Value,
+                                          action == Actions.All ? "" : " (" + action + " only)");
 
                         var tmpl = new XmlMessageTemplateLoader();
 
@@ -122,9 +136,15 @@ namespace OpenFAST.UnitTests.XmlBasedTests
                         }
 
                         mis.TemplateRegistry = tmpl.TemplateRegistry;
+
                         //
                         // TODO - read the messages and check them against the tests
                         //
+
+                        //
+                        // TODO: check against "action" variable -- if All or Encode/Decode
+                        //
+
                         Message msg;
                         XmlElement target = test.GetElement("data");
                         XmlNode msgString = target.FirstChild;
