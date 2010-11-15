@@ -38,21 +38,21 @@ namespace OpenFAST.Template
             return false;
         }
 
-        public bool TryGetId(string name, out int id)
+        public bool TryGetId(string name, out int templateId)
         {
-            id = -1;
+            templateId = -1;
             return false;
         }
 
-        public bool TryGetId(QName templateName, out int id)
+        public bool TryGetId(QName templateName, out int templateId)
         {
-            id = -1;
+            templateId = -1;
             return false;
         }
 
-        public bool TryGetId(MessageTemplate template, out int id)
+        public bool TryGetId(MessageTemplate template, out int templateId)
         {
-            id = -1;
+            templateId = -1;
             return false;
         }
 
@@ -103,7 +103,7 @@ namespace OpenFAST.Template
         {
         }
 
-        public void Remove(int id)
+        public void Remove(int templateId)
         {
         }
 
@@ -146,7 +146,7 @@ namespace OpenFAST.Template
         {
         }
 
-        public bool TryRegister(int id, QName templateName)
+        public bool TryRegister(int templateId, QName templateName)
         {
             return true;
         }

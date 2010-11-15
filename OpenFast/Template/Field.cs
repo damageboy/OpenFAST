@@ -31,7 +31,9 @@ namespace OpenFAST.Template
         private readonly QName _name;
         private Dictionary<QName, string> _attributes;
         private string _id;
+        private bool _isReadonly;
         private QName _key;
+        private MessageTemplate _messageTemplate;
 
         protected Field(QName name, bool isOptional)
             : this(name, name, isOptional, null)
@@ -76,24 +78,46 @@ namespace OpenFAST.Template
         public QName Key
         {
             get { return _key; }
-            set { _key = value; }
+            set
+            {
+                ThrowOnReadonly();
+                _key = value;
+            }
         }
 
         public string Id
         {
             get { return _id ?? ""; }
-            set { _id = value; }
+            set
+            {
+                ThrowOnReadonly();
+                _id = value;
+            }
         }
 
         public abstract Type ValueType { get; }
         public abstract string TypeName { get; }
+
+        public MessageTemplate MessageTemplate
+        {
+            get { return _messageTemplate; }
+            set
+            {
+                ThrowOnReadonly();
+//                if (_messageTemplate != null && !ReferenceEquals(_messageTemplate, value))
+//                    throw new InvalidOperationException("Already set");
+                _messageTemplate = value;
+            }
+        }
+
+        public abstract bool UsesPresenceMapBit { get; }
 
         #region Equals
 
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(this, obj)) return true;
-            
+
             var other = obj as Field;
             if (ReferenceEquals(null, other)) return false;
             return Equals(other._name, _name) && other._isOptional.Equals(_isOptional) &&
@@ -114,6 +138,17 @@ namespace OpenFAST.Template
         }
 
         #endregion
+
+        public void MakeReadonly()
+        {
+            _isReadonly = true;
+        }
+
+        protected void ThrowOnReadonly()
+        {
+            if (_isReadonly)
+                throw new InvalidOperationException("This object is no longer editable");
+        }
 
         public bool IsIdNull()
         {
@@ -136,12 +171,11 @@ namespace OpenFAST.Template
 
         public void AddAttribute(QName qname, string value)
         {
+            ThrowOnReadonly();
             if (_attributes == null)
                 _attributes = new Dictionary<QName, string>();
             _attributes[qname] = value;
         }
-
-        public MessageTemplate MessageTemplate { get; set; }
 
         protected bool IsPresent(BitVectorReader presenceMapReader)
         {
@@ -153,8 +187,6 @@ namespace OpenFAST.Template
 
         public abstract IFieldValue Decode(Stream inStream, Group decodeTemplate, Context context,
                                            BitVectorReader presenceMapReader);
-
-        public abstract bool UsesPresenceMapBit { get; }
 
         public abstract bool IsPresenceMapBitSet(byte[] encoding, IFieldValue fieldValue);
 

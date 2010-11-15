@@ -39,7 +39,7 @@ namespace OpenFAST.UnitTests
         {
             _output = new StreamWriter(new MemoryStream());
             _connection = new MyConnection(_output.BaseStream);
-            _session = new OpenFAST.Sessions.Session(_connection,
+            _session = new Session(_connection,
                                    SessionConstants.Scp10,
                                    TemplateRegistryFields.Null, TemplateRegistryFields.Null);
         }
@@ -53,7 +53,7 @@ namespace OpenFAST.UnitTests
 
         #endregion
 
-        private OpenFAST.Sessions.Session _session;
+        private Session _session;
         private StreamWriter _output;
         private MyConnection _connection;
 
@@ -98,8 +98,7 @@ namespace OpenFAST.UnitTests
             var quote = new MessageTemplate("quote", new Field[] {bid});
 
             var bidR = new Scalar("bid", FastType.Decimal, Operator.Copy, ScalarValue.Undefined, false);
-            var request = new MessageTemplate("request",
-                                              new Field[] {bidR});
+            var request = new MessageTemplate("request", new Field[] {bidR});
 
             var quote1 = new Message(quote);
             quote1.SetFieldValue(1, new DecimalValue(10.2));

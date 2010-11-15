@@ -650,7 +650,7 @@ namespace OpenFAST.Sessions
             IFieldValue retTypeRef;
             if (templateDef.TryGetValue("TypeRef", out retTypeRef) && retTypeRef!=null)
             {
-                GroupValue typeRef = (GroupValue)retTypeRef;
+                var typeRef = (GroupValue)retTypeRef;
                 string typeRefName = typeRef.GetString("Name");
                 string typeRefNs = ""; // context.getNamespace();
                 IFieldValue retNs2;

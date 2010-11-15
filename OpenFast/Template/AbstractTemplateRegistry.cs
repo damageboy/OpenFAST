@@ -70,9 +70,9 @@ namespace OpenFAST.Template
             return TryGetTemplate(new QName(name), out template);
         }
 
-        public bool TryGetId(string name, out int id)
+        public bool TryGetId(string name, out int templateId)
         {
-            return TryGetId(new QName(name), out id);
+            return TryGetId(new QName(name), out templateId);
         }
 
         public virtual void AddTemplateRegisteredListener(ITemplateRegisteredListener templateRegisteredListener)
@@ -85,34 +85,32 @@ namespace OpenFAST.Template
             _listeners.Remove(templateRegisteredListener);
         }
 
-        public abstract void Define(MessageTemplate param1);
-        public abstract MessageTemplate GetTemplate(int key);
-        public abstract int GetId(QName param1);
-        public abstract void Remove(QName param1);
-        public abstract MessageTemplate GetTemplate(QName key);
-        public abstract bool IsRegistered(int param1);
-        public abstract void Register(int param1, MessageTemplate param2);
-        public abstract void Remove(MessageTemplate param1);
-        public abstract bool IsRegistered(MessageTemplate param1);
-        public abstract bool IsRegistered(QName param1);
-        public abstract void RegisterAll(ITemplateRegistry param1);
-        public abstract void Remove(int param1);
-        public abstract int GetId(MessageTemplate param1);
-        public abstract void Register(int param1, QName param2);
-        public abstract bool TryRegister(int param1, QName param2);
+        public abstract void Define(MessageTemplate template);
+        public abstract MessageTemplate GetTemplate(int templateId);
+        public abstract int GetId(QName templateName);
+        public abstract void Remove(QName templateName);
+        public abstract MessageTemplate GetTemplate(QName templateName);
+        public abstract bool IsRegistered(int templateId);
+        public abstract void Register(int templateId, MessageTemplate template);
+        public abstract void Remove(MessageTemplate template);
+        public abstract bool IsRegistered(MessageTemplate template);
+        public abstract bool IsRegistered(QName templateName);
+        public abstract void RegisterAll(ITemplateRegistry registry);
+        public abstract void Remove(int templateId);
+        public abstract int GetId(MessageTemplate template);
+        public abstract void Register(int templateId, QName templateName);
+        public abstract bool TryRegister(int templateId, QName templateName);
         public abstract bool TryGetTemplate(QName templateName, out MessageTemplate template);
-        public abstract bool TryGetId(QName templateName, out int id);
-        public abstract bool TryGetId(MessageTemplate template, out int id);
-
-
+        public abstract bool TryGetId(QName templateName, out int templateId);
+        public abstract bool TryGetId(MessageTemplate template, out int templateId);
         public abstract ICollection<QName> Names();
 
         #endregion
 
-        protected void NotifyTemplateRegistered(MessageTemplate template, int id)
+        protected void NotifyTemplateRegistered(MessageTemplate template, int templateId)
         {
             foreach (ITemplateRegisteredListener l in _listeners)
-                l.TemplateRegistered(template, id);
+                l.TemplateRegistered(template, templateId);
         }
     }
 }

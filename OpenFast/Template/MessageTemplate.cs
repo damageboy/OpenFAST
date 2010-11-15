@@ -29,13 +29,16 @@ namespace OpenFAST.Template
 {
     public sealed class MessageTemplate : Group, IFieldSet, IEquatable<MessageTemplate>
     {
-        public MessageTemplate(QName name, Field[] fields) : base(name, AddTemplateIdField(fields), false)
+        public MessageTemplate(QName name, Field[] fields)
+            : base(name, AddTemplateIdField(fields), false)
         {
-            UpdateTemplateReference(Fields);
+            foreach (Field f in fields)
+                f.MessageTemplate = this;
             Fields[0].MessageTemplate = this;
         }
 
-        public MessageTemplate(string name, Field[] fields) : this(new QName(name), fields)
+        public MessageTemplate(string name, Field[] fields)
+            : this(new QName(name), fields)
         {
         }
 
@@ -54,6 +57,11 @@ namespace OpenFAST.Template
             }
         }
 
+        protected override bool UsesPresenceMap
+        {
+            get { return true; }
+        }
+
         #region IFieldSet Members
 
         public Field GetField(int index)
@@ -62,19 +70,6 @@ namespace OpenFAST.Template
         }
 
         #endregion
-
-        private void UpdateTemplateReference(Field[] fields)
-        {
-            for (int i = 0; i < fields.Length; i++)
-            {
-                fields[i].MessageTemplate = this;
-            }
-        }
-
-        protected override bool UsesPresenceMap
-        {
-            get { return true; }
-        }
 
         private static Field[] AddTemplateIdField(Field[] fields)
         {

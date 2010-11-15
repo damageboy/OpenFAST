@@ -43,6 +43,11 @@ namespace OpenFAST.Template
             get { return null; }
         }
 
+        public override bool UsesPresenceMapBit
+        {
+            get { return false; }
+        }
+
         public override IFieldValue CreateValue(string value)
         {
             return null;
@@ -69,11 +74,6 @@ namespace OpenFAST.Template
             return false;
         }
 
-
-        public override bool UsesPresenceMapBit
-        {
-            get { return false; }
-        }
 
         public override bool Equals(Object obj)
         {

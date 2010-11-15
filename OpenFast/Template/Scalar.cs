@@ -32,10 +32,10 @@ namespace OpenFAST.Template
     public sealed class Scalar : Field
     {
         private readonly ScalarValue _defaultValue;
+        private readonly FastType _fastType;
         private readonly ScalarValue _initialValue;
         private readonly Operator _operator;
         private readonly OperatorCodec _operatorCodec;
-        private readonly FastType _fastType;
         private readonly TypeCodec _typeCodec;
         private string _dictionary;
 
@@ -51,7 +51,8 @@ namespace OpenFAST.Template
         {
         }
 
-        public Scalar(QName name, FastType fastType, OperatorCodec operatorCodec, ScalarValue defaultValue, bool optional)
+        public Scalar(QName name, FastType fastType, OperatorCodec operatorCodec, ScalarValue defaultValue,
+                      bool optional)
             : this(name, fastType, operatorCodec.Operator, operatorCodec, defaultValue, optional)
         {
         }
@@ -85,6 +86,7 @@ namespace OpenFAST.Template
             get { return _dictionary; }
             set
             {
+                ThrowOnReadonly();
                 if (value == null) throw new ArgumentNullException("value");
                 _dictionary = DictionaryFields.InternDictionaryName(value);
             }
@@ -115,6 +117,16 @@ namespace OpenFAST.Template
             get { return _typeCodec; }
         }
 
+        public override bool UsesPresenceMapBit
+        {
+            get { return _operatorCodec.UsesPresenceMapBit(IsOptional); }
+        }
+
+        public OperatorCodec OperatorCodec
+        {
+            get { return _operatorCodec; }
+        }
+
         public override byte[] Encode(IFieldValue fieldValue, Group encodeTemplate, Context context,
                                       BitVectorBuilder presenceMapBuilder)
         {
@@ -143,11 +155,6 @@ namespace OpenFAST.Template
                 context.EncodeTrace.Field(this, fieldValue, valueToEncode, encoding, presenceMapBuilder.Index);
             }
             return encoding;
-        }
-
-        public override bool UsesPresenceMapBit
-        {
-            get { return _operatorCodec.UsesPresenceMapBit(IsOptional); }
         }
 
         public override bool IsPresenceMapBitSet(byte[] encoding, IFieldValue fieldValue)
@@ -258,7 +265,7 @@ namespace OpenFAST.Template
             if (ReferenceEquals(other, this))
                 return true;
             var t = other as Scalar;
-            if (t==null)
+            if (t == null)
                 return false;
             return Equals(t);
         }
@@ -291,11 +298,6 @@ namespace OpenFAST.Template
         {
             return QName.GetHashCode() + _fastType.GetHashCode() + _typeCodec.GetHashCode() + _operator.GetHashCode() +
                    _operatorCodec.GetHashCode() + _initialValue.GetHashCode() + _dictionary.GetHashCode();
-        }
-
-        public OperatorCodec OperatorCodec
-        {
-            get { return _operatorCodec; }
         }
     }
 }

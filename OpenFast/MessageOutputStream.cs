@@ -38,10 +38,15 @@ namespace OpenFAST
             new Dictionary<MessageTemplate, IMessageHandler>();
 
 
-        public MessageOutputStream(Stream outputStream) : this(outputStream, new Context())
+        public MessageOutputStream(Stream outputStream)
+            : this(outputStream, new Context())
         {
         }
 
+        public MessageOutputStream(Stream outputStream, ITemplateRegistry templateRegistry)
+            : this(outputStream, new Context(templateRegistry))
+        {}
+        
         public MessageOutputStream(Stream outputStream, Context context)
         {
             _outStream = outputStream;
@@ -86,7 +91,6 @@ namespace OpenFAST
         public ITemplateRegistry TemplateRegistry
         {
             get { return _context.TemplateRegistry; }
-            set { _context.TemplateRegistry = value; }
         }
 
         #endregion

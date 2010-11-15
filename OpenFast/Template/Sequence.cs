@@ -86,12 +86,21 @@ namespace OpenFAST.Template
         public virtual QName TypeReference
         {
             get { return _group.TypeReference; }
-            set { _group.TypeReference = value; }
+            set
+            {
+                ThrowOnReadonly();
+                _group.TypeReference = value;
+            }
         }
 
         public bool HasTypeReference
         {
             get { return _group.HasTypeReference; }
+        }
+
+        public override bool UsesPresenceMapBit
+        {
+            get { return _length.UsesPresenceMapBit; }
         }
 
         #region IFieldSet Members
@@ -112,11 +121,6 @@ namespace OpenFAST.Template
         {
             return new Scalar(Global.CreateImplicitName(name), FastType.U32, Operator.None, ScalarValue.Undefined,
                               optional);
-        }
-
-        public override bool UsesPresenceMapBit
-        {
-            get { return _length.UsesPresenceMapBit; }
         }
 
         public override bool IsPresenceMapBitSet(byte[] encoding, IFieldValue fieldValue)

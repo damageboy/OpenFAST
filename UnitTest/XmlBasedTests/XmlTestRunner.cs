@@ -113,7 +113,7 @@ namespace OpenFAST.UnitTests.XmlBasedTests
                         {
                             using (FileStream stream = File.OpenRead(binFile.GetAttribute("path")))
                             {
-                                mis = new MessageInputStream(stream) {TemplateRegistry = tmpl.TemplateRegistry};
+                                mis = new MessageInputStream(stream, tmpl.TemplateRegistry);
                                 binData = File.ReadAllBytes(binFile.GetAttribute("path"));
                             }
                         }
@@ -131,11 +131,9 @@ namespace OpenFAST.UnitTests.XmlBasedTests
                                 binData = Convert.FromBase64String(bin64.Value);
                             }
 
-                            mis = new MessageInputStream(new MemoryStream(binData));
+                            mis = new MessageInputStream(new MemoryStream(binData), tmpl.TemplateRegistry);
 
                         }
-
-                        mis.TemplateRegistry = tmpl.TemplateRegistry;
 
                         //
                         // TODO - read the messages and check them against the tests
@@ -149,7 +147,8 @@ namespace OpenFAST.UnitTests.XmlBasedTests
                         XmlElement target = test.GetElement("data");
                         XmlNode msgString = target.FirstChild;
                         var msgStream = new MemoryStream();
-                        var mout = new MessageOutputStream(msgStream) {TemplateRegistry = tmpl.TemplateRegistry};
+                        var mout = new MessageOutputStream(msgStream, tmpl.TemplateRegistry);
+
                         while ((msg = mis.ReadMessage()) != null)
                         {
                             //TODO: Introduce FIX decoding/encoding Scheme);

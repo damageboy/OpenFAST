@@ -26,12 +26,7 @@ namespace OpenFAST.Template
 {
     public static class TemplateRegistryFields
     {
-        public static readonly ITemplateRegistry Null;
-
-        static TemplateRegistryFields()
-        {
-            Null = new NullTemplateRegistry();
-        }
+        public static readonly ITemplateRegistry Null = new NullTemplateRegistry();
     }
 
     public interface ITemplateRegistry
@@ -44,22 +39,22 @@ namespace OpenFAST.Template
 
         void RegisterAll(ITemplateRegistry registry);
 
-        void Register(int id, MessageTemplate template);
+        void Register(int templateId, MessageTemplate template);
 
         [Obsolete]
-        void Register(int id, string name);
+        void Register(int templateId, string name);
 
         [Obsolete]
-        void Register(int id, QName templateName);
+        void Register(int templateId, QName templateName);
 
-        bool TryRegister(int id, QName templateName);
+        bool TryRegister(int templateId, QName templateName);
 
         void Define(MessageTemplate template);
 
         void Remove(string name);
         void Remove(QName templateName);
         void Remove(MessageTemplate template);
-        void Remove(int id);
+        void Remove(int templateId);
 
         [Obsolete]
         int GetId(string name);
@@ -90,9 +85,9 @@ namespace OpenFAST.Template
         bool TryGetTemplate(string name, out MessageTemplate template);
         bool TryGetTemplate(QName templateName, out MessageTemplate template);
 
-        bool TryGetId(string name, out int id);
-        bool TryGetId(QName templateName, out int id);
-        bool TryGetId(MessageTemplate template, out int id);
+        bool TryGetId(string name, out int templateId);
+        bool TryGetId(QName templateName, out int templateId);
+        bool TryGetId(MessageTemplate template, out int templateId);
 
         void AddTemplateRegisteredListener(ITemplateRegisteredListener templateRegisteredListener);
         void RemoveTemplateRegisteredListener(ITemplateRegisteredListener templateRegisteredListener);

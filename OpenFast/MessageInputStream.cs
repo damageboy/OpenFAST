@@ -38,10 +38,16 @@ namespace OpenFAST
 
         private IMessageBlockReader _blockReader = MessageBlockReaderFields.Null;
 
-        public MessageInputStream(Stream inputStream) : this(inputStream, new Context())
+        public MessageInputStream(Stream inputStream)
+            : this(inputStream, new Context())
         {
         }
 
+        public MessageInputStream(Stream inputStream, ITemplateRegistry templateRegistry)
+            : this(inputStream, new Context(templateRegistry))
+        {
+        }
+        
         public MessageInputStream(Stream inputStream, Context context)
         {
             _inStream = inputStream;
@@ -91,7 +97,6 @@ namespace OpenFAST
         public ITemplateRegistry TemplateRegistry
         {
             get { return _context.TemplateRegistry; }
-            set { _context.TemplateRegistry = value; }
         }
 
         #endregion

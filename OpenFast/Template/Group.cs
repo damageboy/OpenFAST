@@ -39,6 +39,8 @@ namespace OpenFAST.Template
         private readonly Dictionary<string, Scalar> _introspectiveFieldMap;
         private readonly StaticTemplateReference[] _staticTemplateReferences;
         private readonly bool _usesPresenceMapRenamedField;
+        private string _childNamespace;
+        private QName _typeReference;
 
         public Group(string name, Field[] fields, bool optional)
             : this(new QName(name), fields, optional)
@@ -103,9 +105,25 @@ namespace OpenFAST.Template
             get { return _fields; }
         }
 
-        public QName TypeReference { get; set; }
+        public QName TypeReference
+        {
+            get { return _typeReference; }
+            set
+            {
+                ThrowOnReadonly();
+                _typeReference = value;
+            }
+        }
 
-        public string ChildNamespace { get; set; }
+        public string ChildNamespace
+        {
+            get { return _childNamespace; }
+            set
+            {
+                ThrowOnReadonly();
+                _childNamespace = value;
+            }
+        }
 
         public StaticTemplateReference[] StaticTemplateReferences
         {
@@ -120,6 +138,16 @@ namespace OpenFAST.Template
         public bool HasTypeReference
         {
             get { return TypeReference != null; }
+        }
+
+        public override bool UsesPresenceMapBit
+        {
+            get { return IsOptional; }
+        }
+
+        protected virtual bool UsesPresenceMap
+        {
+            get { return _usesPresenceMapRenamedField; }
         }
 
         // BAD ABSTRACTION
@@ -182,7 +210,7 @@ namespace OpenFAST.Template
                         Global.ErrorHandler.OnError(null, DynError.GeneralError, "Mandatory field {0} is null", field);
                         // BUG? error is ignored?
                     }
-                    byte[] encoding = field.Encode(fieldValue, template, context, presenceMapBuilder);
+                    byte[] encoding = field.Encode(fieldValue, field.MessageTemplate ?? template, context, presenceMapBuilder);
                     fieldEncodings[fieldIndex] = encoding;
                 }
                 var buffer = new MemoryStream();
@@ -240,7 +268,7 @@ namespace OpenFAST.Template
 
 
         private IFieldValue[] DecodeFieldValues(Stream inStream, Group template,
-                                                          Context context)
+                                                Context context)
         {
             if (!UsesPresenceMap)
             {
@@ -258,14 +286,15 @@ namespace OpenFAST.Template
         }
 
         protected IFieldValue[] DecodeFieldValues(Stream inStream, Group template,
-                                               BitVectorReader pmapReader, Context context)
+                                                  BitVectorReader pmapReader, Context context)
         {
             var values = new IFieldValue[_fields.Length];
             int start = this is MessageTemplate ? 1 : 0;
 
             for (int fieldIndex = start; fieldIndex < _fields.Length; fieldIndex++)
             {
-                values[fieldIndex] = _fields[fieldIndex].Decode(inStream, template, context, pmapReader);
+                var field = _fields[fieldIndex];
+                values[fieldIndex] = field.Decode(inStream, field.MessageTemplate ?? template, context, pmapReader);
             }
 
             if (pmapReader.HasMoreBitsSet)
@@ -282,16 +311,6 @@ namespace OpenFAST.Template
             return encoding.Length != 0;
         }
 
-
-        public override bool UsesPresenceMapBit
-        {
-            get { return IsOptional; }
-        }
-
-        protected virtual bool UsesPresenceMap
-        {
-            get { return _usesPresenceMapRenamedField; }
-        }
 
         public override IFieldValue CreateValue(string value)
         {
@@ -421,7 +440,7 @@ namespace OpenFAST.Template
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(this, obj)) return true;
-            
+
             var other = obj as Group;
             if (ReferenceEquals(null, other)) return false;
             return base.Equals(other) && Util.ArrayEqualsSlow(other._fields, _fields, 0);

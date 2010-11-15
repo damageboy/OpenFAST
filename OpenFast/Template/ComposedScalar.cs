@@ -29,8 +29,8 @@ namespace OpenFAST.Template
     public sealed class ComposedScalar : Field
     {
         private const Type ScalarValueType = null;
-        private readonly Scalar[] _fields;
         private readonly FastType _fastType;
+        private readonly Scalar[] _fields;
         private readonly IComposedValueConverter _valueConverter;
 
         public ComposedScalar(string name, FastType fastType, Scalar[] fields, bool optional,
@@ -65,6 +65,17 @@ namespace OpenFAST.Template
         public Scalar[] Fields
         {
             get { return _fields; }
+        }
+
+        public override bool UsesPresenceMapBit
+        {
+            get
+            {
+                for (int i = 0; i < _fields.Length; i++)
+                    if (_fields[i].UsesPresenceMapBit)
+                        return true;
+                return false;
+            }
         }
 
         public override IFieldValue CreateValue(string value)
@@ -113,17 +124,6 @@ namespace OpenFAST.Template
         public override bool IsPresenceMapBitSet(byte[] encoding, IFieldValue fieldValue)
         {
             return false;
-        }
-
-        public override bool UsesPresenceMapBit
-        {
-            get
-            {
-                for (int i = 0; i < _fields.Length; i++)
-                    if (_fields[i].UsesPresenceMapBit)
-                        return true;
-                return false;
-            }
         }
 
         public override bool Equals(Object obj)
