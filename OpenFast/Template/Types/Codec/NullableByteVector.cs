@@ -62,9 +62,9 @@ namespace OpenFAST.Template.Types.Codec
             if (value.IsNull)
                 return NullableUnsignedInteger.EncodeValue(ScalarValue.Null);
             var byteVectorValue = (ByteVectorValue) value;
-            int lengthSize = IntegerCodec.GetUnsignedIntegerSize(byteVectorValue.Value.Length);
-            var encoding = new byte[byteVectorValue.Value.Length + lengthSize];
             byte[] length = NullableUnsignedInteger.Encode(new IntegerValue(byteVectorValue.Value.Length));
+            int lengthSize = length.Length;
+            var encoding =    new byte[byteVectorValue.Value.Length + lengthSize];
             Array.Copy(length, 0, encoding, 0, lengthSize);
             Array.Copy(byteVectorValue.Value, 0, encoding, lengthSize, byteVectorValue.Value.Length);
             return encoding;
