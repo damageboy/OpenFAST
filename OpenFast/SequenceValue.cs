@@ -62,11 +62,11 @@ namespace OpenFAST
 
         #region IFieldValue Members
 
-        public IFieldValue Copy()
+        public IFieldValue Clone()
         {
             var copy = new SequenceValue(_sequence);
             foreach (GroupValue t in _elements)
-                copy.Add((GroupValue) t.Copy());
+                copy.Add((GroupValue) t.Clone());
             return copy;
         }
 

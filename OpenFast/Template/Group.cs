@@ -47,21 +47,18 @@ namespace OpenFAST.Template
         {
         }
 
-        public Group(QName name, Field[] fields, bool optional)
-            : base(name, optional)
+        private static void Init(Field[] inFields, out Field[] fieldDefinitions, out Field[] fields, out Dictionary<Field, int> fieldIndexMap, out Dictionary<QName, Field> fieldNameMap, out Dictionary<string, Field> fieldIdMap, out Dictionary<string, Scalar> introspectiveFieldMap, out bool usesPresenceMapRenamedField, out StaticTemplateReference[] staticTemplateReferences)
         {
-            if (fields == null) throw new ArgumentNullException("fields");
+            if (inFields == null) throw new ArgumentNullException("inFields");
 
             var expandedFields = new List<Field>();
             var references = new List<StaticTemplateReference>();
 
-            _childNamespace = "";
-
-            foreach (Field t in fields)
+            foreach (Field t in inFields)
             {
-                if (t is StaticTemplateReference)
+                var currentTemplate = t as StaticTemplateReference;
+                if (currentTemplate != null)
                 {
-                    var currentTemplate = (StaticTemplateReference) t;
                     Field[] referenceFields = currentTemplate.Template.Fields;
                     for (int j = 1; j < referenceFields.Length; j++)
                         expandedFields.Add(referenceFields[j]);
@@ -71,15 +68,45 @@ namespace OpenFAST.Template
                     expandedFields.Add(t);
             }
 
-            _fields = expandedFields.ToArray();
-            _fieldDefinitions = fields;
-            _fieldIndexMap = ConstructFieldIndexMap(_fields);
-            _fieldNameMap = Util.ToSafeDictionary(_fields, f => f.QName);
-            _fieldIdMap = Util.ToSafeDictionary(_fields, f => f.Id);
-            _introspectiveFieldMap = ConstructInstrospectiveFields(_fields);
-            _usesPresenceMapRenamedField = _fields.Any(t => t.UsesPresenceMapBit);
-            _staticTemplateReferences = references.ToArray();
+            fieldDefinitions = inFields;
+            fields = expandedFields.ToArray();
+            fieldIndexMap = ConstructFieldIndexMap(fields);
+            fieldNameMap = Util.ToSafeDictionary(fields, f => f.QName);
+            fieldIdMap = Util.ToSafeDictionary(fields, f => f.Id);
+            introspectiveFieldMap = ConstructInstrospectiveFields(fields);
+            usesPresenceMapRenamedField = fields.Any(t => t.UsesPresenceMapBit);
+            staticTemplateReferences = references.ToArray();
         }
+
+        public Group(QName name, Field[] fields, bool optional)
+            : base(name, optional)
+        {
+            _childNamespace = "";
+            
+            Init(fields,
+                 out _fieldDefinitions, out _fields, out _fieldIndexMap, out _fieldNameMap, out _fieldIdMap,
+                 out _introspectiveFieldMap, out _usesPresenceMapRenamedField, out _staticTemplateReferences);
+        }
+
+        #region Cloning
+
+        public Group(Group other)
+            : base(other)
+        {
+            _childNamespace = other._childNamespace;
+            _typeReference = other._typeReference;
+
+            Init(other._fieldDefinitions.CloneArray(),
+                 out _fieldDefinitions, out _fields, out _fieldIndexMap, out _fieldNameMap, out _fieldIdMap,
+                 out _introspectiveFieldMap, out _usesPresenceMapRenamedField, out _staticTemplateReferences);
+        }
+
+        public override Field Clone()
+        {
+            return new Group(this);
+        }
+
+        #endregion
 
         private int MaxPresenceMapSize
         {
@@ -188,9 +215,7 @@ namespace OpenFAST.Template
         public byte[] Encode(IFieldValue value, Group template, Context context)
         {
             if (value == null)
-            {
                 return ByteUtil.EmptyByteArray;
-            }
 
             var groupValue = (GroupValue) value;
             if (context.TraceEnabled)
@@ -211,7 +236,8 @@ namespace OpenFAST.Template
                         Global.ErrorHandler.OnError(null, DynError.GeneralError, "Mandatory field {0} is null", field);
                         // BUG? error is ignored?
                     }
-                    byte[] encoding = field.Encode(fieldValue, field.MessageTemplate ?? template, context, presenceMapBuilder);
+                    byte[] encoding = field.Encode(fieldValue, field.MessageTemplate ?? template, context,
+                                                   presenceMapBuilder);
                     fieldEncodings[fieldIndex] = encoding;
                 }
                 var buffer = new MemoryStream();
@@ -226,10 +252,7 @@ namespace OpenFAST.Template
                 foreach (var t in fieldEncodings)
                 {
                     if (t != null)
-                    {
-                        byte[] tmp = t;
-                        buffer.Write(tmp, 0, tmp.Length);
-                    }
+                        buffer.Write(t, 0, t.Length);
                 }
                 if (context.TraceEnabled)
                     context.EncodeTrace.GroupEnd();
@@ -294,7 +317,7 @@ namespace OpenFAST.Template
 
             for (int fieldIndex = start; fieldIndex < _fields.Length; fieldIndex++)
             {
-                var field = _fields[fieldIndex];
+                Field field = _fields[fieldIndex];
                 values[fieldIndex] = field.Decode(inStream, field.MessageTemplate ?? template, context, pmapReader);
             }
 

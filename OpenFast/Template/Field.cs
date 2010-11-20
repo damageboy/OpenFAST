@@ -25,39 +25,29 @@ using System.IO;
 
 namespace OpenFAST.Template
 {
-    public abstract class Field // : ICloneable
+    public abstract class Field
     {
         private readonly bool _isOptional;
         private readonly QName _name;
         private Dictionary<QName, string> _attributes;
         private string _id;
-        private bool _isReadonly;
         private QName _key;
         private MessageTemplate _messageTemplate;
+        private Context _context;
 
         protected Field(QName name, bool isOptional)
             : this(name, name, isOptional, null)
         {
         }
 
-
         protected Field(QName name, QName key, bool isOptional)
             : this(name, key, isOptional, null)
         {
         }
 
-
         protected Field(string name, string key, bool isOptional, string id)
             : this(new QName(name), new QName(key), isOptional, id)
         {
-        }
-
-        protected Field(Field other)
-            :this(other._name, other._key, other._isOptional, other._id)
-        {
-            // _isReadonly is now false, _messageTemplate is null
-            if (other._attributes != null)
-                _attributes = new Dictionary<QName, string>(other._attributes);
         }
 
         private Field(QName name, QName key, bool isOptional, string id)
@@ -67,6 +57,18 @@ namespace OpenFAST.Template
             _isOptional = isOptional;
             _id = id;
         }
+
+        #region Cloning
+
+        protected Field(Field other)
+            : this(other._name, other._key, other._isOptional, other._id)
+        {
+            // _messageTemplate & _context are now null
+            if (other._attributes != null)
+                _attributes = new Dictionary<QName, string>(other._attributes);
+        }
+
+        #endregion
 
         public string Name
         {
@@ -109,13 +111,11 @@ namespace OpenFAST.Template
         public MessageTemplate MessageTemplate
         {
             get { return _messageTemplate; }
-            set
-            {
-                ThrowOnReadonly();
-//                if (_messageTemplate != null && !ReferenceEquals(_messageTemplate, value))
-//                    throw new InvalidOperationException("Already set");
-                _messageTemplate = value;
-            }
+        }
+
+        public Context Context
+        {
+            get { return _context; }
         }
 
         public abstract bool UsesPresenceMapBit { get; }
@@ -147,19 +147,30 @@ namespace OpenFAST.Template
             }
         }
 
-        //public abstract object Clone();
-
         #endregion
 
-        public void MakeReadonly()
+        public abstract Field Clone();
+
+        internal void AttachToTemplate(MessageTemplate value)
         {
-            _isReadonly = true;
+            if (_messageTemplate != null) // && !ReferenceEquals(_messageTemplate, value))
+                throw new InvalidOperationException("This field is already a part of the template " + _messageTemplate.Name);
+            _messageTemplate = value;
+        }
+
+        internal void AttachToContext(Context value)
+        {
+            if (_context != null) // && !ReferenceEquals(_context, value))
+                throw new InvalidOperationException("This field is already a part of a context");
+            if (_messageTemplate == null)
+                throw new InvalidOperationException("This field is not part of any template");
+            _context = value;
         }
 
         protected void ThrowOnReadonly()
         {
-            if (_isReadonly)
-                throw new InvalidOperationException("This object is no longer editable");
+            if (_context != null)
+                throw new InvalidOperationException("This object cannot be edited because it is part of a context");
         }
 
         public bool IsIdNull()

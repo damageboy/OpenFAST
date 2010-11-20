@@ -262,11 +262,11 @@ namespace OpenFAST.Sessions
 
         public void RegisterDynamicTemplate(QName templateName, int id)
         {
-            if (!_inStream.TemplateRegistry.TryRegister(id, templateName))
+            if (!_inStream.TemplateRegistry.TryAdd(id, templateName))
                 throw new ArgumentOutOfRangeException("templateName", templateName,
                                                       "Template is not defined in the input stream.");
 
-            if (!_outStream.TemplateRegistry.TryRegister(id, templateName))
+            if (!_outStream.TemplateRegistry.TryAdd(id, templateName))
                 throw new ArgumentOutOfRangeException("templateName", templateName,
                                                       "Template is not defined in the output stream.");
         }

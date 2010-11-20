@@ -81,6 +81,12 @@ namespace OpenFAST.Utility
             return ByteUtil.Combine(baseVal, 0, baseVal.Length - subtraction, diff, 0, diff.Length);
         }
 
+        internal static T[] CloneArray<T>(this T[] other)
+            where T : Field
+        {
+            return other == null ? null : Array.ConvertAll(other, i => (T) i.Clone());
+        }
+
         //public static ScalarValue GetDifference(StringValue newValue, StringValue priorValue)
         //{
         //    string value = newValue.Value;

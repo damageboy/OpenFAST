@@ -51,7 +51,7 @@ namespace OpenFAST
 
         #region IFieldValue Members
 
-        public virtual IFieldValue Copy()
+        public virtual IFieldValue Clone()
         {
             return this; // immutable objects don't need actual copies.
         }

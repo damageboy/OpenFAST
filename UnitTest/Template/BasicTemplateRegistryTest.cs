@@ -38,8 +38,8 @@ namespace OpenFAST.UnitTests.Template
             //Assert.Contains(mt, registry.Templates);//dont know why it need to access when it is just defined *SM*
             Assert.AreEqual(-1, registry.GetId("Logon"));
             Assert.AreEqual(-1, registry.GetId(mt));
-            Assert.AreEqual(null, registry.GetTemplate(1000));
-            Assert.AreEqual(mt, registry.GetTemplate("Logon"));
+            Assert.AreEqual(null, registry[1000]);
+            Assert.AreEqual(mt, registry["Logon"]);
         }
 
         // A registerd template should be in the Registry with an ID
@@ -47,14 +47,13 @@ namespace OpenFAST.UnitTests.Template
         public void TestRegister()
         {
             var mt = new MessageTemplate("Logon", new Field[0]);
-            AbstractTemplateRegistry registry = new BasicTemplateRegistry();
-            registry.Register(1000, mt);
+            AbstractTemplateRegistry registry = new BasicTemplateRegistry {{1000, mt}};
 
             Assert.Contains(mt, registry.Templates);
             Assert.AreEqual(1000, registry.GetId("Logon"));
             Assert.AreEqual(1000, registry.GetId(mt));
-            Assert.AreEqual(mt, registry.GetTemplate(1000));
-            Assert.AreEqual(mt, registry.GetTemplate("Logon"));
+            Assert.AreEqual(mt, registry[1000]);
+            Assert.AreEqual(mt, registry["Logon"]);
         }
     }
 }

@@ -15,8 +15,8 @@ namespace OpenFAST.TCPServer
             //session.IsListening = true;
             session.ErrorHandler = new FastServer.ServerErrorHandler();
             session.MessageHandler = new MessageListener();
+
             //register a template
-            ITemplateRegistry registry = new BasicTemplateRegistry();
             var template = new MessageTemplate(
                 "Arbitry",
                 new Field[]
@@ -29,9 +29,10 @@ namespace OpenFAST.TCPServer
                         /* NON-TRANSFERRABLE */
                         new Scalar("6", FastType.I32, Operator.Default, new IntegerValue(2), false)
                     });
-            registry.Register(24, template);
-
+            
+            ITemplateRegistry registry = new BasicTemplateRegistry {{24, template}};
             session.MessageInputStream.RegisterTemplate(24, template);
+
             //send that template
             session.SendTemplates(registry);
 

@@ -34,6 +34,21 @@ namespace OpenFAST.Template
             _template = template;
         }
 
+        #region Cloning
+
+        public StaticTemplateReference(StaticTemplateReference other)
+            : base(other)
+        {
+            _template = (MessageTemplate) other._template.Clone();
+        }
+
+        public override Field Clone()
+        {
+            return new StaticTemplateReference(this);
+        }
+
+        #endregion
+
         public override string TypeName
         {
             get { return null; }

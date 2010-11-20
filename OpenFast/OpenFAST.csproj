@@ -218,6 +218,7 @@
     <Compile Include="Template\Loader\XMLMessageTemplateLoader.cs" />
     <Compile Include="Template\LongValue.cs" />
     <Compile Include="Template\MessageTemplate.cs" />
+    <Compile Include="Template\NewCode.cs" />
     <Compile Include="Template\NullTemplateRegistry.cs" />
     <Compile Include="Template\Operators\AlwaysPresentOperatorCodec.cs" />
     <Compile Include="Template\Operators\ConstantOperatorCodec.cs" />
@@ -235,7 +236,6 @@
     <Compile Include="Template\Scalar.cs" />
     <Compile Include="Template\Sequence.cs" />
     <Compile Include="Template\StaticTemplateReference.cs" />
-    <Compile Include="Template\ITemplateRegisteredListener.cs" />
     <Compile Include="Template\ITemplateRegistry.cs" />
     <Compile Include="Template\TwinValue.cs" />
     <Compile Include="Template\Types\ByteVectorType.cs" />

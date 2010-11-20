@@ -30,17 +30,30 @@ namespace OpenFAST.Template
     public sealed class MessageTemplate : Group, IFieldSet, IEquatable<MessageTemplate>
     {
         public MessageTemplate(QName name, Field[] fields)
-            : base(name, AddTemplateIdField(fields), false)
+            : base(name, CloneAndAddTemplateIdField(fields), false)
         {
-            foreach (Field f in fields)
-                f.MessageTemplate = this;
-            Fields[0].MessageTemplate = this;
+            foreach (Field f in FieldDefinitions)
+                f.AttachToTemplate(this);
         }
 
         public MessageTemplate(string name, Field[] fields)
             : this(new QName(name), fields)
         {
         }
+
+        #region Cloning
+
+        public MessageTemplate(MessageTemplate other)
+            : base(other)
+        {
+        }
+
+        public override Field Clone()
+        {
+            return new MessageTemplate(this);
+        }
+
+        #endregion
 
         public new static Type ValueType
         {
@@ -71,11 +84,13 @@ namespace OpenFAST.Template
 
         #endregion
 
-        private static Field[] AddTemplateIdField(Field[] fields)
+        /// <summary> Clone fields and prepend templateId field </summary>
+        private static Field[] CloneAndAddTemplateIdField(Field[] fields)
         {
             var newFields = new Field[fields.Length + 1];
             newFields[0] = new Scalar("templateId", FastType.U32, Operator.Copy, ScalarValue.Undefined, false);
-            Array.Copy(fields, 0, newFields, 1, fields.Length);
+            for (int i = 0; i < fields.Length; i++)
+                newFields[i + 1] = fields[i].Clone();
             return newFields;
         }
 

@@ -439,7 +439,7 @@ namespace OpenFAST.Sessions
         public static readonly Message DynTempRefMessage = new Message(DynTempRefInstr);
         private static readonly Message Close = CreateAlertMessage(DynError.Close);
 
-        private static readonly ITemplateRegistry TemplateRegistry = new BasicTemplateRegistry();
+        private static readonly ITemplateRegistry TemplateRegistry;
 
         private static readonly IMessageHandler ResetHandler = new ResetMessageHandler();
         private static readonly ISessionMessageHandler AlertHandler = new AlertSessionMessageHandler();
@@ -455,33 +455,36 @@ namespace OpenFAST.Sessions
         {
             FastResetTemplate.AddAttribute(ResetProperty, "yes");
 
-            TemplateRegistry.Register(HelloTemplateId, HelloTemplate);
-            TemplateRegistry.Register(AlertTemplateId, AlertTemplate);
-            TemplateRegistry.Register(ResetTemplateId, FastResetTemplate);
-            TemplateRegistry.Register(TemplateDeclId, TemplateDeclaration);
-            TemplateRegistry.Register(TemplateDefId, TemplateDefinition);
-            TemplateRegistry.Register(Int32InstrId, Int32Instr);
-            TemplateRegistry.Register(Uint32InstrId, Uint32Instr);
-            TemplateRegistry.Register(Int64InstrId, Int64Instr);
-            TemplateRegistry.Register(Uint64InstrId, Uint64Instr);
-            TemplateRegistry.Register(DecimalInstrId, DecimalInstr);
-            TemplateRegistry.Register(CompDecimalInstrId, CompDecimalInstr);
-            TemplateRegistry.Register(AsciiInstrId, AsciiInstr);
-            TemplateRegistry.Register(UnicodeInstrId, UnicodeInstr);
-            TemplateRegistry.Register(ByteVectorInstrId, ByteVectorInstr);
-            TemplateRegistry.Register(StatTempRefInstrId, StatTempRefInstr);
-            TemplateRegistry.Register(DynTempRefInstrId, DynTempRefInstr);
-            TemplateRegistry.Register(SequenceInstrId, SequenceInstr);
-            TemplateRegistry.Register(GroupInstrId, GroupInstr);
-            TemplateRegistry.Register(ConstantOpId, ConstantOp);
-            TemplateRegistry.Register(DefaultOpId, DefaultOp);
-            TemplateRegistry.Register(CopyOpId, CopyOp);
-            TemplateRegistry.Register(IncrementOpId, IncrementOp);
-            TemplateRegistry.Register(DeltaOpId, DeltaOp);
-            TemplateRegistry.Register(TailOpId, TailOp);
-            TemplateRegistry.Register(ForeignInstrId, ForeignInstr);
-            TemplateRegistry.Register(ElementId, Element);
-            TemplateRegistry.Register(TextId, Text);
+            TemplateRegistry = new BasicTemplateRegistry
+                                   {
+                                       {HelloTemplateId, HelloTemplate},
+                                       {AlertTemplateId, AlertTemplate},
+                                       {ResetTemplateId, FastResetTemplate},
+                                       {TemplateDeclId, TemplateDeclaration},
+                                       {TemplateDefId, TemplateDefinition},
+                                       {Int32InstrId, Int32Instr},
+                                       {Uint32InstrId, Uint32Instr},
+                                       {Int64InstrId, Int64Instr},
+                                       {Uint64InstrId, Uint64Instr},
+                                       {DecimalInstrId, DecimalInstr},
+                                       {CompDecimalInstrId, CompDecimalInstr},
+                                       {AsciiInstrId, AsciiInstr},
+                                       {UnicodeInstrId, UnicodeInstr},
+                                       {ByteVectorInstrId, ByteVectorInstr},
+                                       {StatTempRefInstrId, StatTempRefInstr},
+                                       {DynTempRefInstrId, DynTempRefInstr},
+                                       {SequenceInstrId, SequenceInstr},
+                                       {GroupInstrId, GroupInstr},
+                                       {ConstantOpId, ConstantOp},
+                                       {DefaultOpId, DefaultOp},
+                                       {CopyOpId, CopyOp},
+                                       {IncrementOpId, IncrementOp},
+                                       {DeltaOpId, DeltaOp},
+                                       {TailOpId, TailOp},
+                                       {ForeignInstrId, ForeignInstr},
+                                       {ElementId, Element},
+                                       {TextId, Text}
+                                   };
 
             foreach (MessageTemplate t in TemplateRegistry.Templates)
                 SetNamespaces(t);
@@ -489,6 +492,9 @@ namespace OpenFAST.Sessions
 
         public SessionControlProtocol11()
         {
+
+#warning Overrides static field (not thread safe) with each new instance??? Seems very wrong.
+
             MessageHandlers[AlertTemplate] = AlertHandler;
             MessageHandlers[TemplateDefinition] = new ProtocolDefinitionSessionMessageHandler(this);
             MessageHandlers[TemplateDeclaration] = new ProtocolDeclarationSessionMessageHandler(this);

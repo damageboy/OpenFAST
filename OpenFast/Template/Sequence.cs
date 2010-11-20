@@ -58,6 +58,23 @@ namespace OpenFAST.Template
                 _length = length;
         }
 
+        #region Cloning
+
+        public Sequence(Sequence other)
+            : base(other)
+        {
+            _group = (Group) other._group.Clone();
+            _implicitLength = other._implicitLength;
+            _length = (Scalar) other._length.Clone();
+        }
+
+        public override Field Clone()
+        {
+            return new Sequence(this);
+        }
+
+        #endregion
+
         public virtual Scalar Length
         {
             get { return _length; }

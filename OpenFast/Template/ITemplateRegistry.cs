@@ -28,26 +28,25 @@ namespace OpenFAST.Template
     {
         public static readonly ITemplateRegistry Null = new NullTemplateRegistry();
     }
+    public delegate void TemplateNotificationDelegate(ITemplateRegistry registry, MessageTemplate template, int templateId);
 
-    public interface ITemplateRegistry
+    public interface ITemplateRegistry : IEnumerable<KeyValuePair<int, MessageTemplate>>
     {
         MessageTemplate[] Templates { get; }
 
-        MessageTemplate GetTemplate(int id);
-        MessageTemplate GetTemplate(string name);
-        MessageTemplate GetTemplate(QName templateName);
+        MessageTemplate this[int id] { get; }
+        MessageTemplate this[string name] { get; }
+        MessageTemplate this[QName templateName] { get; }
 
         void RegisterAll(ITemplateRegistry registry);
 
-        void Register(int templateId, MessageTemplate template);
-
+        void Add(int templateId, MessageTemplate template);
         [Obsolete]
-        void Register(int templateId, string name);
-
+        void Add(int templateId, string name);
         [Obsolete]
-        void Register(int templateId, QName templateName);
+        void Add(int templateId, QName templateName);
 
-        bool TryRegister(int templateId, QName templateName);
+        bool TryAdd(int templateId, QName templateName);
 
         void Define(MessageTemplate template);
 
@@ -89,8 +88,7 @@ namespace OpenFAST.Template
         bool TryGetId(QName templateName, out int templateId);
         bool TryGetId(MessageTemplate template, out int templateId);
 
-        void AddTemplateRegisteredListener(ITemplateRegisteredListener templateRegisteredListener);
-        void RemoveTemplateRegisteredListener(ITemplateRegisteredListener templateRegisteredListener);
+        event TemplateNotificationDelegate OnTemplateRegistered;
 
         ICollection<QName> Names();
     }

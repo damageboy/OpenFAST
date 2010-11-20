@@ -27,11 +27,23 @@ namespace OpenFAST.Template
 {
     public sealed class DynamicTemplateReference : Field
     {
-        public static readonly DynamicTemplateReference Instance = new DynamicTemplateReference();
+        public static DynamicTemplateReference Instance
+        {
+            get { return new DynamicTemplateReference(); }
+        }
 
-        private DynamicTemplateReference() : base(QName.Null, false)
+        public DynamicTemplateReference() : base(QName.Null, false)
         {
         }
+
+        #region Cloning
+
+        public override Field Clone()
+        {
+            return Instance; // readonly instance
+        }
+
+        #endregion
 
         public override string TypeName
         {
@@ -53,13 +65,11 @@ namespace OpenFAST.Template
             return null;
         }
 
-
         public override IFieldValue Decode(Stream inStream, Group decodeTemplate, Context context,
                                            BitVectorReader pmapReader)
         {
             return new FastDecoder(context, inStream).ReadMessage();
         }
-
 
         public override byte[] Encode(IFieldValue value, Group encodeTemplate, Context context,
                                       BitVectorBuilder presenceMapBuilder)
@@ -68,12 +78,10 @@ namespace OpenFAST.Template
             return message.Template.Encode(message, context);
         }
 
-
         public override bool IsPresenceMapBitSet(byte[] encoding, IFieldValue fieldValue)
         {
             return false;
         }
-
 
         public override bool Equals(Object obj)
         {

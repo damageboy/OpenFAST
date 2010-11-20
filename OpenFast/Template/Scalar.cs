@@ -71,6 +71,27 @@ namespace OpenFAST.Template
             op.Validate(this);
         }
 
+        #region Cloning
+
+        public Scalar(Scalar other)
+            : base(other)
+        {
+            _defaultValue = (ScalarValue) other._defaultValue.Clone();
+            _fastType = other._fastType;
+            _initialValue = (ScalarValue) other._initialValue.Clone();
+            _operator = other._operator;
+            _operatorCodec = other._operatorCodec;
+            _typeCodec = other._typeCodec;
+            _dictionary = other._dictionary;
+        }
+
+        public override Field Clone()
+        {
+            return new Scalar(this);
+        }
+
+        #endregion
+
         public FastType FastType
         {
             get { return _fastType; }

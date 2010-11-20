@@ -64,11 +64,11 @@ namespace OpenFAST
 
         #region IFieldValue Members
 
-        public virtual IFieldValue Copy()
+        public virtual IFieldValue Clone()
         {
             var copies = new IFieldValue[_values.Length];
             for (int i = 0; i < copies.Length; i++)
-                copies[i] = _values[i].Copy();
+                copies[i] = _values[i].Clone();
             return new GroupValue(_group, copies);
         }
 

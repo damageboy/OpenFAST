@@ -23,12 +23,12 @@ using System;
 using System.IO;
 using System.Text;
 using OpenFAST.Template.Types;
+using OpenFAST.Utility;
 
 namespace OpenFAST.Template
 {
     public sealed class ComposedScalar : Field
     {
-        private const Type ScalarValueType = null;
         private readonly FastType _fastType;
         private readonly Scalar[] _fields;
         private readonly IComposedValueConverter _valueConverter;
@@ -47,6 +47,23 @@ namespace OpenFAST.Template
             _fastType = fastType;
         }
 
+        #region Cloning
+
+        public ComposedScalar(ComposedScalar other)
+            : base(other)
+        {
+            _fastType = other._fastType;
+            _fields = other._fields.CloneArray();
+            _valueConverter = other._valueConverter;
+        }
+
+        public override Field Clone()
+        {
+            return new ComposedScalar(this);
+        }
+
+        #endregion
+
         public override string TypeName
         {
             get { return _fastType.Name; }
@@ -54,7 +71,7 @@ namespace OpenFAST.Template
 
         public override Type ValueType
         {
-            get { return ScalarValueType; }
+            get { return null; }
         }
 
         public FastType FastType

@@ -59,14 +59,14 @@ namespace OpenFAST.UnitTests
         [Test]
         public void TestTemplateExtension()
         {
-            MessageTemplate logon = _loader.TemplateRegistry.GetTemplate(new QName("Logon", SessionNs));
+            MessageTemplate logon = _loader.TemplateRegistry[new QName("Logon", SessionNs)];
             Assert.IsTrue(logon.HasAttribute(new QName("reset", Scp11Ns)));
         }
 
         [Test]
         public void TestTemplates()
         {
-            MessageTemplate quote = _loader.TemplateRegistry.GetTemplate(new QName("Quote", PreTradeNs));
+            MessageTemplate quote = _loader.TemplateRegistry[new QName("Quote", PreTradeNs)];
 
             Assert.AreEqual(Fix44Ns, quote.GetField("QuoteID").QName.Namespace);
             Assert.IsNotNull(quote.GetField(new QName("Group", ExtNs)));

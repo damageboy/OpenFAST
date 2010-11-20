@@ -48,7 +48,7 @@ namespace OpenFAST
             _dictionaries[DictionaryFields.Global] = _globalDictionary;
             _dictionaries[DictionaryFields.Template] = _templateDictionary;
             _dictionaries[DictionaryFields.Type] = _applicationTypeDictionary;
-            _templateRegistry = templateRegistry ?? new BasicTemplateRegistry();;
+            _templateRegistry = templateRegistry ?? new BasicTemplateRegistry();
         }
 
         public int LastTemplateId { get; set; }
@@ -94,7 +94,7 @@ namespace OpenFAST
 
         public void RegisterTemplate(int templateId, MessageTemplate template)
         {
-            _templateRegistry.Register(templateId, template);
+            _templateRegistry.Add(templateId, template);
         }
 
         public ScalarValue Lookup(string dictionary, Group group, QName key)

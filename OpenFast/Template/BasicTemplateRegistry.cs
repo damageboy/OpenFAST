@@ -37,7 +37,7 @@ namespace OpenFAST.Template
             get { return Util.ToArray(_regTemplateMap.Keys); }
         }
 
-        public override void Register(int templateId, MessageTemplate template)
+        public override void Add(int templateId, MessageTemplate template)
         {
             Define(template);
             _regIdMap[templateId] = template;
@@ -45,7 +45,7 @@ namespace OpenFAST.Template
             NotifyTemplateRegistered(template, templateId);
         }
 
-        public override void Register(int templateId, QName templateName)
+        public override void Add(int templateId, QName templateName)
         {
             MessageTemplate template;
             if (!_defNameMap.TryGetValue(templateName, out template))
@@ -56,7 +56,7 @@ namespace OpenFAST.Template
             NotifyTemplateRegistered(template, templateId);
         }
 
-        public override bool TryRegister(int templateId, QName templateName)
+        public override bool TryAdd(int templateId, QName templateName)
         {
             MessageTemplate template;
             if (!_defNameMap.TryGetValue(templateName, out template))
@@ -84,16 +84,19 @@ namespace OpenFAST.Template
             return id;
         }
 
-        public override MessageTemplate GetTemplate(int templateId)
+        public override MessageTemplate this[int templateId]
         {
-            MessageTemplate value = null;
-            _regIdMap.TryGetValue(templateId, out value);
-            return value;
+            get
+            {
+                MessageTemplate value;
+                _regIdMap.TryGetValue(templateId, out value);
+                return value;
+            }
         }
 
-        public override MessageTemplate GetTemplate(QName templateName)
+        public override MessageTemplate this[QName templateName]
         {
-            return _defNameMap[templateName];
+            get { return _defNameMap[templateName]; }
         }
 
         public override int GetId(MessageTemplate template)
@@ -188,12 +191,17 @@ namespace OpenFAST.Template
             MessageTemplate[] templatesp = registry.Templates;
             if (templatesp != null)
                 foreach (MessageTemplate t in templatesp)
-                    Register(registry.GetId(t), t);
+                    Add(registry.GetId(t), t);
         }
 
         public override ICollection<QName> Names()
         {
             return _defNameMap.Keys;
+        }
+
+        public override IEnumerator<KeyValuePair<int, MessageTemplate>> GetEnumerator()
+        {
+            return _regIdMap.GetEnumerator();
         }
     }
 }

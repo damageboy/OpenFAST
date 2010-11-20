@@ -19,21 +19,21 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
+using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace OpenFAST.Template
 {
     public abstract class AbstractTemplateRegistry : ITemplateRegistry
     {
-        private readonly List<ITemplateRegisteredListener> _listeners = new List<ITemplateRegisteredListener>();
-
         #region ITemplateRegistry Members
 
         public abstract MessageTemplate[] Templates { get; }
 
-        public virtual MessageTemplate GetTemplate(string name)
+        public virtual MessageTemplate this[string name]
         {
-            return GetTemplate(new QName(name));
+            get { return this[new QName(name)]; }
         }
 
         public virtual int GetId(string name)
@@ -53,9 +53,9 @@ namespace OpenFAST.Template
             return IsRegistered(new QName(name));
         }
 
-        public virtual void Register(int templateId, string name)
+        public virtual void Add(int templateId, string name)
         {
-            Register(templateId, new QName(name));
+            Add(templateId, new QName(name));
         }
 
         public virtual void Remove(string name)
@@ -75,42 +75,41 @@ namespace OpenFAST.Template
             return TryGetId(new QName(name), out templateId);
         }
 
-        public virtual void AddTemplateRegisteredListener(ITemplateRegisteredListener templateRegisteredListener)
-        {
-            _listeners.Add(templateRegisteredListener);
-        }
-
-        public virtual void RemoveTemplateRegisteredListener(ITemplateRegisteredListener templateRegisteredListener)
-        {
-            _listeners.Remove(templateRegisteredListener);
-        }
-
         public abstract void Define(MessageTemplate template);
-        public abstract MessageTemplate GetTemplate(int templateId);
+        public abstract MessageTemplate this[int templateId] { get; }
         public abstract int GetId(QName templateName);
         public abstract void Remove(QName templateName);
-        public abstract MessageTemplate GetTemplate(QName templateName);
+        public abstract MessageTemplate this[QName templateName] { get; }
         public abstract bool IsRegistered(int templateId);
-        public abstract void Register(int templateId, MessageTemplate template);
+        public abstract void Add(int templateId, MessageTemplate template);
         public abstract void Remove(MessageTemplate template);
         public abstract bool IsRegistered(MessageTemplate template);
         public abstract bool IsRegistered(QName templateName);
         public abstract void RegisterAll(ITemplateRegistry registry);
         public abstract void Remove(int templateId);
         public abstract int GetId(MessageTemplate template);
-        public abstract void Register(int templateId, QName templateName);
-        public abstract bool TryRegister(int templateId, QName templateName);
+        public abstract void Add(int templateId, QName templateName);
+        public abstract bool TryAdd(int templateId, QName templateName);
         public abstract bool TryGetTemplate(QName templateName, out MessageTemplate template);
         public abstract bool TryGetId(QName templateName, out int templateId);
         public abstract bool TryGetId(MessageTemplate template, out int templateId);
         public abstract ICollection<QName> Names();
+        public event TemplateNotificationDelegate OnTemplateRegistered;
 
         #endregion
 
         protected void NotifyTemplateRegistered(MessageTemplate template, int templateId)
         {
-            foreach (ITemplateRegisteredListener l in _listeners)
-                l.TemplateRegistered(template, templateId);
+            var evt = OnTemplateRegistered;
+            if (evt != null)
+                evt(this, template, templateId);
+        }
+
+        public abstract IEnumerator<KeyValuePair<int, MessageTemplate>> GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

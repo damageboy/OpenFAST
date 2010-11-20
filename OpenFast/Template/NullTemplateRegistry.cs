@@ -19,6 +19,8 @@ are Copyright (C) Shariq Muhammad. All Rights Reserved.
 Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
+using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace OpenFAST.Template
@@ -56,18 +58,16 @@ namespace OpenFAST.Template
             return false;
         }
 
-        public void AddTemplateRegisteredListener(ITemplateRegisteredListener templateRegisteredListener)
+        public event TemplateNotificationDelegate OnTemplateRegistered;
+
+        public MessageTemplate this[int templateId]
         {
+            get { return null; }
         }
 
-        public MessageTemplate GetTemplate(int templateId)
+        public MessageTemplate this[string templateName]
         {
-            return null;
-        }
-
-        public MessageTemplate GetTemplate(string templateName)
-        {
-            return null;
+            get { return null; }
         }
 
         public bool IsRegistered(string templateName)
@@ -91,7 +91,7 @@ namespace OpenFAST.Template
             return false;
         }
 
-        public void Register(int templateId, MessageTemplate template)
+        public void Add(int templateId, MessageTemplate template)
         {
         }
 
@@ -111,9 +111,9 @@ namespace OpenFAST.Template
         {
         }
 
-        public MessageTemplate GetTemplate(QName templateName)
+        public MessageTemplate this[QName templateName]
         {
-            return null;
+            get { return null; }
         }
 
         public int GetId(string name)
@@ -142,20 +142,16 @@ namespace OpenFAST.Template
             return false;
         }
 
-        public void Register(int templateId, QName templateName)
+        public void Add(int templateId, QName templateName)
         {
         }
 
-        public bool TryRegister(int templateId, QName templateName)
+        public bool TryAdd(int templateId, QName templateName)
         {
             return true;
         }
 
-        public void Register(int templateId, string name)
-        {
-        }
-
-        public void RemoveTemplateRegisteredListener(ITemplateRegisteredListener templateRegisteredListener)
+        public void Add(int templateId, string name)
         {
         }
 
@@ -221,6 +217,16 @@ namespace OpenFAST.Template
         public MessageTemplate[] ToArray()
         {
             return null;
+        }
+
+        public IEnumerator<KeyValuePair<int, MessageTemplate>> GetEnumerator()
+        {
+            yield break;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

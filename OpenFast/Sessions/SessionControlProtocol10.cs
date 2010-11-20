@@ -93,9 +93,9 @@ namespace OpenFAST.Sessions
 
         public virtual void RegisterSessionTemplates(ITemplateRegistry registry)
         {
-            registry.Register(HelloTemplateId, HelloTemplate);
-            registry.Register(AlertTemplateId, AlertTemplate);
-            registry.Register(ResetTemplateId, FastResetTemplate);
+            registry.Add(HelloTemplateId, HelloTemplate);
+            registry.Add(AlertTemplateId, AlertTemplate);
+            registry.Add(ResetTemplateId, FastResetTemplate);
         }
 
         public override void ConfigureSession(Session session)

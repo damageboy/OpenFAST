@@ -90,8 +90,8 @@ namespace OpenFAST.UnitTests.Sessions
             Assert.AreEqual(SessionControlProtocol11.DynTempRefMessage,
                             templateDef.GetSequence("Instructions")[1].GetGroup(0)
                                 .GetSequence("Instructions")[0].GetGroup(0));
-            var registry = new BasicTemplateRegistry();
-            registry.Register(24, ObjectMother.HeaderTemplate);
+            
+            var registry = new BasicTemplateRegistry {{24, ObjectMother.HeaderTemplate}};
             Assert.AreEqual(ObjectMother.BatchTemplate, _scp11.CreateTemplateFromMessage(templateDef, registry));
         }
     }
