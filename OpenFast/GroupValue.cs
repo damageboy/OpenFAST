@@ -88,12 +88,12 @@ namespace OpenFAST
                 Scalar scalar;
                 if (_group.TryGetIntrospectiveField(fieldName, out scalar))
                 {
-                    if (scalar.FASTType.Equals(FastType.Unicode) ||
-                        scalar.FASTType.Equals(FastType.String) ||
-                        scalar.FASTType.Equals(FastType.Ascii))
+                    if (scalar.FastType.Equals(FastType.Unicode) ||
+                        scalar.FastType.Equals(FastType.String) ||
+                        scalar.FastType.Equals(FastType.Ascii))
                         return GetString(scalar.Name).Length;
 
-                    if (scalar.FASTType.Equals(FastType.ByteVector))
+                    if (scalar.FastType.Equals(FastType.ByteVector))
                         return GetBytes(scalar.Name).Length;
                 }
             }

@@ -36,8 +36,8 @@ namespace OpenFAST.Sessions.Template.Exchange
         {
             var scalar = (Scalar) base.Convert(fieldDef, templateRegistry, context);
             IFieldValue retLength;
-            if (fieldDef.TryGetValue("Length", out retLength) && retLength!=null)
-                scalar.AddAttribute(FastConstants.LengthField, ((GroupValue)retLength).GetString("Name"));
+            if (fieldDef.TryGetValue("Length", out retLength) && retLength != null)
+                scalar.AddAttribute(FastConstants.LengthField, ((GroupValue) retLength).GetString("Name"));
             return scalar;
         }
 
@@ -59,7 +59,7 @@ namespace OpenFAST.Sessions.Template.Exchange
         {
             if (!field.GetType().Equals(typeof (Scalar)))
                 return false;
-            var type = ((Scalar) field).FASTType;
+            var type = ((Scalar) field).FastType;
             return type.Equals(FastType.ByteVector) || type.Equals(FastType.Unicode);
         }
     }

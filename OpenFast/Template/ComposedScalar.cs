@@ -57,7 +57,7 @@ namespace OpenFAST.Template
             get { return ScalarValueType; }
         }
 
-        public FastType FASTType
+        public FastType FastType
         {
             get { return _fastType; }
         }
@@ -142,7 +142,7 @@ namespace OpenFAST.Template
                 Scalar fld1 = _fields[i];
                 Scalar fld2 = other._fields[i];
 
-                if (!fld2.FASTType.Equals(fld1.FASTType))
+                if (!fld2.FastType.Equals(fld1.FastType))
                     return false;
                 if (!fld2.TypeCodec.Equals(fld1.TypeCodec))
                     return false;

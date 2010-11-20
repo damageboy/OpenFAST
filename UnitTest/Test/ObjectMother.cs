@@ -35,7 +35,7 @@ namespace OpenFAST.UnitTests.Test
         private static MessageTemplate _batchTemplate;
         private static MessageTemplate _headerTemplate;
         public static readonly int QuoteTemplateId = 10;
-        public static readonly int AllocInstrctnTemplateId = 25;
+        public const int AllocInstrctnTemplateId = 25;
 
         public static MessageTemplate QuoteTemplate
         {

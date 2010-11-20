@@ -69,7 +69,7 @@ namespace OpenFAST.Template.Operators
                                             diffValue, v);
             }
             byte[] bytes = Util.ApplyDifference(v, diffValue);
-            return field.FASTType.GetValue(bytes);
+            return field.FastType.GetValue(bytes);
             //return Util.ApplyDifference((StringValue) v, diffValue);
         }
 

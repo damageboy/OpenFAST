@@ -25,7 +25,7 @@ using System.IO;
 
 namespace OpenFAST.Template
 {
-    public abstract class Field
+    public abstract class Field // : ICloneable
     {
         private readonly bool _isOptional;
         private readonly QName _name;
@@ -50,6 +50,14 @@ namespace OpenFAST.Template
         protected Field(string name, string key, bool isOptional, string id)
             : this(new QName(name), new QName(key), isOptional, id)
         {
+        }
+
+        protected Field(Field other)
+            :this(other._name, other._key, other._isOptional, other._id)
+        {
+            // _isReadonly is now false, _messageTemplate is null
+            if (other._attributes != null)
+                _attributes = new Dictionary<QName, string>(other._attributes);
         }
 
         private Field(QName name, QName key, bool isOptional, string id)
@@ -118,6 +126,8 @@ namespace OpenFAST.Template
         {
             if (ReferenceEquals(this, obj)) return true;
 
+#warning _attributes is a dictionary that does not support equality - used both here & in GetHashCode()
+
             var other = obj as Field;
             if (ReferenceEquals(null, other)) return false;
             return Equals(other._name, _name) && other._isOptional.Equals(_isOptional) &&
@@ -136,6 +146,8 @@ namespace OpenFAST.Template
                 return result;
             }
         }
+
+        //public abstract object Clone();
 
         #endregion
 

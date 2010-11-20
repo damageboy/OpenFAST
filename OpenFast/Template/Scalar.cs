@@ -71,7 +71,7 @@ namespace OpenFAST.Template
             op.Validate(this);
         }
 
-        public FastType FASTType
+        public FastType FastType
         {
             get { return _fastType; }
         }

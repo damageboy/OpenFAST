@@ -50,11 +50,12 @@ namespace OpenFAST.Template
         public Group(QName name, Field[] fields, bool optional)
             : base(name, optional)
         {
-            ChildNamespace = "";
             if (fields == null) throw new ArgumentNullException("fields");
 
             var expandedFields = new List<Field>();
             var references = new List<StaticTemplateReference>();
+
+            _childNamespace = "";
 
             foreach (Field t in fields)
             {

@@ -169,7 +169,7 @@ namespace OpenFAST.UnitTests.Test
                                                         ScalarValue mantissaValue)
         {
             var field = (ComposedScalar) fieldSet.GetField(fieldIndex);
-            Assert.AreEqual(type, field.FASTType);
+            Assert.AreEqual(type, field.FastType);
             Assert.AreEqual(name, field.Name);
 
             Scalar[] fields = field.Fields;
@@ -185,7 +185,7 @@ namespace OpenFAST.UnitTests.Test
                                                         ScalarValue exponentValue, Operator mantissaOp,
                                                         ScalarValue mantissaValue)
         {
-            Assert.AreEqual(type, field.FASTType);
+            Assert.AreEqual(type, field.FastType);
             Assert.AreEqual(name, field.Name);
             Scalar[] fields = field.Fields;
             Assert.AreEqual(exponentOp, fields[0].Operator);
@@ -204,7 +204,7 @@ namespace OpenFAST.UnitTests.Test
 
         protected static void AssertSequenceLengthField(Sequence sequence, String name, FastType type, Operator op)
         {
-            Assert.AreEqual(type, sequence.Length.FASTType);
+            Assert.AreEqual(type, sequence.Length.FastType);
             Assert.AreEqual(name, sequence.Length.Name);
             Assert.AreEqual(op, sequence.Length.Operator);
         }
@@ -233,7 +233,7 @@ namespace OpenFAST.UnitTests.Test
         private static void AssertScalarField(Scalar field, FastType type, string name)
         {
             Assert.AreEqual(name, field.Name);
-            Assert.AreEqual(type, field.FASTType);
+            Assert.AreEqual(type, field.FastType);
         }
 
         protected static XmlElement Document(String xml)
@@ -255,7 +255,7 @@ namespace OpenFAST.UnitTests.Test
                                                 ScalarValue defaultVal, bool optional)
         {
             var qname = new QName(name, ns);
-            Assert.AreEqual(type, scalar.FASTType);
+            Assert.AreEqual(type, scalar.FastType);
             Assert.AreEqual(op, scalar.Operator);
             Assert.AreEqual(qname, scalar.QName);
             var keyName = new QName(key, keyNamespace);

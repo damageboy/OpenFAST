@@ -28,7 +28,8 @@ namespace OpenFAST.Template
     {
         private readonly MessageTemplate _template;
 
-        public StaticTemplateReference(MessageTemplate template) : base(template.QName, false)
+        public StaticTemplateReference(MessageTemplate template)
+            : base(template.QName, false)
         {
             _template = template;
         }

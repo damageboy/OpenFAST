@@ -103,7 +103,7 @@ namespace OpenFAST.Sessions.Template.Exchange
         public override GroupValue Convert(Field field, ConversionContext context)
         {
             var scalar = (Scalar) field;
-            var scalarTemplate = (MessageTemplate) _typeTemplateMap[scalar.FASTType];
+            var scalarTemplate = (MessageTemplate) _typeTemplateMap[scalar.FastType];
             var scalarMsg = new Message(scalarTemplate);
             SetNameAndId(scalar, scalarMsg);
             scalarMsg.SetInteger("Optional", scalar.IsOptional ? 1 : 0);
