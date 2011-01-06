@@ -37,29 +37,30 @@ namespace OpenFAST.Sessions.Template.Exchange
             string name = fieldDef.GetString("Name");
             string namespacetemp = "";
             IFieldValue retns;
-            if (fieldDef.TryGetValue("Ns", out retns) && retns != null )
-            {
+            
+            if (fieldDef.TryGetValue("Ns", out retns) && retns != null)
                 namespacetemp = retns.ToString();
-            }
+
             Field[] fields = ParseFieldInstructions(fieldDef, templateRegistry, context);
             bool optional = fieldDef.GetBool("Optional");
             var group = new Group(new QName(name, namespacetemp), fields, optional);
+            
             IFieldValue retTypeRef;
             if (fieldDef.TryGetValue("TypeRef", out retTypeRef) && retTypeRef != null)
             {
-                GroupValue typeRef = (GroupValue)retTypeRef;
+                var typeRef = (GroupValue) retTypeRef;
                 String typeRefName = typeRef.GetString("Name");
                 String typeRefNs = ""; // context.getNamespace();
                 IFieldValue retNsTypeRef;
-                if (typeRef.TryGetValue("Ns", out retNsTypeRef) && retNsTypeRef != null )
+                if (typeRef.TryGetValue("Ns", out retNsTypeRef) && retNsTypeRef != null)
                     typeRefNs = retNsTypeRef.ToString();
                 group.TypeReference = new QName(typeRefName, typeRefNs);
             }
+            
             IFieldValue retAuxId;
             if (fieldDef.TryGetValue("AuxId", out retAuxId) && retAuxId != null)
-            {
                 group.Id = retAuxId.ToString();
-            }
+            
             return group;
         }
 
@@ -83,9 +84,10 @@ namespace OpenFAST.Sessions.Template.Exchange
             {
                 var typeRef =
                     new GroupValue(
-                        (Group)
-                        SessionControlProtocol11.TypeRef.GetField(new QName("TypeRef",
-                                                                              SessionControlProtocol11.Namespace)));
+                        (Group) SessionControlProtocol11
+                                    .TypeRef
+                                    .GetField(new QName("TypeRef", SessionControlProtocol11.Namespace)));
+
                 SetName(typeRef, group.TypeReference);
                 groupMsg.SetFieldValue("TypeRef", typeRef);
             }
@@ -98,8 +100,10 @@ namespace OpenFAST.Sessions.Template.Exchange
                 var typeRef =
                     new GroupValue(
                         (Group)
-                        SessionControlProtocol11.TypeRef.GetField(new QName("TypeRef",
-                                                                              SessionControlProtocol11.Namespace)));
+                        SessionControlProtocol11
+                            .TypeRef
+                            .GetField(new QName("TypeRef", SessionControlProtocol11.Namespace)));
+
                 SetName(typeRef, group.TypeReference);
                 groupMsg.SetFieldValue("TypeRef", typeRef);
             }
@@ -130,8 +134,9 @@ namespace OpenFAST.Sessions.Template.Exchange
                 GroupValue fieldDef = instructions[i].GetGroup(0);
                 IFieldInstructionConverter converter = context.GetConverter(fieldDef.Group);
                 if (converter == null)
-                    throw new SystemException("Encountered unknown group " + fieldDef.Group +
-                                              "while processing field instructions " + groupDef.Group);
+                    throw new SystemException(
+                        string.Format("Encountered unknown group {0} while processing field instructions {1}",
+                                      fieldDef.Group, groupDef.Group));
 
                 fields[i] = converter.Convert(fieldDef, registry, context);
             }

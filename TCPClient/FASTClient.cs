@@ -9,7 +9,7 @@ namespace OpenFAST.TCPClient
     {
         private readonly Sessions.FastClient _fc;
         private readonly Random _rnd = new Random();
-        private Sessions.Session _ses;
+        private Session _ses;
 
         public FastClient(string host, int port)
         {
@@ -38,6 +38,8 @@ namespace OpenFAST.TCPClient
 
         private class ClientErrorHandler : IErrorHandler
         {
+            #region IErrorHandler Members
+
             public void OnError(Exception exception, StaticError error, string format, params object[] args)
             {
                 Console.WriteLine(format, args);
@@ -52,6 +54,8 @@ namespace OpenFAST.TCPClient
             {
                 Console.WriteLine(format, args);
             }
+
+            #endregion
         }
 
         #endregion
