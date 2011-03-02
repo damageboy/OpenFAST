@@ -20,6 +20,7 @@ Contributor(s): Shariq Muhammad <shariq.muhammad@gmail.com>
                 Yuri Astrakhan <FirstName><LastName>@gmail.com
 */
 using NUnit.Framework;
+using OpenFAST.Template;
 using OpenFAST.UnitTests.Test;
 
 namespace OpenFAST.UnitTests
@@ -30,17 +31,22 @@ namespace OpenFAST.UnitTests
         [Test]
         public void TestLookup()
         {
-            ObjectMother.AllocationInstruction.TypeReference = new QName("AllocationInstruction");
-            ObjectMother.Allocations.TypeReference = new QName("Allocation");
+            var allocationInstruction =
+                new MessageTemplate(ObjectMother.AllocationInstruction)
+                    {
+                        TypeReference = new QName("AllocationInstruction")
+                    };
+
+            var allocations = new Sequence(ObjectMother.Allocations) {TypeReference = new QName("Allocation")};
 
             var context = new Context();
 
-            context.Store(DictionaryFields.Type, ObjectMother.AllocationInstruction, new QName("ID"), String("1234"));
+            context.Store(DictionaryFields.Type, allocationInstruction, new QName("ID"), String("1234"));
 
             Assert.AreEqual(String("1234"),
-                            context.Lookup(DictionaryFields.Type, ObjectMother.AllocationInstruction, new QName("ID")));
+                            context.Lookup(DictionaryFields.Type, allocationInstruction, new QName("ID")));
             Assert.AreEqual(ScalarValue.Undefined,
-                            context.Lookup(DictionaryFields.Type, ObjectMother.Allocations.Group, new QName("ID")));
+                            context.Lookup(DictionaryFields.Type, allocations.Group, new QName("ID")));
         }
     }
 }
