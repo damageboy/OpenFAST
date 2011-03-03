@@ -71,9 +71,12 @@ namespace OpenFAST.Sessions
         // MS Compiler does not verify it. Use Resharper or other tool to see warnings.
         //
 
+        protected new static readonly MessageTemplate FastResetTemplate =
+            new MessageTemplate("Reset", Namespace, new Field[0]);
+
         public static readonly MessageTemplate AlertTemplate =
             new MessageTemplate(
-                "Alert",
+                "Alert", Namespace,
                 new[]
                     {
                         new Scalar("Severity", FastType.U32, Operator.None, ScalarValue.Undefined, false),
@@ -84,7 +87,7 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate HelloTemplate =
             new MessageTemplate(
-                "Hello",
+                "Hello", Namespace,
                 new[]
                     {
                         new Scalar("SenderName", FastType.Ascii, Operator.None, ScalarValue.Undefined, false),
@@ -93,7 +96,7 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate Attribute =
             new MessageTemplate(
-                new QName("Attribute", Namespace),
+                Qualify("Attribute"), Namespace,
                 new[]
                     {
                         Dict("Ns", true, DictionaryFields.Template), Unicode("Name"), Unicode("Value"),
@@ -101,19 +104,18 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate Element =
             new MessageTemplate(
-                new QName("Element", Namespace),
+                Qualify("Element"), Namespace,
                 new[]
                     {
                         Dict("Ns", true, DictionaryFields.Template), Unicode("Name"),
-                        new Sequence(
-                            Qualify("Attributes"), new Field[] {new StaticTemplateReference(Attribute)}, false),
-                        new Sequence(
-                            Qualify("Content"), new Field[] {DynamicTemplateReference.Instance}, false)
+                        new Sequence(Qualify("Attributes"), new Field[] {new StaticTemplateReference(Attribute)}, false)
+                        ,
+                        new Sequence(Qualify("Content"), new Field[] {DynamicTemplateReference.Instance}, false)
                     });
 
         public static readonly MessageTemplate TemplateName =
             new MessageTemplate(
-                new QName("TemplateName", Namespace),
+                Qualify("TemplateName"), Namespace,
                 new[]
                     {
                         new Scalar(Qualify("Ns"), FastType.Unicode, Operator.Copy, null, false),
@@ -122,7 +124,7 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate NsName =
             new MessageTemplate(
-                new QName("NsName", Namespace),
+                Qualify("NsName"), Namespace,
                 new[]
                     {
                         Dict("Ns", false, DictionaryFields.Template),
@@ -131,7 +133,7 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate NsNameWithAuxId =
             new MessageTemplate(
-                new QName("NsNameWithAuxId", Namespace),
+                Qualify("NsNameWithAuxId"), Namespace,
                 new Field[]
                     {
                         new StaticTemplateReference(NsName),
@@ -140,11 +142,11 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate Other =
             new MessageTemplate(
-                new QName("Other", Namespace),
+                Qualify("Other"), Namespace,
                 new Field[]
                     {
                         new Group(
-                            Qualify("Other"),
+                            Qualify("Other"), Namespace,
                             new Field[]
                                 {
                                     new Sequence(
@@ -158,7 +160,7 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate FieldBase =
             new MessageTemplate(
-                new QName("PrimFieldBase", Namespace),
+                Qualify("PrimFieldBase"), Namespace,
                 new Field[]
                     {
                         new StaticTemplateReference(NsNameWithAuxId),
@@ -168,16 +170,16 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate PrimFieldBase =
             new MessageTemplate(
-                new QName("PrimFieldBase", Namespace),
+                Qualify("PrimFieldBase"), Namespace,
                 new Field[]
                     {
                         new StaticTemplateReference(FieldBase),
-                        new Group(Qualify("Operator"), new Field[] {DynamicTemplateReference.Instance}, true)
+                        new Group(Qualify("Operator"), Namespace, new Field[] {DynamicTemplateReference.Instance}, true)
                     });
 
         public static readonly MessageTemplate Int32Instr =
             new MessageTemplate(
-                new QName("Int32Instr", Namespace),
+                Qualify("Int32Instr"), Namespace,
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBase),
@@ -186,7 +188,7 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate Uint32Instr =
             new MessageTemplate(
-                new QName("UInt32Instr", Namespace),
+                Qualify("UInt32Instr"), Namespace,
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBase),
@@ -195,7 +197,7 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate Int64Instr =
             new MessageTemplate(
-                new QName("Int64Instr", Namespace),
+                Qualify("Int64Instr"), Namespace,
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBase),
@@ -204,7 +206,7 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate Uint64Instr =
             new MessageTemplate(
-                new QName("UInt64Instr", Namespace),
+                Qualify("UInt64Instr"), Namespace,
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBase),
@@ -213,7 +215,7 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate DecimalInstr =
             new MessageTemplate(
-                new QName("DecimalInstr", Namespace),
+                Qualify("DecimalInstr"), Namespace,
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBase),
@@ -222,7 +224,7 @@ namespace OpenFAST.Sessions
 
         private static readonly MessageTemplate LengthPreamble =
             new MessageTemplate(
-                new QName("LengthPreamble", Namespace),
+                Qualify("LengthPreamble"), Namespace,
                 new Field[]
                     {
                         new StaticTemplateReference(NsNameWithAuxId),
@@ -231,21 +233,21 @@ namespace OpenFAST.Sessions
 
         private static readonly MessageTemplate PrimFieldBaseWithLength =
             new MessageTemplate(
-                new QName("PrimFieldBaseWithLength", Namespace),
+                Qualify("PrimFieldBaseWithLength"), Namespace,
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBase),
-                        new Group(Qualify("Length"),
+                        new Group(Qualify("Length"), Namespace,
                                   new Field[] {new StaticTemplateReference(LengthPreamble)}, true)
                     });
 
         public static readonly MessageTemplate TypeRef =
             new MessageTemplate(
-                new QName("TypeRef", Namespace),
+                Qualify("TypeRef"), Namespace,
                 new Field[]
                     {
                         new Group(
-                            Qualify("TypeRef"),
+                            Qualify("TypeRef"), Namespace,
                             new Field[]
                                 {
                                     new StaticTemplateReference(NsName),
@@ -256,7 +258,7 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate TemplateDeclaration =
             new MessageTemplate(
-                new QName("TemplateDecl", Namespace),
+                Qualify("TemplateDecl"), Namespace,
                 new[]
                     {
                         new StaticTemplateReference(TemplateName), U32("TemplateId")
@@ -264,47 +266,47 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate OpBase =
             new MessageTemplate(
-                new QName("OpBase", Namespace),
+                Qualify("OpBase"), Namespace,
                 new[]
                     {
                         Unicodeopt("Dictionary"),
-                        new Group(Qualify("Key"), new Field[] {new StaticTemplateReference(NsName)}, true),
+                        new Group(Qualify("Key"), Namespace, new Field[] {new StaticTemplateReference(NsName)}, true),
                         new StaticTemplateReference(Other)
                     });
 
         public static readonly MessageTemplate ConstantOp =
             new MessageTemplate(
-                new QName("ConstantOp", Namespace),
+                Qualify("ConstantOp"), Namespace,
                 new Field[] {new StaticTemplateReference(Other)});
 
         public static readonly MessageTemplate DefaultOp =
             new MessageTemplate(
-                new QName("DefaultOp", Namespace),
+                Qualify("DefaultOp"), Namespace,
                 new Field[] {new StaticTemplateReference(Other)});
 
         public static readonly MessageTemplate CopyOp =
             new MessageTemplate(
-                new QName("CopyOp", Namespace),
+                Qualify("CopyOp"), Namespace,
                 new Field[] {new StaticTemplateReference(OpBase)});
 
         public static readonly MessageTemplate IncrementOp =
             new MessageTemplate(
-                new QName("IncrementOp", Namespace),
+                Qualify("IncrementOp"), Namespace,
                 new Field[] {new StaticTemplateReference(OpBase)});
 
         public static readonly MessageTemplate DeltaOp =
             new MessageTemplate(
-                new QName("DeltaOp", Namespace),
+                Qualify("DeltaOp"), Namespace,
                 new Field[] {new StaticTemplateReference(OpBase)});
 
         public static readonly MessageTemplate TailOp =
             new MessageTemplate(
-                new QName("TailOp", Namespace),
+                Qualify("TailOp"), Namespace,
                 new Field[] {new StaticTemplateReference(OpBase)});
 
         public static readonly MessageTemplate StatTempRefInstr =
             new MessageTemplate(
-                new QName("StaticTemplateRefInstr", Namespace),
+                Qualify("StaticTemplateRefInstr"), Namespace,
                 new Field[]
                     {
                         new StaticTemplateReference(TemplateName),
@@ -313,17 +315,17 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate DynTempRefInstr =
             new MessageTemplate(
-                new QName("DynamicTemplateRefInstr", Namespace),
+                Qualify("DynamicTemplateRefInstr"), Namespace,
                 new Field[] {new StaticTemplateReference(Other)});
 
         public static readonly MessageTemplate ForeignInstr =
             new MessageTemplate(
-                Qualify("ForeignInstr"),
+                Qualify("ForeignInstr"), Namespace,
                 new Field[] {new StaticTemplateReference(Element)});
 
         public static readonly MessageTemplate UnicodeInstr =
             new MessageTemplate(
-                new QName("UnicodeInstr", Namespace),
+                Qualify("UnicodeInstr"), Namespace,
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBaseWithLength),
@@ -332,7 +334,7 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate AsciiInstr =
             new MessageTemplate(
-                new QName("AsciiInstr", Namespace),
+                Qualify("AsciiInstr"), Namespace,
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBase),
@@ -341,7 +343,7 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate ByteVectorInstr =
             new MessageTemplate(
-                new QName("ByteVectorInstr", Namespace),
+                Qualify("ByteVectorInstr"), Namespace,
                 new Field[]
                     {
                         new StaticTemplateReference(PrimFieldBaseWithLength),
@@ -350,11 +352,12 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate TemplateDefinition =
             new MessageTemplate(
-                new QName("TemplateDef", Namespace),
+                Qualify("TemplateDef"), Namespace,
                 new[]
                     {
                         new StaticTemplateReference(TemplateName),
-                        Unicodeopt("AuxId"), U32Opt("TemplateId"),
+                        Unicodeopt("AuxId"),
+                        U32Opt("TemplateId"),
                         new StaticTemplateReference(TypeRef), U32("Reset"),
                         new StaticTemplateReference(Other),
                         new Sequence(Qualify("Instructions"), new Field[] {DynamicTemplateReference.Instance}, false)
@@ -362,7 +365,7 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate GroupInstr =
             new MessageTemplate(
-                new QName("GroupInstr", Namespace),
+                Qualify("GroupInstr"), Namespace,
                 new Field[]
                     {
                         new StaticTemplateReference(FieldBase),
@@ -374,18 +377,18 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate SequenceInstr =
             new MessageTemplate(
-                new QName("SequenceInstr", Namespace),
+                Qualify("SequenceInstr"), Namespace,
                 new Field[]
                     {
                         new StaticTemplateReference(FieldBase),
                         new StaticTemplateReference(TypeRef),
                         new Group(
-                            Qualify("Length"),
+                            Qualify("Length"), Namespace,
                             new Field[]
                                 {
-                                    new Group(Qualify("Name"),
+                                    new Group(Qualify("Name"), Namespace,
                                               new Field[] {new StaticTemplateReference(NsNameWithAuxId)}, true),
-                                    new Group(Qualify("Operator"),
+                                    new Group(Qualify("Operator"), Namespace,
                                               new Field[] {DynamicTemplateReference.Instance}, true),
                                     new Scalar(Qualify("InitialValue"), FastType.U32, Operator.None, null, true),
                                     new StaticTemplateReference(Other)
@@ -395,7 +398,7 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate Text =
             new MessageTemplate(
-                Qualify("Text"),
+                Qualify("Text"), Namespace,
                 new[]
                     {
                         new Scalar(Qualify("Value"), FastType.Unicode, Operator.None, ScalarValue.Undefined, false)
@@ -403,27 +406,28 @@ namespace OpenFAST.Sessions
 
         public static readonly MessageTemplate CompDecimalInstr =
             new MessageTemplate(
-                Qualify("CompositeDecimalInstr"),
+                Qualify("CompositeDecimalInstr"), Namespace,
                 new Field[]
                     {
                         new StaticTemplateReference(FieldBase),
                         new Group(
-                            Qualify("Exponent"),
+                            Qualify("Exponent"), Namespace,
                             new Field[]
                                 {
                                     new Group(
-                                        Qualify("Operator"), new Field[] {DynamicTemplateReference.Instance}, false),
+                                        Qualify("Operator"), Namespace, new Field[] {DynamicTemplateReference.Instance},
+                                        false),
                                     new Scalar(
                                         Qualify("InitialValue"), FastType.I32, Operator.None, ScalarValue.Undefined,
                                         true),
                                     new StaticTemplateReference(Other)
                                 }, true),
                         new Group(
-                            Qualify("Mantissa"),
+                            Qualify("Mantissa"), Namespace,
                             new Field[]
                                 {
                                     new Group(
-                                        Qualify("Operator"),
+                                        Qualify("Operator"), Namespace,
                                         new Field[] {DynamicTemplateReference.Instance}, false),
                                     new Scalar(
                                         Qualify("InitialValue"), FastType.I32, Operator.None, ScalarValue.Undefined,
@@ -434,7 +438,6 @@ namespace OpenFAST.Sessions
 
         #endregion
 
-#warning usage? -- duplicates base class
         private static readonly Message Reset = new ResetMessageObj(FastResetTemplate);
         public static readonly Message DynTempRefMessage = new Message(DynTempRefInstr);
         private static readonly Message Close = CreateAlertMessage(DynError.Close);
@@ -444,7 +447,7 @@ namespace OpenFAST.Sessions
         private static readonly IMessageHandler ResetHandler = new ResetMessageHandler();
         private static readonly ISessionMessageHandler AlertHandler = new AlertSessionMessageHandler();
 
-        private static readonly QName ResetProperty = new QName("reset", Namespace);
+        private static readonly QName ResetProperty = Qualify("reset");
 
         private static readonly Dictionary<MessageTemplate, ISessionMessageHandler> MessageHandlers =
             new Dictionary<MessageTemplate, ISessionMessageHandler>();
@@ -486,13 +489,13 @@ namespace OpenFAST.Sessions
                                        {TextId, Text}
                                    };
 
+            // TODO: move this into a unit test
             foreach (MessageTemplate t in TemplateRegistry.Templates)
-                SetNamespaces(t);
+                VerifyChildNamespaces(t);
         }
 
         public SessionControlProtocol11()
         {
-
 #warning Overrides static field (not thread safe) with each new instance??? Seems very wrong.
 
             MessageHandlers[AlertTemplate] = AlertHandler;
@@ -500,19 +503,29 @@ namespace OpenFAST.Sessions
             MessageHandlers[TemplateDeclaration] = new ProtocolDeclarationSessionMessageHandler(this);
         }
 
+        public override Message ResetMessage
+        {
+            get { return Reset; }
+        }
+
         public override Message CloseMessage
         {
             get { return Close; }
         }
 
-        private static void SetNamespaces(Group value)
+        private static void VerifyChildNamespaces(Group value)
         {
-            value.ChildNamespace = Namespace;
+            if (value.ChildNamespace != Namespace)
+                throw new InvalidOperationException(
+                    string.Format(
+                        "All MessageTemplate or Group objects must have ChildNamespace set to {0}. Verify {1}.",
+                        Namespace, value.Name));
+
             foreach (Field fld in value.Fields)
             {
                 var grp = fld as Group;
                 if (grp != null)
-                    SetNamespaces(grp);
+                    VerifyChildNamespaces(grp);
             }
         }
 
@@ -649,27 +662,27 @@ namespace OpenFAST.Sessions
             string name = templateDef.GetString("Name");
             string tempnamespace = "";
             IFieldValue retNs;
-            if (templateDef.TryGetValue("Ns", out retNs) && retNs!=null)
+            if (templateDef.TryGetValue("Ns", out retNs) && retNs != null)
                 tempnamespace = retNs.ToString();
             Field[] fields = GroupConverter.ParseFieldInstructions(templateDef, registry, _initialContext);
             var group = new MessageTemplate(new QName(name, tempnamespace), fields);
             IFieldValue retTypeRef;
-            if (templateDef.TryGetValue("TypeRef", out retTypeRef) && retTypeRef!=null)
+            if (templateDef.TryGetValue("TypeRef", out retTypeRef) && retTypeRef != null)
             {
-                var typeRef = (GroupValue)retTypeRef;
+                var typeRef = (GroupValue) retTypeRef;
                 string typeRefName = typeRef.GetString("Name");
                 string typeRefNs = ""; // context.getNamespace();
                 IFieldValue retNs2;
-                if (typeRef.TryGetValue("Ns", out retNs2) && retNs2!=null)
+                if (typeRef.TryGetValue("Ns", out retNs2) && retNs2 != null)
                     typeRefNs = retNs2.ToString();
                 group.TypeReference = new QName(typeRefName, typeRefNs);
             }
             IFieldValue retAuxId;
-            if (templateDef.TryGetValue("AuxId", out retAuxId) && retAuxId!=null)
+            if (templateDef.TryGetValue("AuxId", out retAuxId) && retAuxId != null)
             {
                 group.Id = retAuxId.ToString();
             }
-            
+
             return group;
         }
 

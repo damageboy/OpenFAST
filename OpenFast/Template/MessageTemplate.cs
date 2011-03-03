@@ -29,15 +29,25 @@ namespace OpenFAST.Template
 {
     public sealed class MessageTemplate : Group, IFieldSet, IEquatable<MessageTemplate>
     {
-        public MessageTemplate(QName name, Field[] fields)
-            : base(name, CloneAndAddTemplateIdField(fields), false)
+        public MessageTemplate(QName name, string childNamespace, Field[] fields)
+            : base(name, childNamespace, CloneAndAddTemplateIdField(fields), false)
         {
             foreach (Field f in FieldDefinitions)
                 f.AttachToTemplate(this);
         }
 
+        public MessageTemplate(QName name, Field[] fields)
+            : this(name, "", fields)
+        {
+        }
+
         public MessageTemplate(string name, Field[] fields)
-            : this(new QName(name), fields)
+            : this(new QName(name), "", fields)
+        {
+        }
+
+        public MessageTemplate(string name, string childNamespace, Field[] fields)
+            : this(new QName(name), childNamespace, fields)
         {
         }
 

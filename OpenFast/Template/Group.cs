@@ -32,7 +32,6 @@ namespace OpenFAST.Template
     public class Group : Field
     {
         private readonly Field[] _fieldDefinitions;
-        private readonly Dictionary<string, Field> _fieldIdMap;
         private readonly Dictionary<Field, int> _fieldIndexMap;
         private readonly Dictionary<QName, Field> _fieldNameMap;
         private readonly Field[] _fields;
@@ -43,48 +42,22 @@ namespace OpenFAST.Template
         private QName _typeReference;
 
         public Group(string name, Field[] fields, bool optional)
-            : this(new QName(name), fields, optional)
+            : this(new QName(name), "", fields, optional)
         {
-        }
-
-        private static void Init(Field[] inFields, out Field[] fieldDefinitions, out Field[] fields, out Dictionary<Field, int> fieldIndexMap, out Dictionary<QName, Field> fieldNameMap, out Dictionary<string, Field> fieldIdMap, out Dictionary<string, Scalar> introspectiveFieldMap, out bool usesPresenceMapRenamedField, out StaticTemplateReference[] staticTemplateReferences)
-        {
-            if (inFields == null) throw new ArgumentNullException("inFields");
-
-            var expandedFields = new List<Field>();
-            var references = new List<StaticTemplateReference>();
-
-            foreach (Field t in inFields)
-            {
-                var currentTemplate = t as StaticTemplateReference;
-                if (currentTemplate != null)
-                {
-                    Field[] referenceFields = currentTemplate.Template.Fields;
-                    for (int j = 1; j < referenceFields.Length; j++)
-                        expandedFields.Add(referenceFields[j]);
-                    references.Add(currentTemplate);
-                }
-                else
-                    expandedFields.Add(t);
-            }
-
-            fieldDefinitions = inFields;
-            fields = expandedFields.ToArray();
-            fieldIndexMap = ConstructFieldIndexMap(fields);
-            fieldNameMap = Util.ToSafeDictionary(fields, f => f.QName);
-            fieldIdMap = Util.ToSafeDictionary(fields, f => f.Id);
-            introspectiveFieldMap = ConstructInstrospectiveFields(fields);
-            usesPresenceMapRenamedField = fields.Any(t => t.UsesPresenceMapBit);
-            staticTemplateReferences = references.ToArray();
         }
 
         public Group(QName name, Field[] fields, bool optional)
+            : this(name, "", fields, optional)
+        {
+        }
+
+        public Group(QName name, string childNamespace, Field[] fields, bool optional)
             : base(name, optional)
         {
-            _childNamespace = "";
-            
+            _childNamespace = childNamespace;
+
             Init(fields,
-                 out _fieldDefinitions, out _fields, out _fieldIndexMap, out _fieldNameMap, out _fieldIdMap,
+                 out _fieldDefinitions, out _fields, out _fieldIndexMap, out _fieldNameMap,
                  out _introspectiveFieldMap, out _usesPresenceMapRenamedField, out _staticTemplateReferences);
         }
 
@@ -97,7 +70,7 @@ namespace OpenFAST.Template
             _typeReference = other._typeReference;
 
             Init(other._fieldDefinitions.CloneArray(),
-                 out _fieldDefinitions, out _fields, out _fieldIndexMap, out _fieldNameMap, out _fieldIdMap,
+                 out _fieldDefinitions, out _fields, out _fieldIndexMap, out _fieldNameMap,
                  out _introspectiveFieldMap, out _usesPresenceMapRenamedField, out _staticTemplateReferences);
         }
 
@@ -176,6 +149,43 @@ namespace OpenFAST.Template
         protected virtual bool UsesPresenceMap
         {
             get { return _usesPresenceMapRenamedField; }
+        }
+
+        private static void Init(Field[] inFields,
+                                 out Field[] fieldDefinitions,
+                                 out Field[] fields,
+                                 out Dictionary<Field, int> fieldIndexMap,
+                                 out Dictionary<QName, Field> fieldNameMap,
+                                 out Dictionary<string, Scalar> introspectiveFieldMap,
+                                 out bool usesPresenceMapRenamedField,
+                                 out StaticTemplateReference[] staticTemplateReferences)
+        {
+            if (inFields == null) throw new ArgumentNullException("inFields");
+
+            var expandedFields = new List<Field>();
+            var references = new List<StaticTemplateReference>();
+
+            foreach (Field t in inFields)
+            {
+                var currentTemplate = t as StaticTemplateReference;
+                if (currentTemplate != null)
+                {
+                    Field[] referenceFields = currentTemplate.Template.Fields;
+                    for (int j = 1; j < referenceFields.Length; j++)
+                        expandedFields.Add(referenceFields[j]);
+                    references.Add(currentTemplate);
+                }
+                else
+                    expandedFields.Add(t);
+            }
+
+            fieldDefinitions = inFields;
+            fields = expandedFields.ToArray();
+            fieldIndexMap = ConstructFieldIndexMap(fields);
+            fieldNameMap = Util.ToSafeDictionary(fields, f => f.QName);
+            introspectiveFieldMap = ConstructInstrospectiveFields(fields);
+            usesPresenceMapRenamedField = fields.Any(t => t.UsesPresenceMapBit);
+            staticTemplateReferences = references.ToArray();
         }
 
         // BAD ABSTRACTION
