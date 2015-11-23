@@ -1,0 +1,16 @@
+bin/
+obj/
+build/
+packages
+*.pidb
+*.suo
+*.user
+*.ncb
+*.sdf
+*.opensdf
+*.nupkg
+SyncToy*.dat
+*~
+_ReSharper.*
+_NCrunch*
+Thumbs.db
