@@ -14,3 +14,4 @@ SyncToy*.dat
 _ReSharper.*
 _NCrunch*
 Thumbs.db
+.vs/
